@@ -1,6 +1,7 @@
 package com.ssafy.backend.controller;
 
 import java.net.URI;
+import java.util.Collections;
 
 import javax.validation.Valid;
 
@@ -21,11 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ssafy.backend.exception.AppException;
 import com.ssafy.backend.help.ApiResult;
 import com.ssafy.backend.help.JwtAuthenticationResult;
 import com.ssafy.backend.help.LoginRequest;
 import com.ssafy.backend.help.SignUpRequest;
+import com.ssafy.backend.model.Role;
+import com.ssafy.backend.model.RoleName;
 import com.ssafy.backend.model.User;
+import com.ssafy.backend.repository.RoleRepository;
 import com.ssafy.backend.repository.UserRepository;
 import com.ssafy.backend.security.JwtTokenProvider;
 
@@ -39,6 +44,9 @@ public class AuthController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	RoleRepository roleRepository;
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -66,6 +74,10 @@ public class AuthController {
 		User user = new User(null, signUpRequest.getId(), signUpRequest.getName(),
 				signUpRequest.getPassword(), signUpRequest.getRole(), signUpRequest.getQualification(), null);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		
+		Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+				.orElseThrow(() -> new AppException("User Role not set."));
+		user.setRoles(Collections.singleton(userRole));
 
 		User result = userRepository.save(user);
 		
