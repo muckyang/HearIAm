@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-md-12">
         <div>
-          <vue-webrtc
+          <WebRTC
             ref="webrtc"
             width="100%"
             :roomId="roomId"
@@ -38,14 +38,15 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { WebRTC } from "vue-webrtc";
+import WebRTC from "@/components/webRTC/webrtc.vue";
 import * as io from 'socket.io-client'
 window.io = io
-Vue.component(WebRTC.name, WebRTC);
 
 export default {
   name: "WebRTCComp",
+  components:{
+      WebRTC
+  },
   data() {
     return {
       img: null,
