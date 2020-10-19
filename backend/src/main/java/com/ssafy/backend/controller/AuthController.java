@@ -56,7 +56,8 @@ public class AuthController {
 	public static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	// public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	public Object authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUserId(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -66,7 +67,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+	public Object registerUser(@RequestBody SignUpRequest signUpRequest) {
 		if (userRepository.existsById(signUpRequest.getId())) {
 			return new ResponseEntity(new ApiResult(false, "사용자 아이디가 이미 존재합니다!"), HttpStatus.BAD_REQUEST);
 		}
