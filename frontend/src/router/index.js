@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import WebRTC from '../views/webRTC/WebRTC.vue'
+import Emotion from '../views/emotion/EmotionTest.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,11 @@ const routes = [{
         path: '/webRTC',
         name: 'WebRTC',
         component: WebRTC
+    },
+    {
+        path: '/emotion',
+        name: 'Emotion',
+        component: Emotion
     },
 ]
 
