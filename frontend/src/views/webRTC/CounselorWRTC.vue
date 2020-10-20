@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import WebRTCComp from "@/components/webRTC/WebRTCComp.vue";
+import WebRTCComp from "@/components/webRTC/CWebRTCComp.vue";
 export default {
-  name: "WebRTC",
+  name: "CounselorWRTC",
   components: {
     WebRTCComp,
   },
