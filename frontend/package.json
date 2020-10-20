@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "chart.js": "^2.9.4",
+    "@codekraft-studio/vue-record": "0.0.3",
     "core-js": "^3.6.5",
     "face-api.js": "^0.22.2",
     "sockjs-client": "^1.5.0",
