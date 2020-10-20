@@ -1,28 +1,31 @@
-import speech_recognition as sr
-sr.__version__
+import urllib3
+import json
+import base64
+openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
+accessKey = "43524358-66bc-44f8-8702-ebef31faf7eb"
+audioFilePath = "./backend/.mvn/audio/test2.pcm"
+languageCode = "korean"
 
-
-r = sr.Recognizer()
-
-harvard = sr.AudioFile('./backend/.mvn/audio/test1.mp3')
-with harvard as source:
-    audio = r.record(source)
-
-r.recognize_google(audio)
-
-with harvard as source:
-    audio1 = r.record(source, duration=4)
-    audio2 = r.record(source, duration=4)
-    audio3 = r.record(source, duration=4)
-    audio4 = r.record(source, duration=4)
-    audio5 = r.record(source, duration=4)
-print(r.recognize_google(audio1))
-print(r.recognize_google(audio2))
-print(r.recognize_google(audio3))
-print(r.recognize_google(audio4))
-print(r.recognize_google(audio5))
-
-
-with harvard as source:
-    audio = r.record(source, offset=7, duration=3)
-    print(r.recognize_google(audio))
+file = open(audioFilePath, "rb")
+audioContents = base64.b64encode(file.read()).decode("utf8")
+file.close()
+ 
+requestJson = {
+    "access_key": accessKey,
+    "argument": {
+        "language_code": languageCode,
+        "audio": audioContents
+    }
+}
+ 
+http = urllib3.PoolManager()
+response = http.request(
+    "POST",
+    openApiURL,
+    headers={"Content-Type": "application/json; charset=UTF-8"},
+    body=json.dumps(requestJson)
+)
+ 
+print("[responseCode] " + str(response.status))
+print("[responBody]")
+print(str(response.data,"utf-8"))
