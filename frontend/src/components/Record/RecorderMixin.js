@@ -5,7 +5,8 @@ export default {
       hasPermission: false,
       isRecording: false,
       isPaused: false,
-      chunks: []
+      chunks: [],
+      recordFileList: [],
     }
   },
   methods: {
@@ -15,6 +16,7 @@ export default {
       }
 
       try {
+        console.log("start - try");
         this.$_stream = await this.getStream()
         this.prepareRecorder()
         this.$_mediaRecorder.start()
@@ -27,6 +29,7 @@ export default {
     stop () {
       if (!this.isRecording) return
       this.$_mediaRecorder.stop()
+      console.log("stop")
       this.$_stream.getTracks().forEach(t => t.stop())
     },
     pause () {
@@ -44,6 +47,7 @@ export default {
      */
     async getStream () {
       const stream = await navigator.mediaDevices.getUserMedia(this.constraints)
+      console.log(stream)
       this.$_stream = stream
       this.$emit('stream', stream)
       return stream
@@ -95,6 +99,11 @@ export default {
         this.$emit('stop')
 
         const blobData = new Blob(this.chunks)
+        var file = new File([blobData], "test.pcm")
+        this.recordFileList.push(file);
+        axios.
+
+        console.log(this.recordFileList)
         if (blobData.size > 0) {
           this.$emit('result', blobData)
         }
@@ -102,7 +111,17 @@ export default {
         this.isPaused = false
         this.isRecording = false
       }, true)
-    }
+    },
+
+  //   function blobToFile (theBlob: Blob, fileName:string): File => {
+  //     var b: any = theBlob;
+  //     //A Blob() is almost a File() - it's just missing the two properties below which we will add
+  //     b.lastModifiedDate = new Date();
+  //     b.name = fileName;
+  
+  //     //Cast to a File() type
+  //     return <File>theBlob;
+  // }
   },
   mounted () {
     if (!navigator.mediaDevices && !navigator.mediaDevices.getUserMedia) {
