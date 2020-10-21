@@ -20,6 +20,7 @@
             v-on:share-started="logEvent"
             v-on:share-stopped="logEvent"
             @error="onError"
+            @childs-event="parentsMethod"
           />
         </div>
         <div class="row">
@@ -43,7 +44,7 @@ import * as io from 'socket.io-client'
 window.io = io
 
 export default {
-  name: "WebRTCComp",
+  name: "CWebRTCComp",
   components:{
       WebRTC
   },
@@ -51,6 +52,8 @@ export default {
     return {
       img: null,
       roomId: "public-room",
+      message: null,
+      emotion: null,
     };
   },
   methods: {
@@ -65,6 +68,12 @@ export default {
     },
     logEvent(event) {
       console.log("Event : ", event);
+    },
+    sendMessage() {
+      this.$refs.webrtc.sendMessage(this.message);
+    },
+    parentsMethod: function(message) {
+      this.emotion = message;
     },
   },
 };

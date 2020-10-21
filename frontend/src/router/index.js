@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import WebRTC from '../views/webRTC/WebRTC.vue'
+import UserWRTC from '../views/webRTC/UserWRTC.vue'
+import CounselorWRTC from '../views/webRTC/CounselorWRTC.vue'
 import Emotion from '../views/emotion/EmotionTest.vue'
+import Record from '../views/videoRecord/Record.vue'
 
 Vue.use(VueRouter)
 
@@ -21,14 +23,24 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ '../views/About.vue')
     },
     {
-        path: '/webRTC',
-        name: 'WebRTC',
-        component: WebRTC
+        path: '/userWRTC',
+        name: 'UserWRTC',
+        component: UserWRTC
+    },
+    {
+        path: '/counselorWRTC',
+        name: 'CounselorWRTC',
+        component: CounselorWRTC
     },
     {
         path: '/emotion',
         name: 'Emotion',
         component: Emotion
+    },
+    {
+        path: '/record',
+        name: 'Record',
+        component: Record
     },
 ]
 
