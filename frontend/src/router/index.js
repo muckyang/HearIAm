@@ -5,6 +5,7 @@ import UserWRTC from '../views/webRTC/UserWRTC.vue'
 import CounselorWRTC from '../views/webRTC/CounselorWRTC.vue'
 import Emotion from '../views/emotion/EmotionTest.vue'
 import Record from '../views/videoRecord/Record.vue'
+import RecordConsult from '../views/consult/RecordConsult.vue'
 
 Vue.use(VueRouter)
 
@@ -42,6 +43,11 @@ const routes = [{
         name: 'Record',
         component: Record
     },
+    {
+        path: '/recordConsult',
+        name: 'RecordConsult',
+        component: RecordConsult
+    }
 ]
 
 const router = new VueRouter({
