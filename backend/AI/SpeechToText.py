@@ -1,12 +1,31 @@
-import sys
-import io
+import urllib3
+import json
+import base64
+openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
+accessKey = "43524358-66bc-44f8-8702-ebef31faf7eb"
+audioFilePath = "./backend/.mvn/audio/test2.pcm"
+languageCode = "korean"
 
-
-def main(argv):
-    print(argv[1])
-    print(sys.modules)
-
-if __name__ == "__main__":
-    sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
-    main(sys.argv)
+file = open(audioFilePath, "rb")
+audioContents = base64.b64encode(file.read()).decode("utf8")
+file.close()
+ 
+requestJson = {
+    "access_key": accessKey,
+    "argument": {
+        "language_code": languageCode,
+        "audio": audioContents
+    }
+}
+ 
+http = urllib3.PoolManager()
+response = http.request(
+    "POST",
+    openApiURL,
+    headers={"Content-Type": "application/json; charset=UTF-8"},
+    body=json.dumps(requestJson)
+)
+ 
+print("[responseCode] " + str(response.status))
+print("[responBody]")
+print(str(response.data,"utf-8"))

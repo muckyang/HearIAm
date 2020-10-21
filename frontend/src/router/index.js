@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import UserWRTC from '../views/webRTC/UserWRTC.vue'
 import CounselorWRTC from '../views/webRTC/CounselorWRTC.vue'
 import Emotion from '../views/emotion/EmotionTest.vue'
+import Record from '../views/videoRecord/Record.vue'
 
 Vue.use(VueRouter)
 
@@ -35,6 +36,11 @@ const routes = [{
         path: '/emotion',
         name: 'Emotion',
         component: Emotion
+    },
+    {
+        path: '/record',
+        name: 'Record',
+        component: Record
     },
 ]
 
