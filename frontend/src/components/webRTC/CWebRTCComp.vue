@@ -33,6 +33,7 @@
             </v-btn>
           </div>
         </div>
+        <Bar :chartData="chartData" :options="options" />
       </div>
     </div>
   </div>
@@ -40,21 +41,39 @@
 
 <script>
 import WebRTC from "@/components/webRTC/webrtc.vue";
-import * as io from 'socket.io-client'
-window.io = io
+import Bar from "@/components/webRTC/Bar.js";
+import * as io from "socket.io-client";
+window.io = io;
 
 export default {
   name: "CWebRTCComp",
-  components:{
-      WebRTC
+  components: {
+    WebRTC,
+    Bar,
   },
   data() {
     return {
       img: null,
       roomId: "public-room",
       message: null,
-      emotion: null,
+      chartData: null,
+      emotion: [0, 0, 0, 0, 0, 0, 0],
+      options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                max: 100,
+                min: 0,
+              },
+            },
+          ],
+        },
+      },
     };
+  },
+  mounted() {
+    this.fillData();
   },
   methods: {
     onJoin() {
@@ -72,8 +91,37 @@ export default {
     sendMessage() {
       this.$refs.webrtc.sendMessage(this.message);
     },
-    parentsMethod: function(message) {
-      this.emotion = message;
+    parentsMethod: function (message) {
+      this.emotion = [
+        Math.floor(message.angry * 100),
+        Math.floor(message.disgusted * 100),
+        Math.floor(message.fearful * 100),
+        Math.floor(message.happy * 100),
+        Math.floor(message.neutral * 100),
+        Math.floor(message.sad * 100),
+        Math.floor(message.surprised * 100),
+      ];
+      this.fillData();
+    },
+    fillData() {
+      this.chartData = {
+        labels: [
+          "angry",
+          "disgusted",
+          "fearful",
+          "happy",
+          "neutral",
+          "sad",
+          "surprised",
+        ],
+        datasets: [
+          {
+            label: "Emotion",
+            backgroundColor: "#f87979",
+            data: this.emotion,
+          },
+        ],
+      };
     },
   },
 };
