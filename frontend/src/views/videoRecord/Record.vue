@@ -1,19 +1,32 @@
 <template>
   <v-container>
-    <header class="header">
-      <div class="navbar-brand">
-        </div>
-
-      <div class="navbar-brand-name">
-        <h1 class="title">Vue Record</h1>
-        <h2 class="subtitle">
-          components for MediaRecorder API
-        </h2>
-      </div>
-    </header>
-
     <main class="container has-text-centered">
-      <section id="example-video">
+      <section id="example-audio">
+        <div class="columns">
+          <div class="column">
+            <div class="has-text-right">
+              <h2 >녹음상담</h2>
+              <h3 class="subtitle"><strong>마이크</strong> 버튼을 눌러 상담내용을 녹음하세요.</h3>
+            </div>
+
+            <div class="record-settings">
+              <vue-record-audio :mode="recordMode.audio" @stream="onStream" @result="onResult" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="recorded-audio">
+              <div v-for="(record, index) in recordings" :key="index" class="recorded-item">
+                <div class="audio-container"><audio :src="record.src" controls /></div>
+                <p> {{record}} </p>
+                <div><button @click="removeRecord(index)" class="button is-dark">삭제하기</button></div>
+                
+              </div>
+                <div><button @click="fileUpload(recordings[0])" class="button is-dark">저장하기</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+<!--  <section id="example-video">
         <div class="columns">
           <div class="column">
             <div class="has-text-right">
@@ -22,7 +35,7 @@
             </div>
 
             <div class="record-settings">
-              <vue-record-video mode="record" @stream="onVideoStream" @result="onVideoResult" />
+              <vue-record-video mode="press" @stream="onVideoStream" @result="onVideoResult" />
             </div>
           </div>
           <div class="column">
@@ -31,22 +44,21 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
     </main>
-
-    <footer class="footer">
-    </footer>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
 
 export default {
     name: 'Record',
    data () {
     return {
-      recordMode: {
-        video: 'record'
+     recordMode: {
+        audio: 'press',
+        video: 'press'
       },
       recordings: []
     }
@@ -58,19 +70,37 @@ export default {
     onStream (stream) {
       console.log('Got a stream object:', stream);
     },
-    onVideoStream (stream) {
-      console.log('Got a video stream object:', stream);
-    },
-    onVideoResult (data) {
-      this.$refs.Video.srcObject = null
-      this.$refs.Video.src = window.URL.createObjectURL(data)
-      console.log(data)
-    },
+    // onVideoStream (stream) {
+    //   console.log('Got a video stream object:', stream);
+    // },
+    // onVideoResult (data) {
+    //   this.$refs.Video.srcObject = null
+    //   this.$refs.Video.src = window.URL.createObjectURL(data)
+    //   console.log(data)
+    // },
     onResult (data) {
+      console.log(data)
       this.recordings.push({
         src: window.URL.createObjectURL(data)
       })
-    }
+    },
+    fileUpload(data) {
+      var formData = new FormData();
+      formData.append("file", data);
+      axios
+        .post(`https://k3b202.p.ssafy.io:8080/record`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(() => {
+          console.log("in!!!!!!!!!!!!")
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
   }
 };
 

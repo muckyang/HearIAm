@@ -9,11 +9,9 @@
       <v-tabs-slider></v-tabs-slider>
       <v-tab href="#tab-1">
         로그인
-        <v-icon>mdi-phone</v-icon>
       </v-tab>
       <v-tab href="#tab-2">
         회원가입
-        <v-icon>mdi-heart</v-icon>
       </v-tab>
     </v-tabs>
 

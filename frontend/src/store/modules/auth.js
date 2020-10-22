@@ -37,10 +37,11 @@ const actions = {
                 .catch(err => {
                     commit(AUTH_ERROR, err);
                     localStorage.removeItem("user-token");
-                    localStorage.removeItem("profilename");
-                    localStorage.removeItem("realname");
-                    localStorage.removeItem("email");
+                    localStorage.removeItem("role");
+                    localStorage.removeItem("qualification");
+                    localStorage.removeItem("userName");
                     localStorage.removeItem("userNum");
+                    localStorage.removeItem("userID");
                     reject(err);
                 });
         });
@@ -61,11 +62,11 @@ const actions = {
         return new Promise(resolve => {
             commit(AUTH_LOGOUT);
             localStorage.removeItem("user-token");
-            localStorage.removeItem("profilename");
-            localStorage.removeItem("realname");
+            localStorage.removeItem("role");
+            localStorage.removeItem("qualification");
+            localStorage.removeItem("userName");
             localStorage.removeItem("userNum");
             localStorage.removeItem("userID");
-            localStorage.removeItem("userBirth");
             resolve();
         });
     }

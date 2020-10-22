@@ -17,7 +17,7 @@ export default {
   props: {
     mode: {
       type: String,
-      default: 'hold',
+      default: 'press',
       validator: v => ['hold', 'press'].includes(v)
     }
   },
