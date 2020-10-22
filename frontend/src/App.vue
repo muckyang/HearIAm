@@ -35,17 +35,49 @@
     <v-main>
       <router-view />
     </v-main>
+    <!-- <v-btn @click="logout()">LogOut</v-btn> -->
   </v-app>
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
+import { AUTH_LOGOUT } from "@/store/actions/auth";
+
 export default {
   name: "App",
+  components: {
 
-  components: {},
-
+  },
   data() {
-    return {};
+    return {
+
+    };
+  },
+  methods:{
+    logout: function() {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {
+        this.drawer = false;
+      });
+      this.$router.push("/").catch(() => {});
+    },
+  },
+  computed: {
+    ...mapGetters([
+      "isProfileLoaded",
+      "getRole",
+      "getQualification",
+      "getUserName",
+      "getUserNum",
+      "getUserID",
+    ]),
+    ...mapState({
+      authLoading: state => state.auth.status === "loading",
+      role: state => `${state.user.getRole}`,
+      qualification: state => `${state.user.getQualification}`,
+      userNum: state => `${state.user.getUserNum}`,
+      userName: state => `${state.user.getUserName}`,
+      userID: state => `${state.user.getUserID}`
+    })
   },
 };
 </script>
@@ -75,7 +107,6 @@ body {
 }
 
 html {
-  -ms-overflow-style: none !important;
   scroll-behavior: smooth;
 }
 </style>

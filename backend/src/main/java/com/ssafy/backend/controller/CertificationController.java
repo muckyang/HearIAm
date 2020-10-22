@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.sql.SQLException;
 
-import com.ssafy.backend.utils.AuthSelenium;
-
+// import com.ssafy.backend.utils.AuthSelenium;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -78,8 +77,8 @@ public class CertificationController {
 		}
 
 		// 이름, 생년월일, 자격번호, 발급일, 내지번호
-		String text = AuthSelenium.execSelenium(outputList);
-		System.out.println(text);
+		// String text = authSelenium.execSelenium(outputList);
+		// System.out.println(text);
 
 		return outputList;
 	}

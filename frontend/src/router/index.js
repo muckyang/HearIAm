@@ -5,6 +5,8 @@ import UserWRTC from '../views/webRTC/UserWRTC.vue'
 import CounselorWRTC from '../views/webRTC/CounselorWRTC.vue'
 import Emotion from '../views/emotion/EmotionTest.vue'
 import Record from '../views/videoRecord/Record.vue'
+import RecordConsult from '../views/consult/RecordConsult.vue'
+import ReserveMain from '../views/reserve/ReserveMain.vue'
 
 Vue.use(VueRouter)
 
@@ -43,10 +45,26 @@ const routes = [{
         component: Record
     },
     {
+        path: '/recordConsult',
+        name: 'RecordConsult',
+        component: RecordConsult
+    },
+    {
+        path: '/reserveMain',
+        name: 'ReserveMain',
+        component: ReserveMain
+    },
+    {
         path: '/menteeMain',
         name: 'menteeMain',
         component: () =>
-            import ( '../views/mentee/MenteeMain.vue')
+            import ( '@/views/mentee/MenteeMain.vue')
+    },
+    {
+        path: '/mentorMain',
+        name: 'mentorMain',
+        component: () =>
+            import ( '@/views/mentor/MentorMain.vue')
     },
 ]
 
