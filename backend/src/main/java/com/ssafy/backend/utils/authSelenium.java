@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public class AuthSelenium {
+public class authSelenium {
 
 	public static String execSelenium(String[] list) {
 		System.out.println("execselenium");

@@ -5,7 +5,7 @@
         <div class="columns">
           <div class="column">
             <div class="has-text-right">
-              <h2 class="title is-3">녹음상담</h2>
+              <h2 >녹음상담</h2>
               <h3 class="subtitle"><strong>마이크</strong> 버튼을 눌러 상담내용을 녹음하세요.</h3>
             </div>
 
@@ -17,12 +17,13 @@
             <div class="recorded-audio">
               <div v-for="(record, index) in recordings" :key="index" class="recorded-item">
                 <div class="audio-container"><audio :src="record.src" controls /></div>
+                <p> {{record}} </p>
                 <div><button @click="removeRecord(index)" class="button is-dark">삭제하기</button></div>
+                
               </div>
+                <div><button @click="fileUpload(recordings[0])" class="button is-dark">저장하기</button></div>
             </div>
           </div>
-          
-          <div><button @click="ListRecord()" class="button is-dark">조회하기</button></div>
         </div>
       </section>
 <!--  <section id="example-video">
@@ -49,6 +50,7 @@
 </template>
 
 <script>
+import axios from "axios";
 
 export default {
     name: 'Record',
@@ -68,26 +70,37 @@ export default {
     onStream (stream) {
       console.log('Got a stream object:', stream);
     },
-    onVideoStream (stream) {
-      console.log('Got a video stream object:', stream);
-    },
-    onVideoResult (data) {
-      this.$refs.Video.srcObject = null
-      this.$refs.Video.src = window.URL.createObjectURL(data)
-      console.log(data)
-    },
+    // onVideoStream (stream) {
+    //   console.log('Got a video stream object:', stream);
+    // },
+    // onVideoResult (data) {
+    //   this.$refs.Video.srcObject = null
+    //   this.$refs.Video.src = window.URL.createObjectURL(data)
+    //   console.log(data)
+    // },
     onResult (data) {
       console.log(data)
       this.recordings.push({
         src: window.URL.createObjectURL(data)
       })
     },
-    ListRecord () {
-      for(var k  in this.recordings ){
-        console.log(k);
-      }
-      
-    }
+    fileUpload(data) {
+      var formData = new FormData();
+      formData.append("file", data);
+      axios
+        .post(`https://k3b202.p.ssafy.io:8080/record`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(() => {
+          console.log("in!!!!!!!!!!!!")
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
   }
 };
 

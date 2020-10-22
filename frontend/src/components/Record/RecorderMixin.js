@@ -98,11 +98,10 @@ export default {
       this.$_mediaRecorder.addEventListener('stop', () => {
         this.$emit('stop')
 
-        const blobData = new Blob(this.chunks)
-        var file = new File([blobData], "test.pcm")
+        const blobData = new Blob(this.chunks,{ 'type' : 'audio/wav; codecs=0' })
+        var file = new File([blobData], "test.wav")
         this.recordFileList.push(file);
-        axios.
-
+ 
         console.log(this.recordFileList)
         if (blobData.size > 0) {
           this.$emit('result', blobData)
