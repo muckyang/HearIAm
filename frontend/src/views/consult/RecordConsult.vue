@@ -106,7 +106,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .record-main {
   background-image: linear-gradient(to bottom, #93dfff, white);
   height: 100%;
