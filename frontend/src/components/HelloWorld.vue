@@ -85,10 +85,16 @@
                 data-sal-duration="600"
                 data-sal-easing="ease"
               >
-              <div class="justify-content-center mb-5" text-align="center">
-              <img src="../assets/student.png" style="width:220px; height:250px;">
-              <img src="../assets/student2.png" style="width:220px; height:250px;">
-              </div>
+                <div class="justify-content-center mb-5" text-align="center">
+                  <img
+                    src="../assets/student.png"
+                    style="width: 210px; height: 250px"
+                  />
+                  <img
+                    src="../assets/student2.png"
+                    style="width: 210px; height: 250px"
+                  />
+                </div>
                 <p style="font-size: 3rem">청소년</p>
                 <v-btn
                   style="
@@ -110,7 +116,11 @@
                 data-sal-duration="600"
                 data-sal-easing="ease"
               >
-              <img class="mb-5" src="../assets/consultant.png" style="width:260px; height:250px;">
+                <img
+                  class="mb-5"
+                  src="../assets/consultant.png"
+                  style="width: 300px; height: 250px"
+                />
                 <p style="font-size: 3rem">상담사</p>
                 <v-btn
                   style="
@@ -127,15 +137,43 @@
             </v-col>
           </div>
         </div>
-        <!-- <div style="width: 5%"></div> -->
       </div>
     </div>
+    <v-dialog v-model="login_dialog" max-width="500" min-height="700">
+      <v-card
+        v-if="role == 'mentee'"
+        style="padding: 50px; background: #93dfff"
+      >
+        <v-card-title class="text-center justify-center p-8">
+          <p style="font-family: 'Capriola'; font-size: 3rem; font-weight: 700">
+            Hear I Am
+          </p>
+        </v-card-title>
+        <Login :role="role" />
+        <div align="right">
+      <v-btn text class="px-0 mt-2 mr-2">비회원이용</v-btn>
+      <v-btn text class="px-0 mt-2" @click="goSignUpModal(role)">회원가입</v-btn>
+      </div>
+      </v-card>
+      <v-card v-else style="padding: 50px; background: #f5a2bb">
+        <v-card-title class="text-center justify-center p-8">
+          <p style="font-family: 'Capriola'; font-size: 3rem; font-weight: 700">
+            Hear I Am
+          </p>
+        </v-card-title>
+        <Login :role="role" />
+        <div align="right">
+      <v-btn text class="px-0 mt-2 mr-2">비회원이용</v-btn>
+      <v-btn text class="px-0 mt-2" @click="goSignUpModal(role)">회원가입</v-btn>
+      </div>
+      </v-card>
+    </v-dialog>
     <v-dialog
-        v-model="dialog"
+        v-model="sign_dialog"
         max-width="800"
       >
-        <v-card>
-          <LoginModal :role="role" />
+        <v-card style="padding:50px;">
+          <SignUpModal :role="role" />
         </v-card>
       </v-dialog>
   </div>
@@ -143,28 +181,38 @@
 
 <script>
 import sal from "sal.js";
-import LoginModal from '@/components/account/LoginModal.vue';
+// import LoginModal from "@/components/account/LoginModal.vue";
+import Login from "@/components/account/Login.vue";
+import SignUpModal from '@/components/account/SignUpModal.vue';
 
 export default {
   name: "HelloWorld",
   mounted() {
     sal();
   },
-  components:{
-    LoginModal
+  components: {
+    // LoginModal,
+    Login,
+    SignUpModal,
   },
   data() {
     return {
-      dialog: false,
+      login_dialog: false,
+      sign_dialog: false,
       role: "",
     };
   },
-  methods:{
-    loginModal(role){
+  methods: {
+    loginModal(role) {
       this.role = role;
-      this.dialog = true;
+      this.login_dialog = true;
+    },
+    goSignUpModal(role){
+      this.login_dialog=false;
+      this.role = role;
+      this.sign_dialog = true;
     }
-  }
+  },
 };
 </script>
 <style>

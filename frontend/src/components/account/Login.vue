@@ -21,11 +21,13 @@
         class="mb-7"
         @keypress.enter="loginRequest"
       />
-
-      <v-btn class="pa-5 green-mbtn" width="100%" @click="loginRequest"
+      
+      <v-btn class="mbtn" width="100%" @click="loginRequest" style="height:3rem;"
         >로그인</v-btn
       >
+      
     </v-form>
+    
     <v-snackbar v-model="match" top right flat color="error" :timeout="2000"
       ><p
         style="
@@ -46,16 +48,20 @@
 import { AUTH_REQUEST } from "@/store/actions/auth";
 import http from "@/util/http-common.js";
 
+
 export default {
   name: "Login",
   props: {
     role: { type: String },
+  },
+  components:{
   },
   data() {
     return {
       userId: "",
       password: "",
       match: false,
+      dialog:false,
     };
   },
   methods: {
@@ -95,4 +101,8 @@ export default {
 </script>
 
 <style>
+.mbtn{
+  background:#ffdc15 !important;
+  font-weight:bold !important;
+}
 </style>
