@@ -55,7 +55,9 @@
       <v-btn
         large
         elevation="4"
-        @click="$vuetify.goTo('#login')"
+        @click="
+          $vuetify.goTo('#login');
+        "
         class="mt-5"
         style="
           font-weight: bold;
@@ -67,7 +69,7 @@
         >시작하기<v-icon>mdi-cursor-pointer</v-icon></v-btn
       >
     </div>
-    <div id="login" style="height: 100vh">
+    <div id="login" style="height: 100vh" v-if="!show">
       <div class="d-flex justify-content-center" style="height: 100%">
         <!-- <div style="width: 5%"></div> -->
         <div style="height: 100%; width: 100%">
@@ -85,10 +87,16 @@
                 data-sal-duration="600"
                 data-sal-easing="ease"
               >
-              <div class="justify-content-center mb-5" text-align="center">
-              <img src="../assets/student.png" style="width:220px; height:250px;">
-              <img src="../assets/student2.png" style="width:220px; height:250px;">
-              </div>
+                <div class="justify-content-center mb-5" text-align="center">
+                  <img
+                    src="../assets/student.png"
+                    style="width: 220px; height: 250px"
+                  />
+                  <img
+                    src="../assets/student2.png"
+                    style="width: 220px; height: 250px"
+                  />
+                </div>
                 <p style="font-size: 3rem">청소년</p>
                 <v-btn
                   style="
@@ -98,6 +106,7 @@
                     font-size: 1.2rem;
                     background: #ffdc15;
                   "
+                  @click="menteeClick = !menteeClick; show = !show" 
                   >로그인</v-btn
                 >
               </div>
@@ -109,7 +118,11 @@
                 data-sal-duration="600"
                 data-sal-easing="ease"
               >
-              <img class="mb-5" src="../assets/consultant.png" style="width:260px; height:250px;">
+                <img
+                  class="mb-5"
+                  src="../assets/consultant.png"
+                  style="width: 260px; height: 250px"
+                />
                 <p style="font-size: 3rem">상담사</p>
                 <v-btn
                   style="
@@ -119,6 +132,7 @@
                     font-size: 1.2rem;
                     background: #ffdc15;
                   "
+                  @click="mentorClick = !mentorClick;show = !show "
                   >로그인</v-btn
                 >
               </div>
@@ -128,6 +142,137 @@
         <!-- <div style="width: 5%"></div> -->
       </div>
     </div>
+      <transition name="slide-fade">
+        <div v-if="menteeClick" style="height: 100%; width: 100% ;  background: linear-gradient(to right, #93dfff, #f5a2bb);">
+          
+          <!-- background: linear-gradient(to right, #3D5469, #79B7D1); -->
+          <div style="
+          height: 100vh" class="d-flex justify-content-center">
+             <v-col class="my-auto" align="center">
+                 <div>
+                 <v-btn
+                  depressed
+                  elevation="9"
+                  fab
+                  icon
+                  style="width: 260px; height: 250px; background: linear-gradient(to top, #93dfff, #f5a2bb);"
+                  
+                >
+                <div style="width: 260px; height: 250px; padding: 17px;" class="justify-content-center mb-5; " text-align="center" >
+                <img
+                    src="@/assets/icons/stream_btnm.png"
+                    style="width: 100%; height: 100%; "
+                  />
+                </div>
+                </v-btn>
+                </div>
+             </v-col>
+            <v-col class="my-auto" align="center">
+                 <div>
+                 <v-btn
+                  depressed
+                  elevation="9"
+                  fab
+                  icon
+                  style="width: 260px; height: 250px; background: linear-gradient(to top, #93dfff, #f5a2bb);"
+                  
+                >
+                <div style="width: 260px; height: 250px; padding: 17px;" class="justify-content-center mb-5; " text-align="center" >
+                <img
+                    src="@/assets/icons/voice_btn.png"
+                    style="width: 100%; height: 100%; "
+                  />
+                </div>
+                </v-btn>
+                </div>
+             </v-col>
+             <v-col class="my-auto" align="center">
+                 <div>
+                 <v-btn
+                  depressed
+                  elevation="9"
+                  fab
+                  icon
+                  style="width: 260px; height: 250px; background: linear-gradient(to top, #93dfff, #f5a2bb);"
+                  
+                >
+                <div style="width: 260px; height: 250px; padding: 17px;" class="justify-content-center mb-5; " text-align="center" >
+                <img
+                    src="@/assets/icons/res_btn.png"
+                    style="width: 100%; height: 100%; "
+                  />
+                </div>
+                </v-btn>
+                </div>
+             </v-col>
+          </div>
+        </div>
+      </transition>
+
+      <transition name="slide-fade2">
+        <div v-if="mentorClick" style="height: 100%; width: 100%; background: linear-gradient(to left, #93dfff, #f5a2bb);">
+          <div style="
+          height: 100vh" class="d-flex justify-content-center">
+             <v-col class="my-auto" align="center">
+                 <div>
+                 <v-btn
+                  depressed
+                  elevation="9"
+                  fab
+                  icon
+                  style="width: 260px; height: 250px; background: linear-gradient(to top, #93dfff, #f5a2bb);"
+                  
+                >
+                <div style="width: 260px; height: 250px; padding: 17px;" class="justify-content-center mb-5; " text-align="center" >
+                <img
+                    src="@/assets/icons/t_stream_btn.png"
+                    style="width: 100%; height: 100%; "
+                  />
+                </div>
+                </v-btn>
+                </div>
+             </v-col>
+            <v-col class="my-auto" align="center">
+                 <div>
+                 <v-btn
+                  depressed
+                  elevation="9"
+                  fab
+                  icon
+                  style="width: 260px; height: 250px; background: linear-gradient(to top, #93dfff, #f5a2bb);"
+                  
+                >
+                <div style="width: 260px; height: 250px; padding: 17px;" class="justify-content-center mb-5; " text-align="center" >
+                <img
+                    src="@/assets/icons/t_voice_btn.png"
+                    style="width: 100%; height: 100%; "
+                  />
+                </div>
+                </v-btn>
+                </div>
+             </v-col>
+             <v-col class="my-auto" align="center">
+                 <div>
+                 <v-btn
+                  depressed
+                  elevation="9"
+                  fab
+                  icon
+                  style="width: 260px; height: 250px; background: linear-gradient(to top, #93dfff, #f5a2bb);"
+                  
+                >
+                <div style="width: 260px; height: 250px; padding: 17px;" class="justify-content-center mb-5; " text-align="center" >
+                <img
+                    src="@/assets/icons/t_report_btn.png"
+                    style="width: 100%; height: 100%; "
+                  />
+                </div>
+                </v-btn>
+                </div>
+             </v-col>
+          </div>
+        </div>
+      </transition>
   </div>
 </template>
 
@@ -139,7 +284,11 @@ export default {
     sal();
   },
   data() {
-    return {};
+    return {
+      show: false,
+      menteeClick: false,
+      mentorClick: false,
+    };
   },
 };
 </script>
@@ -168,5 +317,24 @@ export default {
   font-size: 7rem;
   text-shadow: 4px 2px 2px black;
   font-weight: 700;
+}
+</style>
+
+<style scoped>
+.slide-fade-enter-active {
+  transition: all 1s ease;
+}
+.slide-fade2-enter-active {
+  transition: all 1s ease;
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-fade2-enter,
+.slide-fade2-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
 }
 </style>
