@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.backend.model.ConRoom;
+import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.repository.ConRoomRepository;
+import com.ssafy.backend.repository.EmotionRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -27,10 +29,21 @@ public class CounselingController {
 	
 	@Autowired
 	ConRoomRepository conRoomRepository;
+	
+	@Autowired
+	EmotionRepository emotionRepository;
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<String> liveRequest(@RequestBody ConRoom conRoom) {
 		conRoomRepository.save(conRoom);
+
+		return ResponseEntity.ok(SUCCESS);
+	}
+	
+	@PostMapping("/saveEmotion")
+	public ResponseEntity<String> saveEmotion(@RequestBody Emotion emotion) {
+		System.out.println(emotion.toString());
+		emotionRepository.save(emotion);
 
 		return ResponseEntity.ok(SUCCESS);
 	}
