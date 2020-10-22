@@ -1,49 +1,47 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-md-12 my-3">
-        <h2>Room</h2>
-        <v-text-field v-model="roomId" />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div>
-          <WebRTC
-            ref="webrtc"
-            width="100%"
-            :roomId="roomId"
-            cameraHeight="500"
-            v-on:joined-room="logEvent"
-            v-on:left-room="logEvent"
-            v-on:opened-room="logEvent"
-            v-on:share-started="logEvent"
-            v-on:share-stopped="logEvent"
-            @error="onError"
-            @childs-event="parentsMethod"
-          />
-        </div>
-        <div class="row">
-          <div class="col-md-12 my-3">
-            <v-btn type="button" class="btn btn-primary" @click="onJoin">
-              Join
-            </v-btn>
-            <v-btn type="button" class="btn btn-primary" @click="onLeave">
-              Leave
-            </v-btn>
-          </div>
-        </div>
-        <Bar :chartData="chartData" :options="options" />
-      </div>
-    </div>
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-row>
+            <v-col>
+              <v-btn type="button" class="btn btn-primary" @click="onJoin">
+                Join
+              </v-btn>
+              <v-btn type="button" class="btn btn-primary" @click="onLeave">
+                Leave
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="5">
+              <Bar :chartData="chartData" :options="options" />
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col cols="6">
+              <WebRTC
+                ref="webrtc"
+                width="100%"
+                :roomId="roomId"
+                cameraHeight="400"
+                @error="onError"
+                @childs-event="parentsMethod"
+              />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
-import WebRTC from "@/components/webRTC/webrtc.vue";
+import WebRTC from "@/components/webRTC/Cwebrtc.vue";
 import Bar from "@/components/webRTC/Bar.js";
 import * as io from "socket.io-client";
 window.io = io;
+import { mapGetters } from "vuex";
+import http from "@/util/http-common.js";
 
 export default {
   name: "CWebRTCComp",
@@ -54,7 +52,7 @@ export default {
   data() {
     return {
       img: null,
-      roomId: "public-room",
+      roomId: null,
       message: null,
       chartData: null,
       emotion: [0, 0, 0, 0, 0, 0, 0],
@@ -70,23 +68,47 @@ export default {
           ],
         },
       },
+      allEmotion: {
+        angry: "",
+        disgusted: "",
+        fearful: "",
+        happy: "",
+        neutral: "",
+        sad: "",
+        surprised: "",
+      },
     };
   },
   mounted() {
+    if (this.getRole != `mentor`) {
+      this.$router.push("/");
+    }
+    this.roomId = this.$route.params.room;
     this.fillData();
   },
   methods: {
     onJoin() {
+      http.put(
+        `/counseling/joinLive/${this.$route.params.num}/${this.getUserNum}`
+      );
       this.$refs.webrtc.join();
     },
     onLeave() {
+      http.put(`/counseling/finishLive/${this.$route.params.num}`);
+      http.post(`/counseling/saveEmotion`, {
+        num: this.$route.params.num,
+        angry: this.allEmotion.angry,
+        disgusted: this.allEmotion.disgusted,
+        fearful: this.allEmotion.fearful,
+        happy: this.allEmotion.happy,
+        neutral: this.allEmotion.neutral,
+        sad: this.allEmotion.sad,
+        surprised: this.allEmotion.surprised
+      });
       this.$refs.webrtc.leave();
     },
     onError(error, stream) {
       console.log("On Error Event", error, stream);
-    },
-    logEvent(event) {
-      console.log("Event : ", event);
     },
     sendMessage() {
       this.$refs.webrtc.sendMessage(this.message);
@@ -101,6 +123,32 @@ export default {
         Math.floor(message.sad * 100),
         Math.floor(message.surprised * 100),
       ];
+      this.allEmotion.angry = this.allEmotion.angry.concat(
+        this.emotion[0],
+        `|`
+      );
+      this.allEmotion.disgusted = this.allEmotion.disgusted.concat(
+        this.emotion[1],
+        `|`
+      );
+      this.allEmotion.fearful = this.allEmotion.fearful.concat(
+        this.emotion[2],
+        `|`
+      );
+      this.allEmotion.happy = this.allEmotion.happy.concat(
+        this.emotion[3],
+        `|`
+      );
+      this.allEmotion.neutral = this.allEmotion.neutral.concat(
+        this.emotion[4],
+        `|`
+      );
+      this.allEmotion.sad = this.allEmotion.sad.concat(this.emotion[5], `|`);
+      this.allEmotion.surprised = this.allEmotion.surprised.concat(
+        this.emotion[6],
+        `|`
+      );
+      console.dir(this.allEmotion);
       this.fillData();
     },
     fillData() {
@@ -123,6 +171,16 @@ export default {
         ],
       };
     },
+  },
+  computed: {
+    ...mapGetters([
+      "isProfileLoaded",
+      "getRole",
+      "getQualification",
+      "getUserName",
+      "getUserNum",
+      "getUserID",
+    ]),
   },
 };
 </script>
