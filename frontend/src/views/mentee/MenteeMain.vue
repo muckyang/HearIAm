@@ -30,6 +30,7 @@
                 <img
                   src="@/assets/icons/stream_btnm.png"
                   style="width: 100%; height: 100%"
+                  @click="goLive()"
                 />
               </div>
             </v-btn>
@@ -95,6 +96,11 @@
 export default {
   data() {
     return {};
+  },
+  methods: {
+    goLive() {
+      this.$router.push(`/userWRTC`);
+    },
   },
 };
 </script>
