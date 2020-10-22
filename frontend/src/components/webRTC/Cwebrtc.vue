@@ -7,7 +7,17 @@
       class="video-item"
     >
       <video
-        controls
+        v-if="item.visibility != `hidden`"
+        autoplay
+        playsinline
+        ref="videos"
+        :height="cameraHeight"
+        :muted="item.muted"
+        :id="item.id"
+        visibility: hidden
+      ></video>
+      <video
+        v-else
         autoplay
         playsinline
         ref="videos"
@@ -114,9 +124,14 @@ export default {
         return video.id === stream.streamid;
       });
       if (found === undefined) {
+        let view = null;
+        if (stream.type === "local") {
+          view = `hidden`;
+        }
         let video = {
           id: stream.streamid,
           muted: stream.type === "local",
+          visibility: view
         };
         that.videoList.push(video);
         if (stream.type === "local") {
@@ -201,14 +216,14 @@ export default {
 </script>
 <style scoped>
 .video-list {
-  background: whitesmoke;
+  background: white;
   height: auto;
 }
 .video-list div {
   padding: 0px;
 }
 .video-item {
-  background: #c5c4c4;
+  background: white;
   display: inline-block;
 }
 </style>
