@@ -5,20 +5,20 @@ import { AUTH_LOGOUT } from "../actions/auth";
 
 const state = {
     status: "",
-    profilename: localStorage.getItem("profilename") || "",
-    realname: localStorage.getItem("realname") || "",
+    role: localStorage.getItem("role") || "",
+    qualification: localStorage.getItem("qualification") || "",
+    userName: localStorage.getItem("userName") || "",
     userNum: localStorage.getItem("userNum") || "",
     userID: localStorage.getItem("userID") || "",
-    userBirth: localStorage.getItem("userBirth") || "",
 };
 
 const getters = {
-    getProfile: state => state.profilename,
-    isProfileLoaded: state => !!state.profilename,
-    getRealName: state => state.realname,
+    isProfileLoaded: state => !!state.userName,
+    getRole: state => state.role,
+    getQualification: state => state.qualification,
+    getUserName: state => state.userName,
     getUserNum: state => state.userNum,
     getUserID: state => state.userID,
-    getUserBirth: state => state.userBirth,
 };
 
 const actions = {
@@ -49,16 +49,16 @@ const mutations = {
     },
     [USER_SUCCESS]: (state, resp) => {
         state.status = "success";
-        localStorage.setItem("profilename", resp.nickName);
-        localStorage.setItem("realname", resp.name);
+        localStorage.setItem("role", resp.role);
+        localStorage.setItem("qualification", resp.qualification);
+        localStorage.setItem("userName", resp.name);
         localStorage.setItem("userNum", resp.num);
-        localStorage.setItem("userID", resp.userId);
-        localStorage.setItem("userBirth", resp.birth);
-        Vue.set(state, "profilename", resp.nickName);
-        Vue.set(state, "realname", resp.name);
+        localStorage.setItem("userID", resp.id);
+        Vue.set(state, "role", resp.role);
+        Vue.set(state, "qualification", resp.qualification);
+        Vue.set(state, "userName", resp.name);
         Vue.set(state, "userNum", resp.num);
-        Vue.set(state, "userID", resp.userId);
-        Vue.set(state, "userBirth", resp.birth);
+        Vue.set(state, "userID", resp.id);
 
 
     },
@@ -66,14 +66,14 @@ const mutations = {
         state.status = "error";
     },
     [AUTH_LOGOUT]: state => {
-        state.profilename = "";
-        state.realname = "";
+        state.role = "";
+        state.qualification = "";
+        state.userName = "";
         state.userNum = "";
         state.userID = "";
-        state.userBirth = "";
     },
     modifyProfileName: function(state, after) {
-        state.profilename = after;
+        state.userName = after;
     }
 };
 

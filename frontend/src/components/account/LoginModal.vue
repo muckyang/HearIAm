@@ -3,15 +3,13 @@
     <v-card-title class="text-center justify-center py-6">
       <h1 class="font-weight-bold display-3 basil--text">{{ userRole }}</h1>
     </v-card-title>
-    <v-tabs v-model="tab" centered icons-and-text>
+    <v-tabs v-model="tab" grow>
       <v-tabs-slider></v-tabs-slider>
       <v-tab href="#tab-1">
         로그인
-        <v-icon>mdi-phone</v-icon>
       </v-tab>
       <v-tab href="#tab-2">
         회원가입
-        <v-icon>mdi-heart</v-icon>
       </v-tab>
     </v-tabs>
 
