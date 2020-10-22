@@ -60,6 +60,18 @@ const routes = [{
         name: 'ReserveMain',
         component: ReserveMain
     },
+    {
+        path: '/menteeMain',
+        name: 'menteeMain',
+        component: () =>
+            import ( '@/views/mentee/MenteeMain.vue')
+    },
+    {
+        path: '/mentorMain',
+        name: 'mentorMain',
+        component: () =>
+            import ( '@/views/mentor/MentorMain.vue')
+    },
 ]
 
 const router = new VueRouter({

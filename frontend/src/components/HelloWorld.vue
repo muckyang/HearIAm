@@ -55,7 +55,9 @@
       <v-btn
         large
         elevation="4"
-        @click="$vuetify.goTo('#login')"
+        @click="
+          $vuetify.goTo('#login');
+        "
         class="mt-5"
         style="
           font-weight: bold;
@@ -67,7 +69,7 @@
         >시작하기<v-icon>mdi-cursor-pointer</v-icon></v-btn
       >
     </div>
-    <div id="login" style="height: 100vh">
+    <div id="login" style="height: 100vh" v-if="!show">
       <div class="d-flex justify-content-center" style="height: 100%">
         <!-- <div style="width: 5%"></div> -->
         <div style="height: 100%; width: 100%">
@@ -88,11 +90,11 @@
                 <div class="justify-content-center mb-5" text-align="center">
                   <img
                     src="../assets/student.png"
-                    style="width: 210px; height: 250px"
+                    style="width: 220px; height: 250px"
                   />
                   <img
                     src="../assets/student2.png"
-                    style="width: 210px; height: 250px"
+                    style="width: 220px; height: 250px"
                   />
                 </div>
                 <p style="font-size: 3rem">청소년</p>
@@ -105,8 +107,7 @@
                     background: #ffdc15;
                   "
                   @click="loginModal(`mentee`)"
-                  >로그인</v-btn
-                >
+                  >로그인</v-btn>
               </div>
             </v-col>
             <v-col class="my-auto" align="center"
@@ -133,12 +134,14 @@
                   @click="loginModal(`mentor`)"
                   >로그인</v-btn
                 >
+                <!-- @click="mentorClick = !mentorClick;show = !show " -->
               </div>
             </v-col>
           </div>
         </div>
       </div>
     </div>
+      
     <v-dialog v-model="login_dialog" max-width="500" min-height="700">
       <v-card
         v-if="role == 'mentee'"

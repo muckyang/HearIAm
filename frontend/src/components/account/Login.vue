@@ -81,10 +81,10 @@ export default {
               this.nowlogin = !this.nowlogin;
               if (this.role == `mentee`) {
                   //청소년 페이지로 가주세요
-                this.$router.push("/1");
+                this.$router.push("/menteeMain");
               } else {
                   //상담사 페이지로 가주세요
-                this.$router.push("/2");
+                this.$router.push("/mentorMain");
               }
             })
             .catch(() => {
