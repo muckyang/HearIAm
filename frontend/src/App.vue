@@ -75,7 +75,6 @@ body {
 }
 
 html {
-  -ms-overflow-style: none !important;
   scroll-behavior: smooth;
 }
 </style>
