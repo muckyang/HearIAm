@@ -42,6 +42,12 @@ const routes = [{
         name: 'Record',
         component: Record
     },
+    {
+        path: '/menteeMain',
+        name: 'menteeMain',
+        component: () =>
+            import ( '../views/mentee/MenteeMain.vue')
+    },
 ]
 
 const router = new VueRouter({

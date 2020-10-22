@@ -13,10 +13,13 @@ public class AuthSelenium {
 		WebDriver driver = null;
 		String res ="";
 		try {
-			System.setProperty("webdriver.chrome.driver", "./backend/src/main/java/com/ssafy/backend/utils/chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "/var/lib/jenkins/workspace/s03-final/S03P31B202/backend/src/main/java/com/ssafy/backend/utils/chromedriver");
 			ChromeOptions options = new ChromeOptions();
    			options.addArguments("headless");
-			driver = new ChromeDriver(options);
+			options.addArguments("no-sandbox");
+			options.addArguments("disable-dev-shm-usage");
+			driver = new ChromeDriver(options); // Driver 생성
+
 			driver.get("https://www.q-net.or.kr/qlf006.do?id=qlf00601&gSite=Q&gId=");
 			WebElement name = driver.findElement(By.id("hgulNm"));
 			name.clear();
