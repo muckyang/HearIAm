@@ -53,8 +53,8 @@ export default {
     position: relative;
     background-color: #4DB6AC;
     border-radius: 50%;
-    width: 64px;
-    height: 64px;
+    width: 100px;
+    height: 100px;
     display: inline-block;
     cursor: pointer;
     box-shadow: 0 0 0 0 rgba(232, 76, 61, 0.7);
