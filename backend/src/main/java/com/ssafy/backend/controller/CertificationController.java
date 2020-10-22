@@ -79,8 +79,8 @@ public class CertificationController {
 		}
 
 		// 이름, 생년월일, 자격번호, 발급일, 내지번호
-		String text = authSelenium.execSelenium(outputList);
-		System.out.println(text);
+		// String text = authSelenium.execSelenium(outputList);
+		// System.out.println(text);
 
 		return outputList;
 	}

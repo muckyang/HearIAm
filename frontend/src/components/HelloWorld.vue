@@ -98,6 +98,7 @@
                     font-size: 1.2rem;
                     background: #ffdc15;
                   "
+                  @click="loginModal(`mentee`)"
                   >로그인</v-btn
                 >
               </div>
@@ -119,6 +120,7 @@
                     font-size: 1.2rem;
                     background: #ffdc15;
                   "
+                  @click="loginModal(`mentor`)"
                   >로그인</v-btn
                 >
               </div>
@@ -128,19 +130,41 @@
         <!-- <div style="width: 5%"></div> -->
       </div>
     </div>
+    <v-dialog
+        v-model="dialog"
+        max-width="800"
+      >
+        <v-card>
+          <LoginModal :role="role" />
+        </v-card>
+      </v-dialog>
   </div>
 </template>
 
 <script>
 import sal from "sal.js";
+import LoginModal from '@/components/account/LoginModal.vue';
+
 export default {
   name: "HelloWorld",
   mounted() {
     sal();
   },
-  data() {
-    return {};
+  components:{
+    LoginModal
   },
+  data() {
+    return {
+      dialog: false,
+      role: "",
+    };
+  },
+  methods:{
+    loginModal(role){
+      this.role = role;
+      this.dialog = true;
+    }
+  }
 };
 </script>
 <style>
