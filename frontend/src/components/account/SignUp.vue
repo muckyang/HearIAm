@@ -1,15 +1,11 @@
 <template>
   <div class="col-md-12 p-0">
     <v-container id="inspire" class="">
-      <v-col class="pr-10 pl-10">
+      <v-col>
         <v-form ref="form" v-model="valid">
           <v-row justify="center">
-            <v-col
-              class="text-left pt-8 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12"
-            >
-              * 아이디
-            </v-col>
-            <v-col class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
+            <v-col class="d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+            <v-icon large color="black" class="pb-7 mr-2">mdi-account-outline</v-icon>
               <v-text-field
                 v-model="id"
                 :counter="15"
@@ -18,24 +14,32 @@
                 placeholder="사용할 아이디를 입력해주세요."
                 required
                 clearable
+                solo
               ></v-text-field>
+              <v-icon v-if="!idchkFlag" class="pb-8 ml-3" color="red" large icon @click="idCheck()">mdi-check-outline</v-icon>
+              <v-icon v-if="idchkFlag" class="pb-9 ml-3" color="blue" icon large @click="idCheck()">mdi-check-bold</v-icon >
             </v-col>
-            <v-col
-              class="text-right pt-6 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12"
-            >
-              <v-btn class="green-mbtn" outlined @click="idCheck()"
-                >중복체크</v-btn
-              >
+          </v-row>
+
+          <v-row v-if="role == `mentor`" justify="center">
+            <v-col class="d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+              <v-icon large color="black" class="pb-7 mr-2">mdi-account-circle-outline</v-icon>
+              <v-text-field
+                v-model="name"
+                :counter="15"
+                :rules="nameRules"
+                placeholder="이름을 입력해주세요."
+                color="#356859"
+                required
+                clearable
+                solo
+              ></v-text-field>
             </v-col>
           </v-row>
 
           <v-row justify="center">
-            <v-col
-              class="text-left pt-8 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12"
-            >
-              * 비밀번호
-            </v-col>
-            <v-col class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+            <v-col class="d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+              <v-icon large color="black" class="pb-7 mr-2">mdi-lock-outline</v-icon>
               <v-text-field
                 v-model="password1"
                 type="password"
@@ -45,17 +49,14 @@
                 required
                 clearable
                 color="#356859"
+                solo
               ></v-text-field>
             </v-col>
           </v-row>
 
           <v-row justify="center">
-            <v-col
-              class="text-left pt-8 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12"
-            >
-              * 비밀번호 재입력
-            </v-col>
-            <v-col class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+            <v-col class="d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+              <v-icon large color="black" class="pb-7 mr-2">mdi-lock</v-icon>
               <v-text-field
                 v-model="password2"
                 type="password"
@@ -65,36 +66,14 @@
                 required
                 clearable
                 color="#356859"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-
-          <v-row v-if="role == `mentor`" justify="center">
-            <v-col
-              class="text-left pt-8 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12"
-            >
-              * 이름
-            </v-col>
-            <v-col class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
-              <v-text-field
-                v-model="name"
-                :counter="15"
-                :rules="nameRules"
-                placeholder="이름을 입력해주세요."
-                color="#356859"
-                required
-                clearable
+                solo
               ></v-text-field>
             </v-col>
           </v-row>
 
           <v-row v-if="role == `mentee`" justify="center">
-            <v-col
-              class="text-left pt-8 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12"
-            >
-              * 별명
-            </v-col>
-            <v-col class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+            <v-col class="d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+              <v-icon large color="black" class="pb-7 mr-2">mdi-shield-account-outline</v-icon>
               <v-text-field
                 v-model="name"
                 :counter="15"
@@ -103,114 +82,82 @@
                 color="#356859"
                 required
                 clearable
+                solo
               ></v-text-field>
             </v-col>
           </v-row>
 
           <v-row v-if="role == `mentor`" justify="center">
-            <v-col
-              class="text-left pt-8 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12"
-            >
-              * 상담자격인증
-            </v-col>
-            <v-col class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
-              인증해주세요
+            <v-col class="d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+              <v-icon large color="black" class="pb-7 mr-2">mdi-badge-account-horizontal-outline</v-icon>
+              <v-file-input
+                small-chips
+                clearable
+                solo
+                label="자격등 파일을 올려주세요."
+              ></v-file-input>
             </v-col>
           </v-row>
-
-          <v-btn
-            class="pa-5 col-12"
-            :disabled="!valid"
-            color="#356859"
-            dark
-            width="100%"
-            @click="validate"
-            >회원가입</v-btn
-          >
+          
+          <v-row>
+            <v-col cols="5" style="margin:0 auto;">
+              <v-btn class="mt-5 col-12" color="#ffdc15" @click="validate">회원가입</v-btn>
+            </v-col>
+          </v-row>
         </v-form>
       </v-col>
       <!-- alert -->
       <v-snackbar v-model="idFlag" top right flat color="error" :timeout="2000">
         <p class="snackText">존재하는 아이디입니다.</p>
       </v-snackbar>
-      <v-snackbar v-model="idOk" top right flat color="#356859" :timeout="2000">
+      <v-snackbar v-model="idOk" top right flat color="success" :timeout="2000">
         <p class="snackText">사용 가능한 아이디입니다.</p>
       </v-snackbar>
       <v-snackbar v-model="noidOk" top right flat color="error" :timeout="2000">
-        <p class="snackText">아이디 중복확인을 해주세요.</p>
+        <p class="snackText">아이디를 체크 해주세요.</p>
       </v-snackbar>
       <v-snackbar v-model="pwdNo" top right flat color="error" :timeout="2000">
         <p class="snackText">비밀번호가 다릅니다.</p>
       </v-snackbar>
-      <v-snackbar
-        v-model="signOk"
-        top
-        right
-        flat
-        color="#356859"
-        :timeout="2000"
-      >
+      <v-snackbar v-model="signOk" top right flat color="success" :timeout="2000">
         <p class="snackText">가입이 완료되었습니다.</p>
       </v-snackbar>
-      <v-snackbar
-        v-model="pwdLength"
-        top
-        right
-        flat
-        color="error"
-        :timeout="2000"
-      >
+      <v-snackbar v-model="pwdLength" top right flat color="error" :timeout="2000">
         <p class="snackText">
           비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.
         </p>
       </v-snackbar>
-      <v-snackbar
-        v-model="pwdEngNum"
-        top
-        right
-        flat
-        color="error"
-        :timeout="2000"
-      >
+      <v-snackbar v-model="pwdEngNum" top right flat color="error" :timeout="2000">
         <p class="snackText">비밀번호는 숫자와 영문자를 혼용하여야 합니다.</p>
+      </v-snackbar>
+      <v-snackbar v-model="noid" top right flat color="error" :timeout="2000">
+        <p class="snackText">아이디를 입력해주세요.</p>
       </v-snackbar>
     </v-container>
   </div>
 </template>
 
 <script>
-import http2 from "@/util/http-common2.js";
-import http from "@/util/http-common.js";
+import http2 from '@/util/http-common2.js';
+import http from '@/util/http-common.js';
 
 export default {
-  name: "SignUp",
+  name: 'SignUp',
   props: {
     role: { type: String },
   },
   data() {
     return {
-      id: "",
-      name: "",
-      password1: "",
-      password2: "",
+      id: '',
+      name: '',
+      password1: '',
+      password2: '',
       valid: false,
-      nameRules: [
-        (v) => !!v || "이름을 입력해주세요",
-        (v) =>
-          (v && v.length <= 15) ||
-          "이름은 최대 15글자까지만 사용할 수 있습니다",
-      ],
-      idRules: [
-        (v) => !!v || "아이디를 입력해주세요",
-        (v) =>
-          (v && v.length <= 15) ||
-          "아이디는 최대 15글자까지만 사용할 수 있습니다",
-      ],
+      nameRules: [(v) => !!v || '이름을 입력해주세요', (v) => (v && v.length <= 15) || '이름은 최대 15글자까지만 사용할 수 있습니다'],
+      idRules: [(v) => !!v || '아이디를 입력해주세요', (v) => (v && v.length <= 15) || '아이디는 최대 15글자까지만 사용할 수 있습니다'],
       passwordRules: [
-        (v) => !!v || "비밀번호를 입력해주세요",
-        (v) =>
-          (v && v.length <= 20) ||
-          "비밀번호는 최대 20글자까지만 사용할 수 있습니다",
+        (v) => !!v || '비밀번호를 입력해주세요',
+        (v) => (v && v.length <= 20) || '비밀번호는 최대 20글자까지만 사용할 수 있습니다',
       ],
       idFlag: false,
       idOk: false,
@@ -220,6 +167,8 @@ export default {
       signOk: false,
       pwdLength: false,
       pwdEngNum: false,
+      noid: false,
+      idchkFlag: false,
     };
   },
   methods: {
@@ -243,7 +192,7 @@ export default {
     },
     signUpRequest() {
       http2
-        .post("/signup", {
+        .post('/signup', {
           id: this.id,
           name: this.name,
           password: this.password1,
@@ -251,19 +200,16 @@ export default {
           role: this.role,
         })
         .then((response) => {
-          if (
-            response.data.success == true ||
-            response.data.success == "true"
-          ) {
+          if (response.data.success == true || response.data.success == 'true') {
             this.signOk = true;
             setTimeout(() => {
-              this.$router.push("/");
+              this.$router.go();
             }, 1500);
           }
         })
         .catch((e) => {
           if (e.request.status === 404) {
-            this.alertMsg = "회원가입에 실패하였습니다.";
+            this.alertMsg = '회원가입에 실패하였습니다.';
             this.alert = true;
           } else {
             this.visablelogin = false;
@@ -275,19 +221,31 @@ export default {
         });
     },
     idCheck() {
-      http.get(`user/checkId/${this.id}`).then((res) => {
-        if (res.data != null) {
-          this.idFlag = true;
-          this.id = "";
-        } else {
-          this.idOk = true;
-          this.idCk = true;
-        }
-      });
+      if (this.id == '') {
+        this.noid = true;
+      } else {
+        http.get(`user/checkId/${this.id}`).then((res) => {
+          if (res.data != null) {
+            this.idFlag = true;
+            this.id = '';
+          } else {
+            this.idOk = true;
+            this.idCk = true;
+            this.idchkFlag = true;
+          }
+        });
+      }
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.snackText {
+  margin-bottom: 0;
+  font-weight: bold;
+  font-size: 1rem;
+  word-spacing: 2px;
+  letter-spacing: 2px;
+}
 </style>

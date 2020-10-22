@@ -142,26 +142,26 @@
     <v-dialog v-model="login_dialog" max-width="500" min-height="700">
       <v-card
         v-if="role == 'mentee'"
-        style="padding: 50px; background: #93dfff"
+        style="padding: 50px;"
       >
         <v-card-title class="text-center justify-center p-8">
           <p style="font-family: 'Capriola'; font-size: 3rem; font-weight: 700">
             Hear I Am
           </p>
         </v-card-title>
-        <Login :role="role" />
+        <Login :role="role" :login_dialog="login_dialog"/>
         <div align="right">
       <v-btn text class="px-0 mt-2 mr-2">비회원이용</v-btn>
       <v-btn text class="px-0 mt-2" @click="goSignUpModal(role)">회원가입</v-btn>
       </div>
       </v-card>
-      <v-card v-else style="padding: 50px; background: #f5a2bb">
+      <v-card v-else style="padding: 50px;">
         <v-card-title class="text-center justify-center p-8">
           <p style="font-family: 'Capriola'; font-size: 3rem; font-weight: 700">
             Hear I Am
           </p>
         </v-card-title>
-        <Login :role="role" />
+        <Login :role="role" :login_dialog="login_dialog"/>
         <div align="right">
       <v-btn text class="px-0 mt-2 mr-2">비회원이용</v-btn>
       <v-btn text class="px-0 mt-2" @click="goSignUpModal(role)">회원가입</v-btn>
@@ -170,10 +170,10 @@
     </v-dialog>
     <v-dialog
         v-model="sign_dialog"
-        max-width="800"
+        max-width="600"
       >
-        <v-card style="padding:50px;">
-          <SignUpModal :role="role" />
+        <v-card style="padding:50px 20px 20px 20px" class="student-dialog">
+          <SignUpModal :role="role" :sign_dialog="sign_dialog"/>
         </v-card>
       </v-dialog>
   </div>
@@ -240,5 +240,9 @@ export default {
   font-size: 7rem;
   text-shadow: 4px 2px 2px black;
   font-weight: 700;
+}
+.student-dialog {
+  /* background-color: red !important; */
+  /* background: linear-gradient(to top, #fff9d8, #fde991); */
 }
 </style>
