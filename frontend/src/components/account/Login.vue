@@ -53,6 +53,7 @@ export default {
   name: "Login",
   props: {
     role: { type: String },
+    login_dialog: { type: Boolean },
   },
   components:{
   },
@@ -97,6 +98,14 @@ export default {
       });
     },
   },
+  watch: {
+    login_dialog(v) {
+      if(!v) {
+        this.userId = "";
+        this.password = "";
+      }
+    }
+  }
 };
 </script>
 
@@ -105,4 +114,5 @@ export default {
   background:#ffdc15 !important;
   font-weight:bold !important;
 }
+body{ -ms-overflow-style: none; } ::-webkit-scrollbar { display: none; }
 </style>
