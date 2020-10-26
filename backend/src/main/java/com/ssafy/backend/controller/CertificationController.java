@@ -40,7 +40,7 @@ public class CertificationController {
 		if (hostname.substring(0, 7).equals("DESKTOP")) {// local
 			command[1] = "./backend/AI/ocr.py";
 		} else {// aws
-			command[1] = "/var/lib/jenkins/workspace/front/backend/AI/ocr.py";
+			command[1] = "../../../../../../../AI/ocr.py";
 		}
 
 		// 파일 이름
