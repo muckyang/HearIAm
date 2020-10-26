@@ -13,11 +13,11 @@
         </div>
         <div class="row">
           <div class="col-md-12 my-3">
-            <v-btn type="button" class="btn btn-primary" @click="onJoin">
-              Join
+            <v-btn v-if="!isProgress" type="button" class="btn btn-primary" @click="onJoin">
+              상담 요청
             </v-btn>
-            <v-btn type="button" class="btn btn-primary" @click="onLeave">
-              Leave
+            <v-btn v-else type="button" class="btn btn-primary" @click="onLeave">
+              상담 종료
             </v-btn>
           </div>
         </div>
@@ -56,6 +56,7 @@ export default {
       roomId: null,
       message: null,
       videoTag: [],
+      isProgress: false,
     };
   },
   mounted() {
@@ -82,6 +83,7 @@ export default {
       this.roomId = text;
     },
     onJoin() {
+      this.isProgress = true;
       http
         .post(`/counseling/liveRequest`, {
           mentee: this.getUserNum,
@@ -99,7 +101,6 @@ export default {
       this.startVideo();
     },
     onLeave() {
-      http.put(`/counseling/finishLive/${this.$route.params.num}`);
       this.$refs.webrtc.leave();
       this.stopVideo();
     },
