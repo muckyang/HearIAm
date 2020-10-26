@@ -2,7 +2,7 @@
 
     Hear I Am은 청소년과 전문 상담가의 매칭을 통한 실시간 및 녹화 상담 서비스입니다.
 
-### 팀명 : :muscle:온청센 (온라인 청소년 센터) 
+### :muscle: 온청센 (온라인 청소년 센터) 
 
 * 팀장: 이재인(Full Stack)
   * 팀원: 김영남(Full Stack), 노휘종(Full Stack), 임도현(Full Stack), 임지민(Full Stack)
