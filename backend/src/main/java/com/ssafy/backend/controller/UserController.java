@@ -2,6 +2,7 @@ package com.ssafy.backend.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,12 @@ public class UserController {
     User user = userRepository.findByNum(num).orElseThrow(() -> new ResourceNotFoundException("User", "num", num));
 
     return user;
+  }
+
+  @GetMapping("/userName")
+  public List<User> getUserName() {
+    List<User> list = userRepository.findAll();
+    return list;
   }
 
   @GetMapping("/users/{userId}")

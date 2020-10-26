@@ -19,6 +19,7 @@ import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
+import com.ssafy.backend.repository.UserRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -32,6 +33,9 @@ public class CounselingController {
 	
 	@Autowired
 	EmotionRepository emotionRepository;
+
+	@Autowired
+  	UserRepository userRepository;
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<String> liveRequest(@RequestBody ConRoom conRoom) {
@@ -87,4 +91,11 @@ public class CounselingController {
 
 		return ResponseEntity.ok(SUCCESS);
 	}
+
+	@GetMapping("/menteeMyList/{num}")
+	public List<ConRoom> myList(@PathVariable(value = "num") Long num) {
+		List<ConRoom> list = conRoomRepository.findByMentee(num);
+		return list;
+	}
+
 }
