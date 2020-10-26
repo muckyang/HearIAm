@@ -1,6 +1,7 @@
 <template>
     <div>
         <div style="height: 100%; width: 100%; background: linear-gradient(to left, #93dfff, #f5a2bb);">
+          
           <div style="
           height: 100vh" class="d-flex justify-content-center">
              <v-col class="my-auto" align="center">
@@ -61,17 +62,24 @@
                 </v-btn>
                 </div>
              </v-col>
+             <v-btn @click="logout()">로그아웃</v-btn>
           </div>
         </div>
     </div>
 </template>
 
 <script>
+import { AUTH_LOGOUT } from "@/store/actions/auth";
 export default {
   methods:{
     goLiveList(){
       this.$router.push(`/liveList`);
-    }
+    },
+    logout: function() {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {
+      });
+      this.$router.push("/").catch(() => {});
+    },
   }
 }
 </script>

@@ -187,11 +187,17 @@ import sal from "sal.js";
 // import LoginModal from "@/components/account/LoginModal.vue";
 import Login from "@/components/account/Login.vue";
 import SignUpModal from '@/components/account/SignUpModal.vue';
+import { mapGetters } from "vuex";
 
 export default {
   name: "HelloWorld",
   mounted() {
     sal();
+    if (this.getRole == `mentee`) {
+      this.$router.push("/menteeMain");
+    } else if (this.getRole == `mentor`) {
+      this.$router.push("/mentorMain");
+    }
   },
   components: {
     // LoginModal,
@@ -215,6 +221,16 @@ export default {
       this.role = role;
       this.sign_dialog = true;
     }
+  },
+  computed: {
+    ...mapGetters([
+      "isProfileLoaded",
+      "getRole",
+      "getQualification",
+      "getUserName",
+      "getUserNum",
+      "getUserID",
+    ]),
   },
 };
 </script>
