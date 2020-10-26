@@ -5,9 +5,11 @@ import Tone from "tone";
 
 // https://github.com/Tonejs/Tone.js/issues/341
 // https://github.com/tambien/StartAudioContext
-StartAudioContext(Tone.context);
 
 export default {
+  created(){
+    StartAudioContext(Tone.context);
+  },
   methods: {
     async start() {
       if (this.isRecording) {

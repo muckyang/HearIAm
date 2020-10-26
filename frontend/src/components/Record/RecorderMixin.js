@@ -1,3 +1,4 @@
+// import bufferToWav from "audiobuffer-to-wav";
 export default {
   data () {
     return {
@@ -16,7 +17,6 @@ export default {
       }
 
       try {
-        console.log("start - try");
         this.$_stream = await this.getStream()
         this.prepareRecorder()
         this.$_mediaRecorder.start()
@@ -97,12 +97,12 @@ export default {
       // than clear all the recording chunks
       this.$_mediaRecorder.addEventListener('stop', () => {
         this.$emit('stop')
-
-        const blobData = new Blob(this.chunks,{ 'type' : 'audio/wav; codecs=0' })
-        var file = new File([blobData], "test.wav")
-        this.recordFileList.push(file);
+        // var wav = bufferToWav(this.chunks);
+        // var blobData = new window.Blob([new DataView(wav)], {
+        //   type: "audio/wav"
+        // });
+        const blobData = new Blob(this.chunks, { 'type' : 'audio/wav; codecs=opus' })
  
-        console.log(this.recordFileList)
         if (blobData.size > 0) {
           this.$emit('result', blobData)
         }
@@ -111,7 +111,7 @@ export default {
         this.isRecording = false
       }, true)
     },
-
+ 
   //   function blobToFile (theBlob: Blob, fileName:string): File => {
   //     var b: any = theBlob;
   //     //A Blob() is almost a File() - it's just missing the two properties below which we will add

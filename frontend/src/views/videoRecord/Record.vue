@@ -17,11 +17,10 @@
             <div class="recorded-audio">
               <div v-for="(record, index) in recordings" :key="index" class="recorded-item">
                 <div class="audio-container"><audio :src="record.src" controls /></div>
-                <p> {{record}} </p>
                 <div><button @click="removeRecord(index)" class="button is-dark">삭제하기</button></div>
                 
               </div>
-                <div><button @click="fileUpload(recordings[0])" class="button is-dark">저장하기</button></div>
+                <div><button @click="fileUpload()" class="button is-dark">저장하기</button></div>
             </div>
           </div>
         </div>
@@ -52,6 +51,8 @@
 <script>
 import axios from "axios";
 
+
+const BACK_URL = 'http://localhost:8080';
 export default {
     name: 'Record',
    data () {
@@ -60,10 +61,14 @@ export default {
         audio: 'press',
         video: 'press'
       },
-      recordings: []
+      recordings: [],
+      file :''
     }
   },
   methods: {
+    callback (data) {
+      console.debug(data)
+    },
     removeRecord (index) {
       this.recordings.splice(index, 1)
     },
@@ -80,15 +85,21 @@ export default {
     // },
     onResult (data) {
       console.log(data)
+      // this.file = this.blobToFile(data, "my-record.wav"); 
+      data.lastModifiedDate = new Date();
+      this.file = new File([data], "record.wav")
       this.recordings.push({
         src: window.URL.createObjectURL(data)
       })
     },
-    fileUpload(data) {
+   
+    fileUpload() {
+      console.log("upload")
+      console.log(this.file)
       var formData = new FormData();
-      formData.append("file", data);
+      formData.append("file", this.file);
       axios
-        .post(`https://k3b202.p.ssafy.io:8080/record`, formData, {
+        .post(`${BACK_URL}/api/record/test`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
