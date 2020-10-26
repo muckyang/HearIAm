@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/cert")
+@RequestMapping("/api/certCK")
 public class CertificationController {
 
 	// @Autowired
