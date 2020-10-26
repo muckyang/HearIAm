@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/certCK")
+@RequestMapping("/api/cert")
 public class CertificationController {
 
 	// @Autowired
@@ -31,27 +31,26 @@ public class CertificationController {
 	@GetMapping("/imgCheck/{img}")
 	@ApiOperation(value = "자격증 OCR")
 	public Object textCheck(@PathVariable String img) throws SQLException, IOException {
-		// System.out.println("Certification Check Python Call");
-		// String[] command = new String[3];
-		// command[0] = "python";
-		// // 경로 확인
-		// String hostname = InetAddress.getLocalHost().getHostName();
+		System.out.println("Certification Check Python Call");
+		String[] command = new String[3];
+		command[0] = "python";
+		// 경로 확인
+		String hostname = InetAddress.getLocalHost().getHostName();
 
-		// if (hostname.substring(0, 7).equals("DESKTOP")) {// local
-		// 	command[1] = "./backend/AI/ocr.py";
-		// } else {// aws
-		// 	command[1] = "../AI/ocr.py";
-		// }
+		if (hostname.substring(0, 7).equals("DESKTOP")) {// local
+			command[1] = "./backend/AI/ocr.py";
+		} else {// aws
+			command[1] = "../AI/ocr.py";
+		}
 
-		// // 파일 이름
-		// command[2] = img;
+		// 파일 이름
+		command[2] = img;
 
-		return 1;
-		// try {
-		// 	return execPython(command);
-		// } catch (Exception e) {
-		// 	return "fail";
-		// }
+		try {
+			return execPython(command);
+		} catch (Exception e) {
+			return "fail";
+		}
 	}
 
 	public static Object execPython(String[] command) throws IOException, InterruptedException {
