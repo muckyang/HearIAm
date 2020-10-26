@@ -55,7 +55,9 @@
       <v-btn
         large
         elevation="4"
-        @click="$vuetify.goTo('#login')"
+        @click="
+          $vuetify.goTo('#login');
+        "
         class="mt-5"
         style="
           font-weight: bold;
@@ -67,7 +69,7 @@
         >시작하기<v-icon>mdi-cursor-pointer</v-icon></v-btn
       >
     </div>
-    <div id="login" style="height: 100vh">
+    <div id="login" style="height: 100vh" v-if="!show">
       <div class="d-flex justify-content-center" style="height: 100%">
         <!-- <div style="width: 5%"></div> -->
         <div style="height: 100%; width: 100%">
@@ -85,10 +87,16 @@
                 data-sal-duration="600"
                 data-sal-easing="ease"
               >
-              <div class="justify-content-center mb-5" text-align="center">
-              <img src="../assets/student.png" style="width:220px; height:250px;">
-              <img src="../assets/student2.png" style="width:220px; height:250px;">
-              </div>
+                <div class="justify-content-center mb-5" text-align="center">
+                  <img
+                    src="../assets/student.png"
+                    style="width: 220px; height: 250px"
+                  />
+                  <img
+                    src="../assets/student2.png"
+                    style="width: 220px; height: 250px"
+                  />
+                </div>
                 <p style="font-size: 3rem">청소년</p>
                 <v-btn
                   style="
@@ -99,8 +107,7 @@
                     background: #ffdc15;
                   "
                   @click="loginModal(`mentee`)"
-                  >로그인</v-btn
-                >
+                  >로그인</v-btn>
               </div>
             </v-col>
             <v-col class="my-auto" align="center"
@@ -110,7 +117,11 @@
                 data-sal-duration="600"
                 data-sal-easing="ease"
               >
-              <img class="mb-5" src="../assets/consultant.png" style="width:260px; height:250px;">
+                <img
+                  class="mb-5"
+                  src="../assets/consultant.png"
+                  style="width: 300px; height: 250px"
+                />
                 <p style="font-size: 3rem">상담사</p>
                 <v-btn
                   style="
@@ -123,19 +134,49 @@
                   @click="loginModal(`mentor`)"
                   >로그인</v-btn
                 >
+                <!-- @click="mentorClick = !mentorClick;show = !show " -->
               </div>
             </v-col>
           </div>
         </div>
-        <!-- <div style="width: 5%"></div> -->
       </div>
     </div>
-    <v-dialog
-        v-model="dialog"
-        max-width="800"
+      
+    <v-dialog v-model="login_dialog" max-width="500" min-height="700">
+      <v-card
+        v-if="role == 'mentee'"
+        style="padding: 50px;"
       >
-        <v-card>
-          <LoginModal :role="role" />
+        <v-card-title class="text-center justify-center p-8">
+          <p style="font-family: 'Capriola'; font-size: 3rem; font-weight: 700">
+            Hear I Am
+          </p>
+        </v-card-title>
+        <Login :role="role" :login_dialog="login_dialog"/>
+        <div align="right">
+      <v-btn text class="px-0 mt-2 mr-2">비회원이용</v-btn>
+      <v-btn text class="px-0 mt-2" @click="goSignUpModal(role)">회원가입</v-btn>
+      </div>
+      </v-card>
+      <v-card v-else style="padding: 50px;">
+        <v-card-title class="text-center justify-center p-8">
+          <p style="font-family: 'Capriola'; font-size: 3rem; font-weight: 700">
+            Hear I Am
+          </p>
+        </v-card-title>
+        <Login :role="role" :login_dialog="login_dialog"/>
+        <div align="right">
+      <v-btn text class="px-0 mt-2 mr-2">비회원이용</v-btn>
+      <v-btn text class="px-0 mt-2" @click="goSignUpModal(role)">회원가입</v-btn>
+      </div>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+        v-model="sign_dialog"
+        max-width="600"
+      >
+        <v-card style="padding:50px 20px 20px 20px" class="student-dialog">
+          <SignUpModal :role="role" :sign_dialog="sign_dialog"/>
         </v-card>
       </v-dialog>
   </div>
@@ -143,28 +184,38 @@
 
 <script>
 import sal from "sal.js";
-import LoginModal from '@/components/account/LoginModal.vue';
+// import LoginModal from "@/components/account/LoginModal.vue";
+import Login from "@/components/account/Login.vue";
+import SignUpModal from '@/components/account/SignUpModal.vue';
 
 export default {
   name: "HelloWorld",
   mounted() {
     sal();
   },
-  components:{
-    LoginModal
+  components: {
+    // LoginModal,
+    Login,
+    SignUpModal,
   },
   data() {
     return {
-      dialog: false,
+      login_dialog: false,
+      sign_dialog: false,
       role: "",
     };
   },
-  methods:{
-    loginModal(role){
+  methods: {
+    loginModal(role) {
       this.role = role;
-      this.dialog = true;
+      this.login_dialog = true;
+    },
+    goSignUpModal(role){
+      this.login_dialog=false;
+      this.role = role;
+      this.sign_dialog = true;
     }
-  }
+  },
 };
 </script>
 <style>
@@ -192,5 +243,9 @@ export default {
   font-size: 7rem;
   text-shadow: 4px 2px 2px black;
   font-weight: 700;
+}
+.student-dialog {
+  /* background-color: red !important; */
+  /* background: linear-gradient(to top, #fff9d8, #fde991); */
 }
 </style>

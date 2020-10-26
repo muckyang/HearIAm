@@ -21,11 +21,13 @@
         class="mb-7"
         @keypress.enter="loginRequest"
       />
-
-      <v-btn class="pa-5 green-mbtn" width="100%" @click="loginRequest"
+      
+      <v-btn class="mbtn" width="100%" @click="loginRequest" style="height:3rem;"
         >로그인</v-btn
       >
+      
     </v-form>
+    
     <v-snackbar v-model="match" top right flat color="error" :timeout="2000"
       ><p
         style="
@@ -46,16 +48,21 @@
 import { AUTH_REQUEST } from "@/store/actions/auth";
 import http from "@/util/http-common.js";
 
+
 export default {
   name: "Login",
   props: {
     role: { type: String },
+    login_dialog: { type: Boolean },
+  },
+  components:{
   },
   data() {
     return {
       userId: "",
       password: "",
       match: false,
+      dialog:false,
     };
   },
   methods: {
@@ -75,10 +82,10 @@ export default {
               this.nowlogin = !this.nowlogin;
               if (this.role == `mentee`) {
                   //청소년 페이지로 가주세요
-                this.$router.push("/1");
+                this.$router.push("/menteeMain");
               } else {
                   //상담사 페이지로 가주세요
-                this.$router.push("/2");
+                this.$router.push("/mentorMain");
               }
             })
             .catch(() => {
@@ -91,8 +98,21 @@ export default {
       });
     },
   },
+  watch: {
+    login_dialog(v) {
+      if(!v) {
+        this.userId = "";
+        this.password = "";
+      }
+    }
+  }
 };
 </script>
 
 <style>
+.mbtn{
+  background:#ffdc15 !important;
+  font-weight:bold !important;
+}
+body{ -ms-overflow-style: none; } ::-webkit-scrollbar { display: none; }
 </style>
