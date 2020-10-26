@@ -7,6 +7,9 @@ import Tone from "tone";
 // https://github.com/tambien/StartAudioContext
 
 export default {
+  created(){
+    StartAudioContext(Tone.context);
+  },
   methods: {
     created() {
       StartAudioContext(Tone.context);

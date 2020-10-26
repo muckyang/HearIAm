@@ -8,7 +8,8 @@ import Emotion from '../views/emotion/EmotionTest.vue'
 import Record from '../views/videoRecord/Record.vue'
 import RecordConsult from '../views/consult/RecordConsult.vue'
 import ReserveMain from '../views/reserve/ReserveMain.vue'
-
+import AudioRecorder from 'vue-audio-recorder'
+Vue.use(AudioRecorder)
 Vue.use(VueRouter)
 
 const routes = [{
