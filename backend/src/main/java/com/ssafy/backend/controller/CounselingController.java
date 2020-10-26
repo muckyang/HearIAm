@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.backend.model.ConReport;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
+import com.ssafy.backend.repository.ConReportRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
 
@@ -29,6 +31,9 @@ public class CounselingController {
 	
 	@Autowired
 	ConRoomRepository conRoomRepository;
+
+	@Autowired
+	ConReportRepository conReportRepository;
 	
 	@Autowired
 	EmotionRepository emotionRepository;
@@ -84,6 +89,13 @@ public class CounselingController {
 	@DeleteMapping("/liveCancel/{num}")
 	public ResponseEntity<String> liveCancel(@PathVariable(value = "num") Long num) {
 		conRoomRepository.deleteByNum(num);
+
+		return ResponseEntity.ok(SUCCESS);
+	}
+
+	@PostMapping("/saveMemo")
+	public ResponseEntity<String> saveMemo(@RequestBody ConReport conReport) {
+		conReportRepository.save(conReport);
 
 		return ResponseEntity.ok(SUCCESS);
 	}
