@@ -12,6 +12,8 @@ def main(argv):
             img = base64.b64encode(f.read())
     else:
         pass
+        with open("/var/lib/jenkins/workspace/s03-final/S03P31B202/frontend/public/images/" + argv[1], "rb") as f:
+            img = base64.b64encode(f.read())
         # r = open('/var/lib/jenkins/workspace/maven-test/frontend/public/textFiles/' + argv[1], mode='rt', encoding='utf-8')
 
     # 본인의 APIGW Invoke URL로 치환
