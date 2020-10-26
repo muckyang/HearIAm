@@ -6,14 +6,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public class authSelenium {
+public class AuthSelenium {
 
-	public static String execSelenium(String[] list) {
+	public String execSelenium(String[] list) {
 		System.out.println("execselenium");
 		WebDriver driver = null;
 		String res ="";
 		try {
-			System.setProperty("webdriver.chrome.driver", "/var/lib/jenkins/workspace/s03-final/S03P31B202/backend/src/main/java/com/ssafy/backend/utils/chromedriver");
+			System.setProperty("webdriver.chrome.driver", "/var/lib/jenkins/workspace/front/backend/src/main/java/com/ssafy/backend/utils/chromedriver");
 			ChromeOptions options = new ChromeOptions();
    			options.addArguments("headless");
 			options.addArguments("no-sandbox");
