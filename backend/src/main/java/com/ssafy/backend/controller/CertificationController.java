@@ -46,11 +46,12 @@ public class CertificationController {
 		// 파일 이름
 		command[2] = img;
 
-		try {
-			return execPython(command);
-		} catch (Exception e) {
-			return "fail";
-		}
+		return 1;
+		// try {
+		// 	return execPython(command);
+		// } catch (Exception e) {
+		// 	return "fail";
+		// }
 	}
 
 	public static Object execPython(String[] command) throws IOException, InterruptedException {
