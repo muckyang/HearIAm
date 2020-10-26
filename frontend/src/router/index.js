@@ -10,7 +10,7 @@ import RecordConsult from '../views/consult/RecordConsult.vue'
 import ReserveMain from '../views/reserve/ReserveMain.vue'
 import MenteeMypage from '../views/mentee/MenteeMypage.vue'
 import MentorMypage from '../views/mentor/MentorMypage.vue'
-
+import MyMenteeInfo from '../views/mentor/MyMenteeInfo.vue'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -83,6 +83,11 @@ const routes = [{
         path: '/mentorMypage',
         name: 'MentorMypage',
         component: MentorMypage
+    },
+    {
+        path: '/myMenteeInfo/:num&:name',
+        name: 'MyMenteeInfo',
+        component: MyMenteeInfo
     },
 ]
 

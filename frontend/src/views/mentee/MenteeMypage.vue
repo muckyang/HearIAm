@@ -14,7 +14,7 @@
 import MyListComp from "@/components/mentee/MyListComp.vue";
 
 export default {
-    name : "MenteeMypage.vue",
+    name : "MenteeMypage",
     components:{
         MyListComp
     }
