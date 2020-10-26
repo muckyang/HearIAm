@@ -49,7 +49,7 @@ public class CertificationController {
 		try {
 			return execPython(command);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(System.getProperty("user.dir"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
