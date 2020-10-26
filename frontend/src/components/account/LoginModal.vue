@@ -1,9 +1,11 @@
 <template>
   <div>
-    <v-card-title class="text-center justify-center py-6">
-      <h1 class="font-weight-bold display-3 basil--text">{{ userRole }}</h1>
+    <v-card-title class="text-center justify-center p-8">
+      <!-- <h1 class="font-weight-bold display-3 basil--text">{{ userRole }}</h1> -->
+      <p style="font-family: 'Capriola'; font-size:3rem; font-weight:700;">Hear I Am</p>
     </v-card-title>
-    <v-tabs v-model="tab" grow>
+    <Login :role="role" />
+    <!-- <v-tabs v-model="tab" centered icons-and-text>
       <v-tabs-slider></v-tabs-slider>
       <v-tab href="#tab-1">
         로그인
@@ -20,12 +22,12 @@
       <v-tab-item :value="'tab-2'">
         <SignUp :role="role" />
       </v-tab-item>
-    </v-tabs-items>
+    </v-tabs-items> -->
   </div>
 </template>
 
 <script>
-import SignUp from "@/components/account/SignUp.vue";
+// import SignUp from "@/components/account/SignUp.vue";
 import Login from "@/components/account/Login.vue";
 export default {
   name: "LoginModal",
@@ -33,7 +35,7 @@ export default {
     role: { type: String },
   },
   components: {
-    SignUp,
+    // SignUp,
     Login,
   },
   data() {

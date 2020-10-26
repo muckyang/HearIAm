@@ -11,6 +11,9 @@ export default {
     StartAudioContext(Tone.context);
   },
   methods: {
+    created() {
+      StartAudioContext(Tone.context);
+    },
     async start() {
       if (this.isRecording) {
         return;

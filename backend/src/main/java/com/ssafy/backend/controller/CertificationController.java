@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.sql.SQLException;
 
-
-import com.ssafy.backend.utils.authSelenium;
-
+// import com.ssafy.backend.utils.AuthSelenium;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -51,7 +49,7 @@ public class CertificationController {
 		try {
 			return execPython(command);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(System.getProperty("user.dir"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
