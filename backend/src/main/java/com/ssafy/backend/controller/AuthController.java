@@ -73,7 +73,7 @@ public class AuthController {
 		}
 		// Creating user's account
 		User user = new User(null, signUpRequest.getId(), signUpRequest.getName(),
-				signUpRequest.getPassword(), signUpRequest.getRole(), signUpRequest.getQualification(), null);
+				signUpRequest.getPassword(), signUpRequest.getRole(), signUpRequest.getQualification(), signUpRequest.getGender(), null);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
 		Role userRole = roleRepository.findByName(RoleName.ROLE_USER)

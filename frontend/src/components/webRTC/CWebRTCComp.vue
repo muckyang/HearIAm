@@ -5,17 +5,17 @@
         <v-col>
           <v-row>
             <v-col>
-              <v-btn type="button" class="btn btn-primary" @click="onJoin">
-                Join
+              <v-btn v-if="!isProgress" type="button" class="btn btn-primary" @click="onJoin">
+                상담 시작
               </v-btn>
-              <v-btn type="button" class="btn btn-primary" @click="onLeave">
-                Leave
+              <v-btn v-else type="button" class="btn btn-primary" @click="onLeave">
+                상담 종료
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="5">
-              <Bar :chartData="chartData" :options="options" />
+              <Bar v-if="isProgress" :chartData="chartData" :options="options" />
             </v-col>
             <v-spacer></v-spacer>
             <v-col cols="6">
@@ -77,6 +77,7 @@ export default {
         sad: "",
         surprised: "",
       },
+      isProgress: false,
     };
   },
   mounted() {
@@ -88,6 +89,7 @@ export default {
   },
   methods: {
     onJoin() {
+      this.isProgress = true;
       http.put(
         `/counseling/joinLive/${this.$route.params.num}/${this.getUserNum}`
       );
