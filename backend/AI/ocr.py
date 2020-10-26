@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import json
-import base64
-import requests
-import socket
-import sys
-import io
+# import json
+# import base64
+# import requests
+# import socket
+# import sys
+# import io
 
 def main(argv):
     if(socket.gethostname()[:7] == "DESKTOP"):
@@ -66,4 +66,4 @@ if __name__ == "__main__":
     # sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
     # sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
     # main(sys.argv)
-    print(sys.modules)
+    print(1)
