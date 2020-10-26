@@ -49,7 +49,7 @@ public class CertificationController {
 		try {
 			return execPython(command);
 		} catch (Exception e) {
-			return new ResponseEntity<>("fail");
+			return "fail";
 		}
 	}
 
