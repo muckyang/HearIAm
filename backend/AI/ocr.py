@@ -11,7 +11,6 @@ def main(argv):
         with open("./frontend/public/images/" + argv[1], "rb") as f:
             img = base64.b64encode(f.read())
     else:
-        pass
         with open("/var/lib/jenkins/workspace/front/frontend/public/images/" + argv[1], "rb") as f:
             img = base64.b64encode(f.read())
         # r = open('/var/lib/jenkins/workspace/maven-test/frontend/public/textFiles/' + argv[1], mode='rt', encoding='utf-8')
