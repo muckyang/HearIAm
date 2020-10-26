@@ -17,6 +17,7 @@
                 <img
                     src="@/assets/icons/t_stream_btn.png"
                     style="width: 100%; height: 100%; "
+                    @click="goLiveList()"
                   />
                 </div>
                 </v-btn>
@@ -64,3 +65,13 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+  methods:{
+    goLiveList(){
+      this.$router.push(`/liveList`);
+    }
+  }
+}
+</script>
