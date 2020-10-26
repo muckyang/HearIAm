@@ -49,7 +49,7 @@ public class CertificationController {
 		try {
 			return execPython(command);
 		} catch (Exception e) {
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("fail");
 		}
 	}
 
