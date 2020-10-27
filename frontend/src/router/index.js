@@ -8,7 +8,7 @@ import Emotion from '../views/emotion/EmotionTest.vue'
 import Record from '../views/videoRecord/Record.vue'
 import RecordConsult from '../views/consult/RecordConsult.vue'
 import ReserveMain from '../views/reserve/ReserveMain.vue'
-
+import ScheduleTest from '../views/consult/UseScheduleTest.vue'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -71,6 +71,11 @@ const routes = [{
         name: 'mentorMain',
         component: () =>
             import ( '@/views/mentor/MentorMain.vue')
+    },
+    {
+        path: '/ScheduleTest',
+        name: 'ScheduleTest',
+        component: ScheduleTest
     },
 ]
 
