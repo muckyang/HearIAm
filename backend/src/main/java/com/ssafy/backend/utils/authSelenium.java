@@ -6,9 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public class authSelenium {
+public class AuthSelenium {
 
-	public static String execSelenium(String[] list) {
+	public String execSelenium(String[] list) {
 		System.out.println("execselenium");
 		WebDriver driver = null;
 		String res ="";

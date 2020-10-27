@@ -29,6 +29,12 @@
               />
             </v-col>
           </v-row>
+          <v-row v-if="isProgress" >
+            <v-col >
+            <textarea v-model="memo_text" style="background-color:pink">
+             </textarea>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
@@ -78,6 +84,7 @@ export default {
         surprised: "",
       },
       isProgress: false,
+      memo_text:"",
     };
   },
   mounted() {
@@ -106,6 +113,10 @@ export default {
         neutral: this.allEmotion.neutral,
         sad: this.allEmotion.sad,
         surprised: this.allEmotion.surprised
+      });
+      http.post(`/counseling/saveMemo`,{
+          content: this.memo_text,
+          con_num: this.$route.params.num
       });
       this.$refs.webrtc.leave();
     },

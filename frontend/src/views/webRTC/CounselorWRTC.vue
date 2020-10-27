@@ -6,6 +6,7 @@
 
 <script>
 import WebRTCComp from "@/components/webRTC/CWebRTCComp.vue";
+
 export default {
   name: "CounselorWRTC",
   components: {

@@ -1,6 +1,8 @@
 package com.ssafy.backend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -8,6 +10,8 @@ import javax.persistence.*;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor 
 @Table(name = "con_room")
 public class ConRoom {
     @Id
