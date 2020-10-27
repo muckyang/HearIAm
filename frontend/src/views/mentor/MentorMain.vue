@@ -51,7 +51,7 @@
                   fab
                   icon
                   style="width: 260px; height: 250px; background: linear-gradient(to top, #93dfff, #f5a2bb);"
-                  @click="goMypage()"
+                  @click="goMyMenteeList()"
                 >
                 <div style="width: 260px; height: 250px; padding: 17px;" class="justify-content-center mb-5; " text-align="center" >
                 <img
@@ -62,6 +62,7 @@
                 </v-btn>
                 </div>
              </v-col>
+             <v-btn @click="goMypage()">마이페이지</v-btn>
              <v-btn @click="logout()">로그아웃</v-btn>
           </div>
         </div>
@@ -82,6 +83,9 @@ export default {
     },
     goMypage() {
       this.$router.push(`/mentorMypage`);
+    },
+    goMyMenteeList() {
+      this.$router.push(`/myMenteeList`);
     }
   }
 }
