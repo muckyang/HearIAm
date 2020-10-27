@@ -8,9 +8,12 @@ import Emotion from '../views/emotion/EmotionTest.vue'
 import Record from '../views/videoRecord/Record.vue'
 import RecordConsult from '../views/consult/RecordConsult.vue'
 import ReserveMain from '../views/reserve/ReserveMain.vue'
+import ScheduleTest from '../views/consult/UseScheduleTest.vue'
 import MenteeMypage from '../views/mentee/MenteeMypage.vue'
 import MentorMypage from '../views/mentor/MentorMypage.vue'
+import MyMenteeList from '../views/mentor/MyMenteeList.vue'
 import MyMenteeInfo from '../views/mentor/MyMenteeInfo.vue'
+import CounselingInfo from '../views/mentor/CounselingInfo.vue'
 import AudioRecorder from 'vue-audio-recorder'
 Vue.use(AudioRecorder)
 Vue.use(VueRouter)
@@ -87,9 +90,24 @@ const routes = [{
         component: MentorMypage
     },
     {
+        path: '/myMenteeList',
+        name: 'MyMenteeList',
+        component: MyMenteeList
+    },
+    {
         path: '/myMenteeInfo/:num&:name',
         name: 'MyMenteeInfo',
         component: MyMenteeInfo
+    },
+    {
+        path: '/counselingInfo/:num',
+        name: 'CounselingInfo',
+        component: CounselingInfo
+    },
+    {
+        path: '/ScheduleTest',
+        name: 'ScheduleTest',
+        component: ScheduleTest
     },
 ]
 

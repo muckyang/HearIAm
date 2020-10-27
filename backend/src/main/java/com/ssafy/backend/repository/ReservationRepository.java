@@ -1,6 +1,6 @@
-package com.ssafy.backend.dao;
+package com.ssafy.backend.repository;
 
-import com.ssafy.backend.model.Schedule.Reservation;
+import com.ssafy.backend.model.Reservation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReservationDao extends JpaRepository<Reservation, String> {
+public interface ReservationRepository extends JpaRepository<Reservation, String> {
     List<Reservation> findAll();
 }

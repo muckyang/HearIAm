@@ -19,6 +19,7 @@
     "vue": "^2.6.11",
     "vue-audio-recorder": "^3.0.1",
     "vue-chartjs": "^3.5.1",
+    "vue-daily-scheduler": "^1.0.8",
     "vue-router": "^3.2.0",
     "vue-webrtc": "^1.2.2",
     "vuetify": "^2.2.11",

@@ -6,17 +6,16 @@
       background: linear-gradient(to left, #93dfff, #f5a2bb);
     "
   >
-    <WebRTCComp />
+    <CounselingInfoComp />
   </div>
 </template>
 
 <script>
-import WebRTCComp from "@/components/webRTC/CWebRTCComp.vue";
-
+import CounselingInfoComp from "@/components/mentor/CounselingInfoComp.vue";
 export default {
-  name: "CounselorWRTC",
+  name: "CounselingInfo",
   components: {
-    WebRTCComp,
+    CounselingInfoComp,
   },
 };
 </script>

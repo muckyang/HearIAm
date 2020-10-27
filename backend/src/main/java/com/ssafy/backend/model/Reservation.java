@@ -1,7 +1,5 @@
-package com.ssafy.backend.model.Schedule;
+package com.ssafy.backend.model;
 
-
-import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;

@@ -55,10 +55,15 @@ public class CounselingController {
 	
 	@PostMapping("/saveEmotion")
 	public ResponseEntity<String> saveEmotion(@RequestBody Emotion emotion) {
-		System.out.println(emotion.toString());
 		emotionRepository.save(emotion);
 
 		return ResponseEntity.ok(SUCCESS);
+	}
+	
+	@GetMapping("/loadEmotion/{num}")
+	public Emotion loadEmotion(@PathVariable(value = "num") Long num) {
+		Emotion emotion = emotionRepository.findByNum(num);
+		return emotion;
 	}
 	
 	@GetMapping("/liveList")
