@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-col cols="4">
-      <Doughnut :chartData="chartData" :options="options" />
+      <Doughnut :chartData="chartData" />
     </v-col>
   </div>
 </template>
