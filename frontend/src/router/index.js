@@ -8,7 +8,6 @@ import Emotion from '../views/emotion/EmotionTest.vue'
 import Record from '../views/videoRecord/Record.vue'
 import RecordConsult from '../views/consult/RecordConsult.vue'
 import ReserveMain from '../views/reserve/ReserveMain.vue'
-import ScheduleTest from '../views/consult/UseScheduleTest.vue'
 import MenteeMypage from '../views/mentee/MenteeMypage.vue'
 import MentorMypage from '../views/mentor/MentorMypage.vue'
 import MyMenteeList from '../views/mentor/MyMenteeList.vue'
@@ -103,11 +102,6 @@ const routes = [{
         path: '/counselingInfo/:num',
         name: 'CounselingInfo',
         component: CounselingInfo
-    },
-    {
-        path: '/ScheduleTest',
-        name: 'ScheduleTest',
-        component: ScheduleTest
     },
 ]
 

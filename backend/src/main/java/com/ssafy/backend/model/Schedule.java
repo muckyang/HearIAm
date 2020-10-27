@@ -24,6 +24,6 @@ public class Schedule {
     private Long num;
     private String mentor;
     private LocalDate sdate;
-    private LocalTime stime;
+    private String stime;
     private int isReser;
 }
