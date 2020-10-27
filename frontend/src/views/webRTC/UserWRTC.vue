@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div
+      style="
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(to right, #93dfff, #f5a2bb);
+      "
+    >
     <WebRTCComp />
   </div>
 </template>
