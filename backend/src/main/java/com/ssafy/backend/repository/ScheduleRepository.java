@@ -1,7 +1,6 @@
 package com.ssafy.backend.repository;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import com.ssafy.backend.model.Schedule;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAll();
 
-    Schedule findScheduleByMentorAndSdateAndStime(String Mentor, LocalDate sdate, LocalTime stime);
+    Schedule findScheduleByMentorAndSdateAndStime(String Mentor, LocalDate sdate, String stime);
 
-    List<Schedule> findScheduleBySdateAndStimeAndIsReser(LocalDate sdate, LocalTime stime, int flag);
+    List<Schedule> findScheduleBySdateAndStimeAndIsReser(LocalDate sdate, String stime, int flag);
 }
