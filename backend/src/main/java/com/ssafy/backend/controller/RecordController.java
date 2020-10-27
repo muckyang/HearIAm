@@ -3,6 +3,7 @@ package com.ssafy.backend.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.time.LocalDateTime;
 
 import org.apache.commons.exec.CommandLine;
@@ -74,13 +75,32 @@ public class RecordController {
         PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
         DefaultExecutor executor = new DefaultExecutor();
         executor.setStreamHandler(pumpStreamHandler);
-        System.out.println("IIIIIIIIIII");
-        int result = executor.execute(commandLine);
-        System.out.println("result: " + result);
+        executor.execute(commandLine);
+        System.out.println("STT OK!");
+
         String[] outputList = outputStream.toString().split("\n");
+        String str =  "";
         for (String s : outputList) {
-            System.out.println(s);
+           str += s+" ";
         }
-        return outputList;
+
+		// 경로 확인
+		String hostname = InetAddress.getLocalHost().getHostName();
+		if (hostname.substring(0, 7).equals("DESKTOP")) {// local
+			command[1] = "./backend/AI/text_wordcloud.py";
+			System.out.println("in");
+		} else {// aws
+			command[1] = "../AI/textCheck.py";
+		}
+        command[2] = str;
+		try {
+            System.out.println(str);
+			return execPython(command);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+
+        // return outputList;
     }
 }

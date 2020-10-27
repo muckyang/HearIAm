@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.bytebuddy.asm.Advice.Local;
+
+import com.ssafy.backend.model.Reservation;
 import com.ssafy.backend.model.Schedule;
+import com.ssafy.backend.repository.ReservationRepository;
 import com.ssafy.backend.repository.ScheduleRepository;
 
 @CrossOrigin(origins = "*")
@@ -34,7 +39,12 @@ public class ScheduleController {
     @Autowired
     ScheduleRepository scheduleRepository;
 
-    @PostMapping("/saveTime/{mentor}")
+
+    @Autowired
+    ReservationRepository reservationRepository;
+
+    @PostMapping("/saveTime/{timetable}/{mentor}")
+
     public Object saveTime(@RequestBody Map<Object, int[]> timetable, @PathVariable String mentor) {
         String newDate = "";
         String newTime = "";
@@ -62,5 +72,35 @@ public class ScheduleController {
         }
 
         return timetable;
+    }
+
+    @DeleteMapping("/delete")
+    public Object DeleteSchedule(@RequestBody Schedule request) {
+
+        Schedule Sche = scheduleRepository.findScheduleByMentorAndSdateAndStime(request.getMentor(), request.getSdate(),
+                request.getStime());
+
+        scheduleRepository.delete(Sche);
+        return 0;
+    }
+
+    @GetMapping("/Reservation/{mentee}/{date}/{time}")
+    public Object Reservation(@PathVariable String mentee, @PathVariable String date, @PathVariable String time) {
+
+        // 아직 매칭 안된 스케줄 중에 시간일치하는것 뽑아옴
+
+        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(LocalDate.parse(date),time, 0);
+
+        // 랜덤돌려서 매칭
+        int number = (int) Math.random() * list.size();
+        Schedule sche = list.get(number);
+        sche.setIsReser(1);
+        scheduleRepository.save(sche);
+        Reservation reser = new Reservation();
+        reser.setScheNum(sche.getNum());
+        reser.setMentee(mentee);
+        reservationRepository.save(reser);
+
+        return 0;
     }
 }
