@@ -118,7 +118,7 @@ export default {
         5: [],
         6: [],
       },
-      dayTable: ["월", "화", "수", "목", "금", "토", "일"],
+      dayTable: ["일","월", "화", "수", "목", "금", "토"],
     };
   },
   created(){
@@ -127,7 +127,7 @@ export default {
   methods: {
     saveTime() {
       http
-        .post(`/schedule/saveTime/${this.timetable}/${this.getUserID}`)
+        .post(`/schedule/saveTime/${this.getUserID}`,this.timetable)
         .then(() => {})
         .catch((e) => {
           console.log(e);

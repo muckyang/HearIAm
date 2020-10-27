@@ -34,26 +34,29 @@ public class ScheduleController {
     @Autowired
     ScheduleRepository scheduleRepository;
 
-    @PostMapping("/saveTime/{timetable}/{mentor}")
+    @PostMapping("/saveTime/{mentor}")
     public Object saveTime(@RequestBody Map<Object, int[]> timetable, @PathVariable String mentor) {
         String newDate = "";
         String newTime = "";
-        String[] timeArr = { "09:00:00", "10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00", "15:00:00",
-                "16:00:00", "17:00:00", "18:00:00", "19:00:00", "20:00:00", "21:00:00", "22:00:00", "23:00:00" };
+        String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
+                "19:00", "20:00", "21:00", "22:00", "23:00" };
         LocalDate today = LocalDate.now();
         int todayWeek = DayOfWeek.from(LocalDate.now()).getValue(); // 일 : 0
         for (int i = 0; i <= 6; i++) {
-            if (i <= todayWeek) { // 오늘보다 이전이면
+            if (i < todayWeek) { // 오늘보다 이전이면
                 newDate = today.minusDays(todayWeek - i).toString();
-            } else {
+            } else if (i > todayWeek) {
                 newDate = today.plusDays(i - todayWeek).toString();
+            } else {
+                newDate = today.toString();
             }
             for (int t : timetable.get(String.valueOf(i))) {
                 newTime = timeArr[t];
                 Schedule schedule = new Schedule();
                 schedule.setMentor(mentor);
+                System.out.println(newTime + " " + LocalTime.parse(newTime));
                 schedule.setSdate(LocalDate.parse(newDate));
-                schedule.setStime(LocalTime.parse(newTime));
+                schedule.setStime(newTime);
                 scheduleRepository.save(schedule);
             }
         }
