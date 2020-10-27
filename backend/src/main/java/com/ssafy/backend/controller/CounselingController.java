@@ -21,6 +21,8 @@ import com.ssafy.backend.exception.ResourceNotFoundException;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.model.User;
+import com.ssafy.backend.model.ConReport;
+import com.ssafy.backend.repository.ConReportRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
 import com.ssafy.backend.repository.UserRepository;
@@ -34,6 +36,9 @@ public class CounselingController {
 	
 	@Autowired
 	ConRoomRepository conRoomRepository;
+
+	@Autowired
+	ConReportRepository conReportRepository;
 	
 	@Autowired
 	EmotionRepository emotionRepository;
@@ -126,4 +131,10 @@ public class CounselingController {
 		return list;
 	}
 
+	@PostMapping("/saveMemo")
+	public ResponseEntity<String> saveMemo(@RequestBody ConReport conReport) {
+		conReportRepository.save(conReport);
+
+		return ResponseEntity.ok(SUCCESS);
+	}
 }

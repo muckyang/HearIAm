@@ -11,6 +11,8 @@ import ReserveMain from '../views/reserve/ReserveMain.vue'
 import MenteeMypage from '../views/mentee/MenteeMypage.vue'
 import MentorMypage from '../views/mentor/MentorMypage.vue'
 import MyMenteeInfo from '../views/mentor/MyMenteeInfo.vue'
+import AudioRecorder from 'vue-audio-recorder'
+Vue.use(AudioRecorder)
 Vue.use(VueRouter)
 
 const routes = [{

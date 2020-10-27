@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@codekraft-studio/vue-record": "0.0.3",
+    "audiobuffer-to-wav": "^1.0.0",
     "axios": "^0.20.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
@@ -16,6 +17,7 @@
     "sal.js": "^0.8.1",
     "sockjs-client": "^1.5.0",
     "vue": "^2.6.11",
+    "vue-audio-recorder": "^3.0.1",
     "vue-chartjs": "^3.5.1",
     "vue-router": "^3.2.0",
     "vue-webrtc": "^1.2.2",

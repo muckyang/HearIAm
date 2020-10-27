@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.sql.SQLException;
 
-// import com.ssafy.backend.utils.AuthSelenium;
+import com.ssafy.backend.utils.AuthSelenium;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -25,8 +25,9 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api/cert")
 public class CertificationController {
 
-	// @Autowired
-	// AuthSelenium authSelenium;
+	@Autowired
+	static
+	AuthSelenium authSelenium;
 
 	@GetMapping("/imgCheck/{img}")
 	@ApiOperation(value = "자격증 OCR")
@@ -40,7 +41,7 @@ public class CertificationController {
 		if (hostname.substring(0, 7).equals("DESKTOP")) {// local
 			command[1] = "./backend/AI/ocr.py";
 		} else {// aws
-			command[1] = "../AI/ocr.py";
+			command[1] = "/var/lib/jenkins/workspace/front/backend/AI/ocr.py";
 		}
 
 		// 파일 이름
@@ -49,7 +50,7 @@ public class CertificationController {
 		try {
 			return execPython(command);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return "fail";
 		}
 	}
 
@@ -77,8 +78,8 @@ public class CertificationController {
 		}
 
 		// 이름, 생년월일, 자격번호, 발급일, 내지번호
-		// String text = authSelenium.execSelenium(outputList);
-		// System.out.println(text);
+		String text = authSelenium.execSelenium(outputList);
+		System.out.println(text);
 
 		return outputList;
 	}
