@@ -80,6 +80,12 @@ public class CounselingController {
 		return list;
 	}
 	
+	@GetMapping("/counseling/{num}")
+	public ConRoom counseling(@PathVariable(value = "num") Long num) {
+		ConRoom conRoom = conRoomRepository.findByNum(num);
+		return conRoom;
+	}
+	
 	@PutMapping("/joinLive/{num}/{mentorNum}")
 	public ResponseEntity<String> joinLive(@PathVariable(value = "num") Long num,@PathVariable(value = "mentorNum") Long mentorNum) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);

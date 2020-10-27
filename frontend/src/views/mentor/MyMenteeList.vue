@@ -6,11 +6,17 @@
       background: linear-gradient(to left, #93dfff, #f5a2bb);
     "
   >
-      <div v-for="item in menteeList" :key="item.num">
-        <v-card @click="menteeInfo(item.num, item.name)">
-          {{ item.name }}
-        </v-card>
-      </div>
+    <v-container>
+      <h1>청소년 목록</h1>
+      <br />
+      <v-row>
+        <v-col cols="2" v-for="item in menteeList" :key="item.num">
+          <v-card @click="menteeInfo(item.num, item.name)" height="200px">
+            {{ item.name }}
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

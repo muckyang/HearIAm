@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>나의 상담 내역</h1><br/>
     <v-card>
       <v-simple-table>
         <template v-slot:default>
@@ -70,7 +71,7 @@ export default {
       let time =
         Number(date.slice(0, 4)) +
         "년 " +
-        Number(date.slice(5, 7) - 1) +
+        Number(date.slice(5, 7)) +
         "월 " +
         Number(date.slice(8, 10)) +
         "일 " +
