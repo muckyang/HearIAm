@@ -10,6 +10,7 @@ import RecordConsult from '../views/consult/RecordConsult.vue'
 import ReserveMain from '../views/reserve/ReserveMain.vue'
 import MenteeMypage from '../views/mentee/MenteeMypage.vue'
 import MentorMypage from '../views/mentor/MentorMypage.vue'
+import MyMenteeList from '../views/mentor/MyMenteeList.vue'
 import MyMenteeInfo from '../views/mentor/MyMenteeInfo.vue'
 import CounselingInfo from '../views/mentor/CounselingInfo.vue'
 import AudioRecorder from 'vue-audio-recorder'
@@ -86,6 +87,11 @@ const routes = [{
         path: '/mentorMypage',
         name: 'MentorMypage',
         component: MentorMypage
+    },
+    {
+        path: '/myMenteeList',
+        name: 'MyMenteeList',
+        component: MyMenteeList
     },
     {
         path: '/myMenteeInfo/:num&:name',
