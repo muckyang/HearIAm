@@ -6,7 +6,11 @@
       background: linear-gradient(to left, #93dfff, #f5a2bb);
     "
   >
+  <v-container>
+    <v-col>
     <CounselingInfoComp />
+    </v-col>
+  </v-container>
   </div>
 </template>
 

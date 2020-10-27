@@ -6,7 +6,11 @@
       background: linear-gradient(to right, #93dfff, #f5a2bb);
     "
   >
-  <MyListComp />
+    <v-container>
+      <v-col>
+        <MyListComp />
+      </v-col>
+    </v-container>
   </div>
 </template>
 
@@ -14,10 +18,10 @@
 import MyListComp from "@/components/mentee/MyListComp.vue";
 
 export default {
-    name : "MenteeMypage",
-    components:{
-        MyListComp
-    }
+  name: "MenteeMypage",
+  components: {
+    MyListComp,
+  },
 };
 </script>
 

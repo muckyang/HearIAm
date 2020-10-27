@@ -1,7 +1,7 @@
 <template>
   <div>
+    <h1 class="text-center">{{ name }}의 상담 내역</h1><br/>
     <v-card>
-      <h1 class="text-center">{{ name }}</h1>
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -11,7 +11,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in myMenteeInfoList" :key="item.name" @click="goInfo(item.num)">
+            <tr
+              v-for="item in myMenteeInfoList"
+              :key="item.name"
+              @click="goInfo(item.num)"
+            >
               <td class="text-center">{{ setTime(item.date) }}</td>
               <td v-if="item.status == `record`" class="text-center">
                 녹화 상담
@@ -62,7 +66,7 @@ export default {
       let time =
         Number(date.slice(0, 4)) +
         "년 " +
-        Number(date.slice(5, 7) - 1) +
+        Number(date.slice(5, 7)) +
         "월 " +
         Number(date.slice(8, 10)) +
         "일 " +
@@ -72,9 +76,9 @@ export default {
         "분";
       return time;
     },
-    goInfo(num){
+    goInfo(num) {
       this.$router.push(`/counselingInfo/${num}`);
-    }
+    },
   },
 };
 </script>

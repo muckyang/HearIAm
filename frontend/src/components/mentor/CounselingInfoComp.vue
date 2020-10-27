@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>{{date}} 상담 내역</h1><br/>
     <v-col cols="4">
       <Doughnut :chartData="chartData" />
     </v-col>
@@ -26,9 +27,17 @@ export default {
       sad: 0,
       surprised: 0,
       chartData: null,
+      counseling: {},
+      date: null,
     };
   },
   created() {
+    http
+      .get(`/counseling/counseling/${this.$route.params.num}`)
+      .then((res) => {
+        this.counseling = res.data;
+        this.date = this.setTime(this.counseling.date);
+      });
     http
       .get(`/counseling/loadEmotion/${this.$route.params.num}`)
       .then((res) => {
@@ -48,6 +57,20 @@ export default {
       });
   },
   methods: {
+    setTime(date) {
+      let time =
+        Number(date.slice(0, 4)) +
+        "년 " +
+        Number(date.slice(5, 7)) +
+        "월 " +
+        Number(date.slice(8, 10)) +
+        "일 " +
+        Number(date.slice(11, 13)) +
+        "시 " +
+        Number(date.slice(14, 16)) +
+        "분";
+      return time;
+    },
     avrage(arr) {
       let result = 0;
       for (let i = 0; i < arr.length; i++) {
