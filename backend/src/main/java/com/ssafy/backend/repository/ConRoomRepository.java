@@ -12,6 +12,9 @@ import com.ssafy.backend.model.ConRoom;
 @Repository
 public interface ConRoomRepository extends JpaRepository<ConRoom, Long> {
     List<ConRoom> findByStatus(String status);
+    List<ConRoom> findByMentee(Long mentee);
+    List<ConRoom> findByMentor(Long mentor);
+    List<ConRoom> findByMentorAndMentee(Long mentor, Long mentee);
     ConRoom findByNum(Long num);
     @Transactional
     @Modifying
