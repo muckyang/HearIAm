@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div
+    style="
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(to left, #93dfff, #f5a2bb);
+    "
+  >
     <v-card class="mx-auto" max-width="300" tile>
       <v-list dense>
         <v-subheader>LiveList</v-subheader>

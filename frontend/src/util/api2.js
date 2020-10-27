@@ -6,7 +6,7 @@ const apiCall2 = usertoken =>
         //axios.get('http://192.168.28.129:8397/api/users/'+usertoken).then(({data}) => {
         axios
             // .get("http://localhost:8080/api/user/users/" + usertoken)
-            .get("http://k3b202.p.ssafy.io:8080/api/user/users/" + usertoken)
+            .get("https://k3b202.p.ssafy.io:8080/api/user/users/" + usertoken)
             .then(({ data }) => {
                 //console.log(data)
                 resolve(data);

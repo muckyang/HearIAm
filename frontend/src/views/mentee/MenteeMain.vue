@@ -88,11 +88,14 @@
             </v-btn>
           </div>
         </v-col>
+        <v-btn @click="goMypage()">마이페이지</v-btn>
+        <v-btn @click="logout()">로그아웃</v-btn>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { AUTH_LOGOUT } from "@/store/actions/auth";
 export default {
   data() {
     return {};
@@ -101,6 +104,14 @@ export default {
     goLive() {
       this.$router.push(`/userWRTC`);
     },
+    logout: function() {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {
+      });
+      this.$router.push("/").catch(() => {});
+    },
+    goMypage(){
+      this.$router.push(`/menteeMypage`);
+    }
   },
 };
 </script>
