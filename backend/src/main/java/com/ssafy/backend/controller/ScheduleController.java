@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -200,6 +199,41 @@ public class ScheduleController {
             return 1;
         }
 
+    }
+    
+    @GetMapping("/allowSchedule/{mentor}")
+	public List<Schedule> counseling(@PathVariable(value = "mentor") String mentor) {
+		List<Schedule> list = scheduleRepository.findByMentorAndIsReser(mentor, 0);
+		return list;
+	}
+    
+    @GetMapping("/findScheduleNum/{date}/{time}")
+	public Long findScheduleNum(@PathVariable(value = "date") String date, @PathVariable(value = "time") String time) {
+		Schedule schedule = scheduleRepository.findBySdateAndStime(LocalDate.parse(date), time);
+		Long num = schedule.getNum();
+		return num;
+	}
+    
+    @PostMapping("/reApply")
+	public ResponseEntity<String> reApply(@RequestBody Reservation reservation) {
+    	Schedule schedule = scheduleRepository.findByNum(reservation.getScheNum());
+    	schedule.setIsReser(1);
+    	scheduleRepository.save(schedule);
+    	reservationRepository.save(reservation);
+
+		return ResponseEntity.ok("success");
+	}
+    
+    @GetMapping("/isReservation/{mentee}")
+    public Boolean isReservation(@PathVariable(value = "mentee") String mentee) {
+    	Boolean bool = reservationRepository.existsByMentee(mentee);
+    	return bool;
+    }
+    
+    @GetMapping("/myReservation/{mentee}")
+    public List<Reservation> myReservation(@PathVariable(value = "mentee") String mentee) {
+    	List<Reservation> list = reservationRepository.findByMentee(mentee);
+    	return list;
     }
 
     @GetMapping("/getTimeByDate/{sdate}")
