@@ -101,12 +101,12 @@ public class ScheduleController {
         return 0;
     }
 
-    @GetMapping("/Reservation/{mentee}/{date}/{time}")
-    public Object Reservation(@PathVariable String mentee, @PathVariable String date, @PathVariable String time) {
+    @PostMapping("/reservation/{mentee}/{date}/{time}/{concern}")
+    public Object reservation(@PathVariable String mentee, @PathVariable String date, @PathVariable String time, @PathVariable String concern) {
 
         // 아직 매칭 안된 스케줄 중에 시간일치하는것 뽑아옴
 
-        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(LocalDate.parse(date), time, 0);
+        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(LocalDate.parse(date), time.split(" ")[0], 0);
 
         // 랜덤돌려서 매칭
         int number = (int) Math.random() * list.size();
@@ -116,9 +116,10 @@ public class ScheduleController {
         Reservation reser = new Reservation();
         reser.setScheNum(sche.getNum());
         reser.setMentee(mentee);
+        reser.setConcern(concern);
         reservationRepository.save(reser);
 
-        return 0;
+        return reser;
     }
 
     @GetMapping("/getTime/{mentor}")
@@ -199,6 +200,23 @@ public class ScheduleController {
             return 1;
         }
 
+    }
+
+    @GetMapping("/getTimeByDate/{sdate}")
+    public Object getTimeByDate(@PathVariable String sdate) {
+        String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+                    "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" };
+        List<Schedule> list = scheduleRepository.findBySdateAndIsReser(LocalDate.parse(sdate),0);
+        List<String> timeList = new LinkedList<>();
+        for(Schedule s : list){
+            int idx = s.getTimeidx();
+            if(idx == 14){
+                timeList.add(timeArr[idx]+" ~ 24:00");
+            }else{
+                timeList.add(timeArr[idx]+" ~ "+timeArr[idx+1]);
+            }
+        }
+        return timeList;
     }
 
 }

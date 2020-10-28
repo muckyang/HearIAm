@@ -83,6 +83,7 @@
                 <img
                   src="@/assets/icons/res_btn.png"
                   style="width: 100%; height: 100%"
+                  @click="goReserve()"
                 />
               </div>
             </v-btn>
@@ -111,6 +112,9 @@ export default {
     },
     goMypage(){
       this.$router.push(`/menteeMypage`);
+    },
+    goReserve(){
+      this.$router.push(`/reserveMain`).catch(()=>{});
     }
   },
 };
