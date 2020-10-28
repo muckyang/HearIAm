@@ -87,6 +87,7 @@ public class RecordController {
         conRoomRepository.save(conRoom);
         return 0;
     }
+
     @GetMapping("/getRecord")
     @ApiOperation(value = "녹화상담 대기 리스트 불러오기")
     private Object ReadRecordings(){
@@ -95,6 +96,7 @@ public class RecordController {
         System.out.println(conlist.size());
         return conlist; 
     }
+
     @PostMapping("/assigned/{num}/{mentor}")
     @ApiOperation(value = "녹화상담 진행")
     private Object AssignedRecord(@PathVariable long num, @PathVariable long mentor) {
@@ -151,5 +153,12 @@ public class RecordController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @GetMapping("/getRecordDetail/{num}")
+    @ApiOperation(value = "녹화상담 디테일")
+    private Object getRecordDetail(@PathVariable Long num){
+        ConRoom conroom = conRoomRepository.findByNum(num);
+        return conroom;
     }
 }

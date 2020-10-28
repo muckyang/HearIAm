@@ -32,7 +32,7 @@
                   fab
                   icon
                   style="width: 260px; height: 250px; background: linear-gradient(to top, #93dfff, #f5a2bb);"
-                  
+                  @click="goRecordList()"
                 >
                 <div style="width: 260px; height: 250px; padding: 17px;" class="justify-content-center mb-5; " text-align="center" >
                 <img
@@ -86,6 +86,9 @@ export default {
     },
     goMyMenteeList() {
       this.$router.push(`/myMenteeList`);
+    },
+    goRecordList(){
+      this.$router.push(`/recordList`);
     }
   }
 }
