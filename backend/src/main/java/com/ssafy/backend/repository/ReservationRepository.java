@@ -17,6 +17,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
     @Transactional
     @Modifying
 	void deleteByScheNum(Long num);
-
-    List<Reservation> findByMentee(String Mentee);
 }
