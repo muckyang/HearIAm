@@ -1,8 +1,9 @@
 <template>
   <div class="record-main">
+    <video hidden id="videoTag" width="720" height="560" style="border:1px solid black" muted @playing="addEventListener()"></video>
+
     <!-- S1 -->
     <div class="record-header"></div>
-    <!-- 물음표 이미지 -->
     <div v-if="!flag1" class="record-body pt-10" data-sal="slide-down" data-sal-delay="900" data-sal-duration="600">
       <v-img max-height="300" max-width="200" style="margin:0 auto" src="../../assets/unicorn.png"></v-img>
     </div>
@@ -20,49 +21,26 @@
     <transition name="slide-fade">
       <div v-if="flag2 && recFlag" class="d-flex record-body pt-10">
         <div style="margin: 0 auto 0 auto;" class="d-flex">
-          <v-img class="mt-3" style="margin-right:60px;" id="mic-image"  max-height="120" max-width="120" src="../../assets/submit.png" @click="fileUpload()"></v-img>
-          <v-img id="mic-image" style="margin-left:60px;" max-height="120" max-width="120" src="../../assets/replay.png" @click="reRecord()"></v-img>
+          <v-img
+            class="mt-3"
+            style="margin-right:60px;"
+            id="mic-image"
+            max-height="120"
+            max-width="120"
+            src="../../assets/submit.png"
+            @click="fileUpload()"
+          ></v-img>
+          <v-img
+            id="mic-image"
+            style="margin-left:60px;"
+            max-height="120"
+            max-width="120"
+            src="../../assets/replay.png"
+            @click="reRecord()"
+          ></v-img>
         </div>
       </div>
     </transition>
-
-    <!-- 마이크 이미지 -->
-    <!-- <transition name="slide-fade">
-      <div v-if="flag2" class="record-body pt-10">
-        <v-img
-          @click="(flag2 = false), (flag3 = true), start()"
-          id="mic-image"
-          max-height="300"
-          max-width="200"
-          style="margin:0 auto"
-          src="../../assets/mic.png"
-        >
-        </v-img>
-      </div>
-    </transition> -->
-
-    <!-- 녹음중 이미지 -->
-    <!-- <transition name="slide-fade">
-      <div v-if="flag3" class="record-body pt-10">
-        <v-img
-          @click="(flag3 = false), (flag2 = true)"
-          id="mic-image"
-          max-height="300"
-          max-width="200"
-          style="margin:0 auto"
-          src="../../assets/micOn.gif"
-        ></v-img>
-        <v-img
-          v-if="flag3"
-          @click="(flag3 = false), (flag2 = true)"
-          id="mic-image"
-          max-height="100"
-          max-width="100"
-          style="margin:0 auto"
-          src="../../assets/record.png"
-        ></v-img>
-      </div>
-    </transition> -->
 
     <!-- Question1 -->
     <div v-if="alertFlag" class="record-alert mx-15" data-sal="slide-right" data-sal-delay="300" data-sal-duration="600">
@@ -105,8 +83,6 @@
     <!-- Question3 -->
     <transition name="slide-fade">
       <div v-if="flag2 && recFlag" class="record-alert mx-15">
-        {{recordings}}
-        {{file}}
         <v-alert id="f-alert" elevation="5" prominent dark color="#f5a2bb">
           <div class="d-flex mb-3">
             <v-icon class="mr-3">mdi-antenna</v-icon>
@@ -129,11 +105,19 @@
 <script>
 import sal from 'sal.js';
 import http from '@/util/http-common.js';
+import * as faceapi from 'face-api.js';
 
 export default {
   name: 'Record',
   mounted() {
     sal();
+    this.videoTag = document.getElementById('videoTag');
+    Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+      faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+      faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+      faceapi.nets.faceExpressionNet.loadFromUri('/models'),
+    ]);
   },
   data() {
     return {
@@ -149,7 +133,18 @@ export default {
       recordings: [],
       file: '',
       recFlag: false,
-      log: "",
+      log: '',
+      videoTag: [],
+      emotion: [0, 0, 0, 0, 0, 0, 0],
+      allEmotion: {
+        angry: '',
+        disgusted: '',
+        fearful: '',
+        happy: '',
+        neutral: '',
+        sad: '',
+        surprised: '',
+      },
     };
   },
   methods: {
@@ -161,10 +156,12 @@ export default {
     },
     onStream(stream) {
       this.log = stream;
+      this.startVideo();
     },
     onResult(data) {
-      this.log = data
+      this.log = data;
       this.recFlag = true;
+      this.stopVideo();
       // this.file = this.blobToFile(data, "my-record.wav");
       data.lastModifiedDate = new Date();
       this.file = new File([data], 'record.wav');
@@ -173,23 +170,19 @@ export default {
       });
     },
     fileUpload() {
-      console.log('upload');
-      console.log(this.file);
       var formData = new FormData();
       formData.append('file', this.file);
       http
-        .post(`/record/test`, formData, {
+        .post("/record/test", formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         })
-        .then(res => {
-          setTimeout(() => {
-            this.$router.push("/menteeMain");
-          }, 1500);
+        .then((res) => {
           this.log = res;
+          this.emotionUpload();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -198,6 +191,62 @@ export default {
       this.flag2 = true;
       this.recordings = [];
       this.file = '';
+    },
+    addEventListener() {
+      setInterval(async () => {
+        const detections = await faceapi
+          .detectAllFaces(this.videoTag, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceExpressions();
+
+        if (detections.length > 0) {
+          this.emotion = [
+            Math.floor(detections[0].expressions.angry * 100),
+            Math.floor(detections[0].expressions.disgusted * 100),
+            Math.floor(detections[0].expressions.fearful * 100),
+            Math.floor(detections[0].expressions.happy * 100),
+            Math.floor(detections[0].expressions.neutral * 100),
+            Math.floor(detections[0].expressions.sad * 100),
+            Math.floor(detections[0].expressions.surprised * 100),
+          ];
+          this.allEmotion.angry = this.allEmotion.angry.concat(this.emotion[0], `|`);
+          this.allEmotion.disgusted = this.allEmotion.disgusted.concat(this.emotion[1], `|`);
+          this.allEmotion.fearful = this.allEmotion.fearful.concat(this.emotion[2], `|`);
+          this.allEmotion.happy = this.allEmotion.happy.concat(this.emotion[3], `|`);
+          this.allEmotion.neutral = this.allEmotion.neutral.concat(this.emotion[4], `|`);
+          this.allEmotion.sad = this.allEmotion.sad.concat(this.emotion[5], `|`);
+          this.allEmotion.surprised = this.allEmotion.surprised.concat(this.emotion[6], `|`);
+        }
+      }, 1000);
+    },
+    startVideo() {
+      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        const videoPlayer = document.getElementById('videoTag');
+        videoPlayer.srcObject = stream;
+        videoPlayer.play();
+      });
+    },
+    stopVideo() {
+      if (this.videoTag.srcObject != null && this.videoTag.srcObject != '') {
+        const tracks = this.videoTag.srcObject.getTracks();
+        tracks.forEach(function(track) {
+          track.stop();
+        });
+        this.videoTag.srcObject = null;
+      }
+    },
+    emotionUpload() {
+      http
+        .post('/')
+        .then((res) => {
+          this.log = res;
+          setTimeout(() => {
+            this.$router.push('/menteeMain');
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

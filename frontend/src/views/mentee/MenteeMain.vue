@@ -48,6 +48,7 @@
                 height: 250px;
                 background: linear-gradient(to top, #93dfff, #f5a2bb);
               "
+              @click="goRecord()"
             >
               <div
                 style="width: 260px; height: 250px; padding: 17px"
@@ -103,7 +104,7 @@ export default {
   },
   methods: {
     goLive() {
-      this.$router.push(`/userWRTC`);
+      this.$router.push(`/userWRTC`).catch(()=>{});
     },
     logout: function() {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
@@ -111,10 +112,13 @@ export default {
       this.$router.push("/").catch(() => {});
     },
     goMypage(){
-      this.$router.push(`/menteeMypage`);
+      this.$router.push(`/menteeMypage`).catch(()=>{});
     },
     goReserve(){
       this.$router.push(`/reserveMain`).catch(()=>{});
+    },
+    goRecord() {
+      this.$router.push("/recordConsult").catch(()=>{});
     }
   },
 };
