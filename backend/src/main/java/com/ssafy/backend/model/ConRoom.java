@@ -19,11 +19,13 @@ public class ConRoom {
     private Long num;
     private Long mentor;
     private Long mentee;
+    private String title;
     private String room;
     private Date date;
     private String keyword1;
     private String keyword2;
     private String keyword3;
-    private String path;
+    private String recordDir;
+    private String wordcloudImg;
     private String status;
 }

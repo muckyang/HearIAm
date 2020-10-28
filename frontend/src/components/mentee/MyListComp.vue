@@ -39,9 +39,18 @@
             <tr>
               <th class="text-center">예약 날짜</th>
               <th class="text-center">상담사</th>
-              <th class="text-center">참여</th>
+              <th class="text-center">취소</th>
             </tr>
           </thead>
+          <tbody>
+            <tr v-for="item in myReservation" :key="item.name">
+              <td class="text-center">{{ item.sdate }} {{ item.stime }}</td>
+              <td class="text-center">{{ item.mentor }}</td>
+              <td class="text-center">
+                <v-btn @click="cancel(item.num)">취소</v-btn>
+              </td>
+            </tr>
+          </tbody>
         </template>
       </v-simple-table>
     </v-card>
@@ -107,6 +116,7 @@ export default {
       date: null,
       schedule: [],
       isReservation: false,
+      myReservation: [],
     };
   },
   mounted() {
@@ -118,6 +128,9 @@ export default {
     });
     http.get(`/schedule/isReservation/${this.getUserID}`).then((res) => {
       this.isReservation = res.data;
+    });
+    http.get(`/schedule/myReservation/${this.getUserID}`).then((res) => {
+      this.myReservation = res.data;
     });
   },
   computed: {
@@ -148,15 +161,14 @@ export default {
     setTime(date) {
       let time =
         Number(date.slice(0, 4)) +
-        "년 " +
+        "-" +
         Number(date.slice(5, 7)) +
-        "월 " +
+        "-" +
         Number(date.slice(8, 10)) +
-        "일 " +
-        Number(date.slice(11, 13)) +
-        "시 " +
-        Number(date.slice(14, 16)) +
-        "분";
+        " " +
+        date.slice(11, 13) +
+        ":" +
+        Number(date.slice(14, 16));
       return time;
     },
     reapply(item) {
@@ -219,6 +231,16 @@ export default {
       } else {
         alert("날짜와 시간을 선택해주세요");
       }
+    },
+    cancel(num) {
+      http.delete(`/schedule/cancelReservation/${num}`).then((res) => {
+        if (res.data == "success") {
+          alert("에약이 취소되었습니다.");
+          http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
+            this.myReservation = data.data;
+          });
+        }
+      });
     },
   },
 };

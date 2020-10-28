@@ -2,6 +2,7 @@ package com.ssafy.backend.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -230,9 +231,23 @@ public class ScheduleController {
     }
     
     @GetMapping("/myReservation/{mentee}")
-    public List<Reservation> myReservation(@PathVariable(value = "mentee") String mentee) {
-    	List<Reservation> list = reservationRepository.findByMentee(mentee);
+    public List<Schedule> myReservation(@PathVariable(value = "mentee") String mentee) {
+    	List<Reservation> numList = reservationRepository.findByMentee(mentee);
+    	List<Schedule> list = new ArrayList<Schedule>();
+    	for (Reservation reservation : numList) {
+    		list.add(scheduleRepository.findByNum(reservation.getScheNum()));
+		}
     	return list;
+    }
+    
+    @DeleteMapping("/cancelReservation/{scheNum}")
+    public ResponseEntity<String> cancelReservation(@PathVariable(value = "scheNum") Long scheNum){
+    	reservationRepository.deleteByScheNum(scheNum);
+    	Schedule schedule = scheduleRepository.findByNum(scheNum);
+    	schedule.setIsReser(0);
+    	scheduleRepository.save(schedule);
+    	
+    	return ResponseEntity.ok("success");
     }
 
 }
