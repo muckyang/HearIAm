@@ -1,6 +1,5 @@
 package com.ssafy.backend.controller;
 
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,10 +70,9 @@ public class CounselingController {
 	public List<ConRoom> liveList() {
 		List<ConRoom> list = conRoomRepository.findByStatus("liveRequest");
 		Date now = new Date();
-		ZoneId defaultZoneId = ZoneId.systemDefault();
 		
 		for (ConRoom conRoom : list) {
-			Date date2 = Date.from(conRoom.getDate().atStartOfDay(defaultZoneId).toInstant());
+			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate());
 			if((now.getTime()-date2.getTime())/60000 > 30) {
 				conRoomRepository.deleteByNum(conRoom.getNum());
 			}

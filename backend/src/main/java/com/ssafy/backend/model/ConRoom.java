@@ -1,13 +1,17 @@
 package com.ssafy.backend.model;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.Date;
-
-import javax.persistence.*;
 
 @Entity
 @Data
@@ -23,7 +27,7 @@ public class ConRoom {
     private String title;
     private String room;
     @Column(insertable = false, updatable = false)
-    private LocalDate date;
+    private LocalDateTime date;
     private String keyword1;
     private String keyword2;
     private String keyword3;
