@@ -26,14 +26,13 @@ def main(argv):
         audio = r.record(source)
     try:
         words = r.recognize_google(audio, language='ko')
-        print("Google Speech Recognition thinks you said : " + words)
+        print(words)
     except sr.UnknownValueError:
         print("Google Speech Recognition could not understand audio")
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
     
 if __name__ == "__main__":
-    print("start py")
     sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
     sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
     main(sys.argv)

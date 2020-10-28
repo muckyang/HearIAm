@@ -35,10 +35,10 @@ public class RecordController {
 
     @Autowired
     RecordRepository recordRepository;
-    
+
     @Autowired
     RecordAssignRepository recordAssignRepository;
-    
+
     @PostMapping("/test")
     @ApiOperation(value = "녹음파일저장, STT ,WordCloud")
     public Object fileTest(@RequestPart("file") MultipartFile ff) throws IllegalStateException, IOException {
@@ -57,49 +57,47 @@ public class RecordController {
             file.getParentFile().mkdirs();
         }
         ff.transferTo(file);
-        
+
         String[] command = new String[3];
         command[0] = "python";
         command[1] = "./backend/AI/SpeechToText2.py";
-        command[2] = file.getName();	
+        command[2] = file.getName();
 
-		try {
-			return execPython(command);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            return execPython(command);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
-        // return file.getName();
     }
+
     @PostMapping("/create")
     @ApiOperation(value = "녹화상담등록")
-    private Object CreateRecord(@RequestBody Record request){
+    private Object CreateRecord(@RequestBody Record request) {
         Record record = new Record();
         record.setTitle(request.getTitle());
         record.setFilename(request.getFilename());
         record.setMentee(request.getMentee());
-    
+
         recordRepository.save(record);
-        return  0;
+        return 0;
     }
 
     @PostMapping("/assigned")
     @ApiOperation(value = "녹화상담 담당하기")
-    private Object AssignedRecord(@RequestBody RecordAssign request){
+    private Object AssignedRecord(@RequestBody RecordAssign request) {
 
         RecordAssign recordassign = new RecordAssign();
         recordassign.setRecordId(request.getRecordId());
         recordassign.setMento(request.getMento());
-    
-        recordAssignRepository.save(recordassign);
-        return  0;
-    }
 
+        recordAssignRepository.save(recordassign);
+        return 0;
+    }
 
     private long datetimeTosec(LocalDateTime ldt) {
         long result = 0L;
         result += ((((((((ldt.getYear() - 2000) * 365) + ldt.getDayOfYear()) * 24) + ldt.getHour()) * 60)
-                + ldt.getMinute()) * 60+ ldt.getSecond());
+                + ldt.getMinute()) * 60 + ldt.getSecond());
         return result;
     }
 
@@ -116,26 +114,30 @@ public class RecordController {
         System.out.println("STT OK!");
 
         String[] outputList = outputStream.toString().split("\n");
-        String str =  "";
+        String str = "";
         for (String s : outputList) {
-           str += s+" ";
+            str += s + " ";
         }
 
-		// 경로 확인
-		String hostname = InetAddress.getLocalHost().getHostName();
-		if (hostname.substring(0, 7).equals("DESKTOP")) {// local
-			command[1] = "./backend/AI/text_wordcloud.py";
-			System.out.println("in");
-		} else {// aws
-			command[1] = "../AI/textCheck.py";
-		}
+        // 경로 확인
+        String hostname = InetAddress.getLocalHost().getHostName();
+        if (hostname.substring(0, 7).equals("DESKTOP")) {// local
+            command[1] = "./backend/AI/text_wordcloud.py";
+        } else {// aws
+            command[1] = "../AI/textCheck.py";
+        }
         command[2] = str;
-		try {
-            System.out.println(str);
-			return execPython(command);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+        commandLine = CommandLine.parse(command[0]);
+        for (int i = 1, n = command.length; i < n; i++) {
+            commandLine.addArgument(command[i]);
+        }
+        executor.execute(commandLine);
+        System.out.println("WordCloud OK!");
+        try {
+            return outputList;
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 }
