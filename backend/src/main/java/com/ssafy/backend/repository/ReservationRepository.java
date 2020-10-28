@@ -12,4 +12,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
     List<Reservation> findAll();
     List<Long> findScheNumByMentee(String mentee);
     Boolean existsByMentee(String mentee);
+    List<Reservation> findByMentee(String Mentee);
 }
