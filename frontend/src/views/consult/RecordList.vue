@@ -1,5 +1,6 @@
 <template>
-  <div class="record-main d-flex justify-content-center p-5">
+  <div class="record-main ">
+<div class="row justify-content-left">
     <div
       v-for="(wait, index) in waitList"
       :key="index"
@@ -26,6 +27,7 @@
       </v-card>
     </div>
   </div>
+</div>
 </template>
 
 <script>

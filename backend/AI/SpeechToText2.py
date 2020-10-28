@@ -20,7 +20,7 @@ import io
     
 
 def main(argv):
-    AUDIO_FILE = "./frontend/src/assets/record/" + argv[1]
+    AUDIO_FILE = "./frontend/public/record/" + argv[1]
     r= sr.Recognizer()
     with sr.AudioFile(AUDIO_FILE) as source:
         audio = r.record(source)
