@@ -1,14 +1,9 @@
 package com.ssafy.backend.controller;
 
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.bytebuddy.asm.Advice.Local;
-
 import com.ssafy.backend.model.Reservation;
 import com.ssafy.backend.model.Schedule;
 import com.ssafy.backend.repository.ReservationRepository;
@@ -39,40 +32,64 @@ public class ScheduleController {
     @Autowired
     ScheduleRepository scheduleRepository;
 
-
     @Autowired
     ReservationRepository reservationRepository;
 
-    @PostMapping("/saveTime/{timetable}/{mentor}")
+    // @PostMapping("/saveTime/{mentor}")
+    // public Object saveTime(@RequestBody Map<Object, int[]> timetable, @PathVariable String mentor) {
+    //     List<Schedule> list = scheduleRepository.findByMentor(mentor);
+    //     LocalDate today = LocalDate.now();
+    //     int todayWeek = DayOfWeek.from(LocalDate.now()).getValue(); // 일 : 0
+    //     String[] thisWeek = new String[7];
+    //     for (int i = 0; i <= 6; i++) {
+    //         if (i < todayWeek) { // 오늘보다 이전이면
+    //             thisWeek[i] = today.minusDays(todayWeek - i).toString();
+    //         } else if (i > todayWeek) {
+    //             thisWeek[i] = today.plusDays(i - todayWeek).toString();
+    //         } else {
+    //             thisWeek[i] = today.toString();
+    //         }
+    //     }
+    //     List<Integer>[] timearr = new List[7];
 
-    public Object saveTime(@RequestBody Map<Object, int[]> timetable, @PathVariable String mentor) {
-        String newDate = "";
-        String newTime = "";
-        String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
-                "19:00", "20:00", "21:00", "22:00", "23:00" };
-        LocalDate today = LocalDate.now();
-        int todayWeek = DayOfWeek.from(LocalDate.now()).getValue(); // 일 : 0
-        for (int i = 0; i <= 6; i++) {
-            if (i < todayWeek) { // 오늘보다 이전이면
-                newDate = today.minusDays(todayWeek - i).toString();
-            } else if (i > todayWeek) {
-                newDate = today.plusDays(i - todayWeek).toString();
-            } else {
-                newDate = today.toString();
-            }
-            for (int t : timetable.get(String.valueOf(i))) {
-                newTime = timeArr[t];
-                Schedule schedule = new Schedule();
-                schedule.setMentor(mentor);
-                System.out.println(newTime + " " + LocalTime.parse(newTime));
-                schedule.setSdate(LocalDate.parse(newDate));
-                schedule.setStime(newTime);
-                scheduleRepository.save(schedule);
-            }
-        }
+    //     for (int i = 0; i < 7; i++) {
+    //         timearr[i] = new LinkedList<>();
+    //     }
+    //     for (Schedule s : list) {
+    //         if (s.getIsReser() == 0)
+    //             scheduleRepository.delete(s);
+    //         else {
+    //             // 예약되어있는거는 이따가 저장하면안돼
+    //         }
+    //     }
+    //     // 먼저 삭제하고
 
-        return timetable;
-    }
+    //     // 등록
+    //     String newDate = "";
+    //     String newTime = "";
+    //     String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
+    //             "19:00", "20:00", "21:00", "22:00", "23:00" };
+    //     for (int i = 0; i <= 6; i++) {
+    //         if (i < todayWeek) { // 오늘보다 이전이면
+    //             newDate = today.minusDays(todayWeek - i).toString();
+    //         } else if (i > todayWeek) {
+    //             newDate = today.plusDays(i - todayWeek).toString();
+    //         } else {
+    //             newDate = today.toString();
+    //         }
+    //         for (int t : timetable.get(String.valueOf(i))) {
+    //             newTime = timeArr[t];
+    //             Schedule schedule = new Schedule();
+    //             schedule.setMentor(mentor);
+    //             System.out.println(newTime + " " + LocalTime.parse(newTime));
+    //             schedule.setSdate(LocalDate.parse(newDate));
+    //             schedule.setStime(newTime);
+    //             schedule.setTimeidx(t);
+    //             scheduleRepository.save(schedule);
+    //         }
+    //     }
+    //     return timetable;
+    // }
 
     @DeleteMapping("/delete")
     public Object DeleteSchedule(@RequestBody Schedule request) {
@@ -89,7 +106,7 @@ public class ScheduleController {
 
         // 아직 매칭 안된 스케줄 중에 시간일치하는것 뽑아옴
 
-        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(LocalDate.parse(date),time, 0);
+        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(LocalDate.parse(date), time, 0);
 
         // 랜덤돌려서 매칭
         int number = (int) Math.random() * list.size();
@@ -103,4 +120,85 @@ public class ScheduleController {
 
         return 0;
     }
+
+    @GetMapping("/getTime/{mentor}")
+    public Object getTime(@PathVariable String mentor) {
+        List<Schedule> list = scheduleRepository.findByMentor(mentor);
+        LocalDate today = LocalDate.now();
+        int todayWeek = DayOfWeek.from(LocalDate.now()).getValue(); // 일 : 0
+        String[] thisWeek = new String[7];
+        for (int i = 0; i <= 6; i++) {
+            if (i < todayWeek) { // 오늘보다 이전이면
+                thisWeek[i] = today.minusDays(todayWeek - i).toString();
+            } else if (i > todayWeek) {
+                thisWeek[i] = today.plusDays(i - todayWeek).toString();
+            } else {
+                thisWeek[i] = today.toString();
+            }
+        }
+        List<Integer>[] timearr = new List[7];
+        for (int i = 0; i < 7; i++) {
+            timearr[i] = new LinkedList<>();
+        }
+        for (Schedule s : list) {
+            if (s.getSdate().toString().equals(thisWeek[0])) {
+                timearr[0].add(s.getTimeidx());
+            } else if (s.getSdate().toString().equals(thisWeek[1])) {
+                timearr[1].add(s.getTimeidx());
+            } else if (s.getSdate().toString().equals(thisWeek[2])) {
+                timearr[2].add(s.getTimeidx());
+            } else if (s.getSdate().toString().equals(thisWeek[3])) {
+                timearr[3].add(s.getTimeidx());
+            } else if (s.getSdate().toString().equals(thisWeek[4])) {
+                timearr[4].add(s.getTimeidx());
+            } else if (s.getSdate().toString().equals(thisWeek[5])) {
+                timearr[5].add(s.getTimeidx());
+            } else if (s.getSdate().toString().equals(thisWeek[6])) {
+                timearr[6].add(s.getTimeidx());
+            }
+        }
+        Map<String, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < 7; i++) {
+            map.put(String.valueOf(i), timearr[i]);
+        }
+        return map;
+    }
+
+    @GetMapping("/checkTime/{mentor}/{dayidx}/{timeidx}")
+    public Object checkTime(@PathVariable String mentor, @PathVariable int dayidx, @PathVariable int timeidx) {
+        System.out.println(dayidx + " " + timeidx);
+        LocalDate today = LocalDate.now();
+        int todayWeek = DayOfWeek.from(LocalDate.now()).getValue();
+        LocalDate sdate; // 확인할 날짜
+        if (dayidx < todayWeek) { // 오늘보다 이전이면
+            sdate = today.minusDays(todayWeek - dayidx);
+        } else if (dayidx > todayWeek) {
+            sdate = today.plusDays(dayidx - todayWeek);
+        } else {
+            sdate = today;
+        }
+        Schedule sche = scheduleRepository.findScheduleByMentorAndSdateAndTimeidx(mentor, sdate, timeidx);
+        if (sche != null) { // 스케줄이 이미 존재하면
+            if (sche.getIsReser() == 0) { //예약이 안되어있으면
+                scheduleRepository.delete(sche);
+                return -1;
+            } else {
+                return 0;
+            }
+        } else { // 스케줄이 없으면
+            String stime = "";
+            String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+                    "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" };
+            stime = timeArr[timeidx];
+            Schedule schedule = new Schedule();
+            schedule.setMentor(mentor);
+            schedule.setSdate(sdate);
+            schedule.setStime(stime);
+            schedule.setTimeidx(timeidx);
+            scheduleRepository.save(schedule);
+            return 1;
+        }
+
+    }
+
 }

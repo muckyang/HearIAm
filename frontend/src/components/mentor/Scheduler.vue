@@ -28,6 +28,7 @@
                 {{ t }}
               </div>
               <div
+                class="day-div"
                 v-for="(day, daynum) in dayTable"
                 :key="daynum"
                 ref="ruleTimeItem"
@@ -47,7 +48,8 @@
         </div>
       </div>
     </div>
-    <v-btn @click="saveTime">등록</v-btn>
+    <v-btn v-if="isModify" @click="saveTime">완료</v-btn>
+    <v-btn v-if="!isModify" @click="modifyTime">일정수정</v-btn>
   </div>
 </template>
 
@@ -118,29 +120,63 @@ export default {
         5: [],
         6: [],
       },
-      dayTable: ["일","월", "화", "수", "목", "금", "토"],
+      dayTable: ["일", "월", "화", "수", "목", "금", "토"],
+      isModify:false
     };
   },
-  created(){
-      this.uid = this.getUserID;
+  created() {
+    this.uid = this.getUserID;
+    this.getTime();
   },
   methods: {
-    saveTime() {
+    getTime(){
       http
-        .post(`/schedule/saveTime/${this.getUserID}`,this.timetable)
-        .then(() => {})
+      .get(`/schedule/getTime/${this.getUserID}`)
+      .then((res) => {
+        this.timetable = res.data;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+      this.isModify=false;
+    },
+    saveTime() {
+      alert("일정이 수정되었습니다.")
+      this.isModify = false;
+      var daydiv_arr = document.getElementsByClassName("day-div");
+      for (var i = 0; i < daydiv_arr.length; i++) {
+        document.getElementsByClassName("day-div")[i].style.pointerEvents =
+          "none";
+      }
+    },
+    modifyTime() {
+      this.isModify = true;
+      var daydiv_arr = document.getElementsByClassName("day-div");
+      for (var i = 0; i < daydiv_arr.length; i++) {
+        document.getElementsByClassName("day-div")[i].style.pointerEvents =
+          "auto";
+      }
+    },
+    toggleDay(day, time) {
+      http
+        .get(`/schedule/checkTime/${this.getUserID}/${day}/${time}`)
+        .then((res) => {
+          if (res.data == 0) {
+            alert("이미 예약된 시간입니다.");
+            return;
+          } else {
+            let indexDay = this.timetable[day].findIndex((el) => el == time);
+            if (indexDay != -1) {
+              this.timetable[day].splice(indexDay, 1);
+            } else {
+              this.timetable[day].push(time);
+            }
+            this.$emit("input", this.timetable);
+          }
+        })
         .catch((e) => {
           console.log(e);
         });
-    },
-    toggleDay(day, time) {
-      let indexDay = this.timetable[day].findIndex((el) => el == time);
-      if (indexDay != -1) {
-        this.timetable[day].splice(indexDay, 1);
-      } else {
-        this.timetable[day].push(time);
-      }
-      this.$emit("input", this.timetable);
     },
     setupCustom() {
       const vm = this;
@@ -151,7 +187,7 @@ export default {
         var hh = Math.floor(tt / 60); // getting hours of day in 0-24 format
         var mm = tt % 60; // getting minutes of the hour in 0-55 format
         if (hh >= 9) {
-          times[i - 9] = ("0" + hh).slice(-2) + "." + ("0" + mm).slice(-2); // pushing data in array in [00:00 - 12:00 AM/PM format]
+          times[i - 9] = ("0" + hh).slice(-2) + ":" + ("0" + mm).slice(-2); // pushing data in array in [00:00 - 12:00 AM/PM format]
         }
         tt = tt + this.steps;
       }
@@ -191,4 +227,7 @@ export default {
 
 <style scoped>
 @import url("../../assets/schedule_style.css");
+.day-div {
+  pointer-events: none;
+}
 </style>
