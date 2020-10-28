@@ -15,6 +15,8 @@ import com.ssafy.backend.model.RecordAssign;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.RecordAssignRepository;
 import com.ssafy.backend.repository.RecordRepository;
+import java.util.List;
+
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -23,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,10 +43,7 @@ import io.swagger.annotations.ApiOperation;
 public class RecordController {
 
     @Autowired
-    RecordRepository recordRepository;
-
-    @Autowired
-    RecordAssignRepository recordAssignRepository;
+    ConRoomRepository conRoomRepository;
 
     @Autowired
     ConRoomRepository conRoomRepository;
@@ -83,26 +84,38 @@ public class RecordController {
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "녹화상담등록")
-    private Object CreateRecord(@RequestBody Record request) {
-        Record record = new Record();
-        record.setTitle(request.getTitle());
-        record.setFilename(request.getFilename());
-        record.setMentee(request.getMentee());
+    @ApiOperation(value = "녹화상담 등록")
+    private Object CreateRecord(@RequestBody ConRoom request) {
+        ConRoom conRoom= new ConRoom();
+        conRoom.setMentor(1L);
+        conRoom.setMentee(request.getMentee());
+        conRoom.setTitle(request.getTitle());
+        conRoom.setRecordDir(request.getRecordDir());
+        conRoom.setWordcloudImg(request.getWordcloudImg());
+        conRoom.setStatus("waiting");
+        //키워드는 나중에 작업예정
+        // conRoom.setKeyword1("");
+        // conRoom.setKeyword2("");
+        // conRoom.setKeyword3("");
 
-        recordRepository.save(record);
+        conRoomRepository.save(conRoom);
         return 0;
     }
-
-    @PostMapping("/assigned")
-    @ApiOperation(value = "녹화상담 담당하기")
-    private Object AssignedRecord(@RequestBody RecordAssign request) {
-
-        RecordAssign recordassign = new RecordAssign();
-        recordassign.setRecordId(request.getRecordId());
-        recordassign.setMento(request.getMento());
-
-        recordAssignRepository.save(recordassign);
+    @GetMapping("/getRecord")
+    @ApiOperation(value = "녹화상담 대기 리스트 불러오기")
+    private Object ReadRecordings(){
+        String waiting = "waiting";
+        List<ConRoom> conlist = conRoomRepository.findByStatus(waiting);
+        System.out.println(conlist.size());
+        return conlist; 
+    }
+    @PostMapping("/assigned/{num}/{mentor}")
+    @ApiOperation(value = "녹화상담 진행")
+    private Object AssignedRecord(@PathVariable long num, @PathVariable long mentor) {
+        ConRoom conRoom = conRoomRepository.findByNum(num);
+        conRoom.setStatus("progress");
+        conRoom.setMentor(mentor);
+        conRoomRepository.save(conRoom);
         return 0;
     }
     
@@ -144,11 +157,12 @@ public class RecordController {
         for (int i = 1, n = command.length; i < n; i++) {
             commandLine.addArgument(command[i]);
         }
-
+        
         outputStream = new ByteArrayOutputStream();
         pumpStreamHandler = new PumpStreamHandler(outputStream);
         executor = new DefaultExecutor();
         executor.setStreamHandler(pumpStreamHandler);
+        System.out.println(str);
         executor.execute(commandLine);
 
         outputList = outputStream.toString().split("\n");

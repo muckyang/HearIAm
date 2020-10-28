@@ -2,6 +2,7 @@ package com.ssafy.backend.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -101,12 +101,12 @@ public class ScheduleController {
         return 0;
     }
 
-    @GetMapping("/Reservation/{mentee}/{date}/{time}")
-    public Object Reservation(@PathVariable String mentee, @PathVariable String date, @PathVariable String time) {
+    @PostMapping("/reservation/{mentee}/{date}/{time}/{concern}")
+    public Object reservation(@PathVariable String mentee, @PathVariable String date, @PathVariable String time, @PathVariable String concern) {
 
         // 아직 매칭 안된 스케줄 중에 시간일치하는것 뽑아옴
 
-        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(LocalDate.parse(date), time, 0);
+        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(LocalDate.parse(date), time.split(" ")[0], 0);
 
         // 랜덤돌려서 매칭
         int number = (int) Math.random() * list.size();
@@ -116,9 +116,10 @@ public class ScheduleController {
         Reservation reser = new Reservation();
         reser.setScheNum(sche.getNum());
         reser.setMentee(mentee);
+        reser.setConcern(concern);
         reservationRepository.save(reser);
 
-        return 0;
+        return reser;
     }
 
     @GetMapping("/getTime/{mentor}")
@@ -199,6 +200,72 @@ public class ScheduleController {
             return 1;
         }
 
+    }
+    
+    @GetMapping("/allowSchedule/{mentor}")
+	public List<Schedule> counseling(@PathVariable(value = "mentor") String mentor) {
+		List<Schedule> list = scheduleRepository.findByMentorAndIsReser(mentor, 0);
+		return list;
+	}
+    
+    @GetMapping("/findScheduleNum/{date}/{time}")
+	public Long findScheduleNum(@PathVariable(value = "date") String date, @PathVariable(value = "time") String time) {
+		Schedule schedule = scheduleRepository.findBySdateAndStime(LocalDate.parse(date), time);
+		Long num = schedule.getNum();
+		return num;
+	}
+    
+    @PostMapping("/reApply")
+	public ResponseEntity<String> reApply(@RequestBody Reservation reservation) {
+    	Schedule schedule = scheduleRepository.findByNum(reservation.getScheNum());
+    	schedule.setIsReser(1);
+    	scheduleRepository.save(schedule);
+    	reservationRepository.save(reservation);
+
+		return ResponseEntity.ok("success");
+	}
+    
+    @GetMapping("/isReservation/{mentee}")
+    public Boolean isReservation(@PathVariable(value = "mentee") String mentee) {
+    	Boolean bool = reservationRepository.existsByMentee(mentee);
+    	return bool;
+    }
+    
+    @GetMapping("/myReservation/{mentee}")
+    public List<Schedule> myReservation(@PathVariable(value = "mentee") String mentee) {
+    	List<Reservation> numList = reservationRepository.findByMentee(mentee);
+    	List<Schedule> list = new ArrayList<Schedule>();
+    	for (Reservation reservation : numList) {
+    		list.add(scheduleRepository.findByNum(reservation.getScheNum()));
+		}
+    	return list;
+    }
+    
+    @DeleteMapping("/cancelReservation/{scheNum}")
+    public ResponseEntity<String> cancelReservation(@PathVariable(value = "scheNum") Long scheNum){
+    	reservationRepository.deleteByScheNum(scheNum);
+    	Schedule schedule = scheduleRepository.findByNum(scheNum);
+    	schedule.setIsReser(0);
+    	scheduleRepository.save(schedule);
+    	
+    	return ResponseEntity.ok("success");
+    }
+
+    @GetMapping("/getTimeByDate/{sdate}")
+    public Object getTimeByDate(@PathVariable String sdate) {
+        String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+                    "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" };
+        List<Schedule> list = scheduleRepository.findBySdateAndIsReser(LocalDate.parse(sdate),0);
+        List<String> timeList = new LinkedList<>();
+        for(Schedule s : list){
+            int idx = s.getTimeidx();
+            if(idx == 14){
+                timeList.add(timeArr[idx]+" ~ 24:00");
+            }else{
+                timeList.add(timeArr[idx]+" ~ "+timeArr[idx+1]);
+            }
+        }
+        return timeList;
     }
 
 }

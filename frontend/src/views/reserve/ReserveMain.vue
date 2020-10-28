@@ -5,7 +5,13 @@
         <h1 class="mb-5">상담 예약하기</h1>
         <v-row class="d-flex justify-content-center">
           <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
-            <v-dialog ref="dialogDate" v-model="dateModal" :return-value.sync="date" persistent width="290px">
+            <v-dialog
+              ref="dialogDate"
+              v-model="dateModal"
+              :return-value.sync="date"
+              persistent
+              width="290px"
+            >
               <template v-slot:activator="{ on, attrs }">
                 <div class="d-flex">
                   <v-icon class="mr-3" large color="black">mdi-calendar</v-icon>
@@ -17,22 +23,27 @@
                     solo
                     v-bind="attrs"
                     v-on="on"
+                    hint="일주일 단위로 예약이 가능합니다."
+                    persistent-hint
                   ></v-text-field>
                 </div>
               </template>
-              <v-date-picker v-model="date" scrollable>
+              <v-date-picker
+                v-model="date"
+                scrollable
+                :min="nowDate"
+                :max="getEndDate"
+              >
                 <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="dateModal = false">
                   Cancel
                 </v-btn>
-                <v-btn text color="primary" @click="$refs.dialogDate.save(date)">
-                  OK
-                </v-btn>
+                <v-btn text color="primary" @click="setDate"> OK </v-btn>
               </v-date-picker>
             </v-dialog>
           </v-col>
         </v-row>
-        <v-row>
+        <!-- <v-row>
           <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
             <v-dialog ref="dialogTime" v-model="timeModal" :return-value.sync="time" persistent width="290px">
               <template v-slot:activator="{ on, attrs }">
@@ -60,26 +71,69 @@
               </v-time-picker>
             </v-dialog>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-row>
           <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
             <div class="d-flex">
-              <v-icon class="mr-3" large color="black">mdi-help-circle-outline</v-icon>
-              <v-select class="mt-7" v-model="concern" :items="items" label="고민이 무엇인가요?" solo></v-select>
+              <v-icon class="mr-3" large color="black"
+                >mdi-clock-time-four-outline</v-icon
+              >
+              <v-select
+                class="mt-7"
+                v-model="time"
+                :items="timeItems"
+                label="시간을 선택해주세요."
+                hint="예약 가능한 시간만 보여집니다."
+                solo
+                persistent-hint
+              ></v-select>
             </div>
           </v-col>
         </v-row>
         <v-row>
+          <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
+            <div class="d-flex">
+              <v-icon class="mr-3" large color="black"
+                >mdi-help-circle-outline</v-icon
+              >
+              <v-select
+                class="mt-7"
+                v-model="concern"
+                :items="items"
+                label="고민이 무엇인가요?"
+                solo
+              ></v-select>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
+            <div class="d-flex">
+            <v-icon class="mr-3" large color="white"
+                >mdi-help-circle-outline</v-icon
+              >
+          <v-text-field
+            v-if="isSelf"
+            v-model="concern2"
+            v-bind="attrs"
+            v-on="on"
+            hint="자유롭게 고민을 입력해주세요."
+            persistent-hint
+          ></v-text-field>
+          </div>
+          </v-col>
+        </v-row>
+        <!-- <v-row>
           <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
             <div class="d-flex">
               <v-icon class="mr-3" large color="black">mdi-account-check-outline</v-icon>
               <v-text-field class="mt-7" v-model="consultant" label="원하는 상담사가 있나요?" solo></v-text-field>
             </div>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-row>
           <v-col cols="2" class="reserve-data pt-10 px-0">
-            <v-btn color="#ffdc15">예약하기</v-btn>
+            <v-btn color="#ffdc15" @click="reserve">예약하기</v-btn>
           </v-col>
         </v-row>
       </v-sheet>
@@ -88,17 +142,96 @@
 </template>
 
 <script>
+import http from "@/util/http-common.js";
+import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
       date: new Date().toISOString().substr(0, 10),
       dateModal: false,
       timeModal: false,
-      time: null,
-      concern: '',
-      consultant: '',
-      items: ['시험 성적 때문에 고민이에요..', '진로에 대한 고민이 있어요.', '괴롭힘을 당하고 있어요...', '친구문제로 상담을 받고 싶어요.'],
+      time: "",
+      concern: "",
+      // consultant: '',
+      items: [
+        "시험 성적 때문에 고민이에요.",
+        "진로에 대한 고민이 있어요.",
+        "괴롭힘을 당하고 있어요.",
+        "친구문제로 상담을 받고 싶어요.",
+        "직접 입력",
+      ],
+      timeItems: [],
+      nowDate: new Date().toISOString().substr(0, 10),
+      nDate: new Date(),
+      isSelf: false,
     };
+  },
+  computed: {
+    getEndDate() {
+      var endDate = new Date();
+      endDate.setDate(this.nDate.getDate() + 7);
+      return endDate.toISOString().slice(0, 10);
+    },
+    ...mapGetters(["getUserID"]),
+    ...mapState({
+      userID: (state) => `${state.user.getUserID}`,
+    }),
+  },
+  watch: {
+    concern(v) {
+      if (v == "직접 입력") {
+        this.isSelf = true;
+      }else{
+        this.isSelf = false;
+      }
+    },
+  },
+  created() {
+    http
+      .get(`/schedule/getTimeByDate/${this.nowDate}`)
+      .then((res) => {
+        if (res.data.length == 0) {
+          this.timeItems.push("예약 가능한 시간이 없습니다.");
+        } else {
+          this.timeItems = res.data;
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  },
+  methods: {
+    setDate() {
+      this.$refs.dialogDate.save(this.date);
+      http
+        .get(`/schedule/getTimeByDate/${this.date}`)
+        .then((res) => {
+          if (res.data.length == 0) {
+            this.timeItems.push("예약 가능한 시간이 없습니다.");
+          } else {
+            this.timeItems = res.data;
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    reserve() {
+      if(this.concern=="직접 입력"){
+        this.concern = this.concern2;
+      }
+      http
+        .post(
+          `/schedule/reservation/${this.getUserID}/${this.date}/${this.time}/${this.concern}`
+        )
+        .then(() => {
+          alert("예약이 완료되었습니다.");
+          this.$router.push("/menteeMain").catch(() => {});
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
 };
 </script>
@@ -113,7 +246,7 @@ export default {
   padding: 2%;
 }
 .sheet-body {
-  background-image: linear-gradient(to right, #93dfff, white, #f5a2bb);
+  /* background-image: linear-gradient(to right, #93dfff, white, #f5a2bb); */
   padding: 50px;
   height: 100%;
   text-align: center;

@@ -84,6 +84,7 @@
                 <img
                   src="@/assets/icons/res_btn.png"
                   style="width: 100%; height: 100%"
+                  @click="goReserve()"
                 />
               </div>
             </v-btn>
@@ -103,7 +104,7 @@ export default {
   },
   methods: {
     goLive() {
-      this.$router.push(`/userWRTC`);
+      this.$router.push(`/userWRTC`).catch(()=>{});
     },
     logout: function() {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
@@ -111,10 +112,13 @@ export default {
       this.$router.push("/").catch(() => {});
     },
     goMypage(){
-      this.$router.push(`/menteeMypage`);
+      this.$router.push(`/menteeMypage`).catch(()=>{});
+    },
+    goReserve(){
+      this.$router.push(`/reserveMain`).catch(()=>{});
     },
     goRecord() {
-      this.$router.push("/recordConsult")
+      this.$router.push("/recordConsult").catch(()=>{});
     }
   },
 };

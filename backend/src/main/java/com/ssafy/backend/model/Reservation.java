@@ -17,5 +17,6 @@ public class Reservation {
     long num;
     String mentee;
     long scheNum;
+    String concern;
     
 }
