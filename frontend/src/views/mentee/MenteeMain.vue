@@ -48,6 +48,7 @@
                 height: 250px;
                 background: linear-gradient(to top, #93dfff, #f5a2bb);
               "
+              @click="goRecord()"
             >
               <div
                 style="width: 260px; height: 250px; padding: 17px"
@@ -111,6 +112,9 @@ export default {
     },
     goMypage(){
       this.$router.push(`/menteeMypage`);
+    },
+    goRecord() {
+      this.$router.push("/recordConsult")
     }
   },
 };
