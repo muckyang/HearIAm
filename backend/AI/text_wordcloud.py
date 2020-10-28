@@ -4,6 +4,8 @@ from wordcloud import WordCloud
 from collections import Counter
 from konlpy.tag import Okt
 import time
+from os import path
+import socket
 
 def get_noun(text):
     okt = Okt()
@@ -30,7 +32,11 @@ def get_noun(text):
 def visualize(noun_list, fileName):
     wc = WordCloud(font_path='C:\\Windows\\Fonts\\NGULIM.TTF', background_color='white', width=1000, height=1000, max_font_size=300)
     wc.generate_from_frequencies(dict(noun_list))
-    wc.to_file(fileName)
+
+    if(socket.gethostname()[:7] == "DESKTOP"):
+        wc.to_file(path.join("./frontend/public/images/" + fileName))
+    else:
+        wc.to_file(path.join("/var/lib/jenkins/workspace/front/frontend/public/images/" + fileName))
 
 if __name__ == "__main__":
     sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
