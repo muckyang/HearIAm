@@ -14,6 +14,8 @@ import MyMenteeList from '../views/mentor/MyMenteeList.vue'
 import MyMenteeInfo from '../views/mentor/MyMenteeInfo.vue'
 import CounselingInfo from '../views/mentor/CounselingInfo.vue'
 import AudioRecorder from 'vue-audio-recorder'
+import RecordList from '../views/consult/RecordList.vue'
+import RecordDetail from '../views/consult/RecordDetail.vue'
 Vue.use(AudioRecorder)
 Vue.use(VueRouter)
 
@@ -102,6 +104,16 @@ const routes = [{
         path: '/counselingInfo/:num',
         name: 'CounselingInfo',
         component: CounselingInfo
+    },
+    {
+        path: '/recordList',
+        name: 'RecordList',
+        component: RecordList
+    },
+    {
+        path: '/recordDetail/:num',
+        name: 'RecordDetail',
+        component: RecordDetail
     },
 ]
 
