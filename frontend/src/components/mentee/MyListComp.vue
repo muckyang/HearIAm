@@ -17,20 +17,30 @@
           <tbody>
             <tr v-for="item in myList" :key="item.name">
               <td class="text-center">{{ setTime(item.date) }}</td>
-              
-              <td v-if="item.mentor == 1 " class="text-center"> - </td>
+
+              <td v-if="item.mentor == 1" class="text-center">-</td>
 
               <td v-else class="text-center">{{ findName(item.mentor) }}</td>
-              <td v-if="item.recordDir != null " class="text-center">
+              <td v-if="item.recordDir != null" class="text-center">
                 녹화 상담
               </td>
               <td v-else class="text-center">실시간 상담</td>
-                <td v-if ="item.status == 'finish' " class="text-center" >상담완료</td>
-                <td v-if ="item.status == 'waiting' " class="text-center" >대기중</td>
-                <td v-if ="item.status == 'progress' " class="text-center" >진행중</td>
-               <td class="text-center">
-                <v-btn v-if ="item.status == 'finish' " @click="reapply(item)">재신청</v-btn>
-             
+              <td v-if="item.status == 'finish'" class="text-center">
+                상담완료
+              </td>
+              <td v-if="item.status == 'waiting'" class="text-center">
+                대기중
+              </td>
+              <td v-if="item.status == 'progress'" class="text-center">
+                진행중
+              </td>
+              <td class="text-center">
+                <v-btn
+                  v-if="item.status == 'finish'"
+                  :disabled="item.isreapply != 0"
+                  @click="reapply(item)"
+                  >재신청</v-btn
+                >
               </td>
             </tr>
           </tbody>
@@ -125,6 +135,7 @@ export default {
       schedule: [],
       isReservation: false,
       myReservation: [],
+      conRoomNum: null,
     };
   },
   mounted() {
@@ -167,7 +178,6 @@ export default {
       }
     },
     setTime(date) {
-      console.dir(date);
       let time =
         date.slice(0, 4) +
         "-" +
@@ -181,10 +191,7 @@ export default {
       return time;
     },
     reapply(item) {
-      // if(this.isReservation == true){
-      //   alert("예약 내역이 존재합니다.")
-      //   return;
-      // }
+      this.conRoomNum = item.num;
       this.time = null;
       this.date = new Date().toISOString().substr(0, 10);
       this.dialog = true;
@@ -226,13 +233,23 @@ export default {
           .get(`/schedule/findScheduleNum/${this.date}/${this.time}`)
           .then((res) => {
             http
-              .post(`/schedule/reApply`, {
+              .post(`/schedule/reApply/${this.conRoomNum}`, {
                 mentee: this.getUserID,
                 scheNum: res.data,
               })
               .then((success) => {
                 if (success.data == "success") {
                   alert("재상담 신청 완료되었습니다.");
+                  http
+                    .get(`/counseling/menteeMyList/${this.getUserNum}`)
+                    .then((res) => {
+                      this.myList = res.data;
+                    });
+                  http
+                    .get(`/schedule/myReservation/${this.getUserID}`)
+                    .then((data) => {
+                      this.myReservation = data.data;
+                    });
                   this.dialog = false;
                 }
               });
