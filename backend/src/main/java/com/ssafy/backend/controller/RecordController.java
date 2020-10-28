@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.backend.model.ConRoom;
+import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.repository.ConRoomRepository;
+import com.ssafy.backend.repository.EmotionRepository;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -40,6 +42,7 @@ public class RecordController {
     ConRoomRepository conRoomRepository;
 
     public static LinkedList<String> list = new LinkedList<>();
+    public static String sttText;
 
     @PostMapping("/test")
     @ApiOperation(value = "녹음파일저장, STT ,WordCloud")
@@ -68,7 +71,8 @@ public class RecordController {
         list.add(file.getName());
 
         try {
-            return execPython(command);
+            execPython(command);
+            return new ResponseEntity<>(execPython(command), HttpStatus.OK) ;
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -171,14 +175,16 @@ public class RecordController {
         list.add("none");
         System.out.println("WordCloud OK!");
 
-        try {
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return list;
+        // try {
+        //     return new ResponseEntity<>(list, HttpStatus.OK);
+        // } catch (Exception e) {
+        //     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
     }
 
     @PostMapping("/regist")
+    @ApiOperation(value = "녹음 상담 등록")
     public Object emotionSave(@RequestBody ConRoom request) throws IOException, SQLException {
         try {
             ConRoom conRoom = new ConRoom();
@@ -192,7 +198,31 @@ public class RecordController {
             conRoom.setKeyword3(request.getKeyword3());
             conRoom.setStatus("waiting");
             conRoomRepository.save(conRoom);
-            return new ResponseEntity<>(conRoom, HttpStatus.OK);
+            return new ResponseEntity<>(conRoom.getNum(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired
+    EmotionRepository emotionRepository;
+
+    @PostMapping("/emotion")
+    @ApiOperation(value = "녹음 상담 감정 등록")
+    public Object emotionUpload(@RequestBody Emotion request) throws SQLException, IOException {
+        try {
+            System.out.println(request.toString());
+            Emotion emotion = new Emotion();
+            emotion.setNum(request.getNum());
+            emotion.setAngry(request.getAngry());
+            emotion.setDisgusted(request.getDisgusted());
+            emotion.setFearful(request.getFearful());
+            emotion.setHappy(request.getHappy());
+            emotion.setNeutral(request.getNeutral());
+            emotion.setSad(request.getSad());
+            emotion.setSurprised(request.getSurprised());
+            emotionRepository.save(emotion);
+            return new ResponseEntity<>("emotion succ", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

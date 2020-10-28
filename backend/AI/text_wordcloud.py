@@ -4,7 +4,6 @@ from wordcloud import WordCloud
 from collections import Counter
 from konlpy.tag import Okt
 import time
-from os import path
 import socket
 
 def get_noun(text):
@@ -34,9 +33,9 @@ def visualize(noun_list, fileName):
     wc.generate_from_frequencies(dict(noun_list))
 
     if(socket.gethostname()[:7] == "DESKTOP"):
-        wc.to_file(path.join("./frontend/public/images/" + fileName))
+        wc.to_file("frontend/words/" + fileName)
     else:
-        wc.to_file(path.join("/var/lib/jenkins/workspace/front/frontend/public/images/" + fileName))
+        wc.to_file("/var/lib/jenkins/workspace/front/frontend/words/" + fileName)
 
 if __name__ == "__main__":
     sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
