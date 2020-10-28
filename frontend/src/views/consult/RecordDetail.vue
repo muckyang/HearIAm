@@ -1,7 +1,9 @@
 <template>
-  <div class="record-main d-flex justify-content-center p-5">
+  <div class="record-main justify-content-center p-5">
   <div>
-      <audio src=""> </audio>
+      <audio :src="getAudio(record.recordDir)" controls> </audio>
+      <!-- <audio src="../../assets/record/656850999record.wav" controls> </audio> -->
+      <!-- <audio :src="`../../assets/record/${record.recordDir}`" controls> </audio> -->
   </div>
   <div>
       감정 그래프 넣는 자리
@@ -20,6 +22,7 @@ export default {
     };
   },
   created() {
+    
     http
       .get(`/record/getRecordDetail/${this.$route.params.num}`)
       .then((res) => {
@@ -30,7 +33,9 @@ export default {
       });
   },
   methods: {
-    
+    getAudio(audio){
+        return "http://localhost:3000/record/"+audio;
+    }
   },
 };
 </script>

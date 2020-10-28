@@ -4,7 +4,7 @@ import base64
 openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
 accessKey = "43524358-66bc-44f8-8702-ebef31faf7eb"
 # audioFilePath = "./backend/.mvn/audio/656352900record.pcm"
-audioFilePath = "./frontend/src/assets/record/656353320record.webm"
+audioFilePath = "./frontend/public/record/656353320record.webm"
 languageCode = "korean"
 
 file = open(audioFilePath, "rb")
