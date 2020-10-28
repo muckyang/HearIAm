@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -21,11 +22,13 @@ public class ConRoom {
     private Long mentee;
     private String title;
     private String room;
-    private Date date;
+    @Column(insertable = false, updatable = false)
+    private LocalDate date;
     private String keyword1;
     private String keyword2;
     private String keyword3;
     private String recordDir;
     private String wordcloudImg;
     private String status;
+    private int isreapply;
 }
