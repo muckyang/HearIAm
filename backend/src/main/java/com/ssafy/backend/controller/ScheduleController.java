@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Reservation;
 import com.ssafy.backend.model.Schedule;
+import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.ReservationRepository;
 import com.ssafy.backend.repository.ScheduleRepository;
 
@@ -34,6 +36,9 @@ public class ScheduleController {
 
     @Autowired
     ReservationRepository reservationRepository;
+    
+    @Autowired
+    ConRoomRepository conRoomRepository;
 
     // @PostMapping("/saveTime/{mentor}")
     // public Object saveTime(@RequestBody Map<Object, int[]> timetable, @PathVariable String mentor) {
@@ -215,8 +220,11 @@ public class ScheduleController {
 		return num;
 	}
     
-    @PostMapping("/reApply")
-	public ResponseEntity<String> reApply(@RequestBody Reservation reservation) {
+    @PostMapping("/reApply/{num}")
+	public ResponseEntity<String> reApply(@PathVariable(value = "num") Long num, @RequestBody Reservation reservation) {
+    	ConRoom conRoom = conRoomRepository.findByNum(num);
+    	conRoom.setIsreapply(1);
+    	conRoomRepository.save(conRoom);
     	Schedule schedule = scheduleRepository.findByNum(reservation.getScheNum());
     	schedule.setIsReser(1);
     	scheduleRepository.save(schedule);
