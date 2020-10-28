@@ -1,5 +1,6 @@
 package com.ssafy.backend.controller;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.backend.exception.ResourceNotFoundException;
+import com.ssafy.backend.model.ConReport;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.model.User;
-import com.ssafy.backend.model.ConReport;
 import com.ssafy.backend.repository.ConReportRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
@@ -70,9 +71,11 @@ public class CounselingController {
 	public List<ConRoom> liveList() {
 		List<ConRoom> list = conRoomRepository.findByStatus("liveRequest");
 		Date now = new Date();
+		ZoneId defaultZoneId = ZoneId.systemDefault();
 		
 		for (ConRoom conRoom : list) {
-			if((now.getTime()-conRoom.getDate().getTime())/60000 > 30) {
+			Date date2 = Date.from(conRoom.getDate().atStartOfDay(defaultZoneId).toInstant());
+			if((now.getTime()-date2.getTime())/60000 > 30) {
 				conRoomRepository.deleteByNum(conRoom.getNum());
 			}
 		}
