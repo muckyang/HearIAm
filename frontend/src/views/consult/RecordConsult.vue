@@ -1,5 +1,6 @@
 <template>
   <div class="record-main">
+    
     <video hidden id="videoTag" width="720" height="560" style="border:1px solid black" muted @playing="addEventListener()"></video>
 
     <!-- S1 -->
@@ -105,8 +106,9 @@
 <script>
 import sal from 'sal.js';
 import http from '@/util/http-common.js';
+import http3 from '@/util/http-common3.js';
 import * as faceapi from 'face-api.js';
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'Record',
@@ -147,6 +149,7 @@ export default {
         surprised: '',
       },
       recordInfo: [],
+      cnum: "",
     };
   },
   methods: {
@@ -174,16 +177,12 @@ export default {
     fileUpload() {
       var formData = new FormData();
       formData.append('file', this.file);
-      http
-        .post("/record/test", formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
+      http3
+        .post('/record/test', formData)
         .then((res) => {
           this.log = res;
           this.recordInfo = res.data;
-          console.log(res.data)
+          this.$router.push("/menteeMain")
           this.recordUpload();
         })
         .catch((err) => {
@@ -221,6 +220,10 @@ export default {
           this.allEmotion.sad = this.allEmotion.sad.concat(this.emotion[5], `|`);
           this.allEmotion.surprised = this.allEmotion.surprised.concat(this.emotion[6], `|`);
         }
+        if(this.recFlag) {
+          clearInterval();
+          return;
+        }
       }, 1000);
     },
     startVideo() {
@@ -251,11 +254,30 @@ export default {
           mentee: this.getUserNum,
         })
         .then((res) => {
+          this.cnum = res.data;
+          this.emotionUpload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    emotionUpload() {
+      http
+        .post("/record/emotion", {
+          num: this.cnum,
+          angry: this.allEmotion.angry,
+          disgusted: this.allEmotion.disgusted,
+          fearful: this.allEmotion.fearful,
+          happy: this.allEmotion.happy,
+          neutral: this.allEmotion.neutral,
+          sad: this.allEmotion.sad,
+          surprised: this.allEmotion.surprised,
+        })
+        .then((res) => {
           this.log = res;
-          console.log(res.data)
-          // setTimeout(() => {
-          //   this.$router.push('/menteeMain');
-          // }, 1500);
+          setTimeout(() => {
+            this.$router.push('MenteeMain');
+          }, 1500);
         })
         .catch((err) => {
           console.log(err);
@@ -263,13 +285,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      "getUserNum",
-    ]),
+    ...mapGetters(['getUserNum']),
     ...mapState({
-      userNum: state => `${state.user.getUserNum}`,
-    })
-  }
+      userNum: (state) => `${state.user.getUserNum}`,
+    }),
+  },
 };
 </script>
 
