@@ -7,16 +7,7 @@ import java.net.InetAddress;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
-
-import com.ssafy.backend.model.ConRoom;
-import com.ssafy.backend.model.Emotion;
-import com.ssafy.backend.model.Record;
-import com.ssafy.backend.model.RecordAssign;
-import com.ssafy.backend.repository.ConRoomRepository;
-import com.ssafy.backend.repository.RecordAssignRepository;
-import com.ssafy.backend.repository.RecordRepository;
 import java.util.List;
-
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -34,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.backend.model.ConRoom;
+import com.ssafy.backend.repository.ConRoomRepository;
+
 import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = "*")
@@ -41,9 +35,6 @@ import io.swagger.annotations.ApiOperation;
 
 @RequestMapping("/api/record")
 public class RecordController {
-
-    @Autowired
-    ConRoomRepository conRoomRepository;
 
     @Autowired
     ConRoomRepository conRoomRepository;
