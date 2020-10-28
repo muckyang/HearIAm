@@ -52,7 +52,7 @@ export default {
     send(){
       http
       .post(`/record/sendAnswer/${this.$route.params.num}/${this.answer}`)
-      .then((res) => {
+      .then(() => {
         alert("답변이 완료되었습니다.");
         this.$router.push('/recordList');
       })
