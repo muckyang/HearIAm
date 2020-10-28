@@ -167,16 +167,17 @@ export default {
       }
     },
     setTime(date) {
+      console.dir(date);
       let time =
-        Number(date.slice(0, 4)) +
+        date.slice(0, 4) +
         "-" +
-        Number(date.slice(5, 7)) +
+        date.slice(5, 7) +
         "-" +
-        Number(date.slice(8, 10)) +
+        date.slice(8, 10) +
         " " +
         date.slice(11, 13) +
         ":" +
-        Number(date.slice(14, 16));
+        date.slice(14, 16);
       return time;
     },
     reapply(item) {
