@@ -112,8 +112,9 @@ public class RecordController {
     @PostMapping("/assigned/{num}/{mentor}")
     @ApiOperation(value = "녹화상담 진행")
     private Object AssignedRecord(@PathVariable long num, @PathVariable long mentor) {
+        String progress = "progress";
         ConRoom conRoom = conRoomRepository.findByNum(num);
-        conRoom.setStatus("progress");
+        conRoom.setStatus(progress);
         conRoom.setMentor(mentor);
         conRoomRepository.save(conRoom);
         return 0;

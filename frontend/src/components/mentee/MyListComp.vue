@@ -10,19 +10,27 @@
               <th class="text-center">상담 날짜</th>
               <th class="text-center">상담사</th>
               <th class="text-center">종류</th>
-              <th class="text-center">재상담</th>
+              <th class="text-center">상태</th>
+              <th class="text-center">재상담현황</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in myList" :key="item.name">
               <td class="text-center">{{ setTime(item.date) }}</td>
-              <td class="text-center">{{ findName(item.mentor) }}</td>
-              <td v-if="item.status == `record`" class="text-center">
+              
+              <td v-if="item.mentor == 1 " class="text-center"> - </td>
+
+              <td v-else class="text-center">{{ findName(item.mentor) }}</td>
+              <td v-if="item.recordDir != null " class="text-center">
                 녹화 상담
               </td>
               <td v-else class="text-center">실시간 상담</td>
-              <td class="text-center">
-                <v-btn @click="reapply(item)">재신청</v-btn>
+                <td v-if ="item.status == 'finish' " class="text-center" >상담완료</td>
+                <td v-if ="item.status == 'waiting' " class="text-center" >대기중</td>
+                <td v-if ="item.status == 'progress' " class="text-center" >진행중</td>
+               <td class="text-center">
+                <v-btn v-if ="item.status == 'finish' " @click="reapply(item)">재신청</v-btn>
+             
               </td>
             </tr>
           </tbody>
