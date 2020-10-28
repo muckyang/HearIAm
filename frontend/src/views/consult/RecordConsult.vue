@@ -106,6 +106,7 @@
 import sal from 'sal.js';
 import http from '@/util/http-common.js';
 import * as faceapi from 'face-api.js';
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: 'Record',
@@ -145,6 +146,7 @@ export default {
         sad: '',
         surprised: '',
       },
+      recordInfo: [],
     };
   },
   methods: {
@@ -180,7 +182,9 @@ export default {
         })
         .then((res) => {
           this.log = res;
-          this.emotionUpload();
+          this.recordInfo = res.data;
+          console.log(res.data)
+          this.recordUpload();
         })
         .catch((err) => {
           console.log(err);
@@ -235,20 +239,37 @@ export default {
         this.videoTag.srcObject = null;
       }
     },
-    emotionUpload() {
+    recordUpload() {
       http
-        .post('/')
+        .post('/record/regist', {
+          title: this.concern,
+          recordDir: this.recordInfo[0],
+          wordcloudImg: this.recordInfo[1],
+          keyword1: this.recordInfo[2],
+          keyword2: this.recordInfo[3],
+          keyword3: this.recordInfo[4],
+          mentee: this.getUserNum,
+        })
         .then((res) => {
           this.log = res;
-          setTimeout(() => {
-            this.$router.push('/menteeMain');
-          }, 1500);
+          console.log(res.data)
+          // setTimeout(() => {
+          //   this.$router.push('/menteeMain');
+          // }, 1500);
         })
         .catch((err) => {
           console.log(err);
         });
     },
   },
+  computed: {
+    ...mapGetters([
+      "getUserNum",
+    ]),
+    ...mapState({
+      userNum: state => `${state.user.getUserNum}`,
+    })
+  }
 };
 </script>
 
