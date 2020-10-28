@@ -15,7 +15,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in myList" :key="item.name">
+            <tr v-for="item in pagingList" :key="item.name">
               <td class="text-center">{{ setTime(item.date) }}</td>
 
               <td v-if="item.mentor == 1" class="text-center">-</td>
@@ -45,8 +45,13 @@
             </tr>
           </tbody>
         </template>
-      </v-simple-table>
-    </v-card>
+      </v-simple-table> </v-card
+    ><br />
+    <v-pagination
+      v-model="page"
+      :length="pageLength"
+      circle
+    ></v-pagination>
     <br />
     <h1>나의 예약 내역</h1>
     <br />
@@ -127,6 +132,8 @@ export default {
   data() {
     return {
       myList: [],
+      pagingList: [],
+      pageLength: 0,
       userList: [],
       dialog: false,
       reMentor: "",
@@ -136,6 +143,7 @@ export default {
       isReservation: false,
       myReservation: [],
       conRoomNum: null,
+      page: 1,
     };
   },
   mounted() {
@@ -144,6 +152,13 @@ export default {
     });
     http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
       this.myList = res.data;
+      this.pagingList = this.myList.slice(0, 9);
+      if(this.myList.length%10 == 0){
+        this.pageLength = this.myList.length/10;
+      }else {
+        this.pageLength = parseInt(this.myList.length/10) +1;
+      }
+      
     });
     http.get(`/schedule/isReservation/${this.getUserID}`).then((res) => {
       this.isReservation = res.data;
@@ -244,6 +259,7 @@ export default {
                     .get(`/counseling/menteeMyList/${this.getUserNum}`)
                     .then((res) => {
                       this.myList = res.data;
+                      this.pagingList = this.myList.slice(0, 9);
                     });
                   http
                     .get(`/schedule/myReservation/${this.getUserID}`)
@@ -267,6 +283,12 @@ export default {
           });
         }
       });
+    },
+  },
+  watch: {
+    page(page) {
+      var first = (page - 1) * 10;
+      this.pagingList = this.myList.slice(first, first+9);
     },
   },
 };
