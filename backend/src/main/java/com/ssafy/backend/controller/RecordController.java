@@ -204,4 +204,15 @@ public class RecordController {
         ConRoom conroom = conRoomRepository.findByNum(num);
         return conroom;
     }
+
+    //답변 저장하기
+    @PostMapping("/sendAnswer/{num}/{answer}")
+    @ApiOperation(value = "답변 저장")
+    private Object sendAnswer(@PathVariable Long num, @PathVariable String answer){
+        ConRoom conroom = conRoomRepository.findByNum(num);
+        conroom.setAnswer(answer);
+        conroom.setStatus("finish");
+        conRoomRepository.save(conroom);
+        return conroom;
+    }
 }
