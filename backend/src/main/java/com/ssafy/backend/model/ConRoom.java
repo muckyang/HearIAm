@@ -35,4 +35,5 @@ public class ConRoom {
     private String wordcloudImg;
     private String status;
     private int isreapply;
+    private String answer;
 }
