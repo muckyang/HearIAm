@@ -1,12 +1,14 @@
 <template>
   <div class="record-main justify-content-center p-5">
     <v-row justify="center">
-      <v-col cols="3" style="height: 270px">
+      <v-col cols="2" style="height: 270px">
         <Bar :chartData="chartData" :options="options" />
       </v-col>
     </v-row>
-    <div>
-      <audio :src="getAudio(record.recordDir)" controls id="audio"></audio>
+    <div style="height: 70px">
+      <v-btn @click="loadTransform()" v-if="!isPlay">음성 재생</v-btn>
+      <audio :src="getAudio(record.recordDir)" id="audio"></audio>
+      <audio id="convert" :controls="isPlay"></audio>
     </div>
     <div align="center">
       <div style="width: 50%">
@@ -29,6 +31,7 @@
 <script>
 import http from "@/util/http-common.js";
 import Bar from "@/components/webRTC/Bar.js";
+import bufferToWav from "audiobuffer-to-wav";
 
 export default {
   name: "RecordList",
@@ -61,6 +64,7 @@ export default {
       sad: {},
       surprised: {},
       playtime: null,
+      isPlay: false,
     };
   },
   created() {
@@ -87,7 +91,7 @@ export default {
   },
   mounted() {
     let that = this;
-    let audio = document.getElementById("audio");
+    let audio = document.getElementById("convert");
     audio.addEventListener("timeupdate", function () {
       that.playtime = audio.currentTime.toFixed();
     });
@@ -127,6 +131,77 @@ export default {
           },
         ],
       };
+    },
+
+    async loadTransform() {
+      this.isPlay = true;
+      let arrayBuffer = await (
+        await fetch(this.getAudio(this.record.recordDir))
+      ).arrayBuffer();
+
+      let AudioBuffer = await new AudioContext().decodeAudioData(arrayBuffer);
+
+      let outputAudioBuffer = this.robot1Transform(AudioBuffer);
+
+      outputAudioBuffer.then(function (result) {
+        var anchor = document.getElementById("convert");
+
+        var wav = bufferToWav(result);
+        var blob = new window.Blob([new DataView(wav)], {
+          type: "audio/wav",
+        });
+
+        var url = window.URL.createObjectURL(blob);
+        anchor.src = url;
+        anchor.play();
+      });
+    },
+
+    async robot1Transform(audioBuffer) {
+      let ctx = new OfflineAudioContext(
+        audioBuffer.numberOfChannels,
+        audioBuffer.length,
+        audioBuffer.sampleRate
+      );
+
+      // Source
+      let source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+
+      // Wobble
+      let oscillator1 = ctx.createOscillator();
+      oscillator1.frequency.value = 10;
+      oscillator1.type = "sawtooth";
+      let oscillator2 = ctx.createOscillator();
+      oscillator2.frequency.value = 30;
+      oscillator2.type = "sawtooth";
+      let oscillator3 = ctx.createOscillator();
+      oscillator3.frequency.value = 10;
+      oscillator3.type = "sawtooth";
+      // ---
+      let oscillatorGain = ctx.createGain();
+      oscillatorGain.gain.value = 0.004;
+      // ---
+      let delay = ctx.createDelay();
+      delay.delayTime.value = 0.01;
+
+      // Create graph
+      oscillator1.connect(oscillatorGain);
+      oscillator2.connect(oscillatorGain);
+      // oscillator3.connect(oscillatorGain);
+      oscillatorGain.connect(delay.delayTime);
+      // ---
+      source.connect(delay);
+      delay.connect(ctx.destination);
+
+      // Render
+      oscillator1.start(0);
+      oscillator2.start(0);
+      oscillator3.start(0);
+      source.start(0);
+      // fire.start(0);
+      let outputAudioBuffer = await ctx.startRendering();
+      return outputAudioBuffer;
     },
   },
   watch: {
