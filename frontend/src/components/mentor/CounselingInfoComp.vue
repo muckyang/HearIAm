@@ -1,9 +1,24 @@
 <template>
-  <div>
-    <h1>{{date}} 상담 내역</h1><br/>
-    <v-col cols="4">
-      <Doughnut :chartData="chartData" />
-    </v-col>
+  <div align ="center" >
+    <h1> {{ counseling.title }}</h1>
+    <br/>
+    <div style="width :500px; height:50px">
+      <h2> # {{counseling.keyword1}}  # {{counseling.keyword2}}  # {{counseling.keyword3}} </h2>
+    </div>
+    <div style="width :400px; height:400px">
+        <Doughnut :chartData="chartData" />
+    </div>
+      <h2>상담 내용</h2>
+    <div>
+        <v-textarea
+        solo
+        rounded
+        readonly
+        v-model="counseling.answer"
+        outlined
+        rows="7"
+      ></v-textarea>
+      </div>
   </div>
 </template>
 
@@ -36,6 +51,7 @@ export default {
       .get(`/counseling/counseling/${this.$route.params.num}`)
       .then((res) => {
         this.counseling = res.data;
+        console.log(this.counseling)
         this.date = this.setTime(this.counseling.date);
       });
     http
@@ -109,6 +125,36 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>
+ <style>
+      #jb-container {
+        width: 940px;
+        margin: 10px auto;
+        padding: 20px;
+        border: 1px solid #bcbcbc;
+      }
+      #jb-header {
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #bcbcbc;
+      }
+      #jb-content {
+        width: 580px;
+        padding: 20px;
+        margin-bottom: 20px;
+        float: left;
+        border: 1px solid #bcbcbc;
+      }
+      #jb-sidebar {
+        width: 260px;
+        padding: 20px;
+        margin-bottom: 20px;
+        float: right;
+        border: 1px solid #bcbcbc;
+      }
+      #jb-footer {
+        clear: both;
+        padding: 20px;
+        border: 1px solid #bcbcbc;
+      }
+     
+    </style>
