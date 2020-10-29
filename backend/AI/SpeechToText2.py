@@ -1,6 +1,7 @@
 import speech_recognition as sr
 import sys
 import io
+import socket
 
 # AUDIO_FILE = "./backend/.mvn/audio/test4.wav"
 # AUDIO_FILE = "./frontend/src/assets/record/656777400record.wav"
@@ -20,7 +21,11 @@ import io
     
 
 def main(argv):
-    AUDIO_FILE = "./frontend/public/record/" + argv[1]
+    if(socket.gethostname()[:7] == "DESKTOP"):
+        AUDIO_FILE = "./frontend/public/record/" + argv[1]
+    else:
+        AUDIO_FILE = "/var/lib/jenkins/workspace/front/frontend/public/record/656938266record.wav" + argv[1]
+
     r= sr.Recognizer()
     with sr.AudioFile(AUDIO_FILE) as source:
         audio = r.record(source)

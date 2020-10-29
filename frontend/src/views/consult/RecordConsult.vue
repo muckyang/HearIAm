@@ -182,7 +182,6 @@ export default {
         .then((res) => {
           this.log = res;
           this.recordInfo = res.data;
-          this.$router.push("/menteeMain")
           this.recordUpload();
         })
         .catch((err) => {
@@ -276,7 +275,7 @@ export default {
         .then((res) => {
           this.log = res;
           setTimeout(() => {
-            this.$router.push('MenteeMain');
+            this.$router.push('/menteeMain');
           }, 1500);
         })
         .catch((err) => {
