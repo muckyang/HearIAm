@@ -58,7 +58,7 @@ public class RecordController {
         if (hostname.substring(0, 7).equals("DESKTOP")) {// local
             file = new File(System.getProperty("user.dir") + "\\\\frontend\\public\\record\\" + nowtime + Rec);
         } else {// aws
-            file = new File("../../frontend/public/record/" + nowtime + Rec);
+            file = new File("/var/lib/jenkins/workspace/front/frontend/public/record/" + nowtime + Rec);
         }
         
         if (!file.getParentFile().exists()) {
