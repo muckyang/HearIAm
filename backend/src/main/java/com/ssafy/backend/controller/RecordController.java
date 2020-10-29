@@ -149,7 +149,7 @@ public class RecordController {
             str += s + " ";
         }
 
-        list.add(str)
+        list.add(str);
 
         // 경로 확인
         // String hostname = InetAddress.getLocalHost().getHostName();
