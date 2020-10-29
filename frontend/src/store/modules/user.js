@@ -10,6 +10,7 @@ const state = {
     userName: localStorage.getItem("userName") || "",
     userNum: localStorage.getItem("userNum") || "",
     userID: localStorage.getItem("userID") || "",
+    deviceID: localStorage.getItem("deviceID") || "",
 };
 
 const getters = {
@@ -19,6 +20,7 @@ const getters = {
     getUserName: state => state.userName,
     getUserNum: state => state.userNum,
     getUserID: state => state.userID,
+    getDeviceID : state => state.deviceID,
 };
 
 const actions = {
@@ -59,8 +61,6 @@ const mutations = {
         Vue.set(state, "userName", resp.name);
         Vue.set(state, "userNum", resp.num);
         Vue.set(state, "userID", resp.id);
-
-
     },
     [USER_ERROR]: state => {
         state.status = "error";
@@ -74,6 +74,9 @@ const mutations = {
     },
     modifyProfileName: function(state, after) {
         state.userName = after;
+    },
+    setDeviceId: (state, data)=>{
+        state.deviceID = data;
     }
 };
 

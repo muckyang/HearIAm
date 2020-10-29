@@ -40,6 +40,7 @@
       ><span class="main-title" style="color: #f5a2bb"> I</span
       ><span class="main-title" style="color: #93dfff"> Am </span>
       <br />
+      <fcm></fcm>
       <p>
         홈페이지에 대한 부가설명 홈페이지에 대한 부가설명 홈페이지에 대한
         부가설명
@@ -188,6 +189,7 @@ import sal from "sal.js";
 import Login from "@/components/account/Login.vue";
 import SignUpModal from '@/components/account/SignUpModal.vue';
 import { mapGetters } from "vuex";
+import fcm from "@/components/firebaseTest.vue"
 
 export default {
   name: "HelloWorld",
@@ -203,6 +205,7 @@ export default {
     // LoginModal,
     Login,
     SignUpModal,
+    fcm
   },
   data() {
     return {

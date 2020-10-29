@@ -103,4 +103,21 @@ public class UserController {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @PutMapping("/userDId/{userId}/{deviceId}")
+  public ResponseEntity<String> updateDeviceId(@PathVariable(value = "userId") String id, @PathVariable(value = "deviceId") String deviceId) {
+    User user = null;
+    System.out.println(id+" "+deviceId);
+    try {
+      user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "userId", id));
+      user.setDeviceId(deviceId);
+    } catch (Exception e) {
+      return null;
+    }
+    userRepository.save(user);
+
+    return new ResponseEntity<String>(deviceId, HttpStatus.OK);
+  }
+
+
 }
