@@ -31,10 +31,14 @@ messaging.setBackgroundMessageHandler((payload) => {
   const notificationOptions = {
     body: '알림이 왔습니다. 확인해주세요!',
     icon: '../src/assets/logo.png',
-  }
+  };
+  const notification = self.registration.showNotification(notificationTitle, notificationOptions)
+  notification.onclick = function(event) {
+    event.preventDefault();
+    window.open('https://www.youtube.com/', '_blank');
+  };
 
-  return self.registration.showNotification(notificationTitle,
-    notificationOptions);
+  return notification;
 })
 
 
