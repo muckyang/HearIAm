@@ -149,35 +149,37 @@ public class RecordController {
             str += s + " ";
         }
 
+        list.add(str)
+
         // 경로 확인
-        String hostname = InetAddress.getLocalHost().getHostName();
-        if (hostname.substring(0, 7).equals("DESKTOP")) {// local
-            command[1] = "./backend/AI/text_wordcloud.py";
-        } else {// aws
-            command[1] = "/var/lib/jenkins/workspace/front/AI/text_wordcloud.py";
-        }
-        command[2] = str;
-        commandLine = CommandLine.parse(command[0]);
-        for (int i = 1, n = command.length; i < n; i++) {
-            commandLine.addArgument(command[i]);
-        }
+        // String hostname = InetAddress.getLocalHost().getHostName();
+        // if (hostname.substring(0, 7).equals("DESKTOP")) {// local
+        //     command[1] = "./backend/AI/text_wordcloud.py";
+        // } else {// aws
+        //     command[1] = "/var/lib/jenkins/workspace/front/AI/text_wordcloud.py";
+        // }
+        // command[2] = str;
+        // commandLine = CommandLine.parse(command[0]);
+        // for (int i = 1, n = command.length; i < n; i++) {
+        //     commandLine.addArgument(command[i]);
+        // }
         
-        outputStream = new ByteArrayOutputStream();
-        pumpStreamHandler = new PumpStreamHandler(outputStream);
-        executor = new DefaultExecutor();
-        executor.setStreamHandler(pumpStreamHandler);
-        System.out.println(str);
-        executor.execute(commandLine);
+        // outputStream = new ByteArrayOutputStream();
+        // pumpStreamHandler = new PumpStreamHandler(outputStream);
+        // executor = new DefaultExecutor();
+        // executor.setStreamHandler(pumpStreamHandler);
+        // System.out.println(str);
+        // executor.execute(commandLine);
 
-        outputList = outputStream.toString().split("\n");
-        for (String s : outputList) {
-            list.add(s.trim());
-        }
+        // outputList = outputStream.toString().split("\n");
+        // for (String s : outputList) {
+        //     list.add(s.trim());
+        // }
 
-        list.add("none");
-        list.add("none");
-        list.add("none");
-        System.out.println("WordCloud OK!");
+        // list.add("none");
+        // list.add("none");
+        // list.add("none");
+        // System.out.println("WordCloud OK!");
 
         return list;
     }
