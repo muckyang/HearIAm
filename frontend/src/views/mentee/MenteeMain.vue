@@ -104,6 +104,7 @@ export default {
     return {
       url : "https://fcm.googleapis.com/fcm/send",
       devecieId : this.$store.getters["getDeviceID"],
+      topic : "streaming"
     };
   },
   methods: {
@@ -115,7 +116,7 @@ export default {
               title: "학생 클릭 함",
               icon: "favicon.ico"
           },
-          to : "/topics/testtopic"
+          to : "/topics/streaming"
       };
       const config = {
           headers:{
@@ -154,8 +155,7 @@ export default {
       this.$router.push("/recordConsult").catch(()=>{});
     },
     unsubscribe(){
-      let topic = "testtopic"
-      this.unsubscribeTokenToTopic(this.devecieId, topic);
+      this.unsubscribeTokenToTopic(this.devecieId, this.topic);
     },
     unsubscribeTokenToTopic(token, topic){
             axios({

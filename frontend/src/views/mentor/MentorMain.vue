@@ -103,13 +103,13 @@ export default {
   data(){
     return {
       devecieId : this.$store.getters["getDeviceID"],
+      topic : "streaming"
     }
   },
   methods: {
     subscribe() {
       console.log("click subscribe btn");
-      let topic = "testtopic";
-      this.subscribeTokenToTopic(this.devecieId, topic);
+      this.subscribeTokenToTopic(this.devecieId, this.topic);
     },
     subscribeTokenToTopic(token, topic) {
       axios({
@@ -155,8 +155,7 @@ export default {
       this.$router.push(`/recordList`);
     },
     unsubscribe(){
-      let topic = "testtopic"
-      this.unsubscribeTokenToTopic(this.devecieId, topic);
+      this.unsubscribeTokenToTopic(this.devecieId, this.topic);
     },
     unsubscribeTokenToTopic(token, topic){
             axios({
