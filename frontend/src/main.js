@@ -32,6 +32,7 @@ messaging.getToken().then((currentToken) => {
         console.log('No Instance ID token available. Request permission to generate one.');
     }
 });
+
 messaging.onMessage((payload) => {
     console.log("main.js - payload : "+payload+" "+payload.data+" "+payload.data.title);
     const title = payload.data.title;
@@ -40,10 +41,11 @@ messaging.onMessage((payload) => {
         icon: './logo.png',
     };
     const notification = new Notification(title, options);
-    notification.onclick(()=>{
-      event.preventDefault();
-      window.open('https://www.naver.com/', '_blank');
-    });
+    notification.onclick = function(event) {
+      event.preventDefault(); // prevent the browser from focusing the Notification's tab
+      // window.open('http://localhost:8080/liveList');
+      window.open('https://k3b201.p.ssafy.io/liveList');
+    }
     return notification;
 });
 

@@ -133,7 +133,7 @@ export default {
       }).catch(e =>{
           console.log(e);
       });
-      //this.$router.push(`/userWRTC`);
+      this.$router.push(`/userWRTC`);
     },
     logout: function() {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
