@@ -28,7 +28,7 @@ def visualize(noun_list, fileName):
         wc.generate_from_frequencies(dict(noun_list))
         wc.to_file("frontend/words/" + fileName)
     else:
-        wc = WordCloud(font_path='/usr/share/fonts/truetype/dejavu/NanumMyeongjo.ttf', background_color='white', width=1000, height=1000, max_font_size=300)
+        wc = WordCloud(font_path='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', background_color='white', width=1000, height=1000, max_font_size=300)
         wc.generate_from_frequencies(dict(noun_list))
         wc.to_file("/var/lib/jenkins/workspace/front/frontend/words/" + fileName)
 
