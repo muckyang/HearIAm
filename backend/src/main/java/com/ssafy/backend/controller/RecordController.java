@@ -80,7 +80,7 @@ public class RecordController {
         try {
             return new ResponseEntity<>(execPython(command), HttpStatus.OK) ;
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(list, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
