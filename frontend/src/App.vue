@@ -1,41 +1,32 @@
 <template>
   <v-app>
-    <!-- <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar> -->
     <v-main>
       <router-view />
     </v-main>
-    <!-- <v-btn @click="logout()">LogOut</v-btn> -->
+    <v-speed-dial
+      v-if="getUserNum"
+      v-model="fab"
+      bottom
+      right
+      open-on-hover
+      fixed
+    >
+      <template v-slot:activator>
+        <v-btn v-model="fab" color="blue darken-2" dark fab>
+          <v-icon v-if="fab"> mdi-close </v-icon>
+          <v-icon v-else> mdi-account-circle </v-icon>
+        </v-btn>
+      </template>
+      <v-btn fab dark small color="green">
+        <v-icon @click="goHome()">mdi-home</v-icon>
+      </v-btn>
+      <v-btn fab dark small color="indigo">
+        <v-icon @click="goMypage()">mdi-clipboard-list-outline</v-icon>
+      </v-btn>
+      <v-btn fab dark small color="red">
+        <v-icon @click="logout()">mdi-logout</v-icon>
+      </v-btn>
+    </v-speed-dial>
   </v-app>
 </template>
 
@@ -50,16 +41,26 @@ export default {
   },
   data() {
     return {
-
+      fab: false,
     };
   },
-  methods:{
-    logout: function() {
+  methods: {
+    logout: function () {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
         this.drawer = false;
       });
       this.$router.push("/").catch(() => {});
     },
+    goHome() {
+      this.$router.push("/").catch(() => {});
+    },
+    goMypage() {
+      if(this.getRole == `mentee`){
+        this.$router.push(`/menteeMypage`).catch(()=>{});
+      } else if(this.getRole == `mentor`){
+        this.$router.push(`/mentorMypage`).catch(()=>{});
+      }
+    }
   },
   computed: {
     ...mapGetters([
@@ -71,13 +72,13 @@ export default {
       "getUserID",
     ]),
     ...mapState({
-      authLoading: state => state.auth.status === "loading",
-      role: state => `${state.user.getRole}`,
-      qualification: state => `${state.user.getQualification}`,
-      userNum: state => `${state.user.getUserNum}`,
-      userName: state => `${state.user.getUserName}`,
-      userID: state => `${state.user.getUserID}`
-    })
+      authLoading: (state) => state.auth.status === "loading",
+      role: (state) => `${state.user.getRole}`,
+      qualification: (state) => `${state.user.getQualification}`,
+      userNum: (state) => `${state.user.getUserNum}`,
+      userName: (state) => `${state.user.getUserName}`,
+      userID: (state) => `${state.user.getUserID}`,
+    }),
   },
 };
 </script>
@@ -108,5 +109,12 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+#create .v-speed-dial {
+  position: absolute;
+}
+
+#create .v-btn--floating {
+  position: relative;
 }
 </style>
