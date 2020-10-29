@@ -43,7 +43,8 @@ messaging.onMessage((payload) => {
     const notification = new Notification(title, options);
     notification.onclick = function(event) {
       event.preventDefault(); // prevent the browser from focusing the Notification's tab
-      window.open('http://localhost:8080/mentorMain');
+      // window.open('http://localhost:8080/liveList');
+      window.open('https://k3b201.p.ssafy.io/liveList');
     }
     return notification;
 });

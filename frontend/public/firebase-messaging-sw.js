@@ -1,12 +1,5 @@
-// Give the service worker access to Firebase Messaging.
-// Note that you can only use Firebase Messaging here, other Firebase libraries
-// are not available in the service worker.
 importScripts('https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.0.0/firebase-messaging.js');
-//import config from '@/assets/firebaseConfig';
-// Initialize the Firebase app in the service worker by passing in the
-// messagingSenderId.
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyBlXUwp6KUZ6ntouxrCdtktNyu441ySZ44",
@@ -35,7 +28,7 @@ messaging.setBackgroundMessageHandler((payload) => {
   const notificationOptions = {
     body: '알림이 왔습니다. 확인해주세요!',
     icon: '../src/assets/logo.png',
-    data: 'http://localhost:8080/mentorMain'
+    data: 'https://k3b201.p.ssafy.io/liveList'
   };
   
 
