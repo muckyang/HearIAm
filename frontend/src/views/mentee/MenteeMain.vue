@@ -103,6 +103,8 @@ export default {
   data() {
     return {
       url : "https://fcm.googleapis.com/fcm/send",
+      devecieId : this.$store.getters["getDeviceID"],
+      topic : "streaming"
     };
   },
   methods: {
@@ -110,11 +112,11 @@ export default {
       console.log("live click")
       const message = {
           data :{
-              body : "새 포스트가 등록되었습니다!.",
-              title: "nowpostpush",
+              body : "상담을 하고 싶어해요~",
+              title: "학생 클릭 함",
               icon: "favicon.ico"
           },
-          to : "/topics/testtopic"
+          to : "/topics/streaming"
       };
       const config = {
           headers:{
@@ -139,7 +141,9 @@ export default {
     logout: function() {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
       });
-      this.$router.push("/").catch(() => {});
+      this.unsubscribe();
+      // this.$router.push("/").catch(() => {});
+      window.location.href="/";
     },
     goMypage(){
       this.$router.push(`/menteeMypage`).catch(()=>{});
@@ -149,7 +153,32 @@ export default {
     },
     goRecord() {
       this.$router.push("/recordConsult").catch(()=>{});
-    }
+    },
+    unsubscribe(){
+      this.unsubscribeTokenToTopic(this.devecieId, this.topic);
+    },
+    unsubscribeTokenToTopic(token, topic){
+            axios({
+                method: 'POST',
+                url: 'https://iid.googleapis.com/iid/v1:batchRemove',
+                data:{
+                    "to":"/topics/"+topic,
+                    "registration_tokens":[token]
+                },
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization" : "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd"
+                 }
+            })
+            .then(response => {
+                if (response.status < 200 || response.status >= 400) {
+                    throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
+                }
+                console.log("unsubscribe success : "+response);
+            }).catch(e =>{
+                console.log(e);
+            })
+        },
   },
 };
 </script>

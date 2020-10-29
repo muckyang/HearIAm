@@ -56,6 +56,7 @@ const mutations = {
         localStorage.setItem("userName", resp.name);
         localStorage.setItem("userNum", resp.num);
         localStorage.setItem("userID", resp.id);
+        localStorage.setItem("deviceID",state.deviceID);
         Vue.set(state, "role", resp.role);
         Vue.set(state, "qualification", resp.qualification);
         Vue.set(state, "userName", resp.name);
@@ -71,13 +72,14 @@ const mutations = {
         state.userName = "";
         state.userNum = "";
         state.userID = "";
+        state.deviceID="";
     },
     modifyProfileName: function(state, after) {
         state.userName = after;
     },
     setDeviceId: (state, data)=>{
         state.deviceID = data;
-    }
+    },
 };
 
 export default {

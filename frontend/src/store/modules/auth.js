@@ -67,6 +67,7 @@ const actions = {
             localStorage.removeItem("userName");
             localStorage.removeItem("userNum");
             localStorage.removeItem("userID");
+            localStorage.removeItem("deviceID");
             resolve();
         });
     }
