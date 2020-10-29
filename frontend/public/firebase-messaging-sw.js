@@ -24,17 +24,17 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // 백그라운드 상태에서 받은 알림 처리
-// messaging.setBackgroundMessageHandler((payload) => {
-//   console.log('[firebase-messaging-sw.js] Received background message ', payload)
-//   // Customize notification here
-//   const notificationTitle = 'Hear I am';
-//   const notificationOptions = {
-//     body: '알림이 왔습니다. 확인해주세요!',
-//     icon: '../src/assets/logo.png',
-//   }
+messaging.setBackgroundMessageHandler((payload) => {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload)
+  // Customize notification here
+  const notificationTitle = 'Hear I am';
+  const notificationOptions = {
+    body: '알림이 왔습니다. 확인해주세요!',
+    icon: '../src/assets/logo.png',
+  }
 
-//   return self.registration.showNotification(notificationTitle,
-//     notificationOptions);
-// })
+  return self.registration.showNotification(notificationTitle,
+    notificationOptions);
+})
 
 
