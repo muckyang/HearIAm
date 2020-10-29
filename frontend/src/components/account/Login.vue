@@ -77,9 +77,12 @@ export default {
           this.$store
             .dispatch(AUTH_REQUEST, { userId, password })
             .then(() => {
+              this.setDeviceId(this.userId);
+
               this.userId = "";
               this.password = "";
               this.nowlogin = !this.nowlogin;
+              
               if (this.role == `mentee`) {
                   //청소년 페이지로 가주세요
                 this.$router.push("/menteeMain");
@@ -97,6 +100,17 @@ export default {
         }
       });
     },
+    setDeviceId(userId){
+      //device id 가져옴. 
+      let devecieId = this.$store.getters["getDeviceID"];
+      console.log("store - "+devecieId);
+      http.put(`/user/userDId/${userId}/${devecieId}`).then((res)=>{
+        console.log("res.id : "+res.data.id)
+        localStorage.setItem("deviceID", res.data.id);  
+      }).catch((e)=>{
+        console.log(e);
+      });
+    }
   },
   watch: {
     login_dialog(v) {

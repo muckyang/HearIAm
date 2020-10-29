@@ -27,6 +27,7 @@ public class User {
 	private String role;
 	private int qualification;
 	private String gender;
+	private String deviceId;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_num"), inverseJoinColumns = @JoinColumn(name = "role_num"))
@@ -116,6 +117,14 @@ public class User {
 	public String toString() {
 		return "User [num=" + num + ", id=" + id + ", name=" + name + ", password=" + password + ", role=" + role
 				+ ", qualification=" + qualification + ", gender=" + gender + ", roles=" + roles + "]";
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 
 }
