@@ -42,7 +42,6 @@ public class RecordController {
     ConRoomRepository conRoomRepository;
 
     public static LinkedList<String> list = new LinkedList<>();
-    public static String sttText;
 
     @PostMapping("/test")
     @ApiOperation(value = "녹음파일저장, STT ,WordCloud")
@@ -56,7 +55,7 @@ public class RecordController {
 
         // File file = new File("C:\\Users\\multicampus\\Desktop\\image\\"+ nowtime +
         // Rec);
-        File file = new File(System.getProperty("user.dir") + "\\\\frontend\\src\\assets\\record\\" + nowtime + Rec);
+        File file = new File(System.getProperty("user.dir") + "\\\\frontend\\public\\record\\" + nowtime + Rec);
 
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
@@ -65,13 +64,17 @@ public class RecordController {
 
         String[] command = new String[3];
         command[0] = "python";
-        command[1] = "./backend/AI/SpeechToText2.py";
+        String hostname = InetAddress.getLocalHost().getHostName();
+        if (hostname.substring(0, 7).equals("DESKTOP")) {// local
+            command[1] = "./backend/AI/SpeechToText2.py";
+        } else {// aws
+            command[1] = "../AI/SpeechToText2.py";
+        }
         command[2] = file.getName();
 
         list.add(file.getName());
 
         try {
-            execPython(command);
             return new ResponseEntity<>(execPython(command), HttpStatus.OK) ;
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -164,10 +167,8 @@ public class RecordController {
         executor.execute(commandLine);
 
         outputList = outputStream.toString().split("\n");
-        String str2 = "";
         for (String s : outputList) {
             list.add(s.trim());
-            str2 += s + " ";
         }
 
         list.add("none");
@@ -176,11 +177,6 @@ public class RecordController {
         System.out.println("WordCloud OK!");
 
         return list;
-        // try {
-        //     return new ResponseEntity<>(list, HttpStatus.OK);
-        // } catch (Exception e) {
-        //     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        // }
     }
 
     @PostMapping("/regist")
