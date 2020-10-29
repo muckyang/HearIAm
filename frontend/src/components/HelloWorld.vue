@@ -69,7 +69,7 @@
         >시작하기<v-icon>mdi-cursor-pointer</v-icon></v-btn
       >
     </div>
-    <div id="login" style="height: 100vh" v-if="!show">
+    <div id="login" style="height: 100vh">
       <div class="d-flex justify-content-center" style="height: 100%">
         <!-- <div style="width: 5%"></div> -->
         <div style="height: 100%; width: 100%">
@@ -134,7 +134,6 @@
                   @click="loginModal(`mentor`)"
                   >로그인</v-btn
                 >
-                <!-- @click="mentorClick = !mentorClick;show = !show " -->
               </div>
             </v-col>
           </div>

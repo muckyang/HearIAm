@@ -89,6 +89,9 @@
             </v-btn>
           </div>
         </v-col>
+        <v-btn @click="unsubscribe()">대기 취소</v-btn>
+        <v-btn @click="goMypage()">마이페이지</v-btn>
+        <v-btn @click="logout()">로그아웃</v-btn>
       </div>
     </div>
   </div>
@@ -98,12 +101,16 @@
 import { AUTH_LOGOUT } from "@/store/actions/auth";
 import axios from "axios";
 export default {
+  data(){
+    return {
+      devecieId : this.$store.getters["getDeviceID"],
+      topic : "streaming"
+    }
+  },
   methods: {
     subscribe() {
       console.log("click subscribe btn");
-      let topic = "testtopic";
-      let devecieId = this.$store.getters["getDeviceID"];
-      this.subscribeTokenToTopic(devecieId, topic);
+      this.subscribeTokenToTopic(this.devecieId, this.topic);
     },
     subscribeTokenToTopic(token, topic) {
       axios({
@@ -135,7 +142,9 @@ export default {
     },
     logout: function () {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {});
-      this.$router.push("/").catch(() => {});
+      this.unsubscribe();
+      // this.$router.push("/").catch(() => {});
+      window.location.href="/";
     },
     goMypage() {
       this.$router.push(`/mentorMypage`);
@@ -145,7 +154,32 @@ export default {
     },
     goRecordList(){
       this.$router.push(`/recordList`);
-    }
+    },
+    unsubscribe(){
+      this.unsubscribeTokenToTopic(this.devecieId);
+    },
+    unsubscribeTokenToTopic(token ){
+      axios({
+          method: 'POST',
+          url: 'https://iid.googleapis.com/iid/v1:batchRemove',
+          data:{
+              "to":"/topics/streaming",
+              "registration_tokens":[token]
+          },
+          headers: {
+              "Content-type": "application/json",
+              "Authorization" : "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd"
+            }
+      })
+      .then(response => {
+          if (response.status < 200 || response.status >= 400) {
+              throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
+          }
+          console.log("unsubscribe success : "+response);
+      }).catch(e =>{
+          console.log(e);
+      })
+    },
   }
 }
 </script>

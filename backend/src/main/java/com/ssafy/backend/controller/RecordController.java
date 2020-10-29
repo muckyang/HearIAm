@@ -71,7 +71,7 @@ public class RecordController {
         if (hostname.substring(0, 7).equals("DESKTOP")) {// local
             command[1] = "./backend/AI/SpeechToText2.py";
         } else {// aws
-            command[1] = "../AI/SpeechToText2.py";
+            command[1] = "/var/lib/jenkins/workspace/front/backend/AI/SpeechToText2.py";
         }
         command[2] = file.getName();
 
@@ -80,7 +80,7 @@ public class RecordController {
         try {
             return new ResponseEntity<>(execPython(command), HttpStatus.OK) ;
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(list, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -154,7 +154,7 @@ public class RecordController {
         if (hostname.substring(0, 7).equals("DESKTOP")) {// local
             command[1] = "./backend/AI/text_wordcloud.py";
         } else {// aws
-            command[1] = "../AI/text_wordcloud.py";
+            command[1] = "/var/lib/jenkins/workspace/front/backend/AI/text_wordcloud.py";
         }
         command[2] = str;
         commandLine = CommandLine.parse(command[0]);

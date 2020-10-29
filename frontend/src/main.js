@@ -40,6 +40,10 @@ messaging.onMessage((payload) => {
         icon: './logo.png',
     };
     const notification = new Notification(title, options);
+    notification.onclick(()=>{
+      event.preventDefault();
+      window.open('https://www.naver.com/', '_blank');
+    });
     return notification;
 });
 

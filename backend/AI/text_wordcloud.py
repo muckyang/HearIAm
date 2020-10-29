@@ -15,12 +15,6 @@ def get_noun(text):
     count = Counter(noun)
     noun_list = count.most_common(100)
     best_list = count.most_common(3)
-
-    size = len(best_list)
-    if size < 3:
-        size = size
-    else:
-        size = 3
     
     best = dict(best_list).keys()
     for item in best:
@@ -34,7 +28,7 @@ def visualize(noun_list, fileName):
         wc.generate_from_frequencies(dict(noun_list))
         wc.to_file("frontend/words/" + fileName)
     else:
-        wc = WordCloud(font_path='/usr/share/fonts/NanumMyeongjo.ttf', background_color='white', width=1000, height=1000, max_font_size=300)
+        wc = WordCloud(font_path='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', background_color='white', width=1000, height=1000, max_font_size=300)
         wc.generate_from_frequencies(dict(noun_list))
         wc.to_file("/var/lib/jenkins/workspace/front/frontend/words/" + fileName)
 
