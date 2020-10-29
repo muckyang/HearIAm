@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import speech_recognition as sr
 import sys
 import io
@@ -38,7 +40,7 @@ def main(argv):
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
     
 if __name__ == "__main__":
-    sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
+    # sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
+    # sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
     main(sys.argv)
   

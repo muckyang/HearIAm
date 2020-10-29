@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 import io
 from wordcloud import WordCloud
@@ -38,8 +40,8 @@ def visualize(noun_list, fileName):
         wc.to_file("/var/lib/jenkins/workspace/front/frontend/words/" + fileName)
 
 if __name__ == "__main__":
-    sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
+    # sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
+    # sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
     now = int(round(time.time() * 1000))
     fileName = 'keyword' + str(now) + '.png'
     print(fileName)
