@@ -249,13 +249,16 @@ public class ScheduleController {
     	return list;
     }
     
-    @DeleteMapping("/cancelReservation/{scheNum}")
-    public ResponseEntity<String> cancelReservation(@PathVariable(value = "scheNum") Long scheNum){
+    @DeleteMapping("/cancelReservation/{scheNum}/{conRoomNum}")
+    public ResponseEntity<String> cancelReservation(@PathVariable(value = "scheNum") Long scheNum, @PathVariable Long conRoomNum){
     	reservationRepository.deleteByScheNum(scheNum);
     	Schedule schedule = scheduleRepository.findByNum(scheNum);
     	schedule.setIsReser(0);
     	scheduleRepository.save(schedule);
-    	
+        
+        ConRoom conroom = conRoomRepository.findByNum(conRoomNum);
+        conroom.setIsreapply(0);
+        conRoomRepository.save(conroom);
     	return ResponseEntity.ok("success");
     }
 

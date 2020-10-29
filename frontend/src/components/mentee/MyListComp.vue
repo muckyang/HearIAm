@@ -38,7 +38,7 @@
                 <v-btn
                   v-if="item.status == 'finish'"
                   :disabled="item.isreapply != 0"
-                  @click="reapply(item)"
+                  @click="reapplyType(item)"
                   >재신청</v-btn
                 >
               </td>
@@ -47,11 +47,7 @@
         </template>
       </v-simple-table> </v-card
     ><br />
-    <v-pagination
-      v-model="page"
-      :length="pageLength"
-      circle
-    ></v-pagination>
+    <v-pagination v-model="page" :length="pageLength" circle></v-pagination>
     <br />
     <h1>나의 예약 내역</h1>
     <br />
@@ -77,12 +73,35 @@
         </template>
       </v-simple-table>
     </v-card>
+
+    <v-dialog v-model="typeDialog" persistent max-width="500">
+      <v-card
+        ><br />
+        <v-card-subtitle>
+          <span><h1>상담 유형을 선택해주세요.</h1></span>
+        </v-card-subtitle>
+        <v-card-text>
+          <div @click="reapply">실시간 상담</div>
+          <div>녹화 상담</div>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" text @click="typeDialog = false">
+            취소
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="dialog" persistent max-width="750">
       <v-card
         ><br />
         <v-card-subtitle>
           <span
-            ><h1>{{ reMentor }} 상담사에게 재상담을 원하십니까?</h1></span
+            ><h1>
+              {{ reMentor }} 상담사에게 실시간 상담을 재신청합니다.
+            </h1></span
           >
         </v-card-subtitle>
         <v-card-text>
@@ -136,6 +155,7 @@ export default {
       pageLength: 0,
       userList: [],
       dialog: false,
+      typeDialog: false,
       reMentor: "",
       time: null,
       date: null,
@@ -144,6 +164,7 @@ export default {
       myReservation: [],
       conRoomNum: null,
       page: 1,
+      selitem: [],
     };
   },
   mounted() {
@@ -153,12 +174,11 @@ export default {
     http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
       this.myList = res.data;
       this.pagingList = this.myList.slice(0, 9);
-      if(this.myList.length%10 == 0){
-        this.pageLength = this.myList.length/10;
-      }else {
-        this.pageLength = parseInt(this.myList.length/10) +1;
+      if (this.myList.length % 10 == 0) {
+        this.pageLength = this.myList.length / 10;
+      } else {
+        this.pageLength = parseInt(this.myList.length / 10) + 1;
       }
-      
     });
     http.get(`/schedule/isReservation/${this.getUserID}`).then((res) => {
       this.isReservation = res.data;
@@ -205,15 +225,21 @@ export default {
         date.slice(14, 16);
       return time;
     },
-    reapply(item) {
-      this.conRoomNum = item.num;
+    reapplyType(item) {
+      this.selitem = item;
+      this.typeDialog = true;
+    },
+    reapply() {
+      this.typeDialog = false;
+      this.conRoomNum = this.selitem.num;
       this.time = null;
       this.date = new Date().toISOString().substr(0, 10);
       this.dialog = true;
-      this.reMentor = this.findName(item.mentor);
-      var mentorId = this.findID(item.mentor);
+      this.reMentor = this.findName(this.selitem.mentor);
+      var mentorId = this.findID(this.selitem.mentor);
       http.get(`/schedule/allowSchedule/${mentorId}`).then((res) => {
         this.schedule = res.data;
+        console.log(res.data);
       });
     },
     allowedDates(val) {
@@ -233,7 +259,12 @@ export default {
       for (const schedule of this.schedule) {
         if (this.date == schedule.sdate) {
           if (val == schedule.stime.substr(0, 2)) {
-            return val > hour;
+            var today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            if (today == this.date) {
+              return val > hour;
+            } else {
+              return 1;
+            }
           }
         }
       }
@@ -275,20 +306,24 @@ export default {
       }
     },
     cancel(num) {
-      http.delete(`/schedule/cancelReservation/${num}`).then((res) => {
-        if (res.data == "success") {
-          alert("에약이 취소되었습니다.");
-          http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
-            this.myReservation = data.data;
-          });
-        }
-      });
+      http
+        .delete(`/schedule/cancelReservation/${num}/${this.conRoomNum}`)
+        .then((res) => {
+          if (res.data == "success") {
+            alert("예약이 취소되었습니다.");
+            http
+              .get(`/schedule/myReservation/${this.getUserID}`)
+              .then((data) => {
+                this.myReservation = data.data;
+              });
+          }
+        });
     },
   },
   watch: {
     page(page) {
       var first = (page - 1) * 10;
-      this.pagingList = this.myList.slice(first, first+9);
+      this.pagingList = this.myList.slice(first, first + 9);
     },
   },
 };
