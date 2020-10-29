@@ -101,31 +101,31 @@ export default {
             })
         },
         newPostPush(){
-            const message = {
-                data :{
-                    body : "새 포스트가 등록되었습니다!.",
-                    title: "nowpostpush",
-                    icon: "favicon.ico"
-                },
-                to : "/topics/testtopic"
-            }
-            const config = {
-                headers:{
-                    'Content-type': 'application/json',
-                    'Accept':'application/json',
-                    'Authorization' : 'key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd'
-                }
-            }
-            axios.post(this.url , message, config)
-            .then(response => {
-                if (response.status < 200 || response.status >= 400) {
-                    throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
-                }
-                console.log("nowpostpush success : "+response);
-                console.log("nowpostpush success : "+response.rel);
-            }).catch(e =>{
-                console.log(e);
-            })
+            // const message = {
+            //     data :{
+            //         body : "새 포스트가 등록되었습니다!.",
+            //         title: "nowpostpush",
+            //         icon: "favicon.ico"
+            //     },
+            //     to : "/topics/testtopic"
+            // }
+            // const config = {
+            //     headers:{
+            //         'Content-type': 'application/json',
+            //         'Accept':'application/json',
+            //         'Authorization' : 'key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd'
+            //     }
+            // }
+            // axios.post(this.url , message, config)
+            // .then(response => {
+            //     if (response.status < 200 || response.status >= 400) {
+            //         throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
+            //     }
+            //     console.log("nowpostpush success : "+response);
+            //     console.log("nowpostpush success : "+response.rel);
+            // }).catch(e =>{
+            //     console.log(e);
+            // })
         }
     }
 }
