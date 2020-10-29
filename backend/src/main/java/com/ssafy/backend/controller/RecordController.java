@@ -154,7 +154,7 @@ public class RecordController {
         if (hostname.substring(0, 7).equals("DESKTOP")) {// local
             command[1] = "./backend/AI/text_wordcloud.py";
         } else {// aws
-            command[1] = "/var/lib/jenkins/workspace/front/AI/text_wordcloud.py";
+            command[1] = "/var/lib/jenkins/workspace/front/backend/AI/text_wordcloud.py";
         }
         command[2] = str;
         commandLine = CommandLine.parse(command[0]);
