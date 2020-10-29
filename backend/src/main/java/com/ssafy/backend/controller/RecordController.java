@@ -49,14 +49,18 @@ public class RecordController {
         list.clear();
         String Rec = ff.getOriginalFilename().toLowerCase();
         long nowtime = datetimeTosec(LocalDateTime.now());
-        // System.out.println(System.getProperty("user.dir") +
-        // "\\\\frontend\\src\\assets\\record\\"+ nowtime + Rec);
+        
         System.out.println("녹음파일명 :" + System.getProperty("user.dir") + nowtime + Rec);
+        
+        File file;
 
-        // File file = new File("C:\\Users\\multicampus\\Desktop\\image\\"+ nowtime +
-        // Rec);
-        File file = new File(System.getProperty("user.dir") + "\\\\frontend\\public\\record\\" + nowtime + Rec);
-
+        String hostname = InetAddress.getLocalHost().getHostName();
+        if (hostname.substring(0, 7).equals("DESKTOP")) {// local
+            file = new File(System.getProperty("user.dir") + "\\\\frontend\\public\\record\\" + nowtime + Rec);
+        } else {// aws
+            file = new File("../../frontend/public/record/" + nowtime + Rec);
+        }
+        
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
@@ -64,7 +68,6 @@ public class RecordController {
 
         String[] command = new String[3];
         command[0] = "python";
-        String hostname = InetAddress.getLocalHost().getHostName();
         if (hostname.substring(0, 7).equals("DESKTOP")) {// local
             command[1] = "./backend/AI/SpeechToText2.py";
         } else {// aws
