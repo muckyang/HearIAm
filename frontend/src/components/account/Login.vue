@@ -105,8 +105,9 @@ export default {
       let devecieId = this.$store.getters["getDeviceID"];
       console.log("store - "+devecieId);
       http.put(`/user/userDId/${userId}/${devecieId}`).then((res)=>{
-        console.log("res.id : "+res.data.id)
-        localStorage.setItem("deviceID", res.data.id);  
+        console.dir(res)
+        console.log("res.id : "+res.data)
+        localStorage.setItem("deviceID", res.data);  
       }).catch((e)=>{
         console.log(e);
       });
