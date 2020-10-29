@@ -131,8 +131,7 @@ export default {
           if (response.status < 200 || response.status >= 400) {
               throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
           }
-          console.log("nowpostpush success : "+response);
-          console.log("nowpostpush success : "+response.rel);
+          console.dir(response);
       }).catch(e =>{
           console.log(e);
       });
