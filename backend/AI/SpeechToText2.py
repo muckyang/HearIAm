@@ -24,7 +24,7 @@ def main(argv):
     if(socket.gethostname()[:7] == "DESKTOP"):
         AUDIO_FILE = "./frontend/public/record/" + argv[1]
     else:
-        AUDIO_FILE = "/var/lib/jenkins/workspace/front/frontend/public/record/656938266record.wav" + argv[1]
+        AUDIO_FILE = "/var/lib/jenkins/workspace/front/frontend/public/record/" + argv[1]
 
     r= sr.Recognizer()
     with sr.AudioFile(AUDIO_FILE) as source:
