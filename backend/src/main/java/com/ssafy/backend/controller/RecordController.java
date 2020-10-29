@@ -4,12 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-
-import com.ssafy.backend.model.Record;
-import com.ssafy.backend.model.RecordAssign;
-import com.ssafy.backend.repository.RecordAssignRepository;
-import com.ssafy.backend.repository.RecordRepository;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -18,12 +16,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.ssafy.backend.model.ConRoom;
+import com.ssafy.backend.model.Emotion;
+import com.ssafy.backend.repository.ConRoomRepository;
+import com.ssafy.backend.repository.EmotionRepository;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -34,15 +39,15 @@ import io.swagger.annotations.ApiOperation;
 public class RecordController {
 
     @Autowired
-    RecordRepository recordRepository;
+    ConRoomRepository conRoomRepository;
 
-    @Autowired
-    RecordAssignRepository recordAssignRepository;
+    public static LinkedList<String> list = new LinkedList<>();
+    public static String sttText;
 
     @PostMapping("/test")
     @ApiOperation(value = "녹음파일저장, STT ,WordCloud")
     public Object fileTest(@RequestPart("file") MultipartFile ff) throws IllegalStateException, IOException {
-
+        list.clear();
         String Rec = ff.getOriginalFilename().toLowerCase();
         long nowtime = datetimeTosec(LocalDateTime.now());
         // System.out.println(System.getProperty("user.dir") +
@@ -63,45 +68,64 @@ public class RecordController {
         command[1] = "./backend/AI/SpeechToText2.py";
         command[2] = file.getName();
 
+        list.add(file.getName());
+
         try {
-            return execPython(command);
+            execPython(command);
+            return new ResponseEntity<>(execPython(command), HttpStatus.OK) ;
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "녹화상담등록")
-    private Object CreateRecord(@RequestBody Record request) {
-        Record record = new Record();
-        record.setTitle(request.getTitle());
-        record.setFilename(request.getFilename());
-        record.setMentee(request.getMentee());
+    @ApiOperation(value = "녹화상담 등록")
+    private Object CreateRecord(@RequestBody ConRoom request) {
+        ConRoom conRoom= new ConRoom();
+        conRoom.setMentor(1L);
+        conRoom.setMentee(request.getMentee());
+        conRoom.setTitle(request.getTitle());
+        conRoom.setRecordDir(request.getRecordDir());
+        conRoom.setWordcloudImg(request.getWordcloudImg());
+        conRoom.setStatus("waiting");
+        //키워드는 나중에 작업예정
+        // conRoom.setKeyword1("");
+        // conRoom.setKeyword2("");
+        // conRoom.setKeyword3("");
 
-        recordRepository.save(record);
+        conRoomRepository.save(conRoom);
         return 0;
     }
 
-    @PostMapping("/assigned")
-    @ApiOperation(value = "녹화상담 담당하기")
-    private Object AssignedRecord(@RequestBody RecordAssign request) {
-
-        RecordAssign recordassign = new RecordAssign();
-        recordassign.setRecordId(request.getRecordId());
-        recordassign.setMento(request.getMento());
-
-        recordAssignRepository.save(recordassign);
-        return 0;
+    @GetMapping("/getRecord")
+    @ApiOperation(value = "녹화상담 대기 리스트 불러오기")
+    private Object ReadRecordings(){
+        String waiting = "waiting";
+        List<ConRoom> conlist = conRoomRepository.findByStatus(waiting);
+        System.out.println(conlist.size());
+        return conlist; 
     }
 
+    @PostMapping("/assigned/{num}/{mentor}")
+    @ApiOperation(value = "녹화상담 진행")
+    private Object AssignedRecord(@PathVariable long num, @PathVariable long mentor) {
+        String progress = "progress";
+        ConRoom conRoom = conRoomRepository.findByNum(num);
+        conRoom.setStatus(progress);
+        conRoom.setMentor(mentor);
+        conRoomRepository.save(conRoom);
+        return 0;
+    }
+    
     private long datetimeTosec(LocalDateTime ldt) {
         long result = 0L;
         result += ((((((((ldt.getYear() - 2000) * 365) + ldt.getDayOfYear()) * 24) + ldt.getHour()) * 60)
-                + ldt.getMinute()) * 60 + ldt.getSecond());
+        + ldt.getMinute()) * 60 + ldt.getSecond());
         return result;
     }
-
+    
     public static Object execPython(String[] command) throws IOException, InterruptedException {
+
         CommandLine commandLine = CommandLine.parse(command[0]);
         for (int i = 1, n = command.length; i < n; i++) {
             commandLine.addArgument(command[i]);
@@ -124,20 +148,101 @@ public class RecordController {
         if (hostname.substring(0, 7).equals("DESKTOP")) {// local
             command[1] = "./backend/AI/text_wordcloud.py";
         } else {// aws
-            command[1] = "../AI/textCheck.py";
+            command[1] = "../AI/text_wordcloud.py";
         }
         command[2] = str;
         commandLine = CommandLine.parse(command[0]);
         for (int i = 1, n = command.length; i < n; i++) {
             commandLine.addArgument(command[i]);
         }
+        
+        outputStream = new ByteArrayOutputStream();
+        pumpStreamHandler = new PumpStreamHandler(outputStream);
+        executor = new DefaultExecutor();
+        executor.setStreamHandler(pumpStreamHandler);
+        System.out.println(str);
         executor.execute(commandLine);
+
+        outputList = outputStream.toString().split("\n");
+        String str2 = "";
+        for (String s : outputList) {
+            list.add(s.trim());
+            str2 += s + " ";
+        }
+
+        list.add("none");
+        list.add("none");
+        list.add("none");
         System.out.println("WordCloud OK!");
+
+        return list;
+        // try {
+        //     return new ResponseEntity<>(list, HttpStatus.OK);
+        // } catch (Exception e) {
+        //     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
+    }
+
+    @PostMapping("/regist")
+    @ApiOperation(value = "녹음 상담 등록")
+    public Object emotionSave(@RequestBody ConRoom request) throws IOException, SQLException {
         try {
-            return outputList;
+            ConRoom conRoom = new ConRoom();
+            conRoom.setMentor(1L);
+            conRoom.setMentee(request.getMentee());
+            conRoom.setTitle(request.getTitle());
+            conRoom.setRecordDir(request.getRecordDir());
+            conRoom.setWordcloudImg(request.getWordcloudImg());
+            conRoom.setKeyword1(request.getKeyword1());
+            conRoom.setKeyword2(request.getKeyword2());
+            conRoom.setKeyword3(request.getKeyword3());
+            conRoom.setStatus("waiting");
+            conRoomRepository.save(conRoom);
+            return new ResponseEntity<>(conRoom.getNum(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @Autowired
+    EmotionRepository emotionRepository;
+
+    @PostMapping("/emotion")
+    @ApiOperation(value = "녹음 상담 감정 등록")
+    public Object emotionUpload(@RequestBody Emotion request) throws SQLException, IOException {
+        try {
+            System.out.println(request.toString());
+            Emotion emotion = new Emotion();
+            emotion.setNum(request.getNum());
+            emotion.setAngry(request.getAngry());
+            emotion.setDisgusted(request.getDisgusted());
+            emotion.setFearful(request.getFearful());
+            emotion.setHappy(request.getHappy());
+            emotion.setNeutral(request.getNeutral());
+            emotion.setSad(request.getSad());
+            emotion.setSurprised(request.getSurprised());
+            emotionRepository.save(emotion);
+            return new ResponseEntity<>("emotion succ", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getRecordDetail/{num}")
+    @ApiOperation(value = "녹화상담 디테일")
+    private Object getRecordDetail(@PathVariable Long num){
+        ConRoom conroom = conRoomRepository.findByNum(num);
+        return conroom;
+    }
+
+    //답변 저장하기
+    @PostMapping("/sendAnswer/{num}/{answer}")
+    @ApiOperation(value = "답변 저장")
+    private Object sendAnswer(@PathVariable Long num, @PathVariable String answer){
+        ConRoom conroom = conRoomRepository.findByNum(num);
+        conroom.setAnswer(answer);
+        conroom.setStatus("finish");
+        conRoomRepository.save(conroom);
+        return conroom;
     }
 }

@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.backend.exception.ResourceNotFoundException;
+import com.ssafy.backend.model.ConReport;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.model.User;
-import com.ssafy.backend.model.ConReport;
 import com.ssafy.backend.repository.ConReportRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
@@ -72,7 +72,8 @@ public class CounselingController {
 		Date now = new Date();
 		
 		for (ConRoom conRoom : list) {
-			if((now.getTime()-conRoom.getDate().getTime())/60000 > 30) {
+			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate());
+			if((now.getTime()-date2.getTime())/60000 > 30) {
 				conRoomRepository.deleteByNum(conRoom.getNum());
 			}
 		}
@@ -114,7 +115,7 @@ public class CounselingController {
 
 	@GetMapping("/menteeMyList/{num}")
 	public List<ConRoom> myList(@PathVariable(value = "num") Long num) {
-		List<ConRoom> list = conRoomRepository.findByMentee(num);
+		List<ConRoom> list = conRoomRepository.findByMenteeOrderByNumDesc(num);
 		return list;
 	}
 	

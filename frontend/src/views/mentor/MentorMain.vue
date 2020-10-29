@@ -144,6 +144,9 @@ export default {
     goMyMenteeList() {
       this.$router.push(`/myMenteeList`);
     },
-  },
-};
+    goRecordList(){
+      this.$router.push(`/recordList`);
+    }
+  }
+}
 </script>
