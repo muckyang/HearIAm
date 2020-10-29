@@ -90,8 +90,6 @@
             </v-btn>
           </div>
         </v-col>
-        <v-btn @click="goMypage()">마이페이지</v-btn>
-        <v-btn @click="logout()">로그아웃</v-btn>
       </div>
     </div>
   </div>
