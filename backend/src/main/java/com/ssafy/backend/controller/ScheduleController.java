@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Reservation;
 import com.ssafy.backend.model.Schedule;
@@ -124,7 +126,7 @@ public class ScheduleController {
         reser.setConcern(concern);
         reservationRepository.save(reser);
 
-        return sche;
+        return reser;
     }
 
     @GetMapping("/getTime/{mentor}")
@@ -274,5 +276,46 @@ public class ScheduleController {
         }
         return timeList;
     }
+
+    @DeleteMapping("/reset/{mentor}")
+    public Object reset(@PathVariable String mentor){
+        List<Schedule> list = scheduleRepository.findByMentor(mentor);
+        for(Schedule s : list){
+            scheduleRepository.delete(s);
+        }
+        Map<String, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < 7; i++) {
+            List<Integer> temp = new LinkedList<>();
+            map.put(String.valueOf(i), temp);
+        }
+        return map;
+    }
+
+    @PutMapping("/maintain/{mentor}")
+    public Object maintain(@PathVariable String mentor){
+        List<Schedule> list = scheduleRepository.findByMentor(mentor);
+        LocalDate today = LocalDate.now().plusDays(7);
+        System.out.println(today);
+        int todayWeek = DayOfWeek.from(LocalDate.now()).getValue();
+        for(Schedule s : list){
+            LocalDate sdate;
+            int dayidx = DayOfWeek.from(s.getSdate()).getValue();
+            if (dayidx < todayWeek) { // 오늘보다 이전이면
+                sdate = today.minusDays(todayWeek - dayidx);
+            } else if (dayidx > todayWeek) {
+                sdate = today.plusDays(dayidx - todayWeek);
+            } else {
+                sdate = today;
+            }
+            s.setSdate(sdate);
+            scheduleRepository.save(s);
+        }
+        return list;
+    }
+
+    // @GetMapping("/checkUpdate")
+    // public Object checkUpdate(){
+        
+    // }
 
 }
