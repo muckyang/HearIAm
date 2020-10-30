@@ -16,15 +16,20 @@
         textColor="#000"
       />
     </div>
+    <div>
+      <ReRecordListComp />
+    </div>
   </div>
 </template>
 
 <script>
 import Scheduler from "../../components/mentor/Scheduler.vue";
+import ReRecordListComp from "../../components/mentor/ReRecordListComp.vue";
 export default {
   name:"MentorMypage",
   components: {
     Scheduler,
+    ReRecordListComp,
   },
   data() {
     return {

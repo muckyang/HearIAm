@@ -50,11 +50,15 @@
           <v-icon class="mr-3">mdi-help-circle-outline</v-icon>
           <h2>당신의 고민은 무엇인가요??</h2>
         </div>
-        <v-col class="d-flex" cols="12" sm="6">
+        <v-col cols="12" sm="7" class="pb-0">
           <v-select v-model="concern" class="ml-5" :items="items" light label="고민이 무엇인가요?" solo></v-select>
         </v-col>
+        <v-col cols="7" class="py-0">
+          <v-text-field class="py-0 ml-5" v-if="writeFlag" v-model="myConcern" label="고민을 입력해주세요"></v-text-field>
+          <div v-else style="height:50px;"></div>
+        </v-col>
         <transition name="bounce">
-          <v-btn v-if="concern != ''" icon style="float:right;" @click="(flag1 = true), (flag2 = true), (alertFlag = false)"
+          <v-btn v-if="concern != '' && concern != '직접 입력' || myConcern != ''" icon style="float:right;" @click="(flag1 = true), (flag2 = true), (alertFlag = false)"
             ><v-icon large>mdi-arrow-right-bold-outline</v-icon></v-btn
           >
         </transition>
@@ -122,6 +126,9 @@ export default {
       faceapi.nets.faceExpressionNet.loadFromUri('/models'),
     ]);
   },
+  created() {
+    this.mentor = this.$route.params.num;
+  },
   data() {
     return {
       flag1: false,
@@ -129,7 +136,7 @@ export default {
       flag3: false,
       alertFlag: true,
       concern: '',
-      items: ['시험 성적 때문에 고민이에요..', '진로에 대한 고민이 있어요.', '괴롭힘을 당하고 있어요...', '친구문제로 상담을 받고 싶어요.'],
+      items: ['시험 성적 때문에 고민이에요..', '진로에 대한 고민이 있어요.', '괴롭힘을 당하고 있어요...', '친구문제로 상담을 받고 싶어요.', '기타', '직접 입력'],
       recordMode: {
         audio: 'press',
       },
@@ -150,6 +157,9 @@ export default {
       },
       recordInfo: [],
       cnum: "",
+      writeFlag: false,
+      myConcern: "",
+      mentor: 1,
     };
   },
   methods: {
@@ -244,6 +254,7 @@ export default {
     recordUpload() {
       http
         .post('/record/regist', {
+          mentor: this.mentor,
           title: this.concern,
           recordDir: this.recordInfo[0],
           wordcloudImg: this.recordInfo[1],
@@ -289,6 +300,15 @@ export default {
       userNum: (state) => `${state.user.getUserNum}`,
     }),
   },
+  watch: {
+    concern(v) {
+      if(v == "직접 입력") {
+        this.writeFlag = true;
+      } else {
+        this.writeFlag = false;
+      }
+    },
+  },
 };
 </script>
 
@@ -301,11 +321,11 @@ export default {
   height: 19%;
 }
 .record-body {
-  height: 49%;
+  height: 45%;
   margin: 0 auto;
 }
 .record-alert {
-  height: 29%;
+  height: 35%;
   bottom: 0px;
 }
 #mic-image :hover {

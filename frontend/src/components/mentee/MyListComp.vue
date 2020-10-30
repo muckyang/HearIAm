@@ -10,7 +10,7 @@
               <th class="text-center">상담 날짜</th>
               <th class="text-center">상담사</th>
               <th class="text-center">종류</th>
-              <th class="text-center">상태</th>
+              <th class="text-center">현황</th>
               <th class="text-center">재상담현황</th>
             </tr>
           </thead>
@@ -19,29 +19,42 @@
               <td class="text-center">{{ setTime(item.date) }}</td>
 
               <td v-if="item.mentor == 1" class="text-center">-</td>
-
               <td v-else class="text-center">{{ findName(item.mentor) }}</td>
+              
               <td v-if="item.recordDir != null" class="text-center">
                 녹화 상담
               </td>
               <td v-else class="text-center">실시간 상담</td>
-              <td v-if="item.status == 'finish'" class="text-center">
+
+              <td v-if="item.recordDir != null && item.status == 'finish'">
+                <v-btn @click="getAnswer(item)" small style="font-size: 0.9rem"
+                  ><span style="vertical-align: middle; display: inline-flex"
+                    ><v-icon small class="mr-1"
+                      >mdi-message-text-outline</v-icon
+                    >
+                    답변</span
+                  ></v-btn
+                >
+              </td>
+              <td v-else-if="item.status == 'finish'" class="text-center">
                 상담완료
               </td>
-              <td v-if="item.status == 'waiting'" class="text-center">
-                대기중
-              </td>
-              <td v-if="item.status == 'progress'" class="text-center">
+              <td v-else-if="item.status == 'progress'" class="text-center">
                 진행중
               </td>
               <td v-if="item.status == 'reserveRequest'" class="text-center">
                 예약중
               </td>
+              <td v-else class="text-center">
+                대기중
+              </td>
               <td class="text-center">
                 <v-btn
+                  small
                   v-if="item.status == 'finish'"
                   :disabled="item.isreapply != 0"
                   @click="reapplyType(item)"
+                  style="font-size: 0.9rem"
                   >재신청</v-btn
                 >
               </td>
@@ -61,7 +74,8 @@
             <tr>
               <th class="text-center">예약 날짜</th>
               <th class="text-center">상담사</th>
-              <th class="text-center">취소</th>
+              <th class="text-center">예약취소</th>
+              <th class="text-center">실시간 상담</th>
             </tr>
           </thead>
           <tbody>
@@ -69,13 +83,45 @@
               <td class="text-center">{{ item.sdate }} {{ item.stime }}</td>
               <td class="text-center">{{ item.mentor }}</td>
               <td class="text-center">
-                <v-btn @click="cancel(item.num)">취소</v-btn>
+                <v-btn @click="cancelD(item.num)">취소</v-btn>
+              </td>
+              <td>
+                <v-btn>들어가기<br />(상담사가 방 열면 활성화)</v-btn>
               </td>
             </tr>
           </tbody>
         </template>
       </v-simple-table>
     </v-card>
+
+    <v-dialog v-model="answerDialog" persistent max-width="700">
+      <v-card>
+        <br />
+        <v-card-subtitle>
+          <span><h1>답변</h1></span>
+        </v-card-subtitle>
+        <v-card-text>
+          <v-textarea
+            rows="10"
+            readonly
+            auto-grow
+            solo
+            flat
+            class="pa-3"
+            :value="answer"
+            style="white-space: pre-line"
+          >
+          </v-textarea>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" text @click="answerDialog = false">
+            닫기
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <v-dialog v-model="typeDialog" persistent max-width="500">
       <v-card
@@ -85,7 +131,7 @@
         </v-card-subtitle>
         <v-card-text>
           <div @click="reapply">실시간 상담</div>
-          <div>녹화 상담</div>
+          <div @click="reRecord">녹화 상담</div>
         </v-card-text>
 
         <v-card-actions>
@@ -109,6 +155,9 @@
         </v-card-subtitle>
         <v-card-text>
           원하시는 날짜와 시간을 선택해주세요.
+          <span style="color: crimson"
+            >재신청은 1회만 가능하므로 신중히 선택해주세요.</span
+          >
           <br />
           (상담 가능한 날짜와 시간만 표시됩니다.)
         </v-card-text>
@@ -142,6 +191,21 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="cancelDialog" persistent max-width="400">
+      <v-card>
+        <v-card-title style="font-size: 1.5rem">
+          예약을 취소하시겠습니까?
+        </v-card-title>
+        <v-card-text></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="cancelDialog = false">
+            아니오
+          </v-btn>
+          <v-btn color="green darken-1" text @click="cancel"> 예 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -159,6 +223,7 @@ export default {
       userList: [],
       dialog: false,
       typeDialog: false,
+      cancelDialog: false,
       reMentor: "",
       time: null,
       date: null,
@@ -169,6 +234,9 @@ export default {
       page: 1,
       selitem: [],
       mentorNum: null,
+      cancelNum: "",
+      answerDialog: false,
+      answer: "",
     };
   },
   mounted() {
@@ -244,7 +312,6 @@ export default {
       var mentorId = this.findID(this.selitem.mentor);
       http.get(`/schedule/allowSchedule/${mentorId}`).then((res) => {
         this.schedule = res.data;
-        console.log(res.data);
       });
     },
     allowedDates(val) {
@@ -264,7 +331,12 @@ export default {
       for (const schedule of this.schedule) {
         if (this.date == schedule.sdate) {
           if (val == schedule.stime.substr(0, 2)) {
-            var today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            var today =
+              date.getFullYear() +
+              "-" +
+              (date.getMonth() + 1) +
+              "-" +
+              date.getDate();
             if (today == this.date) {
               return val > hour;
             } else {
@@ -318,9 +390,10 @@ export default {
         alert("날짜와 시간을 선택해주세요");
       }
     },
-    cancel(num) {
+    cancel() {
+      this.cancelDialog = false;
       http
-        .delete(`/schedule/cancelReservation/${num}/${this.conRoomNum}`)
+        .delete(`/schedule/cancelReservation/${this.cancelNum}`)
         .then((res) => {
           if (res.data == "success") {
             alert("예약이 취소되었습니다.");
@@ -340,6 +413,20 @@ export default {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
       });
       return text;
+    },
+    cancelD(num) {
+      this.cancelNum = num;
+      this.cancelDialog = true;
+    },
+    getAnswer(item) {
+      console.log(item.answer);
+      this.answer = item.answer
+        .substring(1, item.answer.length - 1)
+        .replaceAll("\r\n", "<br/>");
+      this.answerDialog = true;
+    },
+    reRecord() {
+      this.$router.push(`/recordConsult/${this.selitem.mentor}`);
     },
   },
   watch: {

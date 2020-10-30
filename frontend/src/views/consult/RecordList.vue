@@ -32,6 +32,7 @@
 
 <script>
 import http from "@/util/http-common.js";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "RecordList",
@@ -55,8 +56,25 @@ export default {
         });
     },
     goDetail(num){
-        this.$router.push(`/recordDetail/${num}`);
+        http
+        .post(`record/getRecordConsult/${num}`,this.getUserNum)
+        .then(() => {
+          this.$router.push(`/recordDetail/${num}`);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
+  },
+  computed: {
+    ...mapGetters([
+      "getUserNum",
+      "getUserID",
+    ]),
+    ...mapState({
+      userNum: (state) => `${state.user.getUserNum}`,
+      userID: (state) => `${state.user.getUserID}`,
+    }),
   },
 };
 </script>

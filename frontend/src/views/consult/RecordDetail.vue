@@ -18,6 +18,7 @@
           v-model="answer"
           outlined
           rows="10"
+          style="white-space:pre-line"
           placeholder="상담 내용을 입력해주세요."
         ></v-textarea>
         <div align="right">
@@ -32,6 +33,7 @@
 import http from "@/util/http-common.js";
 import Bar from "@/components/webRTC/Bar.js";
 import bufferToWav from "audiobuffer-to-wav";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "RecordList",
@@ -98,12 +100,12 @@ export default {
   },
   methods: {
     getAudio(audio) {
-      // return "http://localhost:3000/record/" + audio;
-      return "http://localhost:8081/record/" + audio;
+      return "http://localhost:3000/record/" + audio;
+      // return "http://localhost:8081/record/" + audio;
     },
     send() {
       http
-        .post(`/record/sendAnswer/${this.$route.params.num}/${this.answer}`)
+        .post(`/record/sendAnswer/${this.$route.params.num}/${this.getUserNum}`, this.answer)
         .then(() => {
           alert("답변이 완료되었습니다.");
           this.$router.push("/recordList");
@@ -215,6 +217,16 @@ export default {
       this.emotion[6] = this.surprised[time];
       this.fillData();
     },
+  },
+  computed: {
+    ...mapGetters([
+      "getUserNum",
+      "getUserID",
+    ]),
+    ...mapState({
+      userNum: (state) => `${state.user.getUserNum}`,
+      userID: (state) => `${state.user.getUserID}`,
+    }),
   },
 };
 </script>

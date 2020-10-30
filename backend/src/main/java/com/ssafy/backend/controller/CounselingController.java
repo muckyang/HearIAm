@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.backend.exception.ResourceNotFoundException;
+import com.ssafy.backend.model.Alarm;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.model.User;
+import com.ssafy.backend.repository.AlarmRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
 import com.ssafy.backend.repository.UserRepository;
@@ -33,7 +35,10 @@ import com.ssafy.backend.repository.UserRepository;
 public class CounselingController {
 
 	private static final String SUCCESS = "success";
-	
+		
+	@Autowired
+	AlarmRepository alarmRepository;
+
 	@Autowired
 	ConRoomRepository conRoomRepository;
 	
@@ -44,10 +49,14 @@ public class CounselingController {
 	UserRepository userRepository;
 
 	@PostMapping("/liveRequest")
-	public ResponseEntity<String> liveRequest(@RequestBody ConRoom conRoom) {
+	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
+		System.out.println(conRoom); // mentee, room
 		conRoomRepository.save(conRoom);
+		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
+		alarmRepository.save(alarm);
+		ConRoom conRoom2 = conRoomRepository.findByRoom(conRoom.getRoom());
+		return ResponseEntity.ok(conRoom2.getNum());
 
-		return ResponseEntity.ok(SUCCESS);
 	}
 	
 	@PostMapping("/saveEmotion")
@@ -139,6 +148,12 @@ public class CounselingController {
 	@GetMapping("/myMenteeInfoList/{mentor}/{mentee}")
 	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "mentee") Long mentee) {
 		List<ConRoom> list = conRoomRepository.findByMentorAndMentee(mentor, mentee);
+		return list;
+	}
+
+	@GetMapping("/RecordList/{mentor}")
+	public List<ConRoom>  myRecordCounList(@PathVariable(value = "mentor" ) Long mentor ){
+		List<ConRoom> list = conRoomRepository.findByMentorAndStatus(mentor,"progress");	
 		return list;
 	}
 
