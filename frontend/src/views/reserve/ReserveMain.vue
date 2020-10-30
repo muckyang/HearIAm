@@ -164,6 +164,7 @@ export default {
       nowDate: new Date().toISOString().substr(0, 10),
       nDate: new Date(),
       isSelf: false,
+      mentorNum: null,
     };
   },
   computed: {
@@ -172,7 +173,7 @@ export default {
       endDate.setDate(this.nDate.getDate() + 7);
       return endDate.toISOString().slice(0, 10);
     },
-    ...mapGetters(["getUserID"]),
+    ...mapGetters(["getUserID","getUserNum"]),
     ...mapState({
       userID: (state) => `${state.user.getUserID}`,
     }),
@@ -224,13 +225,34 @@ export default {
         .post(
           `/schedule/reservation/${this.getUserID}/${this.date}/${this.time}/${this.concern}`
         )
-        .then(() => {
+        .then((res) => {
+          http.get(`/user/users/${res.data.mentor}`)
+            .then((res1) => {
+              this.mentorNum = res1.data.num;
+              http
+                .post(`/counseling/reserveRequest`, {
+                  mentee: this.getUserNum,
+                  mentor: this.mentorNum,
+                  room: this.createRoomId(),
+                  status: "reserve",
+                  date: `${res.data.sdate}T${res.data.stime}:00`
+                });
+            });
           alert("예약이 완료되었습니다.");
           this.$router.push("/menteeMain").catch(() => {});
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    createRoomId(length = 20) {
+      let text = "";
+      const possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      Array.from(Array(length)).forEach(() => {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      });
+      return text;
     },
   },
 };

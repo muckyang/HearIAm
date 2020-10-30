@@ -124,7 +124,7 @@ public class ScheduleController {
         reser.setConcern(concern);
         reservationRepository.save(reser);
 
-        return reser;
+        return sche;
     }
 
     @GetMapping("/getTime/{mentor}")
