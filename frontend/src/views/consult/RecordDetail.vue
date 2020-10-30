@@ -16,6 +16,7 @@
           v-model="answer"
           outlined
           rows="10"
+          style="white-space:pre-line"
           placeholder="상담 내용을 입력해주세요."
         ></v-textarea>
         <div align="right">
@@ -94,12 +95,14 @@ export default {
   },
   methods: {
     getAudio(audio) {
-      // return "http://localhost:3000/record/" + audio;
-      return "http://localhost:8081/record/" + audio;
+      return "http://localhost:3000/record/" + audio;
+      // return "http://localhost:8081/record/" + audio;
     },
     send() {
+      // var ans = JSON.stringify(this.answer);
+      var ans = this.answer;
       http
-        .post(`/record/sendAnswer/${this.$route.params.num}/${this.answer}`)
+        .post(`/record/sendAnswer/${this.$route.params.num}`, ans)
         .then(() => {
           alert("답변이 완료되었습니다.");
           this.$router.push("/recordList");
