@@ -5,35 +5,73 @@
         <v-col>
           <v-row>
             <v-col>
-              <v-btn v-if="!isProgress" type="button" class="btn btn-primary" @click="onJoin">
+              <v-btn
+                v-if="!isProgress"
+                type="button"
+                class="btn btn-primary"
+                @click="onJoin"
+              >
                 상담 시작
               </v-btn>
-              <v-btn v-else type="button" class="btn btn-primary" @click="onLeave">
+              <v-btn
+                v-else
+                type="button"
+                class="btn btn-primary"
+                @click="onLeave"
+              >
                 상담 종료
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="5">
-              <Bar v-if="isProgress" :chartData="chartData" :options="options" />
+              <Bar :chartData="chartData" :options="options" />
             </v-col>
-            <v-spacer></v-spacer>
-            <v-col cols="6">
-              <WebRTC
-                ref="webrtc"
-                width="100%"
-                :roomId="roomId"
-                cameraHeight="400"
-                @error="onError"
-                @childs-event="parentsMethod"
-              />
+            <v-col>
+              <v-row style="height: 220px">
+                <v-col cols="6">
+                  <WebRTC
+                    ref="webrtc"
+                    width="100%"
+                    :roomId="roomId"
+                    cameraHeight="200"
+                    @error="onError"
+                    @childs-event="parentsMethod"
+                  />
+                </v-col>
+                <v-col cols="6">
+                  <v-select
+                    class="mt-7"
+                    v-model="title"
+                    :items="items"
+                    label="고민이 무엇인가요?"
+                    solo
+                  ></v-select>
+                  <v-text-field
+                    v-if="isSelf"
+                    v-model="title2"
+                    v-bind="attrs"
+                    v-on="on"
+                    hint="자유롭게 고민을 입력해주세요."
+                    persistent-hint
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <textarea
+                  v-model="memo"
+                  outlined
+                  auto-grow
+                  row-height="30"
+                  rows="12"
+                  style="background-color: white; width: 100%"
+                >
+                </textarea>
+              </v-row>
             </v-col>
           </v-row>
-          <v-row v-if="isProgress" >
-            <v-col >
-            <textarea v-model="memo_text" style="background-color:pink">
-             </textarea>
-            </v-col>
+          <v-row v-if="isProgress">
+            <v-col> </v-col>
           </v-row>
         </v-col>
       </v-row>
@@ -84,7 +122,19 @@ export default {
         surprised: "",
       },
       isProgress: false,
-      memo_text:"",
+      memo: "",
+      title: "",
+      title2: "",
+      items: [
+        "시험 성적 때문에 고민이에요.",
+        "진로에 대한 고민이 있어요.",
+        "괴롭힘을 당하고 있어요.",
+        "친구문제로 상담을 받고 싶어요.",
+        "직접 입력",
+      ],
+      isSelf: false,
+      menteeNum: null,
+      menteeName: null,
     };
   },
   mounted() {
@@ -100,10 +150,20 @@ export default {
       http.put(
         `/counseling/joinLive/${this.$route.params.num}/${this.getUserNum}`
       );
+      http.get(`/counseling/liveMenteeInfo/${this.$route.params.num}`).then((res)=>{
+        this.menteeNum = res.data.num;
+        this.menteeName = res.data.name;
+      })
       this.$refs.webrtc.join();
     },
     onLeave() {
-      http.put(`/counseling/finishLive/${this.$route.params.num}`);
+      if(this.title == "직접 입력"){
+        this.title = this.title2;
+      }
+      http.put(`/counseling/finishLive/${this.$route.params.num}`,{
+        title: this.title,
+        memo: this.memo
+      });
       http.post(`/counseling/saveEmotion`, {
         num: this.$route.params.num,
         angry: this.allEmotion.angry,
@@ -112,13 +172,11 @@ export default {
         happy: this.allEmotion.happy,
         neutral: this.allEmotion.neutral,
         sad: this.allEmotion.sad,
-        surprised: this.allEmotion.surprised
-      });
-      http.post(`/counseling/saveMemo`,{
-          content: this.memo_text,
-          con_num: this.$route.params.num
+        surprised: this.allEmotion.surprised,
       });
       this.$refs.webrtc.leave();
+      alert(`상담 내용이 저장되었습니다.`);
+      this.$router.push(`/myMenteeInfo/${this.menteeNum}&${this.menteeName}`)
     },
     onError(error, stream) {
       console.log("On Error Event", error, stream);
@@ -194,6 +252,15 @@ export default {
       "getUserNum",
       "getUserID",
     ]),
+  },
+  watch: {
+    title(v) {
+      if (v == "직접 입력") {
+        this.isSelf = true;
+      }else{
+        this.isSelf = false;
+      }
+    },
   },
 };
 </script>

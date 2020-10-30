@@ -84,25 +84,6 @@ public class RecordController {
         }
     }
 
-    @PostMapping("/create")
-    @ApiOperation(value = "녹화상담 등록")
-    private Object CreateRecord(@RequestBody ConRoom request) {
-        ConRoom conRoom= new ConRoom();
-        conRoom.setMentor(1L);
-        conRoom.setMentee(request.getMentee());
-        conRoom.setTitle(request.getTitle());
-        conRoom.setRecordDir(request.getRecordDir());
-        conRoom.setWordcloudImg(request.getWordcloudImg());
-        conRoom.setStatus("waiting");
-        //키워드는 나중에 작업예정
-        // conRoom.setKeyword1("");
-        // conRoom.setKeyword2("");
-        // conRoom.setKeyword3("");
-
-        conRoomRepository.save(conRoom);
-        return 0;
-    }
-
     @GetMapping("/getRecord")
     @ApiOperation(value = "녹화상담 대기 리스트 불러오기")
     private Object ReadRecordings(){
@@ -187,7 +168,13 @@ public class RecordController {
     public Object emotionSave(@RequestBody ConRoom request) throws IOException, SQLException {
         try {
             ConRoom conRoom = new ConRoom();
-            conRoom.setMentor(1L);
+            if(request.getMentor() == 1L) {
+                conRoom.setMentor(1L);
+                conRoom.setStatus("waiting");
+            } else {
+                conRoom.setMentor(request.getMentor());
+                conRoom.setStatus("progress");
+            }
             conRoom.setMentee(request.getMentee());
             conRoom.setTitle(request.getTitle());
             conRoom.setRecordDir(request.getRecordDir());
@@ -195,7 +182,6 @@ public class RecordController {
             conRoom.setKeyword1(request.getKeyword1());
             conRoom.setKeyword2(request.getKeyword2());
             conRoom.setKeyword3(request.getKeyword3());
-            conRoom.setStatus("waiting");
             conRoomRepository.save(conRoom);
             return new ResponseEntity<>(conRoom.getNum(), HttpStatus.OK);
         } catch (Exception e) {
@@ -235,15 +221,23 @@ public class RecordController {
     }
 
     //답변 저장하기
-    @PostMapping("/sendAnswer/{num}")
+    @PostMapping("/sendAnswer/{num}/{userNum}")
     @ApiOperation(value = "답변 저장")
-    private Object sendAnswer(@PathVariable Long num, @RequestBody String answer){
+    private Object sendAnswer(@PathVariable Long num, @PathVariable Long userNum, @RequestBody String answer){
         ConRoom conroom = conRoomRepository.findByNum(num);
-        System.out.println(answer);
-        System.out.println(answer);
-        System.out.println(answer);
         conroom.setAnswer(answer);
+        conroom.setMentor(userNum);
         conroom.setStatus("finish");
+        conRoomRepository.save(conroom);
+        return conroom;
+    }
+
+    @PostMapping("/getRecordConsult/{num}")
+    @ApiOperation(value = "녹화상담 담당하기")
+    private Object getRecordConsult(@PathVariable Long num,  @RequestBody Long userNum){
+        ConRoom conroom = conRoomRepository.findByNum(num);
+        conroom.setMentor(userNum);
+        conroom.setStatus("progress");
         conRoomRepository.save(conroom);
         return conroom;
     }

@@ -33,6 +33,7 @@
 import http from "@/util/http-common.js";
 import Bar from "@/components/webRTC/Bar.js";
 import bufferToWav from "audiobuffer-to-wav";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "RecordList",
@@ -103,10 +104,8 @@ export default {
       // return "http://localhost:8081/record/" + audio;
     },
     send() {
-      // var ans = JSON.stringify(this.answer);
-      var ans = this.answer;
       http
-        .post(`/record/sendAnswer/${this.$route.params.num}`, ans)
+        .post(`/record/sendAnswer/${this.$route.params.num}/${this.getUserNum}`, this.answer)
         .then(() => {
           alert("답변이 완료되었습니다.");
           this.$router.push("/recordList");
@@ -218,6 +217,16 @@ export default {
       this.emotion[6] = this.surprised[time];
       this.fillData();
     },
+  },
+  computed: {
+    ...mapGetters([
+      "getUserNum",
+      "getUserID",
+    ]),
+    ...mapState({
+      userNum: (state) => `${state.user.getUserNum}`,
+      userID: (state) => `${state.user.getUserID}`,
+    }),
   },
 };
 </script>
