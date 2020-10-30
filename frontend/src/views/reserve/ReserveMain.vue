@@ -2,7 +2,7 @@
   <div class="reserve-main">
     <div class="reserve-body">
       <v-sheet class="sheet-body container" rounded="xl" elevation="7">
-        <h1 class="mb-5">상담 예약하기</h1>
+        <h1 class="mb-5">실시간 상담 예약하기</h1>
         <v-row class="d-flex justify-content-center">
           <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
             <v-dialog
@@ -102,6 +102,8 @@
                 :items="items"
                 label="고민이 무엇인가요?"
                 solo
+                hint="대략적인 고민을 입력해주세요."
+                persistent-hint
               ></v-select>
             </div>
           </v-col>
@@ -109,18 +111,16 @@
         <v-row>
           <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
             <div class="d-flex">
-            <v-icon class="mr-3" large color="white"
+              <v-icon class="mr-3" large color="white"
                 >mdi-help-circle-outline</v-icon
               >
-          <v-text-field
-            v-if="isSelf"
-            v-model="concern2"
-            v-bind="attrs"
-            v-on="on"
-            hint="자유롭게 고민을 입력해주세요."
-            persistent-hint
-          ></v-text-field>
-          </div>
+              <v-text-field
+                v-if="isSelf"
+                v-model="concern2"
+                hint="자유롭게 고민을 입력해주세요."
+                persistent-hint
+              ></v-text-field>
+            </div>
           </v-col>
         </v-row>
         <!-- <v-row>
@@ -133,11 +133,36 @@
         </v-row> -->
         <v-row>
           <v-col cols="2" class="reserve-data pt-10 px-0">
-            <v-btn color="#ffdc15" @click="reserve">예약하기</v-btn>
+            <v-btn color="#ffdc15" @click="reserveD">예약하기</v-btn>
           </v-col>
         </v-row>
       </v-sheet>
     </div>
+      <v-dialog v-model="reserDialog" persistent max-width="400">
+      <v-card>
+        <v-card-title style="font-size:1.5rem;">
+          아래 정보로 예약하시겠습니까?
+        </v-card-title>
+        <v-card-text class="pt-3" style="text-align:left;">날짜 : {{this.date}} <br>시간 : {{this.time}}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="reserDialog = false"
+          >
+            아니오
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="reserve"
+          >
+            예
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -164,6 +189,8 @@ export default {
       nowDate: new Date().toISOString().substr(0, 10),
       nDate: new Date(),
       isSelf: false,
+      concern2: "",
+      reserDialog:false,
     };
   },
   computed: {
@@ -181,7 +208,7 @@ export default {
     concern(v) {
       if (v == "직접 입력") {
         this.isSelf = true;
-      }else{
+      } else {
         this.isSelf = false;
       }
     },
@@ -203,6 +230,8 @@ export default {
   methods: {
     setDate() {
       this.$refs.dialogDate.save(this.date);
+      this.time = "";
+      this.timeItems = [];
       http
         .get(`/schedule/getTimeByDate/${this.date}`)
         .then((res) => {
@@ -217,9 +246,6 @@ export default {
         });
     },
     reserve() {
-      if(this.concern=="직접 입력"){
-        this.concern = this.concern2;
-      }
       http
         .post(
           `/schedule/reservation/${this.getUserID}/${this.date}/${this.time}/${this.concern}`
@@ -231,6 +257,20 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    reserveD() {
+      if (this.concern == "직접 입력") {
+        this.concern = this.concern2;
+      }
+      if (this.date == "" || this.time == "" || this.concern == "") {
+        alert("예약 정보를 모두 입력해주세요.");
+        return;
+      } else if (this.time == "예약 가능한 시간이 없습니다.") {
+        alert("예약 시간을 다시 확인해주세요.");
+        return;
+      } else {
+        this.reserDialog = true;
+      }
     },
   },
 };
