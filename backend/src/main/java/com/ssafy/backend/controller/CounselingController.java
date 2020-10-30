@@ -140,10 +140,17 @@ public class CounselingController {
 		return list;
 	}
 
+	@GetMapping("/RecordList/{mentor}")
+	public List<ConRoom>  myRecordCounList(@PathVariable(value = "mentor" ) Long mentor ){
+		List<ConRoom> list = conRoomRepository.findByMentorAndStatus(mentor,"progress");	
+		return list;
+	}
+
 	@GetMapping("/liveMenteeInfo/{num}")
 	public User liveMenteeInfo(@PathVariable(value = "num") Long num) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
 		User user = userRepository.findByNum(conRoom.getMentee()).orElseThrow(() -> new ResourceNotFoundException("User", "num", num));
 		return user;
 	}
+	
 }

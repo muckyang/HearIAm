@@ -17,7 +17,7 @@
               @click="goInfo(item.num)"
             >
               <td class="text-center">{{ setTime(item.date) }}</td>
-              <td v-if="item.status == `record`" class="text-center">
+              <td v-if="item.recordDir != null" class="text-center">
                 녹화 상담
               </td>
               <td v-else class="text-center">실시간 상담</td>
