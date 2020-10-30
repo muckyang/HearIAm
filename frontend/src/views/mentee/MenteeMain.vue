@@ -149,7 +149,7 @@ export default {
       this.$router.push(`/reserveMain`).catch(()=>{});
     },
     goRecord() {
-      this.$router.push("/recordConsult").catch(()=>{});
+      this.$router.push("/recordConsult/1").catch(()=>{});
     },
     unsubscribe(){
       this.unsubscribeTokenToTopic(this.devecieId, this.topic);

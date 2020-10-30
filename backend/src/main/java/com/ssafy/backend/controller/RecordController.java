@@ -84,25 +84,6 @@ public class RecordController {
         }
     }
 
-    @PostMapping("/create")
-    @ApiOperation(value = "녹화상담 등록")
-    private Object CreateRecord(@RequestBody ConRoom request) {
-        ConRoom conRoom= new ConRoom();
-        conRoom.setMentor(1L);
-        conRoom.setMentee(request.getMentee());
-        conRoom.setTitle(request.getTitle());
-        conRoom.setRecordDir(request.getRecordDir());
-        conRoom.setWordcloudImg(request.getWordcloudImg());
-        conRoom.setStatus("waiting");
-        //키워드는 나중에 작업예정
-        // conRoom.setKeyword1("");
-        // conRoom.setKeyword2("");
-        // conRoom.setKeyword3("");
-
-        conRoomRepository.save(conRoom);
-        return 0;
-    }
-
     @GetMapping("/getRecord")
     @ApiOperation(value = "녹화상담 대기 리스트 불러오기")
     private Object ReadRecordings(){
@@ -187,7 +168,13 @@ public class RecordController {
     public Object emotionSave(@RequestBody ConRoom request) throws IOException, SQLException {
         try {
             ConRoom conRoom = new ConRoom();
-            conRoom.setMentor(1L);
+            if(request.getMentor() == 1L) {
+                conRoom.setMentor(1L);
+                conRoom.setStatus("waiting");
+            } else {
+                conRoom.setMentor(request.getMentor());
+                conRoom.setStatus("progress");
+            }
             conRoom.setMentee(request.getMentee());
             conRoom.setTitle(request.getTitle());
             conRoom.setRecordDir(request.getRecordDir());
@@ -195,7 +182,6 @@ public class RecordController {
             conRoom.setKeyword1(request.getKeyword1());
             conRoom.setKeyword2(request.getKeyword2());
             conRoom.setKeyword3(request.getKeyword3());
-            conRoom.setStatus("waiting");
             conRoomRepository.save(conRoom);
             return new ResponseEntity<>(conRoom.getNum(), HttpStatus.OK);
         } catch (Exception e) {
