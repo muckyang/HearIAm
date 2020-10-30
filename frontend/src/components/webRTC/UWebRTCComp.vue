@@ -78,7 +78,7 @@ export default {
       dialog:false,
       failMatching:false,
       isRemote : this.$store.getters["getIsRemote"],
-      room_num: 0,
+      room_num: 1,
     };
   },
   mounted() {
@@ -106,27 +106,7 @@ export default {
     },
     createRoom(){
       //대기 없는 경우 고려해야함 .
-
-
-      http
-        .post(`/counseling/liveRequest`, {
-          mentee: this.getUserNum,
-          mentor: 1,
-          room: this.roomId,
-          status: "liveRequest",
-          date: new Date()
-        })
-        .then((res) => {
-          console.dir(res);
-          console.log(res.data);
-          if (res.data > 0) {
-            this.dialog = true;
-            this.room_num = res.data;
-            console.log("hhh" +this.room_num);
-          }
-        });
-
-      const message = {
+       const message = {
         data: {
           body: "상담을 하고 싶어해요~",
           title: "학생 클릭 함",
@@ -145,22 +125,39 @@ export default {
         },
       };
 
-      axios
-        .post(this.url, message, config)
-        .then((response) => {
-          if (response.status < 200 || response.status >= 400) {
-            throw (
-              "Error subscribing to topic: " +
-              response.status +
-              " - " +
-              response.text()
-            );
-          }
-          console.dir(response);
+      http
+        .post(`/counseling/liveRequest`, {
+          mentee: this.getUserNum,
+          mentor: 1,
+          room: this.roomId,
+          status: "liveRequest",
+          date: new Date()
         })
-        .catch((e) => {
-          console.log(e);
+        .then((res) => {
+          console.log(res.data);
+          if (res.data > 0) {
+            this.dialog = true;
+            this.room_num = res.data;
+          }
+        axios
+          .post(this.url, message, config)
+          .then((response) => {
+            if (response.status < 200 || response.status >= 400) {
+              throw (
+                "Error subscribing to topic: " +
+                response.status +
+                " - " +
+                response.text()
+              );
+            }
+            console.dir(response);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
         });
+
         this.onJoin();
     },
     onJoin() {

@@ -115,6 +115,13 @@ const routes = [{
         name: 'RecordDetail',
         component: RecordDetail
     },
+    {
+        path: '/stMatch',
+        component: () =>
+            import ('@/views/mentor/streamingReady'),
+        name: 'stMatch',
+        props: true
+    }     
 ]
 
 const router = new VueRouter({
