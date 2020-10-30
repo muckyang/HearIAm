@@ -1,10 +1,12 @@
 package com.ssafy.backend.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.hibernate.type.LocalDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.backend.exception.ResourceNotFoundException;
+import com.ssafy.backend.model.Alarm;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.model.User;
+import com.ssafy.backend.repository.AlarmRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
 import com.ssafy.backend.repository.UserRepository;
@@ -31,7 +35,10 @@ import com.ssafy.backend.repository.UserRepository;
 public class CounselingController {
 
 	private static final String SUCCESS = "success";
-	
+		
+	@Autowired
+	AlarmRepository alarmRepository;
+
 	@Autowired
 	ConRoomRepository conRoomRepository;
 	
@@ -42,10 +49,14 @@ public class CounselingController {
 	UserRepository userRepository;
 
 	@PostMapping("/liveRequest")
-	public ResponseEntity<String> liveRequest(@RequestBody ConRoom conRoom) {
+	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
+		System.out.println(conRoom); // mentee, room
 		conRoomRepository.save(conRoom);
+		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
+		alarmRepository.save(alarm);
+		ConRoom conRoom2 = conRoomRepository.findByRoom(conRoom.getRoom());
+		return ResponseEntity.ok(conRoom2.getNum());
 
-		return ResponseEntity.ok(SUCCESS);
 	}
 	
 	@PostMapping("/saveEmotion")
@@ -160,4 +171,11 @@ public class CounselingController {
 		return list;
 	}
 	
+	@PostMapping("/reserveRequest")
+	public ResponseEntity<String> reserveRequest(@RequestBody ConRoom conRoom) {
+		conRoom.setDate(conRoom.getDate().plusHours(9));
+		conRoomRepository.save(conRoom);
+
+		return ResponseEntity.ok(SUCCESS);
+	}
 }

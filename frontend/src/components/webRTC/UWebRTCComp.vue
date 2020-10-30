@@ -13,11 +13,14 @@
         </div>
         <div class="row">
           <div class="col-md-12 my-3">
-            <v-btn v-if="!isProgress" type="button" class="btn btn-primary" @click="onJoin">
+            <v-btn v-if="!isProgress" type="button" class="btn btn-primary" @click="createRoom">
               상담 요청
             </v-btn>
             <v-btn v-else type="button" class="btn btn-primary" @click="onLeave">
               상담 종료
+            </v-btn>
+            <v-btn v-if="failMatching" type="button" class="btn btn-primary" @click="onLeave">
+              매칭 실패 돌아가기
             </v-btn>
           </div>
         </div>
@@ -34,6 +37,18 @@
         </div>
       </v-col>
     </v-row>
+     <v-dialog v-model="dialog" hide-overlay persistent width="300">
+          <v-card color="primary" dark>
+            <v-card-text>
+              Please stand by
+              <v-progress-linear
+                indeterminate
+                color="white"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
   </div>
 </template>
 
@@ -44,7 +59,7 @@ import * as faceapi from "face-api.js";
 window.io = io;
 import { mapGetters } from "vuex";
 import http from "@/util/http-common.js";
-
+import axios from "axios";
 export default {
   name: "UWebRTCComp",
   components: {
@@ -57,6 +72,13 @@ export default {
       message: null,
       videoTag: [],
       isProgress: false,
+      url: "https://fcm.googleapis.com/fcm/send",
+      devecieId: this.$store.getters["getDeviceID"],
+      topic: "streaming",
+      dialog:false,
+      failMatching:false,
+      isRemote : this.$store.getters["getIsRemote"],
+      room_num: 0,
     };
   },
   mounted() {
@@ -82,8 +104,10 @@ export default {
       });
       this.roomId = text;
     },
-    onJoin() {
-      this.isProgress = true;
+    createRoom(){
+      //대기 없는 경우 고려해야함 .
+
+
       http
         .post(`/counseling/liveRequest`, {
           mentee: this.getUserNum,
@@ -93,10 +117,54 @@ export default {
           date: new Date()
         })
         .then((res) => {
-          if (res.data == `success`) {
-            alert(`잠시 대기해주세요.`);
+          console.dir(res);
+          console.log(res.data);
+          if (res.data > 0) {
+            this.dialog = true;
+            this.room_num = res.data;
+            console.log("hhh" +this.room_num);
           }
         });
+
+      const message = {
+        data: {
+          body: "상담을 하고 싶어해요~",
+          title: "학생 클릭 함",
+          icon: "favicon.ico",
+          room: this.roomId,
+          room_num: this.room_num,
+        },
+        to: "/topics/streaming",
+      };
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          Authorization:
+            "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+        },
+      };
+
+      axios
+        .post(this.url, message, config)
+        .then((response) => {
+          if (response.status < 200 || response.status >= 400) {
+            throw (
+              "Error subscribing to topic: " +
+              response.status +
+              " - " +
+              response.text()
+            );
+          }
+          console.dir(response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+        this.onJoin();
+    },
+    onJoin() {
+      this.isProgress = true;
       this.$refs.webrtc.join();
       this.startVideo();
     },
@@ -160,6 +228,24 @@ export default {
       "getUserNum",
       "getUserID",
     ]),
+  },
+  watch: {
+    isRemote(val){
+      console.log("isremote + "+val);
+      if(val){
+        console.log("remote 들어옴");
+      }
+    },
+    dialog (val) {
+      if (!val) {
+        return
+      }
+      setTimeout(() =>{
+        this.dialog = false;
+        this.failMatching = true;
+      }, 4000);
+      //4초 
+    },
   },
 };
 </script>

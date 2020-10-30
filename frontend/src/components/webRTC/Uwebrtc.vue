@@ -84,7 +84,16 @@ export default {
       default: null,
     },
   },
-  watch: {},
+  watch: {
+    check(){
+      console.log(this.videoList.length)
+      if(this.videoList.length>1){
+        console.log(this.videoList.length);
+        //store에 값 저장. 
+        this.$store.commit("changeIsRemote");
+      }
+    }
+  },
   mounted() {
     var that = this;
     this.rtcmConnection = new RTCMultiConnection();
@@ -124,6 +133,7 @@ export default {
         return video.id === stream.streamid;
       });
       if (found === undefined) {
+
         let view = null;
         if (stream.type === "local") {
           view = `hidden`;
