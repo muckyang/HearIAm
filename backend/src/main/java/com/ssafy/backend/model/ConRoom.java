@@ -36,4 +36,5 @@ public class ConRoom {
     private String status;
     private int isreapply;
     private String answer;
+    private String memo;
 }
