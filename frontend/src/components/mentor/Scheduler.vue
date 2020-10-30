@@ -50,6 +50,22 @@
     </div>
     <v-btn v-if="isModify" @click="saveTime">완료</v-btn>
     <v-btn v-if="!isModify" @click="modifyTime">일정수정</v-btn>
+    <v-dialog v-model="monDialog" persistent max-width="400">
+      <v-card>
+        <v-card-title style="font-size: 1.5rem">
+          일정을 변경하시겠습니까?
+        </v-card-title>
+        <v-card-text class="mt-3" style="text-align: left"
+          >새로운 주가 시작되었습니다. <br />이번 주 일정을 새로 설정하거나,
+          <br />지난주와 동일하게 유지할 수 있습니다.</v-card-text
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="reset"> 초기화 </v-btn>
+          <v-btn color="green darken-1" text @click="maintain"> 유지 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -121,7 +137,8 @@ export default {
         6: [],
       },
       dayTable: ["일", "월", "화", "수", "목", "금", "토"],
-      isModify:false
+      isModify: false,
+      monDialog: true,
     };
   },
   created() {
@@ -129,19 +146,19 @@ export default {
     this.getTime();
   },
   methods: {
-    getTime(){
+    getTime() {
       http
-      .get(`/schedule/getTime/${this.getUserID}`)
-      .then((res) => {
-        this.timetable = res.data;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-      this.isModify=false;
+        .get(`/schedule/getTime/${this.getUserID}`)
+        .then((res) => {
+          this.timetable = res.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.isModify = false;
     },
     saveTime() {
-      alert("일정이 수정되었습니다.")
+      alert("일정이 수정되었습니다.");
       this.isModify = false;
       var daydiv_arr = document.getElementsByClassName("day-div");
       for (var i = 0; i < daydiv_arr.length; i++) {
@@ -192,6 +209,21 @@ export default {
         tt = tt + this.steps;
       }
       vm.timeArray = times;
+    },
+    reset() {
+      http
+        .delete(`/schedule/reset/${this.getUserID}`)
+        .then((res) => {
+          this.timetable = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.monDialog = false;
+    },
+    maintain() {
+      this.monDialog = false;
+      console.log(this.timetable);
     },
   },
   mounted() {

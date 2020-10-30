@@ -3,6 +3,7 @@ package com.ssafy.backend.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import com.ssafy.backend.exception.ResourceNotFoundException;
 import com.ssafy.backend.help.UserIdentityAvailability;
@@ -119,5 +123,11 @@ public class UserController {
     return new ResponseEntity<String>(deviceId, HttpStatus.OK);
   }
 
+  @GetMapping("/menteeName/{num}")
+  @ApiOperation("멘티 닉네임 가져오기")
+  public String getName(@PathVariable Long num) throws IOException, SQLException {
+    Optional<User> user = userRepository.findByNum(num);
+    return user.get().getName();
+  }
 
 }
