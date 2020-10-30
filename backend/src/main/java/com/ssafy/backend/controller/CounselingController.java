@@ -1,10 +1,12 @@
 package com.ssafy.backend.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.hibernate.type.LocalDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -162,4 +164,11 @@ public class CounselingController {
 		return user;
 	}
 	
+	@PostMapping("/reserveRequest")
+	public ResponseEntity<String> reserveRequest(@RequestBody ConRoom conRoom) {
+		conRoom.setDate(conRoom.getDate().plusHours(9));
+		conRoomRepository.save(conRoom);
+
+		return ResponseEntity.ok(SUCCESS);
+	}
 }
