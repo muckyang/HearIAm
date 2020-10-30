@@ -235,10 +235,13 @@ public class RecordController {
     }
 
     //답변 저장하기
-    @PostMapping("/sendAnswer/{num}/{answer}")
+    @PostMapping("/sendAnswer/{num}")
     @ApiOperation(value = "답변 저장")
-    private Object sendAnswer(@PathVariable Long num, @PathVariable String answer){
+    private Object sendAnswer(@PathVariable Long num, @RequestBody String answer){
         ConRoom conroom = conRoomRepository.findByNum(num);
+        System.out.println(answer);
+        System.out.println(answer);
+        System.out.println(answer);
         conroom.setAnswer(answer);
         conroom.setStatus("finish");
         conRoomRepository.save(conroom);
