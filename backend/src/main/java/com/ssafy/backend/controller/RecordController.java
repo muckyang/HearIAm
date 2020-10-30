@@ -231,4 +231,14 @@ public class RecordController {
         conRoomRepository.save(conroom);
         return conroom;
     }
+
+    @PostMapping("/getRecordConsult/{num}")
+    @ApiOperation(value = "녹화상담 담당하기")
+    private Object getRecordConsult(@PathVariable Long num,  @RequestBody Long userNum){
+        ConRoom conroom = conRoomRepository.findByNum(num);
+        conroom.setMentor(userNum);
+        conroom.setStatus("progress");
+        conRoomRepository.save(conroom);
+        return conroom;
+    }
 }
