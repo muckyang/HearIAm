@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>녹화 상담 리스트</h1>
+    <h1>실시간 상담 일정</h1>
     <br />
     <v-card>
       <v-simple-table>
@@ -9,8 +9,8 @@
             <tr>
               <th class="text-center">등록일시</th>
               <th class="text-center">닉네임</th>
-              <th class="text-center">키워드</th>
               <th class="text-center">종류</th>
+              <th class="text-center">재상담 여부</th>
               <th class="text-center">비고</th>
             </tr>
           </thead>
@@ -28,19 +28,29 @@
                   style="font-size:0.9rem;"
                   >{{ findName(item.mentee) }}</v-btn
                 ></td>
-                  <td  class="text-center">
-                {{ getKeyword(item) }}
-              </td>
+        
               <td  class="text-center">
-                녹화 상담
+                실시간 예약 상담
               </td>
+              <td v-if="item.status == 'reapply'" class="text-center">
+                재상담
+              </td>
+              <td v-else class="text-center">
+              -</td>
+             
               <td class="text-center">
-                <v-btn
+                
+                <v-btn v-if="item.date.slice(5,7) == todaytime.getMonth()+1 && item.date.slice(8,10) == todaytime.getDate() && item.date.slice(11,13) == todaytime.getHours()"
                   small
+                  color="orange lighten-4"
+                  text-color="red"
                   @click="startCounseling(item)"
-                  style="font-size:0.9rem;"
-                  >상담시작</v-btn
+                  style="font-size:0.9rem;color:red"
+                  >on-Air</v-btn
                 >
+                <v-btn v-else
+                 disabled
+                 style="font-size:0.9rem;color:black">기다리는 중</v-btn>
               </td>
             </tr>
           </tbody>
@@ -55,22 +65,25 @@
 import http from "@/util/http-common.js";// ~~~ 서버주소/api
 import { mapGetters } from "vuex";
 export default {
-  name: "ReRecordListComp",
+  name: "ReserveListComp",
   data() {
     return {
       pagingList: [],
       pageLength: 0,
       page: 1,
       userList: [],
-      conList:[]
+      conList:[],
+      todaytime: new Date()
     };
   },
   mounted() {
+    console.log(this.todaytime.getHours())
       http.get(`/user/userName`).then((res) => {
       this.userList = res.data;
     });
-    http.get(`/counseling/RecordList/${this.getUserNum}`).then((res) => {
+    http.get(`/counseling/ReserveList/${this.getUserNum}`).then((res) => {
       this.conList = res.data;
+      console.log(res.data)
       this.pagingList = this.conList.slice(0, 9);
       if (this.conList.length % 10 == 0) {
         this.pageLength = this.conList.length / 10;
@@ -104,6 +117,7 @@ export default {
         }
       }
     },
+  
     setTime(date) {
       let time =
         date.slice(0, 4) +
@@ -119,7 +133,8 @@ export default {
     },
     startCounseling(item){
         //상담시작
-        this.$router.push(`/recordDetail/${item.num}`)
+        console.log(item.mentee + " 청소년에 대한 ")
+        console.log(this.getUserNum + " 상담사의 상담 시작!")
     },
     MenteeHistory(item){
       let menteeName = "";
