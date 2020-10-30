@@ -93,9 +93,11 @@ public class CounselingController {
 	}
 	
 	@PutMapping("/finishLive/{num}")
-	public ResponseEntity<String> finishLive(@PathVariable(value = "num") Long num) {
+	public ResponseEntity<String> finishLive(@PathVariable(value = "num") Long num, @RequestBody ConRoom con) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
 		conRoom.setStatus("finish");
+		conRoom.setTitle(con.getTitle());
+		conRoom.setMemo(con.getMemo());
 		conRoomRepository.save(conRoom);
 
 		return ResponseEntity.ok(SUCCESS);
@@ -138,10 +140,10 @@ public class CounselingController {
 		return list;
 	}
 
-//	@PostMapping("/saveMemo")
-//	public ResponseEntity<String> saveMemo(@RequestBody ConReport conReport) {
-//		conReportRepository.save(conReport);
-//
-//		return ResponseEntity.ok(SUCCESS);
-//	}
+	@GetMapping("/liveMenteeInfo/{num}")
+	public User liveMenteeInfo(@PathVariable(value = "num") Long num) {
+		ConRoom conRoom = conRoomRepository.findByNum(num);
+		User user = userRepository.findByNum(conRoom.getMentee()).orElseThrow(() -> new ResourceNotFoundException("User", "num", num));
+		return user;
+	}
 }
