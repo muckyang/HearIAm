@@ -43,7 +43,9 @@ messaging.onMessage((payload) => {
     const notification = new Notification(title, options);
     notification.onclick = function(event) {
       event.preventDefault(); // prevent the browser from focusing the Notification's tab
+      console.log(payload.data.room);
       // window.open('http://localhost:8080/liveList');
+      router.push(`/counselorWRTC/${payload.data.room}&${payload.data.room_num}`);
       window.open('https://k3b201.p.ssafy.io/liveList');
     }
     return notification;

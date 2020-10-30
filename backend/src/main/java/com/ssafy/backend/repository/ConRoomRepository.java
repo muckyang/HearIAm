@@ -16,6 +16,7 @@ public interface ConRoomRepository extends JpaRepository<ConRoom, Long> {
     List<ConRoom> findByMenteeOrderByNumDesc(Long mentee);
     List<ConRoom> findByMentor(Long mentor);
     List<ConRoom> findByMentorAndMentee(Long mentor, Long mentee);
+    ConRoom findByRoom(String room);
     ConRoom findByNum(Long num);
     @Transactional
     @Modifying
