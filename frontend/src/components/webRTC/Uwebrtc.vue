@@ -216,14 +216,12 @@ export default {
 </script>
 <style scoped>
 .video-list {
-  background: white;
   height: auto;
 }
 .video-list div {
   padding: 0px;
 }
 .video-item {
-  background: white;
   display: inline-block;
 }
 </style>
