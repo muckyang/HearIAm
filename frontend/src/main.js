@@ -43,10 +43,19 @@ messaging.onMessage((payload) => {
     const notification = new Notification(title, options);
     notification.onclick = function(event) {
       event.preventDefault(); // prevent the browser from focusing the Notification's tab
-      console.log(payload.data.room);
+      console.dir(payload);
       // window.open('http://localhost:8080/liveList');
-      router.push(`/counselorWRTC/${payload.data.room}&${payload.data.room_num}`);
-      window.open('https://k3b201.p.ssafy.io/liveList');
+      console.log(typeof(payload.data.room_num))
+      let num = payload.data.room_num*1;
+      console.log(typeof(num))
+      console.log(num)
+      if(num>0){ //실시간 상담
+        // router.push(`/counselorWRTC`);
+        console.log("main.js")
+        console.log(typeof(num))
+        router.push({name: 'stMatch', params: {room: payload.data.room, room_num:num}});
+      }
+      // window.open('https://k3b201.p.ssafy.io/liveList');
     }
     return notification;
 });
