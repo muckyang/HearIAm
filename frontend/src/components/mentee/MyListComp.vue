@@ -34,6 +34,9 @@
               <td v-if="item.status == 'progress'" class="text-center">
                 진행중
               </td>
+              <td v-if="item.status == 'reserveRequest'" class="text-center">
+                예약중
+              </td>
               <td class="text-center">
                 <v-btn
                   v-if="item.status == 'finish'"
@@ -165,6 +168,7 @@ export default {
       conRoomNum: null,
       page: 1,
       selitem: [],
+      mentorNum: null,
     };
   },
   mounted() {
@@ -226,6 +230,7 @@ export default {
       return time;
     },
     reapplyType(item) {
+      this.mentorNum = item.mentor;
       this.selitem = item;
       this.typeDialog = true;
     },
@@ -285,6 +290,14 @@ export default {
               })
               .then((success) => {
                 if (success.data == "success") {
+                  http
+                    .post(`/counseling/reserveRequest`, {
+                      mentee: this.getUserNum,
+                      mentor: this.mentorNum,
+                      room: this.createRoomId(),
+                      status: "reapply",
+                      date: `${this.date}T${this.time}:00`
+                    })
                   alert("재상담 신청 완료되었습니다.");
                   http
                     .get(`/counseling/menteeMyList/${this.getUserNum}`)
@@ -318,6 +331,15 @@ export default {
               });
           }
         });
+    },
+    createRoomId(length = 20) {
+      let text = "";
+      const possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      Array.from(Array(length)).forEach(() => {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      });
+      return text;
     },
   },
   watch: {

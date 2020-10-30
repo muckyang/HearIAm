@@ -2,7 +2,6 @@ package com.ssafy.backend.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,7 +25,6 @@ public class ConRoom {
     private Long mentee;
     private String title;
     private String room;
-    @Column(insertable = false, updatable = false)
     private LocalDateTime date;
     private String keyword1;
     private String keyword2;
