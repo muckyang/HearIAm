@@ -1,33 +1,82 @@
 <template>
-  <div align ="center" >
-    <h1> {{ counseling.title }}</h1>
-    <br/>
-    <div style="width :500px; height:50px">
-      <h2> # {{counseling.keyword1}}  # {{counseling.keyword2}}  # {{counseling.keyword3}} </h2>
-    </div>
-    <div style="width :400px; height:400px">
-        <Doughnut :chartData="chartData" />
-    </div>
-      <h2>상담 내용</h2>
-    <div>
-        <v-textarea
-        solo
-        rounded
-        readonly
-        v-model="counseling.answer"
-        outlined
-        rows="7"
-      ></v-textarea>
-      </div>
+  <div>
+    <v-card class="py-3 px-3" id="report-card">
+      <v-card-title>
+        <!-- 제목 -->
+        <v-icon large color="red" class="mr-3">mdi-subtitles-outline</v-icon>
+        <h2 v-if="counseling.title != null">{{ counseling.title }}</h2>
+        <h2 v-else>{{ nickname }}님과의 상담내용</h2>
+      </v-card-title>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-text>
+        <v-row cols="12">
+          <!-- 감정 그래프 -->
+          <v-col cols="7">
+            <div style="width :40vw; height:40vw; margin-left:5%;">
+              <Doughnut :chartData="chartData"/>
+            </div>
+          </v-col>
+          <!-- 상담일, 키워드 -->
+          <v-col cols="5" class="pl-15 pt-5" style="text-align:left;">
+            <v-icon large color="red" class="mb-3 mr-3">mdi-calendar-range</v-icon>DATE
+            <h2 class="mb-10">{{date}}</h2>
+
+            <v-icon large color="red" class="mb-3 mr-3">mdi-tag-heart-outline</v-icon>KEYWORD
+            <div class="d-flex">
+              <h2 class="mt-6 mr-3">#</h2>
+              <h2 class="mb-4">
+                <v-text-field name="name" v-model="counseling.keyword1"></v-text-field>
+              </h2>
+            </div>
+            <div class="d-flex">
+              <h2 class="mt-6 mr-3">#</h2>
+              <h2 class="mb-4">
+                <v-text-field name="name" v-model="counseling.keyword2"></v-text-field>
+              </h2>
+            </div>
+            <div class="d-flex">
+              <h2 class="mt-6 mr-3">#</h2>
+              <h2 class="mb-4">
+                <v-text-field name="name" v-model="counseling.keyword3"></v-text-field>
+              </h2>
+            </div>
+          </v-col>
+        </v-row>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+      
+      <v-card-title>
+        <v-icon large color="red" class="mr-3">mdi-book-open-outline</v-icon>
+        MEMO
+      </v-card-title>
+      <v-card-text>
+        <v-textarea solo no-resize v-model="counseling.memo"></v-textarea>
+      </v-card-text>
+      <v-card-title>
+        <v-icon large color="red" class="mr-3">mdi-pencil-plus-outline</v-icon>
+        RESULT
+      </v-card-title>
+      <v-card-text>
+        <v-textarea solo no-resize v-model="counseling.answer" style="white-space:pre-line"></v-textarea>
+      </v-card-text>
+        <v-card-actions>
+        <v-btn color="deep-purple lighten-2" style="color:white;margin:0 auto;" class="mb-3" @click="reportSave()">
+          등록하기
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
 <script>
-import Doughnut from "@/components/mentor/Doughnut.js";
-import http from "@/util/http-common.js";
+import Doughnut from '@/components/mentor/Doughnut.js';
+import http from '@/util/http-common.js';
 
 export default {
-  name: "CounselingInfoComp",
+  name: 'CounselingInfoComp',
   components: {
     Doughnut,
   },
@@ -44,47 +93,40 @@ export default {
       chartData: null,
       counseling: {},
       date: null,
+      nickname: '',
     };
   },
   created() {
-    http
-      .get(`/counseling/counseling/${this.$route.params.num}`)
-      .then((res) => {
-        this.counseling = res.data;
-        console.log(this.counseling)
-        this.date = this.setTime(this.counseling.date);
-      });
-    http
-      .get(`/counseling/loadEmotion/${this.$route.params.num}`)
-      .then((res) => {
-        this.emotion = res.data;
-        this.angry = this.avrage(this.emotion.angry.split(`|`).map(Number));
-        this.disgusted = this.avrage(
-          this.emotion.disgusted.split(`|`).map(Number)
-        );
-        this.fearful = this.avrage(this.emotion.fearful.split(`|`).map(Number));
-        this.happy = this.avrage(this.emotion.happy.split(`|`).map(Number));
-        this.neutral = this.avrage(this.emotion.neutral.split(`|`).map(Number));
-        this.sad = this.avrage(this.emotion.sad.split(`|`).map(Number));
-        this.surprised = this.avrage(
-          this.emotion.surprised.split(`|`).map(Number)
-        );
-        this.fillData();
-      });
+    http.get(`/counseling/counseling/${this.$route.params.num}`).then((res) => {
+      this.counseling = res.data;
+      this.date = this.setTime(this.counseling.date);
+      this.getMenteeName(this.counseling.mentee);
+    });
+    http.get(`/counseling/loadEmotion/${this.$route.params.num}`).then((res) => {
+      this.emotion = res.data;
+      this.angry = this.avrage(this.emotion.angry.split(`|`).map(Number));
+      this.disgusted = this.avrage(this.emotion.disgusted.split(`|`).map(Number));
+      this.fearful = this.avrage(this.emotion.fearful.split(`|`).map(Number));
+      this.happy = this.avrage(this.emotion.happy.split(`|`).map(Number));
+      this.neutral = this.avrage(this.emotion.neutral.split(`|`).map(Number));
+      this.sad = this.avrage(this.emotion.sad.split(`|`).map(Number));
+      this.surprised = this.avrage(this.emotion.surprised.split(`|`).map(Number));
+      this.fillData();
+    });
   },
   methods: {
     setTime(date) {
       let time =
         Number(date.slice(0, 4)) +
-        "년 " +
+        '년 ' +
         Number(date.slice(5, 7)) +
-        "월 " +
+        '월 ' +
         Number(date.slice(8, 10)) +
-        "일 " +
+        '일 ' +
         Number(date.slice(11, 13)) +
-        "시 " +
+        '시 ' +
         Number(date.slice(14, 16)) +
-        "분";
+        '분';
       return time;
     },
     avrage(arr) {
@@ -96,65 +138,71 @@ export default {
     },
     fillData() {
       this.chartData = {
-        labels: [
-          "angry",
-          "disgusted",
-          "fearful",
-          "happy",
-          "neutral",
-          "sad",
-          "surprised",
-        ],
+        labels: ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised'],
         datasets: [
           {
-            borderColor: ["red", "orange", "#ffff00", "green", "blue", "#000080", "purple"],
-            backgroundColor: ["red", "orange", "#ffff00", "green", "blue", "#000080", "purple"],
-            data: [
-              this.angry,
-              this.disgusted,
-              this.fearful,
-              this.happy,
-              this.neutral,
-              this.sad,
-              this.surprised,
-            ],
+            borderColor: ['red', 'orange', '#ffff00', 'green', 'blue', '#000080', 'purple'],
+            backgroundColor: ['red', 'orange', '#ffff00', 'green', 'blue', '#000080', 'purple'],
+            data: [this.angry, this.disgusted, this.fearful, this.happy, this.neutral, this.sad, this.surprised],
           },
         ],
       };
     },
+    getMenteeName(mentee) {
+      http
+        .get(`/user/menteeName/${mentee}`)
+        .then((res) => {
+          this.nickname = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    reportSave() {
+      http.put(`/counseling/update`, this.counseling)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
   },
 };
 </script>
- <style>
-      #jb-container {
-        width: 940px;
-        margin: 10px auto;
-        padding: 20px;
-        border: 1px solid #bcbcbc;
-      }
-      #jb-header {
-        padding: 20px;
-        margin-bottom: 20px;
-        border: 1px solid #bcbcbc;
-      }
-      #jb-content {
-        width: 580px;
-        padding: 20px;
-        margin-bottom: 20px;
-        float: left;
-        border: 1px solid #bcbcbc;
-      }
-      #jb-sidebar {
-        width: 260px;
-        padding: 20px;
-        margin-bottom: 20px;
-        float: right;
-        border: 1px solid #bcbcbc;
-      }
-      #jb-footer {
-        clear: both;
-        padding: 20px;
-        border: 1px solid #bcbcbc;
-      }
-     
-    </style>
+<style>
+#jb-container {
+  width: 940px;
+  margin: 10px auto;
+  padding: 20px;
+  border: 1px solid #bcbcbc;
+}
+#jb-header {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #bcbcbc;
+}
+#jb-content {
+  width: 580px;
+  padding: 20px;
+  margin-bottom: 20px;
+  float: left;
+  border: 1px solid #bcbcbc;
+}
+#jb-sidebar {
+  width: 260px;
+  padding: 20px;
+  margin-bottom: 20px;
+  float: right;
+  border: 1px solid #bcbcbc;
+}
+#jb-footer {
+  clear: both;
+  padding: 20px;
+  border: 1px solid #bcbcbc;
+}
+#report-card {
+  height: auto;
+  width: 100%;
+}
+</style>
