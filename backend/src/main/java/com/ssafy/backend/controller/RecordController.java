@@ -220,7 +220,6 @@ public class RecordController {
         return conroom;
     }
 
-    //답변 저장하기
     @PostMapping("/sendAnswer/{num}/{userNum}")
     @ApiOperation(value = "답변 저장")
     private Object sendAnswer(@PathVariable Long num, @PathVariable Long userNum, @RequestBody String answer){
@@ -234,7 +233,7 @@ public class RecordController {
 
     @PostMapping("/getRecordConsult/{num}")
     @ApiOperation(value = "녹화상담 담당하기")
-    private Object getRecordConsult(@PathVariable Long num,  @RequestBody Long userNum){
+    private Object getRecordConsult(@PathVariable Long num, @RequestBody Long userNum){
         ConRoom conroom = conRoomRepository.findByNum(num);
         conroom.setMentor(userNum);
         conroom.setStatus("progress");
