@@ -22,4 +22,5 @@ public interface ConRoomRepository extends JpaRepository<ConRoom, Long> {
     @Modifying
     void deleteByNum(Long num);
     List<ConRoom> findByMentorAndStatus(Long mentor, String status);
+    List<ConRoom> findByMentorAndStatusOrStatusOrderByDateAsc(Long mentor, String status1,String status2);
 }

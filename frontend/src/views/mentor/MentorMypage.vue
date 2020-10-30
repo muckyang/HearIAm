@@ -19,17 +19,22 @@
     <div>
       <ReRecordListComp />
     </div>
+    <div>
+      <ReserveListComp />
+    </div>
   </div>
 </template>
 
 <script>
 import Scheduler from "../../components/mentor/Scheduler.vue";
 import ReRecordListComp from "../../components/mentor/ReRecordListComp.vue";
+import ReserveListComp from "../../components/mentor/ReserveListComp.vue";
 export default {
   name:"MentorMypage",
   components: {
     Scheduler,
     ReRecordListComp,
+    ReserveListComp
   },
   data() {
     return {
