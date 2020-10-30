@@ -11,6 +11,7 @@ const state = {
     userNum: localStorage.getItem("userNum") || "",
     userID: localStorage.getItem("userID") || "",
     deviceID: localStorage.getItem("deviceID") || "",
+    isRemote : false,
 };
 
 const getters = {
@@ -21,6 +22,7 @@ const getters = {
     getUserNum: state => state.userNum,
     getUserID: state => state.userID,
     getDeviceID : state => state.deviceID,
+    getIsRemote : state => state.isRemote,
 };
 
 const actions = {
@@ -80,6 +82,9 @@ const mutations = {
     setDeviceId: (state, data)=>{
         state.deviceID = data;
     },
+    changeIsRemote : (state)=>{
+        state.isRemote = !state.isRemote;
+    }
 };
 
 export default {
