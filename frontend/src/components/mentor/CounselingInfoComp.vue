@@ -162,6 +162,9 @@ export default {
       http.put(`/counseling/update`, this.counseling)
       .then(res => {
         console.log(res.data);
+        setTimeout(() => {
+          this.$router.push("/");
+        }, 1000);
       })
       .catch(err => {
         console.log(err);

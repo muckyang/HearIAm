@@ -1,5 +1,7 @@
 package com.ssafy.backend.controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,6 +10,7 @@ import java.util.TreeSet;
 
 import org.hibernate.type.LocalDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 
 import com.ssafy.backend.exception.ResourceNotFoundException;
 import com.ssafy.backend.model.Alarm;
@@ -177,5 +182,16 @@ public class CounselingController {
 		conRoomRepository.save(conRoom);
 
 		return ResponseEntity.ok(SUCCESS);
+	}
+
+	@PutMapping("/update")
+	@ApiOperation("상담일지 수정등록")
+	public Object updateReport(@RequestBody ConRoom request) throws IOException, SQLException {
+		try {
+			conRoomRepository.save(request);
+			return new ResponseEntity<>("report save", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }
