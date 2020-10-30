@@ -59,7 +59,7 @@ const routes = [{
         component: Record
     },
     {
-        path: '/recordConsult',
+        path: '/recordConsult/:num',
         name: 'RecordConsult',
         component: RecordConsult
     },

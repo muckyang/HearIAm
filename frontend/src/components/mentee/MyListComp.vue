@@ -120,7 +120,7 @@
         </v-card-subtitle>
         <v-card-text>
           <div @click="reapply">실시간 상담</div>
-          <div>녹화 상담</div>
+          <div @click="reRecord">녹화 상담</div>
         </v-card-text>
 
         <v-card-actions>
@@ -232,6 +232,7 @@ export default {
       cancelNum:'',
       answerDialog:false,
       answer:'',
+      mentor: 1,
     };
   },
   mounted() {
@@ -295,6 +296,7 @@ export default {
     reapplyType(item) {
       this.selitem = item;
       this.typeDialog = true;
+      this.mentor = item.mentor;
     },
     reapply() {
       this.typeDialog = false;
@@ -394,7 +396,10 @@ export default {
       console.log(item.answer)
       this.answer = item.answer.substring(1,item.answer.length-1).replaceAll("\r\n","<br/>");
       this.answerDialog = true;
-    }
+    },
+    reRecord() {
+      this.$router.push(`/recordConsult/${this.mentor}`);
+    },
   },
   watch: {
     page(page) {
