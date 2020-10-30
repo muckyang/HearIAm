@@ -86,7 +86,17 @@
                 <v-btn @click="cancelD(item.num)">취소</v-btn>
               </td>
               <td>
-                <v-btn>들어가기<br />(상담사가 방 열면 활성화)</v-btn>
+                <v-btn v-if="item.sdate.slice(5,7) == todaytime.getMonth()+1 && item.sdate.slice(8,10) == todaytime.getDate() && item.stime.slice(0,2) == todaytime.getHours()"
+                  small
+                  color="orange lighten-4"
+                  text-color="red"
+                  @click="startCounseling(item)"
+                  style="font-size:0.9rem;color:red"
+                  >on-Air</v-btn
+                >
+                <v-btn v-else
+                 disabled
+                 style="font-size:0.9rem;color:black">기다리는 중</v-btn>
               </td>
             </tr>
           </tbody>
@@ -237,6 +247,7 @@ export default {
       cancelNum: "",
       answerDialog: false,
       answer: "",
+      todaytime: new Date()
     };
   },
   mounted() {
@@ -428,6 +439,9 @@ export default {
     reRecord() {
       this.$router.push(`/recordConsult/${this.selitem.mentor}`);
     },
+    startCounseling(){
+      
+    }
   },
   watch: {
     page(page) {
