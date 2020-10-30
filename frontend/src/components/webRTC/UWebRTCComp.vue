@@ -78,6 +78,7 @@ export default {
       dialog:false,
       failMatching:false,
       isRemote : this.$store.getters["getIsRemote"],
+      room_num: 0,
     };
   },
   mounted() {
@@ -116,8 +117,12 @@ export default {
           date: new Date()
         })
         .then((res) => {
-          if (res.data == `success`) {
+          console.dir(res);
+          console.log(res.data);
+          if (res.data > 0) {
             this.dialog = true;
+            this.room_num = res.data;
+            console.log("hhh" +this.room_num);
           }
         });
 
@@ -127,6 +132,7 @@ export default {
           title: "학생 클릭 함",
           icon: "favicon.ico",
           room: this.roomId,
+          room_num: this.room_num,
         },
         to: "/topics/streaming",
       };

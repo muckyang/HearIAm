@@ -47,12 +47,13 @@ public class CounselingController {
 	UserRepository userRepository;
 
 	@PostMapping("/liveRequest")
-	public ResponseEntity<String> liveRequest(@RequestBody ConRoom conRoom) {
+	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
 		System.out.println(conRoom); // mentee, room
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
 		alarmRepository.save(alarm);
-		return ResponseEntity.ok(SUCCESS);
+		ConRoom conRoom2 = conRoomRepository.findByRoom(conRoom.getRoom());
+		return ResponseEntity.ok(conRoom2.getNum());
 
 	}
 	
