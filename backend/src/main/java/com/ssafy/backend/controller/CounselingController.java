@@ -138,6 +138,12 @@ public class CounselingController {
 		return list;
 	}
 
+	@GetMapping("/RecordList/{mentor}")
+	public List<ConRoom>  myRecordCounList(@PathVariable(value = "mentor" ) Long mentor ){
+		List<ConRoom> list = conRoomRepository.findByMentorAndStatus(mentor,"progress");	
+		return list;
+	}
+
 //	@PostMapping("/saveMemo")
 //	public ResponseEntity<String> saveMemo(@RequestBody ConReport conReport) {
 //		conReportRepository.save(conReport);
