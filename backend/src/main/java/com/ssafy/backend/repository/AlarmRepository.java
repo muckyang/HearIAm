@@ -9,5 +9,5 @@ import com.ssafy.backend.model.Alarm;
 public interface AlarmRepository extends JpaRepository<Alarm, Long>{
     public Optional<Alarm> findByRoom(String room);
 	public void deleteByRoom(String room);
-
+    public long count();
 }

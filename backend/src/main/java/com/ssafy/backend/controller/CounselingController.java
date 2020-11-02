@@ -262,4 +262,16 @@ public class CounselingController {
 		
 		return conRoom;
 	}
+
+	@GetMapping("/alarmList")
+	public List<Alarm> alarmList(){
+		List<Alarm> list = alarmRepository.findAll();
+		return list;
+	}
+
+	@GetMapping("/alarmListCnt")
+	public Long alarmListCnt(){
+		Long cnt = alarmRepository.count();
+		return cnt;
+	}
 }
