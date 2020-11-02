@@ -9,6 +9,9 @@
     >
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
+          <v-btn @click="unsubscribe()">대기 취소</v-btn>
+          <v-btn @click="goMypage()">마이페이지</v-btn>
+          <v-btn @click="logout()">로그아웃</v-btn>
           <div>
             <v-btn
               depressed
@@ -89,9 +92,6 @@
             </v-btn>
           </div>
         </v-col>
-        <v-btn @click="unsubscribe()">대기 취소</v-btn>
-        <v-btn @click="goMypage()">마이페이지</v-btn>
-        <v-btn @click="logout()">로그아웃</v-btn>
       </div>
     </div>
   </div>
@@ -99,18 +99,23 @@
 
 <script>
 import { AUTH_LOGOUT } from "@/store/actions/auth";
+import http from "@/util/http-common.js";
 import axios from "axios";
 export default {
-  data(){
+  data() {
     return {
-      devecieId : this.$store.getters["getDeviceID"],
-      topic : "streaming"
-    }
+      devecieId: this.$store.getters["getDeviceID"],
+      topic: "streaming",
+    };
   },
   methods: {
     subscribe() {
       console.log("click subscribe btn");
       this.subscribeTokenToTopic(this.devecieId, this.topic);
+      let mentorname = this.$store.getters['getUserNum'];
+      http.get(`/counseling/addReady/${mentorname}`).then((res)=>{
+        console.log("add ready success : "+res)
+      });
     },
     subscribeTokenToTopic(token, topic) {
       axios({
@@ -144,7 +149,7 @@ export default {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {});
       this.unsubscribe();
       // this.$router.push("/").catch(() => {});
-      window.location.href="/";
+      window.location.href = "/";
     },
     goMypage() {
       this.$router.push(`/mentorMypage`);
@@ -152,34 +157,41 @@ export default {
     goMyMenteeList() {
       this.$router.push(`/myMenteeList`);
     },
-    goRecordList(){
+    goRecordList() {
       this.$router.push(`/recordList`);
     },
-    unsubscribe(){
+    unsubscribe() {
       this.unsubscribeTokenToTopic(this.devecieId);
     },
-    unsubscribeTokenToTopic(token ){
+    unsubscribeTokenToTopic(token) {
       axios({
-          method: 'POST',
-          url: 'https://iid.googleapis.com/iid/v1:batchRemove',
-          data:{
-              "to":"/topics/streaming",
-              "registration_tokens":[token]
-          },
-          headers: {
-              "Content-type": "application/json",
-              "Authorization" : "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd"
-            }
+        method: "POST",
+        url: "https://iid.googleapis.com/iid/v1:batchRemove",
+        data: {
+          to: "/topics/streaming",
+          registration_tokens: [token],
+        },
+        headers: {
+          "Content-type": "application/json",
+          Authorization:
+            "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+        },
       })
-      .then(response => {
+        .then((response) => {
           if (response.status < 200 || response.status >= 400) {
-              throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
+            throw (
+              "Error subscribing to topic: " +
+              response.status +
+              " - " +
+              response.text()
+            );
           }
-          console.log("unsubscribe success : "+response);
-      }).catch(e =>{
+          console.log("unsubscribe success : " + response);
+        })
+        .catch((e) => {
           console.log(e);
-      })
+        });
     },
-  }
-}
+  },
+};
 </script>

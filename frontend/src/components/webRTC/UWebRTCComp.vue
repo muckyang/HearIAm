@@ -18,24 +18,21 @@
               type="button"
               class="btn btn-primary"
               @click="createRoom"
-            >
-              상담 요청
+            > 상담 요청 
+            </v-btn>
+            <v-btn
+              v-else-if="failMatching"
+              type="button"
+              class="btn btn-primary"
+              @click="onLeave"
+            > 매칭 실패 돌아가기
             </v-btn>
             <v-btn
               v-else
               type="button"
               class="btn btn-primary"
               @click="onLeave"
-            >
-              상담 종료
-            </v-btn>
-            <v-btn
-              v-if="failMatching"
-              type="button"
-              class="btn btn-primary"
-              @click="onLeave"
-            >
-              매칭 실패 돌아가기
+            > 상담 종료
             </v-btn>
           </div>
         </div>
@@ -62,6 +59,7 @@
             class="mb-0"
           ></v-progress-linear>
         </v-card-text>
+        <v-btn @click="dialogCancel() ">취소</v-btn>
       </v-card>
     </v-dialog>
   </div>
@@ -122,8 +120,6 @@ export default {
       this.roomId = text;
     },
     createRoom() {
-      //대기 없는 경우 고려해야함 .
-
       http
         .post(`/counseling/liveRequest`, {
           mentee: this.getUserNum,
@@ -133,7 +129,8 @@ export default {
           date: new Date(),
         })
         .then((res) => {
-          console.log(res.data);
+          console.log("create room : "+res)
+          console.dir(res)
           if (res.data > 0) {
             this.dialog = true;
           }
@@ -155,9 +152,9 @@ export default {
                 "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
             },
           };
-          console.dir("mmmmmm"+message)
-          console.log(message.room_num)
-          console.log(res.data)
+          console.log(this.url);
+          console.log(message)
+          console.log(config)
           axios
             .post(this.url, message, config)
             .then((response) => {
@@ -169,13 +166,11 @@ export default {
                   response.text()
                 );
               }
-              console.dir(response);
             })
             .catch((e) => {
               console.log(e);
             });
         });
-
       this.onJoin();
     },
     onJoin() {
@@ -186,6 +181,7 @@ export default {
     onLeave() {
       this.$refs.webrtc.leave();
       this.stopVideo();
+      this.$router.push("/");
     },
     onError(error, stream) {
       console.log("On Error Event", error, stream);
@@ -233,6 +229,13 @@ export default {
         ctx.beginPath();
       }
     },
+    dialogCancel(){
+      this.dialog = !this.dialog; 
+      console.log("cancel1")
+      this.onLeave();
+      console.log("cancel2")
+    },
+
   },
   computed: {
     ...mapGetters([
@@ -245,12 +248,12 @@ export default {
     ]),
   },
   watch: {
-    isRemote(val) {
-      console.log("isremote + " + val);
-      if (val) {
-        console.log("remote 들어옴");
-      }
-    },
+    // isRemote(val) {
+    //   console.log("isremote + " + val);
+    //   if (val) {
+    //     console.log("remote 들어옴");
+    //   }
+    // },
     dialog(val) {
       if (!val) {
         return;
@@ -258,7 +261,7 @@ export default {
       setTimeout(() => {
         this.dialog = false;
         this.failMatching = true;
-      }, 4000);
+      }, 60000);
       //4초
     },
   },

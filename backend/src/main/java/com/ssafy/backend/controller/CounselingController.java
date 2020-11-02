@@ -25,12 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 
+import com.google.common.base.Optional;
 import com.ssafy.backend.exception.ResourceNotFoundException;
 import com.ssafy.backend.model.Alarm;
+import com.ssafy.backend.model.AlarmReady;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.model.Schedule;
 import com.ssafy.backend.model.User;
+import com.ssafy.backend.repository.AlarmReadyRepository;
 import com.ssafy.backend.repository.AlarmRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
@@ -44,6 +47,9 @@ public class CounselingController {
 
 	private static final String SUCCESS = "success";
 		
+	@Autowired
+	AlarmReadyRepository alarmReadyRepository;
+
 	@Autowired
 	AlarmRepository alarmRepository;
 
@@ -66,8 +72,6 @@ public class CounselingController {
 		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
 		alarmRepository.save(alarm);
 		ConRoom conRoom2 = conRoomRepository.findByRoom(conRoom.getRoom());
-		System.out.println(conRoom2);
-		System.out.println(": : :::::::::::::: "+conRoom2.getNum());
 		return ResponseEntity.ok(conRoom2.getNum());
 
 	}
@@ -204,6 +208,50 @@ public class CounselingController {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@GetMapping("/addReady/{mentor}")
+	public Object addReady(@PathVariable(value = "mentor") Long mentor){
+		try {
+			AlarmReady ready = new AlarmReady();
+			ready.setMentor(mentor);
+			alarmReadyRepository.save(ready);
+			return new ResponseEntity<>("readyList save", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+
+	@GetMapping("/isMentee")
+	public Object isMentee(){
+		try {
+			long cnt = alarmReadyRepository.count();
+			return new ResponseEntity<>(cnt, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/isRoom/{mentor}/{roomNum}")
+	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") String roomNum){
+		try {
+			System.out.println(roomNum);
+			Optional<Alarm> alarm = alarmRepository.findByRoom(roomNum);
+			System.out.println(alarm);
+			String result = "";
+			if(!alarm.isPresent()){
+				result = "fail";
+			}else{
+				System.out.println("success");
+				alarmRepository.delete(alarm.get());
+				alarmReadyRepository.deleteByMentor(mentor);
+				result = "sucess";
+			}
+			System.out.println(result);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	
 	@GetMapping("/reserveConRoom/{num}")
 	public ConRoom reserveConRoom(@PathVariable(value = "num") Long num) {

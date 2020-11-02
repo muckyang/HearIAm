@@ -97,11 +97,11 @@
 </template>
 <script>
 import { AUTH_LOGOUT } from "@/store/actions/auth";
+import http from "@/util/http-common.js";
 import axios from "axios";
 export default {
   data() {
     return {
-      url: "https://fcm.googleapis.com/fcm/send",
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
       dialog:false,
@@ -109,7 +109,20 @@ export default {
   },
   methods: {
     goLive() {
-      this.$router.push(`/userWRTC`);
+       http
+        .get(`/counseling/isMentee`)
+        .then((res) => {
+          console.dir(res);
+          console.log(res.data);
+          if (res.data == 0) {
+            alert("대기중인 멘토가 없어요! 예약하기를 이용해주세요! ");
+          } else {
+             this.$router.push(`/userWRTC`);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });     
     },
     logout: function () {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {});
