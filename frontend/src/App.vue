@@ -82,7 +82,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 @font-face {
   font-family: "S-CoreDream-5Medium";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff")
@@ -106,7 +106,6 @@ body {
 ::-webkit-scrollbar {
   display: none !important;
 }
-
 html {
   scroll-behavior: smooth;
 }
