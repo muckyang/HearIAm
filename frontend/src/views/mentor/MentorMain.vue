@@ -10,8 +10,7 @@
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
           <alarmList></alarmList>
-          <v-btn @click="unsubscribe()">대기 취소</v-btn>
-          <v-btn @click="goMypage()">마이페이지</v-btn>
+          <v-btn v-if="readyClick" @click="unsubscribe()">대기 취소</v-btn>
           <v-btn @click="logout()">로그아웃</v-btn>
           <div>
             <v-btn
@@ -109,6 +108,7 @@ export default {
     return {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
+      readyClick:false,
     };
   },
   components: {
@@ -117,7 +117,7 @@ export default {
   methods: {
     subscribe() {
       console.log("click subscribe btn");
-
+      this.readyClick= true;
       http.get(`/counseling/getMenteeCnt`).then((res) => {
         console.log(res.data);
         if (res.data == "empty") {
@@ -178,6 +178,7 @@ export default {
       this.$router.push(`/recordList`);
     },
     unsubscribe() {
+      this.readyClick = false;
       this.unsubscribeTokenToTopic(this.devecieId);
     },
     unsubscribeTokenToTopic(token) {

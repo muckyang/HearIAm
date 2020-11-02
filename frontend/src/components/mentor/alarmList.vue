@@ -11,18 +11,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in list" :key="item.name">
-              <td class="text-center">
+            <tr v-for="item in list" :key="item.name" @click="onjoin(item)">
+              <td class="text-center" >
                 {{ item.mentee}}
               </td>
-              <td class="text-center">
+              <td class="text-center" >
                    {{ item.room }}
-                <!-- <v-btn
-                  small
-                  @click="startCounseling(item)"
-                  style="font-size: 0.9rem"
-                  >상담시작</v-btn
-                > -->
               </td>
             </tr>
           </tbody>
@@ -34,6 +28,7 @@
 </template>
 <script>
 import http from "@/util/http-common.js";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -45,5 +40,60 @@ export default {
       this.list = res.data;
     });
   },
+  methods: {
+    onjoin(data) {
+      let mentorName = this.$store.getters['getUserNum'];
+      http
+        .get(`/counseling/isRoom/${mentorName}/${data.room}`)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data == "fail") {
+            alert("이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ! ");
+          } else {
+            alert(" 상담을 시작합니다. ")
+            this.unsubscribe();
+            this.$router.push(`/counselorWRTC/${this.room}&${this.room_num}`);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      
+    },
+    unsubscribe(){
+      let token = this.$store.getters["getDeviceID"];
+      let topic = "streaming";
+      axios({
+        method: "POST",
+        url: "https://iid.googleapis.com/iid/v1:batchRemove",
+        data: {
+          to: "/topics/" + topic,
+          registration_tokens: [token],
+        },
+        headers: {
+          "Content-type": "application/json",
+          Authorization:
+            "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+        },
+      })
+        .then((response) => {
+          if (response.status < 200 || response.status >= 400) {
+            throw (
+              "Error subscribing to topic: " +
+              response.status +
+              " - " +
+              response.text()
+            );
+          }
+          console.log("unsubscribe success : " + response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+        console.log("dekl "+this.$store.getters['getUserNum']);
+        http.delete(`/counseling/deleteReadyMentor/${this.$store.getters['getUserNum']}`).then(()=>{
+      });
+      }
+    },
 };
 </script>

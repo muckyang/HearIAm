@@ -25,7 +25,7 @@
               v-else-if="failMatching"
               type="button"
               class="btn btn-primary"
-              @click="onLeave"
+              @click="mathing()"
             >
               매칭 실패 돌아가기
             </v-btn>
@@ -235,8 +235,13 @@ export default {
     },
     dialogCancel() {
       this.dialog = !this.dialog;
-      this.onLeave();
+      this.mathing();
     },
+    mathing(){
+       http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
+      });
+      this.onLeave();
+    }
   },
   computed: {
     ...mapGetters([
@@ -253,10 +258,14 @@ export default {
       console.log("isremote + " + val);
       if (val) {
         console.log("remote 들어옴");
+        alert("상담가가 들어옵니다. ")
       }
     },
     dialog(val) {
       if (!val) {
+        return;
+      }
+      if(this.isRemote){
         return;
       }
       setTimeout(() => {

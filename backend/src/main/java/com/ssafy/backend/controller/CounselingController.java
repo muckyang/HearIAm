@@ -234,7 +234,6 @@ public class CounselingController {
 	@GetMapping("/isRoom/{mentor}/{roomNum}")
 	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") String roomNum){
 		try {
-			System.out.println(roomNum);
 			Optional<Alarm> alarm = alarmRepository.findByRoom(roomNum);
 			System.out.println(alarm);
 			String result = "";

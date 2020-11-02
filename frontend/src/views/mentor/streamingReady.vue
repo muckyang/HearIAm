@@ -1,6 +1,19 @@
 <template>
   <div>
+    <div
+      style="
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(to right, #93dfff, #f5a2bb);
+      "
+    >
+    <div style="height: 100vh" class="d-flex justify-content-center">
+      <v-col class="my-auto" align="center">
     <v-btn @click="onjoin()"> ready </v-btn>
+      </v-col>
+      
+  </div>
+    </div>
   </div>
 </template>
 <script>
@@ -67,6 +80,9 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+        console.log("dekl "+this.$store.getters['getUserNum']);
+        http.delete(`/counseling/deleteReadyMentor/${this.$store.getters['getUserNum']}`).then(()=>{
+      });
       }
     },
 };

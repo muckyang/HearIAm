@@ -173,7 +173,7 @@ export default {
         });
 
       http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
-        alert("삭제 완료");
+        // alert("삭제 완료");
       }); 
 
     },
