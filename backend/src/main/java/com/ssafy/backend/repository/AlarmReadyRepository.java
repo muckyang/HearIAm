@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
+
 import javax.transaction.Transactional;
 
 import com.ssafy.backend.model.AlarmReady;
@@ -13,4 +14,5 @@ public interface AlarmReadyRepository extends JpaRepository<AlarmReady, Long>{
     @Transactional
     @Modifying
     public void deleteByMentor(Long mentor);
+
 }

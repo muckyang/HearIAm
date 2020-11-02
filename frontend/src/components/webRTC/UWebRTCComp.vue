@@ -18,21 +18,24 @@
               type="button"
               class="btn btn-primary"
               @click="createRoom"
-            > 상담 요청 
+            >
+              상담 요청
             </v-btn>
             <v-btn
               v-else-if="failMatching"
               type="button"
               class="btn btn-primary"
               @click="onLeave"
-            > 매칭 실패 돌아가기
+            >
+              매칭 실패 돌아가기
             </v-btn>
             <v-btn
               v-else
               type="button"
               class="btn btn-primary"
               @click="onLeave"
-            > 상담 종료
+            >
+              상담 종료
             </v-btn>
           </div>
         </div>
@@ -59,7 +62,7 @@
             class="mb-0"
           ></v-progress-linear>
         </v-card-text>
-        <v-btn @click="dialogCancel() ">취소</v-btn>
+        <v-btn @click="dialogCancel()">취소</v-btn>
       </v-card>
     </v-dialog>
   </div>
@@ -129,49 +132,50 @@ export default {
           date: new Date(),
         })
         .then((res) => {
-          console.log("create room : "+res)
-          console.dir(res)
           if (res.data > 0) {
             this.dialog = true;
           }
-          const message = {
-            data: {
-              body: "상담을 하고 싶어해요~",
-              title: "학생 클릭 함",
-              icon: "favicon.ico",
-              room: this.roomId,
-              room_num: res.data,
-            },
-            to: "/topics/streaming",
-          };
-          const config = {
-            headers: {
-              "Content-type": "application/json",
-              Accept: "application/json",
-              Authorization:
-                "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
-            },
-          };
-          console.log(this.url);
-          console.log(message)
-          console.log(config)
-          axios
-            .post(this.url, message, config)
-            .then((response) => {
-              if (response.status < 200 || response.status >= 400) {
-                throw (
-                  "Error subscribing to topic: " +
-                  response.status +
-                  " - " +
-                  response.text()
-                );
-              }
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+
+          
+          this.sendDM(res);
         });
       this.onJoin();
+    },
+    sendDM(res) {
+      const message = {
+        data: {
+          body: "상담을 하고 싶어해요~",
+          title: "학생 클릭 함",
+          icon: "favicon.ico",
+          room: this.roomId,
+          room_num: res.data,
+        },
+        to: "/topics/streaming",
+      };
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          Authorization:
+            "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+        },
+      };
+
+      axios
+        .post(this.url, message, config)
+        .then((response) => {
+          if (response.status < 200 || response.status >= 400) {
+            throw (
+              "Error subscribing to topic: " +
+              response.status +
+              " - " +
+              response.text()
+            );
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     onJoin() {
       this.isProgress = true;
@@ -229,13 +233,10 @@ export default {
         ctx.beginPath();
       }
     },
-    dialogCancel(){
-      this.dialog = !this.dialog; 
-      console.log("cancel1")
+    dialogCancel() {
+      this.dialog = !this.dialog;
       this.onLeave();
-      console.log("cancel2")
     },
-
   },
   computed: {
     ...mapGetters([
@@ -248,12 +249,12 @@ export default {
     ]),
   },
   watch: {
-    // isRemote(val) {
-    //   console.log("isremote + " + val);
-    //   if (val) {
-    //     console.log("remote 들어옴");
-    //   }
-    // },
+    isRemote(val) {
+      console.log("isremote + " + val);
+      if (val) {
+        console.log("remote 들어옴");
+      }
+    },
     dialog(val) {
       if (!val) {
         return;
