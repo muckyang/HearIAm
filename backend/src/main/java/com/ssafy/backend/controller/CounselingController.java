@@ -274,4 +274,27 @@ public class CounselingController {
 		Long cnt = alarmRepository.count();
 		return cnt;
 	}
+
+	@GetMapping("/getMenteeCnt")
+	public Object getMenteeCnt(){
+		if(alarmRepository.count() >0){
+			List<Alarm> list = alarmRepository.findAll();
+			return new ResponseEntity<>(list.get(0), HttpStatus.OK);
+		}else{
+			return new ResponseEntity<>("empty", HttpStatus.OK);
+		}
+	}
+
+	
+	@DeleteMapping("/deleteReadyMentor/{mentor}")
+	public void deleteReadyMentor(@PathVariable (value = "mentor") Long mentor){
+		alarmReadyRepository.deleteByMentor(mentor);
+		System.out.println("mentor 완료"+mentor);
+	}
+
+	@DeleteMapping("/deleteReadyMentee/{mentee}")
+	public void deleteReadyMentee(@PathVariable (value = "mentee") Long mentee){
+		alarmRepository.deleteByMentee(mentee);
+		System.out.println("mentee삭제 완료"+mentee);
+	}
 }

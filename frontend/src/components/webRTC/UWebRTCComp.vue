@@ -249,12 +249,12 @@ export default {
     ]),
   },
   watch: {
-    // isRemote(val) {
-    //   console.log("isremote + " + val);
-    //   if (val) {
-    //     console.log("remote 들어옴");
-    //   }
-    // },
+    isRemote(val) {
+      console.log("isremote + " + val);
+      if (val) {
+        console.log("remote 들어옴");
+      }
+    },
     dialog(val) {
       if (!val) {
         return;
