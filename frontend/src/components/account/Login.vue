@@ -76,7 +76,7 @@ export default {
         const { userId, password } = this;
         this.$store
           .dispatch(AUTH_REQUEST, { userId, password })
-          .then((res) => {
+          .then(() => {
             this.setDeviceId(this.userId);
 
             this.userId = "";
