@@ -2,6 +2,7 @@ package com.ssafy.backend.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,10 +29,12 @@ import com.ssafy.backend.exception.ResourceNotFoundException;
 import com.ssafy.backend.model.Alarm;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
+import com.ssafy.backend.model.Schedule;
 import com.ssafy.backend.model.User;
 import com.ssafy.backend.repository.AlarmRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
+import com.ssafy.backend.repository.ScheduleRepository;
 import com.ssafy.backend.repository.UserRepository;
 
 @CrossOrigin(origins = "*")
@@ -52,6 +55,9 @@ public class CounselingController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	ScheduleRepository scheduleRepository;
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
@@ -172,7 +178,9 @@ public class CounselingController {
 	@GetMapping("/ReserveList/{mentor}")
 	public List<ConRoom> ReserveList(@PathVariable(value = "mentor") Long mentor){
 		List<ConRoom> list = conRoomRepository.findByMentorAndStatusOrStatusOrderByDateAsc(mentor,"reserve","reapply");	
-	
+		for (ConRoom conRoom : list) {
+			conRoom.setDate(conRoom.getDate().minusHours(9));
+		}
 		return list;
 	}
 	
@@ -193,5 +201,15 @@ public class CounselingController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping("/reserveConRoom/{num}")
+	public ConRoom reserveConRoom(@PathVariable(value = "num") Long num) {
+		Schedule schedule = scheduleRepository.findByNum(num);
+		User user = userRepository.findById(schedule.getMentor()).orElseThrow(() -> new ResourceNotFoundException("User", "id", schedule.getMentor()));
+		LocalDateTime date = LocalDateTime.parse(schedule.getSdate()+"T"+schedule.getStime());
+		ConRoom conRoom = conRoomRepository.findByMentorAndDate(user.getNum(), date.plusHours(9));
+		
+		return conRoom;
 	}
 }

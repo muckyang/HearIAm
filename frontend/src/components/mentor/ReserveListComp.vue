@@ -39,7 +39,6 @@
               -</td>
              
               <td class="text-center">
-                
                 <v-btn v-if="item.date.slice(5,7) == todaytime.getMonth()+1 && item.date.slice(8,10) == todaytime.getDate() && item.date.slice(11,13) == todaytime.getHours()"
                   small
                   color="orange lighten-4"
@@ -132,9 +131,7 @@ export default {
       return time;
     },
     startCounseling(item){
-        //상담시작
-        console.log(item.mentee + " 청소년에 대한 ")
-        console.log(this.getUserNum + " 상담사의 상담 시작!")
+      this.$router.push(`/counselorWRTC/${item.room}&${item.num}`);
     },
     MenteeHistory(item){
       let menteeName = "";
