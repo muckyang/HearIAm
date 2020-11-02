@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 
+import com.google.common.base.Optional;
 import com.ssafy.backend.exception.ResourceNotFoundException;
 import com.ssafy.backend.model.Alarm;
 import com.ssafy.backend.model.AlarmReady;
@@ -218,6 +219,28 @@ public class CounselingController {
 		try {
 			long cnt = alarmReadyRepository.count();
 			return new ResponseEntity<>(cnt, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/isRoom/{mentor}/{roomNum}")
+	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") String roomNum){
+		try {
+			System.out.println(roomNum);
+			Optional<Alarm> alarm = alarmRepository.findByRoom(roomNum);
+			System.out.println(alarm);
+			String result = "";
+			if(!alarm.isPresent()){
+				result = "fail";
+			}else{
+				System.out.println("success");
+				alarmRepository.delete(alarm.get());
+				alarmReadyRepository.deleteByMentor(mentor);
+				result = "sucess";
+			}
+			System.out.println(result);
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

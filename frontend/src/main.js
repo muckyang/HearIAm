@@ -25,16 +25,15 @@ messaging.usePublicVapidKey('BCslFJO_va9K_9Qeo8HbYWjwI2rg4CrmcfNt5Uy0ffzDfoLFSB0
 messaging.getToken().then((currentToken) => {
     if (currentToken) {
         console.log("currentToken : "+currentToken);
-        // token.value = currentToken;
         store.commit('setDeviceId',currentToken);
     } else {
-        // Show permission request.
         console.log('No Instance ID token available. Request permission to generate one.');
     }
 });
 
 messaging.onMessage((payload) => {
-    console.log("main.js - payload : "+payload+" "+payload.data+" "+payload.data.title);
+    console.dir("main.js - payload : ");
+    console.dir(payload);
     const title = payload.data.title;
     const options = {
         body: payload.data.body,

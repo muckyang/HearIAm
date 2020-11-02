@@ -28,7 +28,7 @@ messaging.setBackgroundMessageHandler((payload) => {
   const notificationOptions = {
     body: '알림이 왔습니다. 확인해주세요!',
     icon: '../src/assets/logo.png',
-    data: 'https://k3b201.p.ssafy.io/liveList'
+    data: 'https://k3b201.p.ssafy.io/'
   };
   
 

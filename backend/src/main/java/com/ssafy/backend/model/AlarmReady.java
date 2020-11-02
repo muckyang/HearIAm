@@ -15,7 +15,6 @@ public class AlarmReady {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long num ;
-    private Long roomNum;
     private Long mentor;
 
 }

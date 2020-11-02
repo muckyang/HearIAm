@@ -102,7 +102,6 @@ import axios from "axios";
 export default {
   data() {
     return {
-      url: "https://fcm.googleapis.com/fcm/send",
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
       dialog:false,
