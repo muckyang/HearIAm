@@ -130,8 +130,8 @@ export default {
           date: new Date(),
         })
         .then((res) => {
-          console.log(res);
-          if (res > 0) {
+          console.log(res.data);
+          if (res.data > 0) {
             this.dialog = true;
           }
           const message = {
@@ -140,7 +140,7 @@ export default {
               title: "학생 클릭 함",
               icon: "favicon.ico",
               room: this.roomId,
-              room_num: res,
+              room_num: res.data,
             },
             to: "/topics/streaming",
           };
