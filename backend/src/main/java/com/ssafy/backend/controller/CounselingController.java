@@ -60,6 +60,8 @@ public class CounselingController {
 		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
 		alarmRepository.save(alarm);
 		ConRoom conRoom2 = conRoomRepository.findByRoom(conRoom.getRoom());
+		System.out.println(conRoom2);
+		System.out.println(": : :::::::::::::: "+conRoom2.getNum());
 		return ResponseEntity.ok(conRoom2.getNum());
 
 	}
