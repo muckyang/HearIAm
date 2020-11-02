@@ -13,6 +13,7 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -239,5 +240,19 @@ public class RecordController {
         conroom.setStatus("progress");
         conRoomRepository.save(conroom);
         return conroom;
+    }
+
+    @GetMapping("/count")
+    @ApiOperation(value = "녹음 상담 개수")
+    public int recCount() throws SQLException, IOException {
+        List<ConRoom> list = conRoomRepository.findByStatus("waiting");
+        return list.size();
+    }
+
+    @GetMapping("/getRecordPage/{page}")
+    @ApiOperation(value = "녹화상담 대기 리스트 페이지네이션")
+    private Object recPageList(@PathVariable int page) throws SQLException, IOException {
+        List<ConRoom> conlist = conRoomRepository.findByStatusOrderByDateDesc("waiting", PageRequest.of(page, 8));
+        return conlist; 
     }
 }
