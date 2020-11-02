@@ -138,7 +138,7 @@ export default {
       },
       dayTable: ["일", "월", "화", "수", "목", "금", "토"],
       isModify: false,
-      monDialog: false, //true로 바구기
+      monDialog: false,
     };
   },
   created() {
@@ -153,7 +153,9 @@ export default {
           this.monDialog = true;
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
     this.getTime();
   },
   methods: {
