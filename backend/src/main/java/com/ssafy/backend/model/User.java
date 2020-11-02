@@ -28,6 +28,7 @@ public class User {
 	private int qualification;
 	private String gender;
 	private String deviceId;
+	private int isSet;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_num"), inverseJoinColumns = @JoinColumn(name = "role_num"))
@@ -125,6 +126,14 @@ public class User {
 
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
+	}
+
+	public int getIsSet(){
+		return isSet;
+	}
+
+	public void setIsSet(int isSet){
+		this.isSet = isSet;
 	}
 
 }
