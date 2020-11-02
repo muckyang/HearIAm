@@ -138,11 +138,24 @@ export default {
       },
       dayTable: ["일", "월", "화", "수", "목", "금", "토"],
       isModify: false,
-      monDialog: true,
+      monDialog: false,
     };
   },
   created() {
     this.uid = this.getUserID;
+    http
+      .get(`/schedule/checkUpdate/${this.getUserID}`)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data == 1) {
+          this.monDialog = false;
+        }else if(res.data==0){
+          this.monDialog = true;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     this.getTime();
   },
   methods: {
@@ -222,8 +235,15 @@ export default {
       this.monDialog = false;
     },
     maintain() {
+      http
+        .put(`/schedule/maintain/${this.getUserID}`)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       this.monDialog = false;
-      console.log(this.timetable);
     },
   },
   mounted() {

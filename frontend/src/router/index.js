@@ -39,6 +39,11 @@ const routes = [{
         component: UserWRTC
     },
     {
+        path: '/userWRTC/:room',
+        name: 'UserWRTC',
+        component: UserWRTC
+    },
+    {
         path: '/counselorWRTC/:room&:num',
         name: 'CounselorWRTC',
         component: CounselorWRTC
@@ -121,7 +126,7 @@ const routes = [{
             import ('@/views/mentor/streamingReady'),
         name: 'stMatch',
         props: true
-    }     
+    }
 ]
 
 const router = new VueRouter({

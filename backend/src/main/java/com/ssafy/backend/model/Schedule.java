@@ -27,4 +27,5 @@ public class Schedule {
     private String stime;
     private int isReser;
     private int timeidx;
+    private int dateidx;
 }
