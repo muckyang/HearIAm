@@ -289,12 +289,10 @@ public class CounselingController {
 	@DeleteMapping("/deleteReadyMentor/{mentor}")
 	public void deleteReadyMentor(@PathVariable (value = "mentor") Long mentor){
 		alarmReadyRepository.deleteByMentor(mentor);
-		System.out.println("mentor 완료"+mentor);
 	}
 
 	@DeleteMapping("/deleteReadyMentee/{mentee}")
 	public void deleteReadyMentee(@PathVariable (value = "mentee") Long mentee){
 		alarmRepository.deleteByMentee(mentee);
-		System.out.println("mentee삭제 완료"+mentee);
 	}
 }
