@@ -90,7 +90,7 @@
                   small
                   color="orange lighten-4"
                   text-color="red"
-                  @click="startCounseling(item)"
+                  @click="startCounseling(item.num)"
                   style="font-size:0.9rem;color:red"
                   >on-Air</v-btn
                 >
@@ -439,9 +439,13 @@ export default {
     reRecord() {
       this.$router.push(`/recordConsult/${this.selitem.mentor}`);
     },
-    startCounseling(){
-      
-    }
+    startCounseling(num){
+      http
+      .get(`/counseling/reserveConRoom/${num}`)
+      .then((res) => {
+        this.$router.push(`/userWRTC/${res.data.room}`);
+      });
+    },
   },
   watch: {
     page(page) {
