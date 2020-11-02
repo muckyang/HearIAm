@@ -67,7 +67,6 @@ public class CounselingController {
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
-		System.out.println(conRoom); // mentee, room
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
 		alarmRepository.save(alarm);
@@ -252,7 +251,7 @@ public class CounselingController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	
+	}
 	@GetMapping("/reserveConRoom/{num}")
 	public ConRoom reserveConRoom(@PathVariable(value = "num") Long num) {
 		Schedule schedule = scheduleRepository.findByNum(num);
