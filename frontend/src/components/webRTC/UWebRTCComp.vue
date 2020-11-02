@@ -101,7 +101,9 @@ export default {
       this.$router.push("/");
     }
     this.createRoomId();
-    
+    if(this.$route.params.room){
+      this.roomId = this.$route.params.room;
+    }
     this.videoTag = document.getElementById("videoTag");
     Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("/models"),

@@ -252,6 +252,7 @@ public class CounselingController {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	@GetMapping("/reserveConRoom/{num}")
 	public ConRoom reserveConRoom(@PathVariable(value = "num") Long num) {
 		Schedule schedule = scheduleRepository.findByNum(num);
