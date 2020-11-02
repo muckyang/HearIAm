@@ -246,11 +246,12 @@ export default {
   border-bottom-right-radius:40px; 
 } */
 .main-back {
+  background-image: url("../assets/mainBack2.jpg");
   /* background: linear-gradient(to right, #93dfff, #f5a2bb); */
   /* background: linear-gradient(to bottom, #f5e9b3, #f2d867); */
   /* background: #ffdc15 ; */
-  width: 100%;
-  height: 100%;
+  /* width: 100%; */
+  /* height: 100%; */
   font-family: "yg-jalnan";
 }
 .main-title {
