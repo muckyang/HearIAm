@@ -26,9 +26,11 @@ import io.swagger.annotations.ApiOperation;
 
 import com.ssafy.backend.exception.ResourceNotFoundException;
 import com.ssafy.backend.model.Alarm;
+import com.ssafy.backend.model.AlarmReady;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Emotion;
 import com.ssafy.backend.model.User;
+import com.ssafy.backend.repository.AlarmReadyRepository;
 import com.ssafy.backend.repository.AlarmRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.EmotionRepository;
@@ -41,6 +43,9 @@ public class CounselingController {
 
 	private static final String SUCCESS = "success";
 		
+	@Autowired
+	AlarmReadyRepository alarmReadyRepository;
+
 	@Autowired
 	AlarmRepository alarmRepository;
 
@@ -60,8 +65,6 @@ public class CounselingController {
 		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
 		alarmRepository.save(alarm);
 		ConRoom conRoom2 = conRoomRepository.findByRoom(conRoom.getRoom());
-		System.out.println(conRoom2);
-		System.out.println(": : :::::::::::::: "+conRoom2.getNum());
 		return ResponseEntity.ok(conRoom2.getNum());
 
 	}
@@ -192,6 +195,29 @@ public class CounselingController {
 		try {
 			conRoomRepository.save(request);
 			return new ResponseEntity<>("report save", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/addReady/{mentor}")
+	public Object addReady(@PathVariable(value = "mentor") Long mentor){
+		try {
+			AlarmReady ready = new AlarmReady();
+			ready.setMentor(mentor);
+			alarmReadyRepository.save(ready);
+			return new ResponseEntity<>("readyList save", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+
+	@GetMapping("/isMentee")
+	public Object isMentee(){
+		try {
+			long cnt = alarmReadyRepository.count();
+			return new ResponseEntity<>(cnt, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

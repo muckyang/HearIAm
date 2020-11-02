@@ -44,14 +44,11 @@ messaging.onMessage((payload) => {
     notification.onclick = function(event) {
       event.preventDefault(); // prevent the browser from focusing the Notification's tab
       console.dir(payload);
-      // window.open('http://localhost:8080/liveList');
       let num = payload.data.room_num*1;
-      console.log("num :::: "+num)
+      
       if(num>0){ //실시간 상담
-        // router.push(`/counselorWRTC`);
         router.push({name: 'stMatch', params: {room: payload.data.room, room_num:num}});
       }
-      // window.open('https://k3b201.p.ssafy.io/liveList');
     }
     return notification;
 });

@@ -14,11 +14,14 @@ export default {
       type: Number,
       default: 0,
     },
-    methods:{
-        onjoin(){
-            console.log("streaming Ready .vue ---> "+this.room+" "+this.room_num);
-        }
-    }
+  },
+  methods: {
+    onjoin() {
+      console.log(
+        "streaming Ready .vue ---> " + this.room + " " + this.room_num
+      );
+      this.$router.push(`/counselorWRTC/${this.room}&${this.room_num}`);
+    },
   },
 };
 </script>
