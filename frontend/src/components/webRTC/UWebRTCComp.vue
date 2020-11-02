@@ -98,7 +98,7 @@ export default {
       this.$router.push("/");
     }
     this.createRoomId();
-    if(this.$route.params){
+    if(this.$route.params.room){
       this.roomId = this.$route.params.room;
     }
     this.videoTag = document.getElementById("videoTag");
