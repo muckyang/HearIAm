@@ -4,7 +4,7 @@
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
           <alarmList></alarmList>
-          <v-btn v-if="readyClick" @click="unsubscribe()">대기 취소</v-btn>
+          <v-btn v-if="this.getIsReady" @click="unsubscribe()">대기 취소</v-btn>
           <v-btn @click="logout()">로그아웃</v-btn>
           <div>
             <v-btn
@@ -102,7 +102,6 @@ export default {
     return {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
-      readyClick:false,
     };
   },
   components: {
@@ -112,6 +111,7 @@ export default {
     subscribe() {
       console.log("click subscribe btn");
       this.readyClick= true;
+      this.$store.commit('changeIsReady',true);
       http.get(`/counseling/getMenteeCnt`).then((res) => {
         console.log(res.data);
         if (res.data == "empty") {
@@ -172,7 +172,7 @@ export default {
       this.$router.push(`/recordList`);
     },
     unsubscribe() {
-      this.readyClick = false;
+      this.$store.commit('changeIsReady',false);
       this.unsubscribeTokenToTopic(this.devecieId);
     },
     unsubscribeTokenToTopic(token) {
@@ -205,7 +205,7 @@ export default {
         });
 
          let num = this.getUserNum;
-      http.delete(`/counseling/deleteReadyMentor/${num}`).then(()=>{
+        http.delete(`/counseling/deleteReadyMentor/${num}`).then(()=>{
       });
        
     },
@@ -213,6 +213,7 @@ export default {
        computed: {
         ...mapGetters([
         "getUserNum",
+        "getIsReady",
       ]),
       }
 };
