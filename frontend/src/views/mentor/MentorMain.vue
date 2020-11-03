@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="main-back">
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
           <alarmList></alarmList>

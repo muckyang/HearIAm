@@ -1,35 +1,19 @@
 <template>
   <v-app>
-    <v-app-bar
-      v-if="getRole == `mentee`"
-      absolute
-      flat
-      style="background-color: rgba(255, 255, 255, 0)"
-    >
-      <v-btn text dark @click="goHome()"><h2>Hear I Am</h2></v-btn>
-      <v-spacer></v-spacer>
-      <v-btn text dark @click="goLive()">1:1 상담</v-btn>
-      <v-btn text dark @click="goRecord()">음성 상담</v-btn>
-      <v-btn text dark @click="goReserve()">상담 예약</v-btn>
-      <v-btn text dark @click="goMypage()">마이페이지</v-btn>
-      <v-btn text dark @click="logout()">로그아웃</v-btn>
-    </v-app-bar>
-    <v-app-bar
-      v-if="getRole == `mentor`"
-      absolute
-      flat
-      style="background-color: rgba(255, 255, 255, 0)"
-    >
-      <v-btn text dark @click="goHome()"><h2>Hear I Am</h2></v-btn>
-      <v-spacer></v-spacer>
-      <v-btn text dark @click="subscribe()">1:1 상담 현황</v-btn>
-      <v-btn text dark @click="goRecordList()">음성 상담 현황</v-btn>
-      <v-btn text dark @click="goMyMenteeList()">일지 관리</v-btn>
-      <v-btn text dark @click="goMypage()">마이페이지</v-btn>
-      <v-btn text dark @click="logout()">로그아웃</v-btn>
+    <v-app-bar v-if="getRole" fixed flat dark style="background-color: rgba(255, 255, 255, 0)">
+        <v-btn text @click="goHome()"><h2>Hear I Am</h2></v-btn>
+        <v-spacer></v-spacer>
+        <v-btn v-if="getRole == `mentee`" text @click="goLive()">1:1 상담</v-btn>
+        <v-btn v-if="getRole == `mentee`" text @click="goRecord()">음성 상담</v-btn>
+        <v-btn v-if="getRole == `mentee`" text @click="goReserve()">상담 예약</v-btn>
+        <v-btn v-if="getRole == `mentor`" text @click="subscribe()">1:1 상담 현황</v-btn>
+        <v-btn v-if="getRole == `mentor`" text @click="goRecordList()">음성 상담 현황</v-btn>
+        <v-btn v-if="getRole == `mentor`" text @click="goMyMenteeList()">일지 관리</v-btn>
+        <v-btn text @click="goMypage()">마이페이지</v-btn>
+        <v-btn text @click="logout()">로그아웃</v-btn>
     </v-app-bar>
     <v-main>
-      <router-view class="main-back" style="padding-top: 64px" />
+      <router-view />
     </v-main>
     <v-speed-dial
       v-model="fab"
@@ -45,7 +29,7 @@
           <v-icon v-else> mdi-bell </v-icon>
         </v-btn>
       </template>
-      <v-card min-width="300" style="margin-right:230px; text-align:center;">
+      <v-card min-width="300" style="margin-right: 230px; text-align: center">
         <v-list dense>
           <v-header>알람</v-header>
           <v-list-item-group v-model="selectedItem" color="primary">
@@ -62,7 +46,9 @@
                 <v-icon>mdi-bell-alert</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>주문하신 상품이 배송되었어요!</v-list-item-title>
+                <v-list-item-title
+                  >주문하신 상품이 배송되었어요!</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -137,8 +123,8 @@ export default {
       console.log("click subscribe btn");
       this.subscribeTokenToTopic(this.devecieId, this.topic);
       // let mentorname = this.$store.getters['getUserNum'];
-      http.get(`/counseling/addReady/${this.getUserNum}`).then((res)=>{
-        console.log("add ready success : "+res)
+      http.get(`/counseling/addReady/${this.getUserNum}`).then((res) => {
+        console.log("add ready success : " + res);
       });
     },
     subscribeTokenToTopic(token, topic) {
