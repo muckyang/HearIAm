@@ -9,12 +9,13 @@ import com.google.common.base.Optional;
 import com.ssafy.backend.model.Alarm;
 @Repository
 public interface AlarmRepository extends JpaRepository<Alarm, Long>{
-    public Optional<Alarm> findByRoom(String room);
-    @Transactional
-    @Modifying
-    public void deleteByRoom(String room);
+    // public Optional<Alarm> findByRoom(String room);
+    // @Transactional
+    // @Modifying
+    // public void deleteByRoom(String room);
     public long count();
     @Transactional
     @Modifying
-    void deleteByMentee(Long mentee);
+    void deleteByCrNum(Long num);
+
 }

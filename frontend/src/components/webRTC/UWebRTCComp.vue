@@ -93,6 +93,7 @@ export default {
       topic: "streaming",
       dialog: false,
       failMatching: false,
+      roomNum : null,
     };
   },
   mounted() {
@@ -136,6 +137,7 @@ export default {
           }
 
           this.sendDM(res);
+          this.roomNum = res.data;
         });
       this.onJoin();
     },
@@ -181,7 +183,7 @@ export default {
       this.startVideo();
     },
     onLeave() {
-      this.$store.commit('changeIsRemote',false);
+      this.$store.commit("changeIsRemote", false);
       this.$refs.webrtc.leave();
       this.stopVideo();
       this.$router.push("/");
@@ -239,10 +241,15 @@ export default {
     mathing() {
       http
         .delete(
-          `/counseling/deleteReadyMentor/${this.$store.getters["getUserNum"]}`
+          `/counseling/deleteReadyMentor/${this.getUserNum}}`
         )
         .then(() => {});
       this.onLeave();
+    },
+    deleteDB() {
+      http
+        .delete(`/counseling/deleteReadyMentee/${this.roomNum}`)
+        .then(() => {});
     },
   },
   computed: {
@@ -264,9 +271,7 @@ export default {
         console.log("remote 들어옴");
         alert("상담가가 들어옵니다. ");
         this.dialog = false;
-        http
-          .delete(`/counseling/deleteReadyMentee/${this.getUserNum}`)
-          .then(() => {});
+        this.deleteDB();
       }
     },
     dialog(val) {
@@ -277,9 +282,7 @@ export default {
       setTimeout(() => {
         this.dialog = false;
         this.failMatching = true;
-        http
-          .delete(`/counseling/deleteReadyMentee/${this.getUserNum}`)
-          .then(() => {});
+        this.deleteDB();
       }, 60000);
       //1분
     },
