@@ -15,14 +15,10 @@ public class Alarm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long num ;
-    private Long mentee;
-    private String room;
     private Long mentor;
-
-    public Alarm(Long mentee, String room) {
-        this.mentee = mentee;
-        this.room = room;
-    }
+    private Long crNum;
     
+    public Alarm(Long crNum) {
+    }
     
 }
