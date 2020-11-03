@@ -67,7 +67,6 @@ public class CounselingController {
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
-		System.out.println(conRoom); // mentee, room
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
 		alarmRepository.save(alarm);
@@ -235,7 +234,6 @@ public class CounselingController {
 	@GetMapping("/isRoom/{mentor}/{roomNum}")
 	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") String roomNum){
 		try {
-			System.out.println(roomNum);
 			Optional<Alarm> alarm = alarmRepository.findByRoom(roomNum);
 			System.out.println(alarm);
 			String result = "";
@@ -253,7 +251,7 @@ public class CounselingController {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/reserveConRoom/{num}")
 	public ConRoom reserveConRoom(@PathVariable(value = "num") Long num) {
 		Schedule schedule = scheduleRepository.findByNum(num);
@@ -262,5 +260,38 @@ public class CounselingController {
 		ConRoom conRoom = conRoomRepository.findByMentorAndDate(user.getNum(), date.plusHours(9));
 		
 		return conRoom;
+	}
+
+	@GetMapping("/alarmList")
+	public List<Alarm> alarmList(){
+		List<Alarm> list = alarmRepository.findAll();
+		return list;
+	}
+
+	@GetMapping("/alarmListCnt")
+	public Long alarmListCnt(){
+		Long cnt = alarmRepository.count();
+		return cnt;
+	}
+
+	@GetMapping("/getMenteeCnt")
+	public Object getMenteeCnt(){
+		if(alarmRepository.count() >0){
+			List<Alarm> list = alarmRepository.findAll();
+			return new ResponseEntity<>(list.get(0), HttpStatus.OK);
+		}else{
+			return new ResponseEntity<>("empty", HttpStatus.OK);
+		}
+	}
+
+	
+	@DeleteMapping("/deleteReadyMentor/{mentor}")
+	public void deleteReadyMentor(@PathVariable (value = "mentor") Long mentor){
+		alarmReadyRepository.deleteByMentor(mentor);
+	}
+
+	@DeleteMapping("/deleteReadyMentee/{mentee}")
+	public void deleteReadyMentee(@PathVariable (value = "mentee") Long mentee){
+		alarmRepository.deleteByMentee(mentee);
 	}
 }

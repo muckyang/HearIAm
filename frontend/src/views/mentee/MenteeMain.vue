@@ -9,6 +9,7 @@
     >
       <!-- background: linear-gradient(to right, #3D5469, #79B7D1); -->
       <div style="height: 100vh" class="d-flex justify-content-center">
+        <v-btn @click="logout()">로그아웃 </v-btn>
         <v-col class="my-auto" align="center">
           <div>
             <v-btn
@@ -89,6 +90,7 @@
               </div>
             </v-btn>
           </div>
+          
         </v-col>
       </div>
     </div>
@@ -104,7 +106,6 @@ export default {
     return {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
-      dialog:false,
     };
   },
   methods: {
@@ -125,8 +126,8 @@ export default {
         });     
     },
     logout: function () {
-      this.$store.dispatch(AUTH_LOGOUT).then(() => {});
       this.unsubscribe();
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {});
       // this.$router.push("/").catch(() => {});
       window.location.href = "/";
     },
@@ -170,6 +171,11 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+
+      http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
+        // alert("삭제 완료");
+      }); 
+
     },
   },
   

@@ -9,8 +9,8 @@
     >
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
-          <v-btn @click="unsubscribe()">대기 취소</v-btn>
-          <v-btn @click="goMypage()">마이페이지</v-btn>
+          <alarmList></alarmList>
+          <v-btn v-if="readyClick" @click="unsubscribe()">대기 취소</v-btn>
           <v-btn @click="logout()">로그아웃</v-btn>
           <div>
             <v-btn
@@ -101,20 +101,37 @@
 import { AUTH_LOGOUT } from "@/store/actions/auth";
 import http from "@/util/http-common.js";
 import axios from "axios";
+import alarmList from "@/components/mentor/alarm.vue";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
+      readyClick:false,
     };
+  },
+  components: {
+    alarmList,
   },
   methods: {
     subscribe() {
       console.log("click subscribe btn");
-      this.subscribeTokenToTopic(this.devecieId, this.topic);
-      let mentorname = this.$store.getters['getUserNum'];
-      http.get(`/counseling/addReady/${mentorname}`).then((res)=>{
-        console.log("add ready success : "+res)
+      this.readyClick= true;
+      http.get(`/counseling/getMenteeCnt`).then((res) => {
+        console.log(res.data);
+        if (res.data == "empty") {
+          //상담사 대기
+          this.subscribeTokenToTopic(this.devecieId, this.topic);
+          let mentorname = this.$store.getters["getUserNum"];
+          http.get(`/counseling/addReady/${mentorname}`).then((res) => {
+            console.log("add ready success : " + res);
+          });
+        } else {
+          // 학생 대기
+          alert(" 상담을 시작합니다. ");
+          this.$router.push(`/counselorWRTC/${res.data.room}&${res.data.num}`);
+        }
       });
     },
     subscribeTokenToTopic(token, topic) {
@@ -146,8 +163,8 @@ export default {
       this.$router.push(`/liveList`);
     },
     logout: function () {
-      this.$store.dispatch(AUTH_LOGOUT).then(() => {});
       this.unsubscribe();
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {});
       // this.$router.push("/").catch(() => {});
       window.location.href = "/";
     },
@@ -161,6 +178,7 @@ export default {
       this.$router.push(`/recordList`);
     },
     unsubscribe() {
+      this.readyClick = false;
       this.unsubscribeTokenToTopic(this.devecieId);
     },
     unsubscribeTokenToTopic(token) {
@@ -191,7 +209,17 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+
+         let num = this.getUserNum;
+      http.delete(`/counseling/deleteReadyMentor/${num}`).then(()=>{
+      });
+       
     },
   },
+       computed: {
+        ...mapGetters([
+        "getUserNum",
+      ]),
+      }
 };
 </script>

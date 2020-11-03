@@ -1,40 +1,51 @@
 <template>
   <div>
-    <div
-      style="
-        height: 100%;
-        width: 100%;
-        background: linear-gradient(to right, #93dfff, #f5a2bb);
-      "
-    >
-    <div style="height: 100vh" class="d-flex justify-content-center">
-      <v-col class="my-auto" align="center">
-    <v-btn @click="onjoin()"> ready </v-btn>
-      </v-col>
-      
-  </div>
-    </div>
+    <h1>알람 리스트</h1>
+    <v-card>
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-center">mentee</th>
+              <th class="text-center">room name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in list" :key="item.name" @click="onjoin(item)">
+              <td class="text-center" >
+                {{ item.mentee}}
+              </td>
+              <td class="text-center" >
+                   {{ item.room }}
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </v-card>
+    <!-- <v-pagination v-model="page" :length="pageLength" circle></v-pagination> -->
   </div>
 </template>
 <script>
 import http from "@/util/http-common.js";
 import axios from "axios";
 export default {
-  props: {
-    room: {
-      type: String,
-      default: "",
-    },
-    room_num: {
-      type: Number,
-      default: 0,
-    },
+  data() {
+    return {
+      list: [],
+    };
+  },
+  mounted() {
+    http.get(`/counseling/alarmList`).then((res) => {
+      this.list = res.data;
+    });
   },
   methods: {
-    onjoin() {
+    onjoin(data) {
       let mentorName = this.$store.getters['getUserNum'];
+      console.log(mentorName+" "+data.room);
       http
-        .get(`/counseling/isRoom/${mentorName}/${this.room}`)
+        .get(`/counseling/isRoom/${mentorName}/${data.room}`)
         .then((res) => {
           console.log(res.data);
           if (res.data == "fail") {
@@ -42,7 +53,7 @@ export default {
           } else {
             alert(" 상담을 시작합니다. ")
             this.unsubscribe();
-            this.$router.push(`/counselorWRTC/${this.room}&${this.room_num}`);
+            this.$router.push(`/counselorWRTC/${data.room}&${mentorName}`);
           }
         })
         .catch((e) => {
