@@ -238,7 +238,7 @@ export default {
       this.mathing();
     },
     mathing(){
-       http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
+       http.delete(`/counseling/deleteReadyMentor/${this.$store.getters['getUserNum']}`).then(()=>{
       });
       this.onLeave();
     }
@@ -258,7 +258,9 @@ export default {
       console.log("isremote + " + val);
       if (val) {
         console.log("remote 들어옴");
-        alert("상담가가 들어옵니다. ")
+        alert("상담가가 들어옵니다. ");
+         http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
+      });
       }
     },
     dialog(val) {

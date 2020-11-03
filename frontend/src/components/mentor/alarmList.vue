@@ -43,6 +43,7 @@ export default {
   methods: {
     onjoin(data) {
       let mentorName = this.$store.getters['getUserNum'];
+      console.log(mentorName+" "+data.room);
       http
         .get(`/counseling/isRoom/${mentorName}/${data.room}`)
         .then((res) => {
@@ -52,7 +53,7 @@ export default {
           } else {
             alert(" 상담을 시작합니다. ")
             this.unsubscribe();
-            this.$router.push(`/counselorWRTC/${this.room}&${this.room_num}`);
+            this.$router.push(`/counselorWRTC/${data.room}&${mentorName}`);
           }
         })
         .catch((e) => {
