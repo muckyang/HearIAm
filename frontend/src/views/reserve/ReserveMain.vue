@@ -1,5 +1,5 @@
 <template>
-  <div class="reserve-main">
+  <div class="reserve-main" style="padding-top: 64px;">
     <div class="reserve-body">
       <v-sheet class="sheet-body container" rounded="xl" elevation="7">
         <h1 class="mb-5">실시간 상담 예약하기</h1>

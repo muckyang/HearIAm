@@ -233,12 +233,12 @@ export default {
           track.stop();
         });
         this.videoTag.srcObject = null;
-        const picture = document.querySelector("canvas");
-        const ctx = picture.getContext("2d");
-        // 픽셀 정리
-        ctx.clearRect(0, 0, picture.width, picture.height);
-        // 컨텍스트 리셋
-        ctx.beginPath();
+        // const picture = document.querySelector("canvas");
+        // const ctx = picture.getContext("2d");
+        // // 픽셀 정리
+        // ctx.clearRect(0, 0, picture.width, picture.height);
+        // // 컨텍스트 리셋
+        // ctx.beginPath();
       }
     },
     dialogCancel() {

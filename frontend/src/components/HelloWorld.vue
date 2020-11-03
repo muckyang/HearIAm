@@ -1,5 +1,5 @@
 <template>
-  <div align="center">
+  <div align="center" class="main-back" style="height:100vh">
     <div>
       <span class="main-title"> Hear I Am</span>
       <v-btn
