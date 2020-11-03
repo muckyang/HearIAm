@@ -27,6 +27,7 @@ import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
 import com.ssafy.backend.model.Alarm;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Reservation;
+import com.ssafy.backend.model.ReserveRes;
 import com.ssafy.backend.model.Schedule;
 import com.ssafy.backend.model.User;
 import com.ssafy.backend.repository.AlarmRepository;
@@ -142,8 +143,12 @@ public class ScheduleController {
         reser.setMentee(mentee);
         reser.setConcern(concern);
         reservationRepository.save(reser);
+        ReserveRes res = new ReserveRes();
+        res.setMentor(sche.getMentor());  
+        res.setSdate(sche.getSdate());  
+        res.setStime(sche.getStime());  
 
-        return reser;
+        return res;
     }
 
     // @GetMapping("/getTime/{mentor}")
