@@ -127,13 +127,6 @@ const routes = [{
         name: 'stMatch',
         props: true
     },
-    {
-        path: '/alarmList',
-        component: () =>
-            import ('@/components/mentor/alarmList'),
-        name: 'alarmList',
-        props: true
-    },
 ]
 
 const router = new VueRouter({
