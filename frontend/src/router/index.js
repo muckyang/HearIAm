@@ -12,6 +12,7 @@ import MenteeMypage from '../views/mentee/MenteeMypage.vue'
 import MentorMypage from '../views/mentor/MentorMypage.vue'
 import MyMenteeList from '../views/mentor/MyMenteeList.vue'
 import MyMenteeInfo from '../views/mentor/MyMenteeInfo.vue'
+import ConsultingCenter from '../views/ConsultingCenter.vue'
 import CounselingInfo from '../views/mentor/CounselingInfo.vue'
 import AudioRecorder from 'vue-audio-recorder'
 import RecordList from '../views/consult/RecordList.vue'
@@ -119,6 +120,11 @@ const routes = [{
         path: '/recordDetail/:num',
         name: 'RecordDetail',
         component: RecordDetail
+    },  
+    {
+        path: '/consultingCenter',
+        name: 'ConsultingCenter',
+        component: ConsultingCenter
     },
     {
         path: '/stMatch',
