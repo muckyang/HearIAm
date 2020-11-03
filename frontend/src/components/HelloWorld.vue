@@ -1,6 +1,6 @@
 <template>
-  <div class="main-back" align="center" style="height:100vh;">
-    <div style="height: 100vh">
+  <div align="center">
+    <div>
       <span class="main-title"> Hear I Am</span>
       <v-btn
         large
@@ -100,7 +100,7 @@ export default {
   /* background: linear-gradient(to right, #93dfff, #f5a2bb); */
   /* background: linear-gradient(to bottom, #f5e9b3, #f2d867); */
   /* background: #ffdc15 ; */
-  font-family: "yg-jalnan";
+  /* font-family: "yg-jalnan"; */
 }
 .main-title {
   font-family: "Capriola", sans-serif;

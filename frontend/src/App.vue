@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar v-if="getRole == `mentee`" fixed flat style="positone: absolute; background-color: rgba( 255, 255, 255, 0 )">
+    <v-app-bar
+      v-if="getRole == `mentee`"
+      absolute
+      flat
+      style="background-color: rgba(255, 255, 255, 0)"
+    >
       <v-btn text dark @click="goHome()"><h2>Hear I Am</h2></v-btn>
       <v-spacer></v-spacer>
       <v-btn text dark @click="goLive()">1:1 상담</v-btn>
@@ -9,7 +14,12 @@
       <v-btn text dark @click="goMypage()">마이페이지</v-btn>
       <v-btn text dark @click="logout()">로그아웃</v-btn>
     </v-app-bar>
-    <v-app-bar v-if="getRole == `mentor`" fixed flat style="positone: absolute; background-color: rgba( 255, 255, 255, 0 )">
+    <v-app-bar
+      v-if="getRole == `mentor`"
+      absolute
+      flat
+      style="background-color: rgba(255, 255, 255, 0)"
+    >
       <v-btn text dark @click="goHome()"><h2>Hear I Am</h2></v-btn>
       <v-spacer></v-spacer>
       <v-btn text dark @click="subscribe()">1:1 상담 현황</v-btn>
@@ -19,8 +29,46 @@
       <v-btn text dark @click="logout()">로그아웃</v-btn>
     </v-app-bar>
     <v-main>
-      <router-view />
+      <router-view class="main-back" style="padding-top: 64px" />
     </v-main>
+    <v-speed-dial
+      v-model="fab"
+      bottom
+      right
+      fixed
+      direction="top"
+      transition="slide-x-reverse-transition"
+    >
+      <template v-slot:activator>
+        <v-btn v-model="fab" color="#0a7a78" dark fab>
+          <v-icon v-if="fab">mdi-close </v-icon>
+          <v-icon v-else> mdi-bell </v-icon>
+        </v-btn>
+      </template>
+      <v-card min-width="300" style="margin-right:230px; text-align:center;">
+        <v-list dense>
+          <v-header>알람</v-header>
+          <v-list-item-group v-model="selectedItem" color="primary">
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-bell-alert</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>상담요청이 왔어요!</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-bell-alert</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>주문하신 상품이 배송되었어요!</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+    </v-speed-dial>
   </v-app>
 </template>
 
@@ -32,9 +80,7 @@ import axios from "axios";
 
 export default {
   name: "App",
-  components: {
-
-  },
+  components: {},
   data() {
     return {
       fab: false,
@@ -42,23 +88,25 @@ export default {
   },
   methods: {
     logout: function () {
+      this.unsubscribe();
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
         this.drawer = false;
       });
-      this.$router.push("/").catch(() => {});
+      // this.$router.push("/").catch(() => {});
+      window.location.href = "/";
     },
     goHome() {
       this.$router.push("/").catch(() => {});
     },
     goMypage() {
-      if(this.getRole == `mentee`){
-        this.$router.push(`/menteeMypage`).catch(()=>{});
-      } else if(this.getRole == `mentor`){
-        this.$router.push(`/mentorMypage`).catch(()=>{});
+      if (this.getRole == `mentee`) {
+        this.$router.push(`/menteeMypage`).catch(() => {});
+      } else if (this.getRole == `mentor`) {
+        this.$router.push(`/mentorMypage`).catch(() => {});
       }
     },
     goLive() {
-       http
+      http
         .get(`/counseling/isMentee`)
         .then((res) => {
           console.dir(res);
@@ -66,18 +114,18 @@ export default {
           if (res.data == 0) {
             alert("대기중인 멘토가 없어요! 예약하기를 이용해주세요! ");
           } else {
-             this.$router.push(`/userWRTC`);
+            this.$router.push(`/userWRTC`);
           }
         })
         .catch((e) => {
           console.log(e);
-        });     
+        });
     },
     goReserve() {
       this.$router.push(`/reserveMain`).catch(() => {});
     },
     goRecord() {
-      this.$router.push("/recordConsult/1").catch(()=>{});
+      this.$router.push("/recordConsult/1").catch(() => {});
     },
     goMyMenteeList() {
       this.$router.push(`/myMenteeList`);

@@ -1,15 +1,8 @@
 <template>
   <div>
-    <div
-      style="
-        height: 100%;
-        width: 100%;
-        background: linear-gradient(to right, #93dfff, #f5a2bb);
-      "
-    >
+    <div>
       <!-- background: linear-gradient(to right, #3D5469, #79B7D1); -->
       <div style="height: 100vh" class="d-flex justify-content-center">
-        <v-btn @click="logout()">로그아웃 </v-btn>
         <v-col class="my-auto" align="center">
           <div>
             <v-btn
@@ -20,7 +13,7 @@
               style="
                 width: 260px;
                 height: 250px;
-                background: linear-gradient(to top, #93dfff, #f5a2bb);
+                background: linear-gradient(to top, black, #0a7a78);
               "
             >
               <div
@@ -47,7 +40,7 @@
               style="
                 width: 260px;
                 height: 250px;
-                background: linear-gradient(to top, #93dfff, #f5a2bb);
+                background: linear-gradient(to top, black, #0a7a78);
               "
               @click="goRecord()"
             >
@@ -74,7 +67,7 @@
               style="
                 width: 260px;
                 height: 250px;
-                background: linear-gradient(to top, #93dfff, #f5a2bb);
+                background: linear-gradient(to top, black, #0a7a78);
               "
             >
               <div
