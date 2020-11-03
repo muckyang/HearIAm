@@ -24,10 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
+import com.ssafy.backend.model.Alarm;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Reservation;
 import com.ssafy.backend.model.Schedule;
 import com.ssafy.backend.model.User;
+import com.ssafy.backend.repository.AlarmRepository;
 import com.ssafy.backend.repository.ConRoomRepository;
 import com.ssafy.backend.repository.ReservationRepository;
 import com.ssafy.backend.repository.ScheduleRepository;
@@ -49,6 +51,9 @@ public class ScheduleController {
 
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+    AlarmRepository alarmRepository;
 
     // @PostMapping("/saveTime/{mentor}")
     // public Object saveTime(@RequestBody Map<Object, int[]> timetable,
@@ -261,7 +266,9 @@ public class ScheduleController {
         schedule.setIsReser(1);
         scheduleRepository.save(schedule);
         reservationRepository.save(reservation);
-
+        Alarm alarm = new Alarm();
+        alarm.setMentor(conRoom.getMentor());
+        alarm.setCrNum(conRoom.getNum());
         return ResponseEntity.ok("success");
     }
 
