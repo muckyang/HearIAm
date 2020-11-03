@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CenterRepository extends JpaRepository<Center, Long>{
     List<Center> findAll();
+    List<Center> findByAddressLike(String word);
 }
