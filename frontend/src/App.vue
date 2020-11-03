@@ -197,6 +197,11 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+
+         let num = this.getUserNum;
+      http.delete(`/counseling/deleteReadyMentor/${num}`).then(()=>{
+      });
+       
     },
   },
   computed: {
