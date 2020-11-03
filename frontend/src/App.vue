@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <v-app-bar v-if="getRole" fixed flat dark style="background-color: rgba(255, 255, 255, 0)">
+    <v-app-bar v-if="getRole" fixed flat dark elevate-on-scroll
+        scroll-target="#scrolling-techniques-7" style="background-color: rgba(255, 255, 255, 0)">
         <v-btn text @click="goHome()"><h2>Hear I Am</h2></v-btn>
         <v-spacer></v-spacer>
         <v-btn v-if="getRole == `mentee`" text @click="goLive()">1:1 상담</v-btn>
@@ -32,7 +33,7 @@
       <v-card min-width="300" style="margin-right: 230px; text-align: center">
         <v-list dense>
           <v-header>알람</v-header>
-          <v-list-item-group v-model="selectedItem" color="primary">
+          <v-list-item-group v-model="alarm" color="primary">
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-bell-alert</v-icon>
@@ -70,6 +71,7 @@ export default {
   data() {
     return {
       fab: false,
+      alarm: null
     };
   },
   methods: {

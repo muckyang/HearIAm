@@ -10,14 +10,7 @@
   <div class="text-center">
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="error"
-          fab
-          small
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
+        <v-btn color="error" fab small dark v-bind="attrs" v-on="on">
           {{ alert_num }}
         </v-btn>
       </template>
@@ -94,28 +87,23 @@ export default {
         });
       console.log("dekl " + this.getUserNum);
       http
-        .delete(
-          `/counseling/deleteReadyMentor/${this.getUserNum}`
-        )
+        .delete(`/counseling/deleteReadyMentor/${this.getUserNum}`)
         .then(() => {});
     },
   },
-  mounted: function () {
-    http
-      .get(`/counseling/alarmList/${this.getUserNum}`)
-      .then((res) => {
-        console.dir(res)
+  mounted: function () {},
+  watch: {
+    getUserNum() {
+      http.get(`/counseling/alarmList/${this.getUserNum}`).then((res) => {
+        console.dir(res);
         this.list = res.data;
-        console.log(this.list.length)
+        console.log(this.list.length);
         this.alert_num = this.list.length;
       });
+    },
   },
   computed: {
-    ...mapGetters([
-      "getUserName",
-      "getUserNum",
-      "getDeviceID",
-    ]),
+    ...mapGetters(["getUserName", "getUserNum", "getDeviceID"]),
   },
 };
 </script>
