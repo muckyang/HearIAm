@@ -34,7 +34,7 @@ export default {
     onjoin() {
       let mentorName = this.$store.getters['getUserNum'];
       http
-        .get(`/counseling/isRoom/${mentorName}/${this.room}`)
+        .get(`/counseling/isRoom/${mentorName}/${this.room_num}`)
         .then((res) => {
           console.log(res.data);
           if (res.data == "fail") {

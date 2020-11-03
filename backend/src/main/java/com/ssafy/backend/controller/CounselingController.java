@@ -68,11 +68,9 @@ public class CounselingController {
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
 		conRoomRepository.save(conRoom);
-		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
+		Alarm alarm = new Alarm(conRoom.getNum());
 		alarmRepository.save(alarm);
-		ConRoom conRoom2 = conRoomRepository.findByRoom(conRoom.getRoom());
-		return ResponseEntity.ok(conRoom2.getNum());
-
+		return ResponseEntity.ok(conRoom.getNum());
 	}
 
 	@PostMapping("/saveEmotion")
@@ -237,16 +235,18 @@ public class CounselingController {
 
 	@GetMapping("/isRoom/{mentor}/{roomNum}")
 	public Object isMentee(@PathVariable(value = "mentor") Long mentor,
-			@PathVariable(value = "roomNum") String roomNum) {
+			@PathVariable(value = "roomNum") Long roomNum) {
 		try {
-			Optional<Alarm> alarm = alarmRepository.findByRoom(roomNum);
-			System.out.println(alarm);
+			ConRoom cRoom = conRoomRepository.findByNum(roomNum);
+			
+			// Optional<Alarm> alarm = conRoomRepository.findByNum(roomNum);
+			// System.out.println(alarm);
 			String result = "";
-			if (!alarm.isPresent()) {
+			if(cRoom.getMentor()== 1 ){
 				result = "fail";
 			} else {
 				System.out.println("success");
-				alarmRepository.delete(alarm.get());
+				alarmRepository.deleteByCrNum(cRoom.getNum());
 				alarmReadyRepository.deleteByMentor(mentor);
 				result = "sucess";
 			}
@@ -292,7 +292,7 @@ public class CounselingController {
 		Alarm res = new Alarm();
 		boolean flag = false;
 		for (Alarm alarm : list) {
-			if (alarm.getMentee() == 1) {
+			if (alarm.getMentor() == 1) {
 				flag = true;
 				res = alarm;
 			}
@@ -310,8 +310,8 @@ public class CounselingController {
 		alarmReadyRepository.deleteByMentor(mentor);
 	}
 
-	@DeleteMapping("/deleteReadyMentee/{mentee}")
-	public void deleteReadyMentee(@PathVariable(value = "mentee") Long mentee) {
-		alarmRepository.deleteByMentee(mentee);
+	@DeleteMapping("/deleteReadyMentee/{roonNum}")
+	public void deleteReadyMentee(@PathVariable(value = "roonNum") Long roonNum) {
+		alarmRepository.deleteByCrNum(roonNum);
 	}
 }
