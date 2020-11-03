@@ -247,14 +247,17 @@ export default {
         });
     },
     reserve() {
-      http
-        .post(
+      http.post(
           `/schedule/reservation/${this.getUserID}/${this.date}/${this.time}/${this.concern}`
-        )
+         )
         .then((res) => {
+          // console.log(res.data.mentor)
           http.get(`/user/users/${res.data.mentor}`)
             .then((res1) => {
               this.mentorNum = res1.data.num;
+              console.log(res1.data)
+              console.log(res.data)
+              console.log(this.getUserNum)
               http
                 .post(`/counseling/reserveRequest`, {
                   mentee: this.getUserNum,

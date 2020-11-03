@@ -196,7 +196,10 @@ public class CounselingController {
 	public ResponseEntity<String> reserveRequest(@RequestBody ConRoom conRoom) {
 		conRoom.setDate(conRoom.getDate().plusHours(9));
 		conRoomRepository.save(conRoom);
-
+		Alarm alarm = new Alarm();
+		alarm.setCrNum(conRoom.getNum());
+		alarm.setMentor(conRoom.getMentor());
+		alarmRepository.save(alarm);
 		return ResponseEntity.ok(SUCCESS);
 	}
 
