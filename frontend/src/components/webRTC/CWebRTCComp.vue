@@ -157,6 +157,7 @@ export default {
       this.$refs.webrtc.join();
     },
     onLeave() {
+      this.$store.commit('changeIsRemote',false);
       if(this.title == "직접 입력"){
         this.title = this.title2;
       }

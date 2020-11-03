@@ -46,7 +46,7 @@ import com.ssafy.backend.repository.UserRepository;
 public class CounselingController {
 
 	private static final String SUCCESS = "success";
-		
+
 	@Autowired
 	AlarmReadyRepository alarmReadyRepository;
 
@@ -55,62 +55,61 @@ public class CounselingController {
 
 	@Autowired
 	ConRoomRepository conRoomRepository;
-	
+
 	@Autowired
 	EmotionRepository emotionRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	ScheduleRepository scheduleRepository;
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
 		conRoomRepository.save(conRoom);
-		Alarm alarm = new Alarm(conRoom.getMentee(), conRoom.getRoom());
+		Alarm alarm = new Alarm(conRoom.getNum());
 		alarmRepository.save(alarm);
-		ConRoom conRoom2 = conRoomRepository.findByRoom(conRoom.getRoom());
-		return ResponseEntity.ok(conRoom2.getNum());
-
+		return ResponseEntity.ok(conRoom.getNum());
 	}
-	
+
 	@PostMapping("/saveEmotion")
 	public ResponseEntity<String> saveEmotion(@RequestBody Emotion emotion) {
 		emotionRepository.save(emotion);
 
 		return ResponseEntity.ok(SUCCESS);
 	}
-	
+
 	@GetMapping("/loadEmotion/{num}")
 	public Emotion loadEmotion(@PathVariable(value = "num") Long num) {
 		Emotion emotion = emotionRepository.findByNum(num);
 		return emotion;
 	}
-	
+
 	@GetMapping("/liveList")
 	public List<ConRoom> liveList() {
 		List<ConRoom> list = conRoomRepository.findByStatus("liveRequest");
 		Date now = new Date();
-		
+
 		for (ConRoom conRoom : list) {
 			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate());
-			if((now.getTime()-date2.getTime())/60000 > 30) {
+			if ((now.getTime() - date2.getTime()) / 60000 > 30) {
 				conRoomRepository.deleteByNum(conRoom.getNum());
 			}
 		}
 		list = conRoomRepository.findByStatus("liveRequest");
 		return list;
 	}
-	
+
 	@GetMapping("/counseling/{num}")
 	public ConRoom counseling(@PathVariable(value = "num") Long num) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
 		return conRoom;
 	}
-	
+
 	@PutMapping("/joinLive/{num}/{mentorNum}")
-	public ResponseEntity<String> joinLive(@PathVariable(value = "num") Long num,@PathVariable(value = "mentorNum") Long mentorNum) {
+	public ResponseEntity<String> joinLive(@PathVariable(value = "num") Long num,
+			@PathVariable(value = "mentorNum") Long mentorNum) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
 		conRoom.setMentor(mentorNum);
 		conRoom.setStatus("progress");
@@ -118,7 +117,7 @@ public class CounselingController {
 
 		return ResponseEntity.ok(SUCCESS);
 	}
-	
+
 	@PutMapping("/finishLive/{num}")
 	public ResponseEntity<String> finishLive(@PathVariable(value = "num") Long num, @RequestBody ConRoom con) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
@@ -129,7 +128,7 @@ public class CounselingController {
 
 		return ResponseEntity.ok(SUCCESS);
 	}
-	
+
 	@DeleteMapping("/liveCancel/{num}")
 	public ResponseEntity<String> liveCancel(@PathVariable(value = "num") Long num) {
 		conRoomRepository.deleteByNum(num);
@@ -142,7 +141,7 @@ public class CounselingController {
 		List<ConRoom> list = conRoomRepository.findByMenteeOrderByNumDesc(num);
 		return list;
 	}
-	
+
 	@GetMapping("/myMenteeList/{num}")
 	public List<User> myMenteeList(@PathVariable(value = "num") Long num) {
 		List<ConRoom> list = conRoomRepository.findByMentor(num);
@@ -151,44 +150,48 @@ public class CounselingController {
 			result.add(conRoom.getMentee());
 		}
 		TreeSet<Long> distinctData = new TreeSet<Long>(result);
-		result =  new ArrayList<Long>(distinctData);
-		
+		result = new ArrayList<Long>(distinctData);
+
 		List<User> users = new ArrayList<User>();
 		for (Long long1 : result) {
-			users.add(userRepository.findByNum(long1).orElseThrow(() -> new ResourceNotFoundException("User", "num", num)));
+			users.add(userRepository.findByNum(long1)
+					.orElseThrow(() -> new ResourceNotFoundException("User", "num", num)));
 		}
-		
+
 		return users;
 	}
-	
+
 	@GetMapping("/myMenteeInfoList/{mentor}/{mentee}")
-	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "mentee") Long mentee) {
+	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor,
+			@PathVariable(value = "mentee") Long mentee) {
 		List<ConRoom> list = conRoomRepository.findByMentorAndMentee(mentor, mentee);
 		return list;
 	}
 
 	@GetMapping("/RecordList/{mentor}")
-	public List<ConRoom>  myRecordCounList(@PathVariable(value = "mentor" ) Long mentor ){
-		List<ConRoom> list = conRoomRepository.findByMentorAndStatus(mentor,"progress");	
+	public List<ConRoom> myRecordCounList(@PathVariable(value = "mentor") Long mentor) {
+		List<ConRoom> list = conRoomRepository.findByMentorAndStatus(mentor, "progress");
 		return list;
 	}
-	
+
 	@GetMapping("/liveMenteeInfo/{num}")
 	public User liveMenteeInfo(@PathVariable(value = "num") Long num) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
-		User user = userRepository.findByNum(conRoom.getMentee()).orElseThrow(() -> new ResourceNotFoundException("User", "num", num));
+		User user = userRepository.findByNum(conRoom.getMentee())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "num", num));
 		return user;
 	}
-	
+
 	@GetMapping("/ReserveList/{mentor}")
-	public List<ConRoom> ReserveList(@PathVariable(value = "mentor") Long mentor){
-		List<ConRoom> list = conRoomRepository.findByMentorAndStatusOrStatusOrderByDateAsc(mentor,"reserve","reapply");	
+	public List<ConRoom> ReserveList(@PathVariable(value = "mentor") Long mentor) {
+		List<ConRoom> list = conRoomRepository.findByMentorAndStatusOrStatusOrderByDateAsc(mentor, "reserve",
+				"reapply");
 		for (ConRoom conRoom : list) {
 			conRoom.setDate(conRoom.getDate().minusHours(9));
 		}
 		return list;
 	}
-	
+
 	@PostMapping("/reserveRequest")
 	public ResponseEntity<String> reserveRequest(@RequestBody ConRoom conRoom) {
 		conRoom.setDate(conRoom.getDate().plusHours(9));
@@ -209,7 +212,7 @@ public class CounselingController {
 	}
 
 	@GetMapping("/addReady/{mentor}")
-	public Object addReady(@PathVariable(value = "mentor") Long mentor){
+	public Object addReady(@PathVariable(value = "mentor") Long mentor) {
 		try {
 			AlarmReady ready = new AlarmReady();
 			ready.setMentor(mentor);
@@ -219,10 +222,9 @@ public class CounselingController {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
 
 	@GetMapping("/isMentee")
-	public Object isMentee(){
+	public Object isMentee() {
 		try {
 			long cnt = alarmReadyRepository.count();
 			return new ResponseEntity<>(cnt, HttpStatus.OK);
@@ -230,18 +232,20 @@ public class CounselingController {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/isRoom/{mentor}/{roomNum}")
-	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") String roomNum){
+	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") Long roomNum) {
 		try {
-			Optional<Alarm> alarm = alarmRepository.findByRoom(roomNum);
-			System.out.println(alarm);
+			ConRoom cRoom = conRoomRepository.findByNum(roomNum);
+
+			// Optional<Alarm> alarm = conRoomRepository.findByNum(roomNum);
+			// System.out.println(alarm);
 			String result = "";
-			if(!alarm.isPresent()){
+			if (cRoom.getMentor() == 1) {
 				result = "fail";
-			}else{
+			} else {
 				System.out.println("success");
-				alarmRepository.delete(alarm.get());
+				alarmRepository.deleteByCrNum(cRoom.getNum());
 				alarmReadyRepository.deleteByMentor(mentor);
 				result = "sucess";
 			}
@@ -255,43 +259,66 @@ public class CounselingController {
 	@GetMapping("/reserveConRoom/{num}")
 	public ConRoom reserveConRoom(@PathVariable(value = "num") Long num) {
 		Schedule schedule = scheduleRepository.findByNum(num);
-		User user = userRepository.findById(schedule.getMentor()).orElseThrow(() -> new ResourceNotFoundException("User", "id", schedule.getMentor()));
-		LocalDateTime date = LocalDateTime.parse(schedule.getSdate()+"T"+schedule.getStime());
+		User user = userRepository.findById(schedule.getMentor())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", schedule.getMentor()));
+		LocalDateTime date = LocalDateTime.parse(schedule.getSdate() + "T" + schedule.getStime());
 		ConRoom conRoom = conRoomRepository.findByMentorAndDate(user.getNum(), date.plusHours(9));
-		
+
 		return conRoom;
 	}
 
-	@GetMapping("/alarmList")
-	public List<Alarm> alarmList(){
+	@GetMapping("/alarmList/{mentorNum}")
+	public List<Alarm> alarmList(@PathVariable(value = "mentorNum") Long mentorNum) {
 		List<Alarm> list = alarmRepository.findAll();
-		return list;
+		List<Alarm> res = new ArrayList<>();
+		for (Alarm alarm : list) {
+			if (alarm.getMentor() == 1 || alarm.getMentor() == mentorNum) {
+				res.add(alarm);
+			}
+		}
+		return res;
 	}
 
 	@GetMapping("/alarmListCnt")
-	public Long alarmListCnt(){
+	public Long alarmListCnt() {
 		Long cnt = alarmRepository.count();
 		return cnt;
 	}
 
 	@GetMapping("/getMenteeCnt")
-	public Object getMenteeCnt(){
-		if(alarmRepository.count() >0){
-			List<Alarm> list = alarmRepository.findAll();
-			return new ResponseEntity<>(list.get(0), HttpStatus.OK);
-		}else{
+	public Object getMenteeCnt() {
+		List<Alarm> list = alarmRepository.findAll();
+		Alarm res = new Alarm();
+		boolean flag = false;
+		for (Alarm alarm : list) {
+			if (alarm.getMentor() == 1) {
+				flag = true;
+				res = alarm;
+			}
+			if (flag)
+				break;
+		}
+		if (flag) {
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		} else {
 			return new ResponseEntity<>("empty", HttpStatus.OK);
 		}
 	}
 
-	
+	@GetMapping("/getMenteeMSGCnt")
+	public Object getMenteeMSGCnt() {
+		List<Alarm> list = alarmRepository.findByMentor(1L);
+		return new ResponseEntity<>(list.size(), HttpStatus.OK);
+
+	}
+
 	@DeleteMapping("/deleteReadyMentor/{mentor}")
-	public void deleteReadyMentor(@PathVariable (value = "mentor") Long mentor){
+	public void deleteReadyMentor(@PathVariable(value = "mentor") Long mentor) {
 		alarmReadyRepository.deleteByMentor(mentor);
 	}
 
-	@DeleteMapping("/deleteReadyMentee/{mentee}")
-	public void deleteReadyMentee(@PathVariable (value = "mentee") Long mentee){
-		alarmRepository.deleteByMentee(mentee);
+	@DeleteMapping("/deleteReadyMentee/{roonNum}")
+	public void deleteReadyMentee(@PathVariable(value = "roonNum") Long roonNum) {
+		alarmRepository.deleteByCrNum(roonNum);
 	}
 }

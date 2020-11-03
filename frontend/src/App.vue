@@ -136,9 +136,9 @@ export default {
     subscribe() {
       console.log("click subscribe btn");
       this.subscribeTokenToTopic(this.devecieId, this.topic);
-      let mentorname = this.$store.getters["getUserNum"];
-      http.get(`/counseling/addReady/${mentorname}`).then((res) => {
-        console.log("add ready success : " + res);
+      // let mentorname = this.$store.getters['getUserNum'];
+      http.get(`/counseling/addReady/${this.getUserNum}`).then((res)=>{
+        console.log("add ready success : "+res)
       });
     },
     subscribeTokenToTopic(token, topic) {

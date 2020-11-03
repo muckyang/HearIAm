@@ -82,8 +82,8 @@ const mutations = {
     setDeviceId: (state, data)=>{
         state.deviceID = data;
     },
-    changeIsRemote : (state)=>{
-        state.isRemote = !state.isRemote;
+    changeIsRemote : (state,data)=>{
+        state.isRemote = data;
     }
 };
 

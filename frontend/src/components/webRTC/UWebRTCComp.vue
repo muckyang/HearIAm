@@ -89,11 +89,11 @@ export default {
       videoTag: [],
       isProgress: false,
       url: "https://fcm.googleapis.com/fcm/send",
-      devecieId: this.$store.getters["getDeviceID"],
+      devecieId: this.getDeviceID,
       topic: "streaming",
       dialog: false,
       failMatching: false,
-      isRemote: this.$store.getters["getIsRemote"],
+      roomNum : null,
     };
   },
   mounted() {
@@ -101,7 +101,7 @@ export default {
       this.$router.push("/");
     }
     this.createRoomId();
-    if(this.$route.params.room){
+    if (this.$route.params.room) {
       this.roomId = this.$route.params.room;
     }
     this.videoTag = document.getElementById("videoTag");
@@ -135,11 +135,18 @@ export default {
           if (res.data > 0) {
             this.dialog = true;
           }
-
-          
-          this.sendDM(res);
+          this.checkCnt(res);
+          // this.sendDM(res);
+          this.roomNum = res.data;
         });
       this.onJoin();
+    },
+    checkCnt(data){
+      http.get(`/getMenteeMSGCnt`).then((res)=>{
+        if(res.data == 1){
+          this.sendDM(data);
+        }
+      });
     },
     sendDM(res) {
       const message = {
@@ -183,6 +190,7 @@ export default {
       this.startVideo();
     },
     onLeave() {
+      this.$store.commit("changeIsRemote", false);
       this.$refs.webrtc.leave();
       this.stopVideo();
       this.$router.push("/");
@@ -237,11 +245,19 @@ export default {
       this.dialog = !this.dialog;
       this.mathing();
     },
-    mathing(){
-       http.delete(`/counseling/deleteReadyMentor/${this.$store.getters['getUserNum']}`).then(()=>{
-      });
+    mathing() {
+      http
+        .delete(
+          `/counseling/deleteReadyMentor/${this.getUserNum}}`
+        )
+        .then(() => {});
       this.onLeave();
-    }
+    },
+    deleteDB() {
+      http
+        .delete(`/counseling/deleteReadyMentee/${this.roomNum}`)
+        .then(() => {});
+    },
   },
   computed: {
     ...mapGetters([
@@ -251,30 +267,31 @@ export default {
       "getUserName",
       "getUserNum",
       "getUserID",
+      "getIsRemote",
+      "getDeviceID",
     ]),
   },
   watch: {
-    isRemote(val) {
+    getIsRemote(val) {
       console.log("isremote + " + val);
       if (val) {
         console.log("remote 들어옴");
         alert("상담가가 들어옵니다. ");
-         http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
-      });
+        this.dialog = false;
+        this.deleteDB();
       }
     },
     dialog(val) {
       if (!val) {
         return;
       }
-      if(this.isRemote){
-        return;
-      }
+      console.log("isremote " + this.getIsRemote);
       setTimeout(() => {
         this.dialog = false;
         this.failMatching = true;
+        this.deleteDB();
       }, 60000);
-      //4초
+      //1분
     },
   },
 };
