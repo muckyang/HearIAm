@@ -45,7 +45,8 @@ export default {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
         this.drawer = false;
       });
-      this.$router.push("/").catch(() => {});
+      // this.$router.push("/").catch(() => {});
+      window.location.href="/";
     },
     goHome() {
       this.$router.push("/").catch(() => {});

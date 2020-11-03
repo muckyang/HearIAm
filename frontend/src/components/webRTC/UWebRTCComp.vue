@@ -21,14 +21,14 @@
             >
               상담 요청
             </v-btn>
-            <v-btn
+            <!-- <v-btn
               v-else-if="failMatching"
               type="button"
               class="btn btn-primary"
               @click="mathing()"
             >
               매칭 실패 돌아가기
-            </v-btn>
+            </v-btn> -->
             <v-btn
               v-else
               type="button"
@@ -92,7 +92,7 @@ export default {
       devecieId: this.getDeviceID,
       topic: "streaming",
       dialog: false,
-      failMatching: false,
+      // failMatching: false,
       roomNum : null,
     };
   },
@@ -142,13 +142,18 @@ export default {
       this.onJoin();
     },
     checkCnt(data){
-      http.get(`/getMenteeMSGCnt`).then((res)=>{
+      console.log(" checkCnt ");
+      http.get(`/counseling/getMenteeMSGCnt`).then((res)=>{
+        console.log(" "+res.data);
         if(res.data == 1){
+          console.log(res.data);
           this.sendDM(data);
         }
       });
     },
     sendDM(res) {
+      console.log("sendDM");
+      console.dir(res);
       const message = {
         data: {
           body: "상담을 하고 싶어해요~",
@@ -193,6 +198,7 @@ export default {
       this.$store.commit("changeIsRemote", false);
       this.$refs.webrtc.leave();
       this.stopVideo();
+      this.deleteDB();
       this.$router.push("/");
     },
     onError(error, stream) {
@@ -233,26 +239,19 @@ export default {
           track.stop();
         });
         this.videoTag.srcObject = null;
-        const picture = document.querySelector("canvas");
-        const ctx = picture.getContext("2d");
-        // 픽셀 정리
-        ctx.clearRect(0, 0, picture.width, picture.height);
-        // 컨텍스트 리셋
-        ctx.beginPath();
+        // const picture = document.querySelector("canvas");
+        // const ctx = picture.getContext("2d");
+        // // 픽셀 정리
+        // ctx.clearRect(0, 0, picture.width, picture.height);
+        // // 컨텍스트 리셋
+        // ctx.beginPath();
       }
     },
     dialogCancel() {
       this.dialog = !this.dialog;
-      this.mathing();
-    },
-    mathing() {
-      http
-        .delete(
-          `/counseling/deleteReadyMentor/${this.getUserNum}}`
-        )
-        .then(() => {});
       this.onLeave();
     },
+    
     deleteDB() {
       http
         .delete(`/counseling/deleteReadyMentee/${this.roomNum}`)
@@ -278,7 +277,7 @@ export default {
         console.log("remote 들어옴");
         alert("상담가가 들어옵니다. ");
         this.dialog = false;
-        this.deleteDB();
+        this.onLeave();
       }
     },
     dialog(val) {
@@ -288,8 +287,8 @@ export default {
       console.log("isremote " + this.getIsRemote);
       setTimeout(() => {
         this.dialog = false;
-        this.failMatching = true;
-        this.deleteDB();
+        // this.failMatching = true;
+        this.onLeave();
       }, 60000);
       //1분
     },
