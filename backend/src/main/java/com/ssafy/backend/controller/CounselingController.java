@@ -234,15 +234,14 @@ public class CounselingController {
 	}
 
 	@GetMapping("/isRoom/{mentor}/{roomNum}")
-	public Object isMentee(@PathVariable(value = "mentor") Long mentor,
-			@PathVariable(value = "roomNum") Long roomNum) {
+	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") Long roomNum) {
 		try {
 			ConRoom cRoom = conRoomRepository.findByNum(roomNum);
-			
+
 			// Optional<Alarm> alarm = conRoomRepository.findByNum(roomNum);
 			// System.out.println(alarm);
 			String result = "";
-			if(cRoom.getMentor()== 1 ){
+			if (cRoom.getMentor() == 1) {
 				result = "fail";
 			} else {
 				System.out.println("success");
@@ -273,7 +272,7 @@ public class CounselingController {
 		List<Alarm> list = alarmRepository.findAll();
 		List<Alarm> res = new ArrayList<>();
 		for (Alarm alarm : list) {
-			if(alarm.getMentor()==1 || alarm.getMentor()==mentorNum){
+			if (alarm.getMentor() == 1 || alarm.getMentor() == mentorNum) {
 				res.add(alarm);
 			}
 		}
@@ -296,13 +295,21 @@ public class CounselingController {
 				flag = true;
 				res = alarm;
 			}
-			if(flag) break;
+			if (flag)
+				break;
 		}
 		if (flag) {
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("empty", HttpStatus.OK);
 		}
+	}
+
+	@GetMapping("/getMenteeMSGCnt")
+	public Object getMenteeMSGCnt() {
+		List<Alarm> list = alarmRepository.findByMentor(1L);
+		return new ResponseEntity<>(list.size(), HttpStatus.OK);
+
 	}
 
 	@DeleteMapping("/deleteReadyMentor/{mentor}")

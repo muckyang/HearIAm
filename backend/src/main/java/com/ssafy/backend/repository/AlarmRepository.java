@@ -3,6 +3,9 @@ package com.ssafy.backend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import com.google.common.base.Optional;
@@ -17,5 +20,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long>{
     @Transactional
     @Modifying
     void deleteByCrNum(Long num);
+	public List<Alarm> findByMentor(Long i);
 
 }
