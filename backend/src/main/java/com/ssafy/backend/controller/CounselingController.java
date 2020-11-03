@@ -68,7 +68,7 @@ public class CounselingController {
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
 		conRoomRepository.save(conRoom);
-		Alarm alarm = new Alarm(conRoom.getNum());
+		Alarm alarm = new Alarm(1L,conRoom.getNum());
 		alarmRepository.save(alarm);
 		return ResponseEntity.ok(conRoom.getNum());
 	}
@@ -275,18 +275,13 @@ public class CounselingController {
 		List<Alarm> list = alarmRepository.findAll();
 		List<Alarm> res = new ArrayList<>();
 		for (Alarm alarm : list) {
-			if (alarm.getMentor() == 1 || alarm.getMentor() == mentorNum) {
+			if (alarm.getMentor() == 1 || alarm.getMentor() == mentorNum ) {
 				res.add(alarm);
 			}
 		}
 		return res;
 	}
 
-	@GetMapping("/alarmListCnt")
-	public Long alarmListCnt() {
-		Long cnt = alarmRepository.count();
-		return cnt;
-	}
 
 	@GetMapping("/getMenteeCnt")
 	public Object getMenteeCnt() {

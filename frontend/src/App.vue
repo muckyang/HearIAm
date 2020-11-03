@@ -93,7 +93,7 @@ export default {
         this.drawer = false;
       });
       // this.$router.push("/").catch(() => {});
-      window.location.href = "/";
+      window.location.href="/";
     },
     goHome() {
       this.$router.push("/").catch(() => {});

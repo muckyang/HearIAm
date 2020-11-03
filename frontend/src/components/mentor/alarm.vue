@@ -24,7 +24,7 @@
       <v-list>
         <v-list-item v-for="(item, index) in list" :key="index">
           <v-list-item-title @click="onjoin(item)">
-            {{ item.mentee }} {{ item.room }}</v-list-item-title
+            실시간 상담 요청이 왔습니다!</v-list-item-title
           >
         </v-list-item>
       </v-list>
@@ -43,11 +43,6 @@ export default {
     };
   },
   methods: {
-    getStart() {
-      http.get(`/counseling/alarmListCnt`).then((res) => {
-        this.alert_num = res.data;
-      });
-    },
     onjoin(data) {
       let mentorName = this.getUserNum;
       console.log(mentorName + " " + data.room);
@@ -109,9 +104,11 @@ export default {
     http
       .get(`/counseling/alarmList/${this.getUserNum}`)
       .then((res) => {
+        console.dir(res)
         this.list = res.data;
+        console.log(this.list.length)
+        this.alert_num = this.list.length;
       });
-    this.getStart();
   },
   computed: {
     ...mapGetters([

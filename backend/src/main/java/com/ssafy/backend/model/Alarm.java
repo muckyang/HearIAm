@@ -18,7 +18,9 @@ public class Alarm {
     private Long mentor;
     private Long crNum;
     
-    public Alarm(Long crNum) {
+    public Alarm(Long mentor, Long crNum) {
+        this.mentor = mentor;
+        this.crNum = crNum;
     }
     
 }

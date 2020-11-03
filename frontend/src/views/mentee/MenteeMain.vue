@@ -165,9 +165,9 @@ export default {
           console.log(e);
         });
 
-      http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
-        // alert("삭제 완료");
-      }); 
+      // http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
+      //   // alert("삭제 완료");
+      // }); 
 
     },
   },
