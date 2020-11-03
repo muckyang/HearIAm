@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative" :style="rootCssVar">
-    <div class="vws-rule-custom" style="user-select: none">
+    <div class="vws-rule-custom mb-5" style="user-select: none">
       <div class="vws-rule-row">
         <div class="vws-table-rule">
           <div class="vws-table-rule-heading">
@@ -48,8 +48,8 @@
         </div>
       </div>
     </div>
-    <v-btn v-if="isModify" @click="saveTime">완료</v-btn>
-    <v-btn v-if="!isModify" @click="modifyTime">일정수정</v-btn>
+    <v-btn v-if="isModify" @click="saveTime" color="#bbcfe9">완료</v-btn>
+    <v-btn v-if="!isModify" @click="modifyTime" color="#bbcfe9">일정수정</v-btn>
     <v-dialog v-model="monDialog" persistent max-width="400">
       <v-card>
         <v-card-title style="font-size: 1.5rem">
