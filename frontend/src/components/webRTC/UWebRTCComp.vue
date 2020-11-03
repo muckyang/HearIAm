@@ -141,10 +141,10 @@ export default {
         });
       this.onJoin();
     },
-    checkCnt(res){
+    checkCnt(data){
       http.get(`/getMenteeMSGCnt`).then((res)=>{
         if(res.data == 1){
-          this.sendDM(res);
+          this.sendDM(data);
         }
       });
     },
