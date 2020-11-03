@@ -1,12 +1,6 @@
 <template>
   <div>
-    <div
-      style="
-        height: 100%;
-        width: 100%;
-        background: linear-gradient(to left, #93dfff, #f5a2bb);
-      "
-    >
+    <div>
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
           <alarmList></alarmList>
@@ -21,7 +15,7 @@
               style="
                 width: 260px;
                 height: 250px;
-                background: linear-gradient(to top, #93dfff, #f5a2bb);
+                background: linear-gradient(to top, black, #0a7a78);
               "
             >
               <div
@@ -48,7 +42,7 @@
               style="
                 width: 260px;
                 height: 250px;
-                background: linear-gradient(to top, #93dfff, #f5a2bb);
+                background: linear-gradient(to top, black, #0a7a78);
               "
             >
               <div
@@ -75,7 +69,7 @@
               style="
                 width: 260px;
                 height: 250px;
-                background: linear-gradient(to top, #93dfff, #f5a2bb);
+                background: linear-gradient(to top, black, #0a7a78);
               "
               @click="goMyMenteeList()"
             >
