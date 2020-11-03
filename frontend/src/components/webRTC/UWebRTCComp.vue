@@ -135,11 +135,18 @@ export default {
           if (res.data > 0) {
             this.dialog = true;
           }
-
-          this.sendDM(res);
+          this.checkCnt(res);
+          // this.sendDM(res);
           this.roomNum = res.data;
         });
       this.onJoin();
+    },
+    checkCnt(res){
+      http.get(`/getMenteeMSGCnt`).then((res)=>{
+        if(res.data == 1){
+          this.sendDM(res);
+        }
+      });
     },
     sendDM(res) {
       const message = {
