@@ -1,92 +1,66 @@
 <template>
   <div>
-    <h1>녹화 상담 리스트</h1>
-    <br />
-    <v-card>
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-center">등록일시</th>
-              <th class="text-center">닉네임</th>
-              <th class="text-center">키워드</th>
-              <th class="text-center">종류</th>
-              <th class="text-center">비고</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in pagingList" :key="item.name">
-              <td class="text-center">
-                {{ setTime(item.date) }}</td>
-
-              <td v-if="item.mentor == 1" class="text-center">-</td>
-
-              <td v-else class="text-center">
-                <v-btn
-                  small
-                  @click="MenteeHistory(item)"
-                  style="font-size:0.9rem;"
-                  >{{ findName(item.mentee) }}</v-btn
-                ></td>
-                  <td  class="text-center">
+    <v-timeline align-top :dense="$vuetify.breakpoint.smAndDown">
+      <v-timeline-item v-for="(item, index) in conList" :key="index">
+        <v-card color="#bbcfe9">
+          <v-card-title class="title py-0" style="height:50px;">
+            <h2 style="font-size:1rem;" class="mb-0">
+              {{ item.title }}
+            </h2>
+          </v-card-title>
+          <v-card-text class="white text--primary pt-4">
+            <div>
+              <p>
                 {{ getKeyword(item) }}
-              </td>
-              <td  class="text-center">
-                녹화 상담
-              </td>
-              <td class="text-center">
-                <v-btn
-                  small
-                  @click="startCounseling(item)"
-                  style="font-size:0.9rem;"
-                  >상담시작</v-btn
-                >
-              </td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table> </v-card
-    ><br />
-    <v-pagination v-model="page" :length="pageLength" circle></v-pagination>
+              </p>
+              <p>
+                <v-tooltip left>
+                  <template v-slot:activator="{ on, attrs }">
+                    <span style="color:pink" v-bind="attrs" v-on="on" id="mentee-name-text" @click="MenteeHistory(item)">{{ findName(item.mentee) }}</span>
+                  </template>
+                  <span>클릭하여 상담내역 보기</span>
+                </v-tooltip>
+                <span>님의 음성 상담입니다.</span>
+              </p>
+              <p>
+                {{ setTime(item.date) }}
+              </p>
+            </div>
+            <v-btn small @click="startCounseling(item)" style="font-size:0.9rem;" color="#bbcfe9">상담시작</v-btn>
+          </v-card-text>
+        </v-card>
+      </v-timeline-item>
+    </v-timeline>
   </div>
 </template>
 
 <script>
-import http from "@/util/http-common.js";// ~~~ 서버주소/api
-import { mapGetters } from "vuex";
+import http from '@/util/http-common.js'; // ~~~ 서버주소/api
+import { mapGetters } from 'vuex';
 export default {
-  name: "ReRecordListComp",
+  name: 'ReRecordListComp',
   data() {
     return {
-      pagingList: [],
-      pageLength: 0,
-      page: 1,
       userList: [],
-      conList:[]
+      conList: [],
     };
   },
   mounted() {
-      http.get(`/user/userName`).then((res) => {
+    http.get(`/user/userName`).then((res) => {
       this.userList = res.data;
     });
     http.get(`/counseling/RecordList/${this.getUserNum}`).then((res) => {
       this.conList = res.data;
-      this.pagingList = this.conList.slice(0, 9);
-      if (this.conList.length % 10 == 0) {
-        this.pageLength = this.conList.length / 10;
-      } else {
-        this.pageLength = parseInt(this.conList.length / 10) + 1;
-      }
     });
   },
   computed: {
     ...mapGetters([
-        "getUserNum",
-    //   "isProfileLoaded",
-    //   "getRole",
-    //   "getQualification",
-    //   "getUserName",
-    //   "getUserID",
+      'getUserNum',
+      //   "isProfileLoaded",
+      //   "getRole",
+      //   "getQualification",
+      //   "getUserName",
+      //   "getUserID",
     ]),
   },
   methods: {
@@ -105,43 +79,34 @@ export default {
       }
     },
     setTime(date) {
-      let time =
-        date.slice(0, 4) +
-        "-" +
-        date.slice(5, 7) +
-        "-" +
-        date.slice(8, 10) +
-        " " +
-        date.slice(11, 13) +
-        ":" +
-        date.slice(14, 16);
+      let time = date.slice(0, 4) + '-' + date.slice(5, 7) + '-' + date.slice(8, 10);
       return time;
     },
-    startCounseling(item){
-        //상담시작
-        this.$router.push(`/recordDetail/${item.num}`)
+    startCounseling(item) {
+      //상담시작
+      this.$router.push(`/recordDetail/${item.num}`);
     },
-    MenteeHistory(item){
-      let menteeName = "";
-       for (let index = 0; index < this.userList.length; index++) {
+    MenteeHistory(item) {
+      let menteeName = '';
+      for (let index = 0; index < this.userList.length; index++) {
         if (this.userList[index].num == item.mentee) {
           menteeName = this.userList[index].name;
         }
       }
-      this.$router.push(`/myMenteeInfo/${item.mentee}&${menteeName}`)
+      this.$router.push(`/myMenteeInfo/${item.mentee}&${menteeName}`);
     },
-    getKeyword(item){
-      let str = ""
-      if(item.keyword1 != "none" && item.keyword1 !=null){
-        str += "#" + item.keyword1 +" "
+    getKeyword(item) {
+      let str = '';
+      if (item.keyword1 != 'none' && item.keyword1 != null) {
+        str += '#' + item.keyword1 + ' ';
       }
-      
-      if(item.keyword2 != "none" && item.keyword2 !=null){
-        str += "#" + item.keyword2 +" "
+
+      if (item.keyword2 != 'none' && item.keyword2 != null) {
+        str += '#' + item.keyword2 + ' ';
       }
-      
-      if(item.keyword3 != "none" && item.keyword3 !=null){
-        str += "#" + item.keyword3 +" "
+
+      if (item.keyword3 != 'none' && item.keyword3 != null) {
+        str += '#' + item.keyword3 + ' ';
       }
 
       return str;
@@ -150,11 +115,12 @@ export default {
       this.$router.push(`/myMenteeInfo/${num}&${name}`);
     },
   },
-  watch: {
-    page(page) {
-      var first = (page - 1) * 10;
-      this.pagingList = this.myList.slice(first, first + 9);
-    },
-  },
+  watch: {},
 };
 </script>
+
+<style scoped>
+#mentee-name-text {
+  cursor: pointer;
+}
+</style>

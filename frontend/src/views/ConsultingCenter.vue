@@ -64,6 +64,8 @@
         </div>
       </v-sheet>
     </v-sheet>
+    <br />
+    <v-pagination v-model="page" :length="pageLength" circle></v-pagination>
   </div>
 </template>
 
@@ -78,6 +80,9 @@ export default {
   data() {
     return {
       centerList: [],
+      pagingList: [],
+      pageLength: 0,
+      page: 1,
       markerImg:
         "https://blog.kakaocdn.net/dn/pe3Gt/btqKibc7VPl/JMG0zmTTAZuBAegMSA2c9k/img.png",
       kakaomap: "",
@@ -118,9 +123,17 @@ export default {
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
         script.src =
-          "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e99ee62c46f9d78ea96e3c4785fc69a";
+          "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e99ee62c46f9d78ea96e3c4785fc69a";
         document.head.appendChild(script);
       }
+
+      this.pagingList = this.centerList.slice(0, 9);
+      if (this.conList.length % 10 == 0) {
+        this.pageLength = this.centerList.length / 10;
+      } else {
+        this.pageLength = parseInt(this.centerList.length / 10) + 1;
+      }
+
     });
   },
   methods: {
@@ -208,8 +221,7 @@ export default {
       this.kakaomap.setLevel(3);
     },
     goNowLocation() {
-
-        var kakaomap = this.kakaomap
+      var kakaomap = this.kakaomap;
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           var lat = position.coords.latitude, // 위도
@@ -217,10 +229,10 @@ export default {
 
           var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
             message = '<div style="padding:5px;">현재위치 입니다!</div>'; // 인포윈도우에 표시될 내용입니다
-            kakaomap.setLevel(3)
+          kakaomap.setLevel(3);
           var marker = new kakao.maps.Marker({
-                map: kakaomap,
-                position: locPosition,
+            map: kakaomap,
+            position: locPosition,
           });
 
           var iwContent = message, // 인포윈도우에 표시할 내용
@@ -228,7 +240,7 @@ export default {
 
           // 인포윈도우를 생성합니다
           var infowindow = new kakao.maps.InfoWindow({
-              content: iwContent,
+            content: iwContent,
             removable: iwRemoveable,
           });
 
@@ -262,6 +274,12 @@ export default {
         // 지도 중심좌표를 접속위치로 변경합니다
         this.kakaomap.setCenter(locPosition);
       }
+    },
+  },
+  watch: {
+    page(page) {
+      var first = (page - 1) * 10;
+      this.pagingList = this.centerList.slice(first, first + 9);
     },
   },
 };
