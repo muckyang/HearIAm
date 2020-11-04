@@ -1,70 +1,64 @@
 <template>
-  <div class="container">
-    <v-row class="row">
-      <v-col class="col-md-12">
-        <div>
-          <WebRTC
-            ref="webrtc"
-            width="100%"
-            :roomId="roomId"
-            cameraHeight="500"
-            @error="onError"
-          />
-        </div>
-        <div class="row">
-          <div class="col-md-12 my-3">
-            <v-btn
-              v-if="!isProgress"
-              type="button"
-              class="btn btn-primary"
-              @click="createRoom"
-            >
-              상담 요청
-            </v-btn>
-            <!-- <v-btn
-              v-else-if="failMatching"
-              type="button"
-              class="btn btn-primary"
-              @click="mathing()"
-            >
-              매칭 실패 돌아가기
-            </v-btn> -->
-            <v-btn
-              v-else
-              type="button"
-              class="btn btn-primary"
-              @click="onLeave"
-            >
-              상담 종료
-            </v-btn>
-          </div>
-        </div>
-        <div>
-          <video
-            id="videoTag"
-            width="720"
-            height="560"
-            style="border: 1px solid black"
-            muted
-            hidden
-            @playing="addEventListener()"
-          ></video>
-        </div>
-      </v-col>
-    </v-row>
-    <v-dialog v-model="dialog" hide-overlay persistent width="300">
-      <v-card color="primary" dark>
-        <v-card-text>
-          Please stand by
-          <v-progress-linear
-            indeterminate
-            color="white"
-            class="mb-0"
-          ></v-progress-linear>
-        </v-card-text>
-        <v-btn @click="dialogCancel()">취소</v-btn>
+  <div>
+    <v-dialog v-model="dialogRTC" persistent max-width="1000">
+      <v-card height="650" dark>
+        <v-container>
+          <v-row v-if="!isProgress">
+            <v-col>
+              <v-btn
+                type="button"
+                class="btn btn-primary"
+                @click="createRoom"
+              >
+                상담 요청
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row v-if="dialog" style="padding-top:200px">
+            <v-col>
+              <div>
+                <h4 v-if="mentorName">{{mentorName}} 상담사와 연결중입니다.</h4>
+                <br />
+                <v-progress-circular
+                  :size="100"
+                  :width="7"
+                  color="#0a7a78"
+                  indeterminate
+                >
+                  <v-btn text @click="dialogCancel()">취소</v-btn>
+                </v-progress-circular>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row style="padding-top:0px">
+            <v-col>
+              <h1>상담사와 상담 중입니다.</h1><br/>
+              <WebRTC
+                ref="webrtc"
+                width="100%"
+                :roomId="roomId"
+                cameraHeight="450"
+                @error="onError"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-spacer></v-spacer>
+            <v-col>
+              <v-btn
+                v-if="endBtn"
+                type="button"
+                class="btn btn-primary"
+                @click="onLeave"
+              >
+                상담 종료
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card>
     </v-dialog>
+    <video id="videoTag" muted hidden @playing="addEventListener()"></video>
   </div>
 </template>
 
@@ -93,7 +87,10 @@ export default {
       topic: "streaming",
       dialog: false,
       // failMatching: false,
-      roomNum : null,
+      roomNum: null,
+      dialogRTC: true,
+      endBtn: false,
+      mentorName: null,
     };
   },
   mounted() {
@@ -132,20 +129,18 @@ export default {
           date: new Date(),
         })
         .then((res) => {
-          if (res.data > 0) {
-            this.dialog = true;
-          }
           this.checkCnt(res);
           // this.sendDM(res);
           this.roomNum = res.data;
         });
+      this.dialog = true;
       this.onJoin();
     },
-    checkCnt(data){
+    checkCnt(data) {
       console.log(" checkCnt ");
-      http.get(`/counseling/getMenteeMSGCnt`).then((res)=>{
-        console.log(" "+res.data);
-        if(res.data == 1){
+      http.get(`/counseling/getMenteeMSGCnt`).then((res) => {
+        console.log(" " + res.data);
+        if (res.data == 1) {
           console.log(res.data);
           this.sendDM(data);
         }
@@ -172,7 +167,6 @@ export default {
             "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
         },
       };
-
       axios
         .post(this.url, message, config)
         .then((response) => {
@@ -251,7 +245,6 @@ export default {
       this.dialog = !this.dialog;
       this.onLeave();
     },
-    
     deleteDB() {
       http
         .delete(`/counseling/deleteReadyMentee/${this.roomNum}`)
@@ -277,6 +270,12 @@ export default {
         console.log("remote 들어옴");
         alert("상담가가 들어옵니다. ");
         this.dialog = false;
+        this.endBtn = true;
+        http
+        .get(`/counseling/liveMentorInfo/${this.roomId}`)
+        .then((res) => {
+          this.mentorName = res.data.name;
+        });
         // this.onLeave();
       }
     },
