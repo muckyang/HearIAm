@@ -1,6 +1,6 @@
 <template>
   <div class="record-main container" style="padding-top: 64px;">
-    <v-card style="height: 95%;">
+    <v-card style="height: 100%;">
       <v-tabs color="deep-purple accent-4" right v-model="nowPage">
         <v-tab v-for="i in page" :key="i" class="tab-menu-page">
           {{ i }}
@@ -11,7 +11,7 @@
             <v-row>
               <v-col v-for="(wait, index) in waitList" :key="index" cols="12" sm="6" md="3">
                 <v-card class="mx-auto">
-                  <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="155px"></v-img>
+                  <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="145px"></v-img>
                   <v-card-text>
                     <p class="mb-1 text-area" style="text-align: left;">#{{ wait.keyword1 }} #{{ wait.keyword2 }} #{{ wait.keyword3 }}</p>
                     <p class="text-area" style="font-size: 1rem; color: black; text-align: left;">

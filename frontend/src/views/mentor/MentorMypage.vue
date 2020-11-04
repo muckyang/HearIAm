@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="height: 100%; width: 60%; padding-top: 64px;">
+  <div class="container" style="height: 100%; width: 70%; padding-top: 64px;">
       <v-card-title class="text-center justify-center py-6">
         <h2 class="font-weight-bold">
           마이페이지

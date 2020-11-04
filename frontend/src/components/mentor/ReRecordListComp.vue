@@ -1,6 +1,43 @@
 <template>
   <div>
-    <v-timeline align-top :dense="$vuetify.breakpoint.smAndDown">
+    <v-sheet class="mx-auto" elevation="5" max-width="100%">
+      <v-slide-group v-model="model" class="pa-4" show-arrows>
+        <v-slide-item v-for="(n, idx) in conList" :key="idx" v-slot="{ active, toggle }">
+          <v-card class="ma-4" height="200" width="200" @click="toggle">
+            <v-img v-if="!active" src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="100%" width="100%"></v-img>
+            <v-img v-else src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="100%" width="100%" style="filter: brightness(50%);"></v-img>
+          </v-card>
+        </v-slide-item>
+      </v-slide-group>
+
+      <v-expand-transition>
+        <v-sheet height="200" tile class="pt-5">
+          <div>
+            <p>{{ getKeyword(conList[model]) }}</p>
+          </div>
+          <div>
+            <p>
+              <v-tooltip left>
+                <template v-slot:activator="{ on, attrs }">
+                  <span style="color:pink" v-bind="attrs" v-on="on" id="mentee-name-text" @click="MenteeHistory(conList[model])">
+                    {{ findName(conList[model].mentee) }}
+                  </span>
+                </template>
+                <span>클릭하여 상담내역 보기</span>
+              </v-tooltip>
+              <span>님의 음성 상담입니다.</span>
+            </p>
+          </div>
+          <div>
+            <p> {{ setTime(conList[model].date) }} </p>
+          </div>
+          <div>
+            <v-btn small @click="startCounseling(conList[model])" style="font-size:0.9rem;" color="#bbcfe9">상담시작</v-btn>
+          </div>
+        </v-sheet>
+      </v-expand-transition>
+    </v-sheet>
+    <!-- <v-timeline align-top :dense="$vuetify.breakpoint.smAndDown">
       <v-timeline-item v-for="(item, index) in conList" :key="index">
         <v-card color="#bbcfe9">
           <v-card-title class="title py-0" style="height:50px;">
@@ -16,7 +53,9 @@
               <p>
                 <v-tooltip left>
                   <template v-slot:activator="{ on, attrs }">
-                    <span style="color:pink" v-bind="attrs" v-on="on" id="mentee-name-text" @click="MenteeHistory(item)">{{ findName(item.mentee) }}</span>
+                    <span style="color:pink" v-bind="attrs" v-on="on" id="mentee-name-text" @click="MenteeHistory(item)">{{
+                      findName(item.mentee)
+                    }}</span>
                   </template>
                   <span>클릭하여 상담내역 보기</span>
                 </v-tooltip>
@@ -30,7 +69,7 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
-    </v-timeline>
+    </v-timeline> -->
   </div>
 </template>
 
@@ -43,6 +82,7 @@ export default {
     return {
       userList: [],
       conList: [],
+      model: 0,
     };
   },
   mounted() {
