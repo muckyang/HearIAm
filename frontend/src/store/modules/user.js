@@ -10,9 +10,9 @@ const state = {
     userName: localStorage.getItem("userName") || "",
     userNum: localStorage.getItem("userNum") || "",
     userID: localStorage.getItem("userID") || "",
-    deviceID: localStorage.getItem("deviceID") || "",
-    isRemote : false,
-    isready : localStorage.getItem("isready") || false,
+    // deviceID: localStorage.getItem("deviceID") || "",
+    // isRemote : false,
+    // isready : localStorage.getItem("isready") || false,
  };
 
 const getters = {
@@ -22,9 +22,9 @@ const getters = {
     getUserName: state => state.userName,
     getUserNum: state => state.userNum,
     getUserID: state => state.userID,
-    getDeviceID : state => state.deviceID,
-    getIsRemote : state => state.isRemote,
-    getIsReady : state => state.isready, 
+    // getDeviceID : state => state.deviceID,
+    // getIsRemote : state => state.isRemote,
+    // getIsReady : state => state.isready, 
 };
 
 const actions = {
@@ -82,16 +82,16 @@ const mutations = {
     modifyProfileName: function(state, after) {
         state.userName = after;
     },
-    setDeviceId: (state, data)=>{
-        state.deviceID = data;
-    },
-    changeIsRemote : (state,data)=>{
-        state.isRemote = data;
-    },
-    changeIsReady : (state, data )=> {
-        state.isready = data;
-        localStorage.setItem("isready",data);
-    }
+    // setDeviceId: (state, data)=>{
+    //     state.deviceID = data;
+    // },
+    // changeIsRemote : (state,data)=>{
+    //     state.isRemote = data;
+    // },
+    // changeIsReady : (state, data )=> {
+    //     state.isready = data;
+    //     localStorage.setItem("isready",data);
+    // }
 };
 
 export default {

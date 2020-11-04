@@ -16,11 +16,13 @@ public class Alarm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long num ;
     private Long mentor;
-    private Long crNum;
     
-    public Alarm(Long mentor, Long crNum) {
+    public Alarm(Long mentor, Long num) {
         this.mentor = mentor;
-        this.crNum = crNum;
+        this.num = num;
     }
     
+    @OneToOne
+    @JoinColumn(name = "num")
+    private ConRoom conRoom;
 }

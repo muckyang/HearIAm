@@ -2,6 +2,7 @@ package com.ssafy.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long>{
     public long count();
     @Transactional
     @Modifying
-    void deleteByCrNum(Long num);
-	public List<Alarm> findByMentor(Long i);
+    void deleteByNum(Long num);
+    public List<Alarm> findByMentor(Long i);
+    
 
 }
