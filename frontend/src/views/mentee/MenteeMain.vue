@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="main-back">
       <!-- background: linear-gradient(to right, #3D5469, #79B7D1); -->
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
@@ -78,7 +78,7 @@
                 <img
                   src="@/assets/icons/res_btn.png"
                   style="width: 100%; height: 100%"
-                  @click="goReserve()"
+                  @click="reser_dialog = true"
                 />
               </div>
             </v-btn>
@@ -87,18 +87,30 @@
         </v-col>
       </div>
     </div>
-    
+    <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
+      <v-card rounded="xl" style="padding: 20px;" >
+        <v-card-title class="text-center justify-center p-8">
+          <h2 style="font-family: 'yg-jalnan'">실시간 상담 예약</h2>
+        </v-card-title>
+    <ReserveMain :reser_dialog="reser_dialog"/>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
 import { AUTH_LOGOUT } from "@/store/actions/auth";
 import http from "@/util/http-common.js";
 import axios from "axios";
+import ReserveMain from "@/views/reserve/ReserveMain.vue";
 export default {
+  components:{
+    ReserveMain,
+  },
   data() {
     return {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
+      reser_dialog:false,
     };
   },
   methods: {

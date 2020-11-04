@@ -1,5 +1,5 @@
 <template>
-  <div class="record-main container">
+  <div class="record-main container" style="padding-top: 64px;">
     <v-card style="height: 95%;">
       <v-tabs color="deep-purple accent-4" right v-model="nowPage">
         <v-tab v-for="i in page" :key="i" class="tab-menu-page">

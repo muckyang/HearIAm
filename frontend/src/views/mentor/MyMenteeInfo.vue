@@ -4,6 +4,7 @@
       height: 100%;
       width: 100%;
       background: linear-gradient(to left, #93dfff, #f5a2bb);
+      padding-top: 64px;
     "
   >
   <v-container>
