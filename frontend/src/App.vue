@@ -1,21 +1,26 @@
 <template>
   <v-app>
-    <v-app-bar v-if="getRole" fixed flat dark elevate-on-scroll
-        scroll-target="#scrolling-techniques-7" style="background-color: rgba(255, 255, 255, 0)">
-        <v-btn text @click="goHome()"><h2>Hear I Am</h2></v-btn>
+    <v-app-bar v-if="getRole" fixed flat dark hide-on-scroll
+        scroll-target="#scrolling-techniques-4" style="background-color: rgba(255, 255, 255, 0);">
+        <v-btn class="shadow" text @click="goHome()"><h2>Hear I Am</h2></v-btn>
         <v-spacer></v-spacer>
-        <v-btn v-if="getRole == `mentee`" text @click="goLive()">1:1 상담</v-btn>
-        <v-btn v-if="getRole == `mentee`" text @click="goRecord()">음성 상담</v-btn>
-        <v-btn v-if="getRole == `mentee`" text @click="goReserve()">상담 예약</v-btn>
-        <v-btn v-if="getRole == `mentor`" text @click="subscribe()">1:1 상담 현황</v-btn>
-        <v-btn v-if="getRole == `mentor`" text @click="goRecordList()">음성 상담 현황</v-btn>
-        <v-btn v-if="getRole == `mentor`" text @click="goMyMenteeList()">일지 관리</v-btn>
-        <v-btn text @click="goMypage()">마이페이지</v-btn>
-        <v-btn text @click="logout()">로그아웃</v-btn>
+        <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goLive()">1:1 상담</v-btn>
+        <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goRecord()">음성 상담</v-btn>
+        <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goReserve()">상담 예약</v-btn>
+        <v-btn class="shadow" v-if="getRole == `mentor`" text @click="subscribe()">1:1 상담 현황</v-btn>
+        <v-btn class="shadow" v-if="getRole == `mentor`" text @click="goRecordList()">음성 상담 현황</v-btn>
+        <v-btn class="shadow" v-if="getRole == `mentor`" text @click="goMyMenteeList()">일지 관리</v-btn>
+        <v-btn class="shadow" text @click="goMypage()">마이페이지</v-btn>
+        <v-btn class="shadow" text @click="logout()">로그아웃</v-btn>
     </v-app-bar>
-    <v-main>
-      <router-view />
-    </v-main>
+    <v-sheet
+        id="scrolling-techniques-4"
+        class="overflow-y-auto"
+      >
+      <v-main>
+        <router-view />
+      </v-main>
+    </v-sheet>
     <v-speed-dial
       v-model="fab"
       bottom
@@ -246,5 +251,8 @@ html {
 
 #create .v-btn--floating {
   position: relative;
+}
+.shadow { 
+  text-shadow:#464646 3px 3px 3px; 
 }
 </style>
