@@ -120,7 +120,7 @@
                   >mdi-shield-account-outline</v-icon
                 >
                 <v-text-field
-                  v-model="nickname"
+                  v-model="name"
                   hide-details
                   placeholder="닉네임을 입력해주세요."
                   color="#a2c9d0"
@@ -255,7 +255,6 @@ export default {
       userRole: this.role,
       id: "",
       name: "",
-      nickname: "",
       password1: "",
       password2: "",
       valid: false,
