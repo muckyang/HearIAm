@@ -108,6 +108,9 @@ export default {
   },
   methods: {
     subscribe() {
+      http.get(`/counseling/liveList`);
+      console.log("click subscribe btn");
+      this.readyClick= true;
       this.$store.commit("changeIsReady", true);
       http.get(`/counseling/getMenteeCnt`).then((res) => {
         if (res.data == "empty") {

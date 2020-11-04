@@ -127,6 +127,7 @@ export default {
       this.$router.push(`/recordList`);
     },
     subscribe() {
+      http.get(`/counseling/liveList`);
       console.log("click subscribe btn");
       this.subscribeTokenToTopic(this.devecieId, this.topic);
       // let mentorname = this.$store.getters['getUserNum'];

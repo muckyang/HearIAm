@@ -67,6 +67,7 @@ public class CounselingController {
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
+		conRoom.setDate(LocalDateTime.now().plusHours(9));
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm(1L,conRoom.getNum());
 		alarmRepository.save(alarm);
