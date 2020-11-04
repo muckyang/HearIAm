@@ -5,6 +5,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -307,6 +308,18 @@ public class ScheduleController {
         for (Reservation reservation : numList) {
             list.add(scheduleRepository.findByNum(reservation.getScheNum()));
         }
+        list.sort(new Comparator<Schedule>(){
+            @Override
+            public int compare(Schedule o1, Schedule o2) {
+                if(o1.getSdate().getDayOfYear() < o2.getSdate().getDayOfYear()) {
+                    return 1;
+                } else if(o1.getSdate().getDayOfYear() == o2.getSdate().getDayOfYear()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
         return list;
     }
 
