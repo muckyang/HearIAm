@@ -169,7 +169,7 @@ public class CounselingController {
 	@GetMapping("/myMenteeInfoList/{mentor}/{mentee}")
 	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor,
 			@PathVariable(value = "mentee") Long mentee) {
-		List<ConRoom> list = conRoomRepository.findByMentorAndMentee(mentor, mentee);
+		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeOrderByDateDesc(mentor, mentee);
 		for (ConRoom conRoom : list) {
 			conRoom.setDate(conRoom.getDate().minusHours(9));
 		}
