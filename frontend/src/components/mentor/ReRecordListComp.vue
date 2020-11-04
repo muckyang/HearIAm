@@ -4,14 +4,16 @@
       <v-slide-group v-model="model" class="pa-4" show-arrows>
         <v-slide-item v-for="(n, idx) in conList" :key="idx" v-slot="{ active, toggle }">
           <v-card class="ma-4" height="200" width="200" @click="toggle">
-            <v-img v-if="!active" src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="100%" width="100%"></v-img>
-            <v-img v-else src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="100%" width="100%" style="filter: brightness(50%);"></v-img>
+            <!-- <v-img v-if="!active" src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="100%" width="100%"></v-img>
+            <v-img v-else src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="100%" width="100%" style="filter: brightness(50%);"></v-img> -->
+            <v-img v-if="!active" :src="getImg(n)" height="100%" width="100%"></v-img>
+            <v-img v-else :src="getImg(n)" height="100%" width="100%" style="filter: brightness(50%);"></v-img>
           </v-card>
         </v-slide-item>
       </v-slide-group>
 
       <v-expand-transition>
-        <v-sheet height="200" tile class="pt-5">
+        <v-sheet v-if="model != null" height="200" tile class="pt-5">
           <div>
             <p>{{ getKeyword(conList[model]) }}</p>
           </div>
@@ -82,15 +84,16 @@ export default {
     return {
       userList: [],
       conList: [],
-      model: 0,
+      model: null,
     };
   },
-  mounted() {
+  created() {
     http.get(`/user/userName`).then((res) => {
       this.userList = res.data;
     });
     http.get(`/counseling/RecordList/${this.getUserNum}`).then((res) => {
       this.conList = res.data;
+      this.model = 0;
     });
   },
   computed: {
@@ -137,19 +140,24 @@ export default {
     },
     getKeyword(item) {
       let str = '';
-      if (item.keyword1 != 'none' && item.keyword1 != null) {
+      
+      if (item.keyword1 != null && item.keyword1 != 'none') {
         str += '#' + item.keyword1 + ' ';
       }
 
-      if (item.keyword2 != 'none' && item.keyword2 != null) {
+      if ( item.keyword2 != null &&item.keyword2 != 'none') {
         str += '#' + item.keyword2 + ' ';
       }
 
-      if (item.keyword3 != 'none' && item.keyword3 != null) {
+      if (item.keyword3 != null && item.keyword3 != 'none' ) {
         str += '#' + item.keyword3 + ' ';
       }
 
       return str;
+    },
+    getImg(item){
+      // console.log(item)
+      return "../../wordcloud/"+item.wordcloudImg  
     },
     menteeInfo(num, name) {
       this.$router.push(`/myMenteeInfo/${num}&${name}`);
