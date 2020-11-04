@@ -11,12 +11,11 @@
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-center">상담 날짜</th>
-                <th class="text-center">상담사</th>
-                <th class="text-center">종류</th>
-                <th class="text-center">현황</th>
-                <th class="text-center">재상담현황</th>
-                <th class="text-center">재신청</th>
+                <th class="text-center" style="width: 20%">상담 날짜</th>
+                <th class="text-center" style="width: 20%">상담사</th>
+                <th class="text-center" style="width: 20%">종류</th>
+                <th class="text-center" style="width: 20%">현황</th>
+                <th class="text-center" style="width: 20%">재상담 신청</th>
               </tr>
             </thead>
             <tbody>
@@ -32,9 +31,15 @@
                 <td v-else class="text-center">실시간 상담</td>
 
                 <td v-if="item.recordDir != null && item.status == 'finish'">
-                  <v-btn @click="getAnswer(item)" small style="font-size: 0.9rem"
+                  <v-btn
+                    @click="getAnswer(item)"
+                    small
+                    style="font-size: 0.9rem"
                     ><span style="vertical-align: middle; display: inline-flex"
-                      ><v-icon small class="mr-1">mdi-message-text-outline</v-icon> 답변</span
+                      ><v-icon small class="mr-1"
+                        >mdi-message-text-outline</v-icon
+                      >
+                      답변</span
                     ></v-btn
                   >
                 </td>
@@ -44,12 +49,14 @@
                 <td v-else-if="item.status == 'progress'" class="text-center">
                   진행중
                 </td>
-                <td v-if="item.status == 'reserveRequest'" class="text-center">
+                <td
+                  v-else-if="item.status == 'reserveRequest'"
+                  class="text-center"
+                >
                   예약중
                 </td>
-                <td v-else class="text-center">
-                  대기중
-                </td>
+                <td v-else class="text-center">대기중</td>
+
                 <td class="text-center">
                   <v-btn
                     small
@@ -57,14 +64,19 @@
                     :disabled="item.isreapply != 0"
                     @click="reapplyType(item)"
                     style="font-size: 0.9rem"
-                    >재신청</v-btn
+                    >신청</v-btn
                   >
                 </td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
-        <v-pagination v-model="cpage" :length="cpageLength" circle class="pb-3"></v-pagination>
+        <v-pagination
+          v-model="cpage"
+          :length="cpageLength"
+          circle
+          class="pb-3"
+        ></v-pagination>
       </v-tab-item>
 
       <!-- 예약 내역 -->
@@ -84,29 +96,42 @@
                 <td class="text-center">{{ item.sdate }} {{ item.stime }}</td>
                 <td class="text-center">{{ item.mentor }}</td>
                 <td class="text-center">
-                  <v-btn small icon color="red" @click="cancelD(item.num)"><v-icon>mdi-delete-forever-outline</v-icon></v-btn>
+                  <v-btn small icon color="red" @click="cancelD(item.num)"
+                    ><v-icon>mdi-delete-forever-outline</v-icon></v-btn
+                  >
                 </td>
                 <td>
                   <v-btn
                     v-if="
                       item.sdate.slice(5, 7) == todaytime.getMonth() + 1 &&
-                        item.sdate.slice(8, 10) == todaytime.getDate() &&
-                        item.stime.slice(0, 2) == todaytime.getHours()
+                      item.sdate.slice(8, 10) == todaytime.getDate() &&
+                      item.stime.slice(0, 2) == todaytime.getHours()
                     "
                     small
                     color="orange lighten-4"
                     text-color="red"
                     @click="startCounseling(item.num)"
-                    style="font-size:0.9rem;color:red"
+                    style="font-size: 0.9rem; color: red"
                     >on-Air</v-btn
                   >
-                  <v-btn v-else disabled style="font-size:0.9rem;color:black" text>on-air</v-btn>
+                  <v-btn
+                    v-else
+                    disabled
+                    style="font-size: 0.9rem; color: black"
+                    text
+                    >on-air</v-btn
+                  >
                 </td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
-        <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3"></v-pagination>
+        <v-pagination
+          v-model="rpage"
+          :length="rpageLength"
+          circle
+          class="pb-3"
+        ></v-pagination>
       </v-tab-item>
     </v-tabs-items>
 
@@ -119,7 +144,17 @@
           <span><h1>답변</h1></span>
         </v-card-subtitle>
         <v-card-text>
-          <v-textarea rows="10" readonly auto-grow solo flat class="pa-3" :value="answer" style="white-space: pre-line"> </v-textarea>
+          <v-textarea
+            rows="10"
+            readonly
+            auto-grow
+            solo
+            flat
+            class="pa-3"
+            :value="answer"
+            style="white-space: pre-line"
+          >
+          </v-textarea>
         </v-card-text>
 
         <v-card-actions>
@@ -131,15 +166,25 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="typeDialog" persistent max-width="500">
-      <v-card
-        ><br />
-        <v-card-subtitle>
-          <span><h1>상담 유형을 선택해주세요.</h1></span>
-        </v-card-subtitle>
+    <v-dialog
+      v-model="typeDialog"
+      max-width="500"
+      min-height="500"
+      style="height: 500px"
+    >
+      <v-card class="pt-5 px-5">
+        <v-card-title class="justify-center pb-7">
+          <h2>상담 유형을 선택해주세요.</h2>
+        </v-card-title>
         <v-card-text>
-          <div @click="reapply">실시간 상담</div>
-          <div @click="reRecord">녹화 상담</div>
+          <v-row class="justify-center">
+            <v-col cols="5" @click="reapply" class="mr-1 type-box"
+              ><div class="type-title" style="width:100%;height:100%;padding-top:30%;">실시간 상담</div></v-col
+            >
+            <v-col cols="5" @click="reRecord" class="type-box"
+              ><div class="type-title" style="width:100%;height:100%;padding-top:30%;">녹화 상담</div></v-col
+            >
+          </v-row>
         </v-card-text>
 
         <v-card-actions>
@@ -156,39 +201,58 @@
         ><br />
         <v-card-subtitle>
           <span
-            ><h1>{{ reMentor }} 상담사에게 실시간 상담을 재신청합니다.</h1></span
+            ><h1>
+              {{ reMentor }} 상담사에게 실시간 상담을 재신청합니다.
+            </h1></span
           >
         </v-card-subtitle>
         <v-card-text>
           원하시는 날짜와 시간을 선택해주세요.
-          <span style="color: crimson">재신청은 1회만 가능하므로 신중히 선택해주세요.</span>
+          <span style="color: crimson"
+            >재신청은 1회만 가능하므로 신중히 선택해주세요.</span
+          >
           <br />
           (상담 가능한 날짜와 시간만 표시됩니다.)
         </v-card-text>
         <v-container>
           <v-row>
-            <v-col>
-              <v-date-picker v-model="date" :allowed-dates="allowedDates" color="#93dfff"></v-date-picker>
+            <v-col class="pb-0">
+              <v-date-picker
+                v-model="date"
+                :allowed-dates="allowedDates"
+                color="#93dfff"
+              ></v-date-picker>
             </v-col>
-            <v-col>
-              <v-time-picker
-                v-model="time"
-                ampm-in-title
-                format="24hr"
-                color="#f5a2bb"
-                :allowed-hours="allowedHours"
-                :allowed-minutes="allowedMinutes"
-              ></v-time-picker>
+            <v-col class="pb-0">
+              <div class="px-7" style="height: 100%">
+                <div style="height: 20%">
+                  <v-select
+                    v-model="time"
+                    :items="timeItems"
+                    :label="selLabel"
+                    solo
+                  ></v-select>
+                </div>
+                <div style="height: 60%"></div>
+                <div align="right" style="height: 20%">
+                  <v-btn color="red darken-1" text @click="dialog = false">
+                    취소
+                  </v-btn>
+                  <v-btn color="blue darken-1" text @click="reqReapply()">
+                    신청
+                  </v-btn>
+                </div>
+              </div>
             </v-col>
           </v-row>
         </v-container>
-        <v-card-actions>
+        <!-- <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red darken-1" text @click="dialog = false">
             취소
           </v-btn>
           <v-btn color="blue darken-1" text @click="reqReapply()"> 신청 </v-btn>
-        </v-card-actions>
+        </v-card-actions> -->
       </v-card>
     </v-dialog>
     <v-dialog v-model="cancelDialog" persistent max-width="400">
@@ -210,11 +274,11 @@
 </template>
 
 <script>
-import http from '@/util/http-common.js';
-import { mapGetters } from 'vuex';
+import http from "@/util/http-common.js";
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'MyListComp',
+  name: "MyListComp",
   data() {
     return {
       myList: [],
@@ -226,7 +290,7 @@ export default {
       dialog: false,
       typeDialog: false,
       cancelDialog: false,
-      reMentor: '',
+      reMentor: "",
       time: null,
       date: null,
       schedule: [],
@@ -237,11 +301,13 @@ export default {
       rpage: 1,
       selitem: [],
       mentorNum: null,
-      cancelNum: '',
+      cancelNum: "",
       answerDialog: false,
-      answer: '',
+      answer: "",
       todaytime: new Date(),
       tab: null,
+      timeItems: [],
+      selLabel: "시간을 선택해주세요.",
     };
   },
   mounted() {
@@ -271,7 +337,14 @@ export default {
     });
   },
   computed: {
-    ...mapGetters(['isProfileLoaded', 'getRole', 'getQualification', 'getUserName', 'getUserNum', 'getUserID']),
+    ...mapGetters([
+      "isProfileLoaded",
+      "getRole",
+      "getQualification",
+      "getUserName",
+      "getUserNum",
+      "getUserID",
+    ]),
   },
   methods: {
     findName(userNum) {
@@ -289,7 +362,16 @@ export default {
       }
     },
     setTime(date) {
-      let time = date.slice(0, 4) + '-' + date.slice(5, 7) + '-' + date.slice(8, 10) + ' ' + date.slice(11, 13) + ':' + date.slice(14, 16);
+      let time =
+        date.slice(0, 4) +
+        "-" +
+        date.slice(5, 7) +
+        "-" +
+        date.slice(8, 10) +
+        " " +
+        date.slice(11, 13) +
+        ":" +
+        date.slice(14, 16);
       return time;
     },
     reapplyType(item) {
@@ -307,6 +389,7 @@ export default {
       var mentorId = this.findID(this.selitem.mentor);
       http.get(`/schedule/allowSchedule/${mentorId}`).then((res) => {
         this.schedule = res.data;
+        console.log(this.schedule);
       });
     },
     allowedDates(val) {
@@ -326,7 +409,12 @@ export default {
       for (const schedule of this.schedule) {
         if (this.date == schedule.sdate) {
           if (val == schedule.stime.substr(0, 2)) {
-            var today = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+            var today =
+              date.getFullYear() +
+              "-" +
+              (date.getMonth() + 1) +
+              "-" +
+              date.getDate();
             if (today == this.date) {
               return val > hour;
             } else {
@@ -341,52 +429,69 @@ export default {
       return val == 0;
     },
     reqReapply() {
+      var mentorId = this.findID(this.selitem.mentor);
       if (this.date != null && this.time != null) {
-        http.get(`/schedule/findScheduleNum/${this.date}/${this.time}`).then((res) => {
-          http
-            .post(`/schedule/reApply/${this.conRoomNum}`, {
-              mentee: this.getUserID,
-              scheNum: res.data,
-            })
-            .then((success) => {
-              if (success.data == 'success') {
-                http.post(`/counseling/reserveRequest`, {
-                  mentee: this.getUserNum,
-                  mentor: this.mentorNum,
-                  room: this.createRoomId(),
-                  status: 'reapply',
-                  date: `${this.date}T${this.time}:00`,
-                });
-                alert('재상담 신청 완료되었습니다.');
-                http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
-                  this.myList = res.data;
-                  this.cpagingList = this.myList.slice(0, 9);
-                });
-                http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
-                  this.myReservation = data.data;
-                });
-                this.dialog = false;
-              }
-            });
-        });
+        http
+          .get(
+            `/schedule/findScheduleNum/${this.date}/${this.time.substr(
+              0,
+              5
+            )}/${mentorId}`
+          )
+          .then((res) => {
+            http
+              .post(`/schedule/reApply/${this.conRoomNum}`, {
+                mentee: this.getUserID,
+                scheNum: res.data,
+              })
+              .then((success) => {
+                if (success.data == "success") {
+                  http.post(`/counseling/reserveRequest`, {
+                    mentee: this.getUserNum,
+                    mentor: this.mentorNum,
+                    room: this.createRoomId(),
+                    status: "reapply",
+                    date: `${this.date}T${this.time.substr(0, 5)}:00`,
+                  });
+                  alert("재상담 신청 완료되었습니다.");
+                  http
+                    .get(`/counseling/menteeMyList/${this.getUserNum}`)
+                    .then((res) => {
+                      this.myList = res.data;
+                      this.cpagingList = this.myList.slice(0, 9);
+                    });
+                  http
+                    .get(`/schedule/myReservation/${this.getUserID}`)
+                    .then((data) => {
+                      this.myReservation = data.data;
+                    });
+                  this.dialog = false;
+                }
+              });
+          });
       } else {
-        alert('날짜와 시간을 선택해주세요');
+        alert("날짜와 시간을 선택해주세요");
       }
     },
     cancel() {
       this.cancelDialog = false;
-      http.delete(`/schedule/cancelReservation/${this.cancelNum}`).then((res) => {
-        if (res.data == 'success') {
-          alert('예약이 취소되었습니다.');
-          http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
-            this.myReservation = data.data;
-          });
-        }
-      });
+      http
+        .delete(`/schedule/cancelReservation/${this.cancelNum}`)
+        .then((res) => {
+          if (res.data == "success") {
+            alert("예약이 취소되었습니다.");
+            http
+              .get(`/schedule/myReservation/${this.getUserID}`)
+              .then((data) => {
+                this.myReservation = data.data;
+              });
+          }
+        });
     },
     createRoomId(length = 20) {
-      let text = '';
-      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let text = "";
+      const possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       Array.from(Array(length)).forEach(() => {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
       });
@@ -398,7 +503,9 @@ export default {
     },
     getAnswer(item) {
       console.log(item.answer);
-      this.answer = item.answer.substring(1, item.answer.length - 1).replaceAll('\r\n', '<br/>');
+      this.answer = item.answer
+        .substring(1, item.answer.length - 1)
+        .replaceAll("\r\n", "<br/>");
       this.answerDialog = true;
     },
     reRecord() {
@@ -419,8 +526,42 @@ export default {
       var first = (page - 1) * 10;
       this.rpagingList = this.myReservation.slice(first, first + 9);
     },
+    date(v) {
+      var mentorId = this.findID(this.selitem.mentor);
+      var hour = new Date().getHours();
+      this.timeItems = [];
+      http.get(`/schedule/allowScheduleTime/${mentorId}/${v}`).then((res) => {
+        for (const stime of res.data) {
+          if (stime.substr(0, 2) > hour) {
+            this.timeItems.push(stime);
+          }
+        }
+        if (this.timeItems.length == 0) {
+          this.selLabel = "예약 가능한 시간이 없습니다.";
+          this.timeItems.push("예약 가능한 시간이 없습니다.");
+        } else {
+          this.selLabel = "시간을 선택해주세요.";
+        }
+      });
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.type-box {
+  border: 2px solid lightgray;
+  font-size: 1.3rem;
+  cursor: pointer;
+  height: 150px;
+}
+.type-title{
+  transform: scale(1);
+  transition: all 0.3s;
+}
+.type-title:hover{
+  transform: scale(1.2);
+  transition: all 0.3s;
+}
+
+</style>
