@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "alarm")
 public class Alarm {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name="con_room_num")
 	private Long num ;
     private Long mentor;
     
-    public Alarm(Long mentor, Long num) {
-        this.mentor = mentor;
+    public Alarm( Long num, Long mentor) {
         this.num = num;
+        this.mentor = mentor;
     }
     
     @OneToOne

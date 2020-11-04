@@ -123,6 +123,10 @@ export default {
       this.roomId = text;
     },
     createRoom() {
+      console.log("create Room :::::: "+this.getUserNum)
+      if(this.getUserNum == null){
+        this.$router.go();
+      }else{
       http
         .post(`/counseling/liveRequest`, {
           mentee: this.getUserNum,
@@ -140,6 +144,7 @@ export default {
           this.roomNum = res.data;
         });
       this.onJoin();
+      }
     },
     checkCnt(data){
       console.log(" checkCnt ");
