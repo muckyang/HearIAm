@@ -17,7 +17,7 @@
           <v-row v-if="dialog" style="padding-top:200px">
             <v-col>
               <div>
-                <h4 v-if="mentorName">{{mentorName}} 상담사와 연결중입니다.</h4>
+                <h4>상담사와 연결중입니다.</h4>
                 <br />
                 <v-progress-circular
                   :size="100"
@@ -32,7 +32,7 @@
           </v-row>
           <v-row style="padding-top:0px">
             <v-col>
-              <h1>상담사와 상담 중입니다.</h1><br/>
+              <h1 v-if="mentorName">{{mentorName}}상담사와 상담 중입니다.</h1><br/>
               <WebRTC
                 ref="webrtc"
                 width="100%"

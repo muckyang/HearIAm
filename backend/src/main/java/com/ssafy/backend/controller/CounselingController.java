@@ -194,7 +194,7 @@ public class CounselingController {
 	public User liveMentorInfo(@PathVariable(value = "roomId") String roomId) {
 		ConRoom conRoom = conRoomRepository.findByRoom(roomId);
 		User user = userRepository.findByNum(conRoom.getMentor())
-				.orElseThrow(() -> new ResourceNotFoundException("User", "num", num));
+				.orElseThrow(() -> new ResourceNotFoundException("User", "num", conRoom.getMentor()));
 		return user;
 	}
 
