@@ -92,9 +92,9 @@ public class CounselingController {
 	public List<ConRoom> liveList() {
 		List<ConRoom> list = conRoomRepository.findByStatus("liveRequest");
 		Date now = new Date();
-
+		
 		for (ConRoom conRoom : list) {
-			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate());
+			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate().minusHours(9));
 			if ((now.getTime() - date2.getTime()) / 60000 > 30) {
 				conRoomRepository.deleteByNum(conRoom.getNum());
 			}
@@ -223,6 +223,7 @@ public class CounselingController {
 	@ApiOperation("상담일지 수정등록")
 	public Object updateReport(@RequestBody ConRoom request) throws IOException, SQLException {
 		try {
+			request.setDate(request.getDate().plusHours(9));
 			conRoomRepository.save(request);
 			return new ResponseEntity<>("report save", HttpStatus.OK);
 		} catch (Exception e) {
