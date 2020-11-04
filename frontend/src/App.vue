@@ -160,6 +160,7 @@ export default {
         });
     },
     unsubscribe() {
+      this.$store.commit('changeIsReady',false);
       this.unsubscribeTokenToTopic(this.devecieId);
     },
     unsubscribeTokenToTopic(token) {
