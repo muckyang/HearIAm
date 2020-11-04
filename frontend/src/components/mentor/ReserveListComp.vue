@@ -55,13 +55,12 @@ export default {
     };
   },
   mounted() {
-    console.log(this.todaytime.getHours());
+    // console.log(this.todaytime.getHours());
     http.get(`/user/userName`).then((res) => {
       this.userList = res.data;
     });
     http.get(`/counseling/ReserveList/${this.getUserNum}`).then((res) => {
       this.conList = res.data;
-      console.log(res.data);
       // this.pagingList = this.conList.slice(0, 9);
       // if (this.conList.length % 10 == 0) {
       //   this.pageLength = this.conList.length / 10;
