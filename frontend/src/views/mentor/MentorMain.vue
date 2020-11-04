@@ -108,16 +108,13 @@ export default {
   },
   methods: {
     subscribe() {
-      console.log("click subscribe btn");
-      this.readyClick= true;
-      this.$store.commit('changeIsReady',true);
+      this.$store.commit("changeIsReady", true);
       http.get(`/counseling/getMenteeCnt`).then((res) => {
-        console.log(res.data);
         if (res.data == "empty") {
           this.subscribeTokenToTopic(this.devecieId, this.topic);
           let mentorname = this.$store.getters["getUserNum"];
-          http.get(`/counseling/addReady/${mentorname}`).then((res) => {
-            console.log("add ready success : " + res);
+          http.get(`/counseling/addReady/${mentorname}`).catch((e) => {
+            console.log(e);
           });
         } else {
           // 학생 대기
@@ -145,7 +142,6 @@ export default {
               response.text()
             );
           }
-          console.log("subscribe success : " + response);
         })
         .catch((e) => {
           console.log(e);
@@ -156,6 +152,7 @@ export default {
     },
     logout: function () {
       this.unsubscribe();
+      
       this.$store.dispatch(AUTH_LOGOUT).then(() => {});
       // this.$router.push("/").catch(() => {});
       window.location.href = "/";
@@ -170,7 +167,7 @@ export default {
       this.$router.push(`/recordList`);
     },
     unsubscribe() {
-      this.$store.commit('changeIsReady',false);
+      this.$store.commit("changeIsReady", false);
       this.unsubscribeTokenToTopic(this.devecieId);
     },
     unsubscribeTokenToTopic(token) {
@@ -196,23 +193,17 @@ export default {
               response.text()
             );
           }
-          console.log("unsubscribe success : " + response);
         })
         .catch((e) => {
           console.log(e);
         });
 
-         let num = this.getUserNum;
-        http.delete(`/counseling/deleteReadyMentor/${num}`).then(()=>{
-      });
-       
+      let num = this.getUserNum;
+      http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
     },
   },
-       computed: {
-        ...mapGetters([
-        "getUserNum",
-        "getIsReady",
-      ]),
-      }
+  computed: {
+    ...mapGetters(["getUserNum", "getIsReady"]),
+  },
 };
 </script>
