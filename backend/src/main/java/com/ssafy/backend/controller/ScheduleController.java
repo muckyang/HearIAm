@@ -52,7 +52,7 @@ public class ScheduleController {
 
     @Autowired
     UserRepository userRepository;
-    
+
     @Autowired
     AlarmRepository alarmRepository;
 
@@ -144,9 +144,9 @@ public class ScheduleController {
         reser.setConcern(concern);
         reservationRepository.save(reser);
         ReserveRes res = new ReserveRes();
-        res.setMentor(sche.getMentor());  
-        res.setSdate(sche.getSdate());  
-        res.setStime(sche.getStime());  
+        res.setMentor(sche.getMentor());
+        res.setSdate(sche.getSdate());
+        res.setStime(sche.getStime());
 
         return res;
     }
@@ -255,9 +255,26 @@ public class ScheduleController {
         return list;
     }
 
-    @GetMapping("/findScheduleNum/{date}/{time}")
-    public Long findScheduleNum(@PathVariable(value = "date") String date, @PathVariable(value = "time") String time) {
-        Schedule schedule = scheduleRepository.findBySdateAndStime(LocalDate.parse(date), time);
+    @GetMapping("/allowScheduleTime/{mentor}/{sdate}")
+    public List<String> counselingTime(@PathVariable(value = "mentor") String mentor, @PathVariable String sdate) {
+        List<Schedule> list = scheduleRepository.findByMentorAndSdateAndIsReserOrderByTimeidxAsc( mentor, LocalDate.parse(sdate),0);
+        String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
+                "19:00", "20:00", "21:00", "22:00", "23:00" };
+        List<String> timeList = new LinkedList<>();
+        for (Schedule s : list) {
+            int idx = s.getTimeidx();
+            if (idx == 14) {
+                timeList.add(timeArr[idx] + " ~ 24:00");
+            } else {
+                timeList.add(timeArr[idx] + " ~ " + timeArr[idx + 1]);
+            }
+        }
+        return timeList;
+    }
+
+    @GetMapping("/findScheduleNum/{date}/{time}/{mentor}")
+    public Long findScheduleNum(@PathVariable(value = "date") String date, @PathVariable(value = "time") String time, @PathVariable String mentor) {
+        Schedule schedule = scheduleRepository.findScheduleByMentorAndSdateAndStime(mentor, LocalDate.parse(date), time);
         Long num = schedule.getNum();
         return num;
     }

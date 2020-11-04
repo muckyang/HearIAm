@@ -27,4 +27,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     Schedule findScheduleByMentorAndSdateAndTimeidx(String Mentor, LocalDate sdate, int timeidx);
 
     List<Schedule> findBySdateAndIsReser(LocalDate sdate, int isReser);
+
+    List<Schedule> findByMentorAndSdateAndIsReserOrderByTimeidxAsc(String mentor, LocalDate sdate, int isReser);
 }
