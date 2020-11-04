@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.google.common.base.Optional;
 import com.ssafy.backend.model.Alarm;
 @Repository
 public interface AlarmRepository extends JpaRepository<Alarm, Long>{

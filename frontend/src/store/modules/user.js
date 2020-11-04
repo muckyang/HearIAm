@@ -12,7 +12,8 @@ const state = {
     userID: localStorage.getItem("userID") || "",
     deviceID: localStorage.getItem("deviceID") || "",
     isRemote : false,
-};
+    isready : localStorage.getItem("isready") || false,
+ };
 
 const getters = {
     isProfileLoaded: state => !!state.userName,
@@ -23,6 +24,7 @@ const getters = {
     getUserID: state => state.userID,
     getDeviceID : state => state.deviceID,
     getIsRemote : state => state.isRemote,
+    getIsReady : state => state.isready, 
 };
 
 const actions = {
@@ -75,6 +77,7 @@ const mutations = {
         state.userNum = "";
         state.userID = "";
         state.deviceID="";
+        state.isready=false;
     },
     modifyProfileName: function(state, after) {
         state.userName = after;
@@ -84,6 +87,10 @@ const mutations = {
     },
     changeIsRemote : (state,data)=>{
         state.isRemote = data;
+    },
+    changeIsReady : (state, data )=> {
+        state.isready = data;
+        localStorage.setItem("isready",data);
     }
 };
 

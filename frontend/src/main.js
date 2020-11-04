@@ -13,9 +13,8 @@ firebase.initializeApp(configset);
 
 Notification.requestPermission()
 .then((permission) => {
-  console.log('permission ', permission)
   if (permission !== 'granted') {
-    alert('알림을 허용해주세요')
+    alert('알림을 허용해주세요');
   }
 })
 
@@ -32,8 +31,6 @@ messaging.getToken().then((currentToken) => {
 });
 
 messaging.onMessage((payload) => {
-    console.dir("main.js - payload : ");
-    console.dir(payload);
     const title = payload.data.title;
     const options = {
         body: payload.data.body,
@@ -42,7 +39,6 @@ messaging.onMessage((payload) => {
     const notification = new Notification(title, options);
     notification.onclick = function(event) {
       event.preventDefault(); // prevent the browser from focusing the Notification's tab
-      console.dir(payload);
       let num = payload.data.room_num*1;
       
       if(num>0){ //실시간 상담

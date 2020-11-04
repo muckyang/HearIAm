@@ -241,17 +241,15 @@ public class CounselingController {
 	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") Long roomNum) {
 		try {
 			ConRoom cRoom = conRoomRepository.findByNum(roomNum);
-
-			// Optional<Alarm> alarm = conRoomRepository.findByNum(roomNum);
-			// System.out.println(alarm);
+			System.out.println("adasasddsa ::::::: "+cRoom.getMentor());
 			String result = "";
 			if (cRoom.getMentor() == 1) {
-				result = "fail";
-			} else {
 				System.out.println("success");
 				alarmRepository.deleteByCrNum(cRoom.getNum());
 				alarmReadyRepository.deleteByMentor(mentor);
 				result = "sucess";
+			} else {
+				result = "fail";
 			}
 			System.out.println(result);
 			return new ResponseEntity<>(result, HttpStatus.OK);

@@ -4,8 +4,7 @@
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
           <alarmList></alarmList>
-          <v-btn v-if="readyClick" @click="unsubscribe()">대기 취소</v-btn>
-          <v-btn @click="logout()">로그아웃</v-btn>
+          <v-btn v-if="this.getIsReady" @click="unsubscribe()">대기 취소</v-btn>
           <div>
             <v-btn
               depressed
@@ -102,7 +101,6 @@ export default {
     return {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
-      readyClick:false,
     };
   },
   components: {
@@ -113,14 +111,13 @@ export default {
       http.get(`/counseling/liveList`);
       console.log("click subscribe btn");
       this.readyClick= true;
+      this.$store.commit("changeIsReady", true);
       http.get(`/counseling/getMenteeCnt`).then((res) => {
-        console.log(res.data);
         if (res.data == "empty") {
-          //상담사 대기
           this.subscribeTokenToTopic(this.devecieId, this.topic);
           let mentorname = this.$store.getters["getUserNum"];
-          http.get(`/counseling/addReady/${mentorname}`).then((res) => {
-            console.log("add ready success : " + res);
+          http.get(`/counseling/addReady/${mentorname}`).catch((e) => {
+            console.log(e);
           });
         } else {
           // 학생 대기
@@ -148,7 +145,6 @@ export default {
               response.text()
             );
           }
-          console.log("subscribe success : " + response);
         })
         .catch((e) => {
           console.log(e);
@@ -159,6 +155,7 @@ export default {
     },
     logout: function () {
       this.unsubscribe();
+      
       this.$store.dispatch(AUTH_LOGOUT).then(() => {});
       // this.$router.push("/").catch(() => {});
       window.location.href = "/";
@@ -173,7 +170,7 @@ export default {
       this.$router.push(`/recordList`);
     },
     unsubscribe() {
-      this.readyClick = false;
+      this.$store.commit("changeIsReady", false);
       this.unsubscribeTokenToTopic(this.devecieId);
     },
     unsubscribeTokenToTopic(token) {
@@ -199,22 +196,17 @@ export default {
               response.text()
             );
           }
-          console.log("unsubscribe success : " + response);
         })
         .catch((e) => {
           console.log(e);
         });
 
-         let num = this.getUserNum;
-      http.delete(`/counseling/deleteReadyMentor/${num}`).then(()=>{
-      });
-       
+      let num = this.getUserNum;
+      http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
     },
   },
-       computed: {
-        ...mapGetters([
-        "getUserNum",
-      ]),
-      }
+  computed: {
+    ...mapGetters(["getUserNum", "getIsReady"]),
+  },
 };
 </script>
