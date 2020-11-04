@@ -217,25 +217,22 @@ export default {
         });
     },
     reserve() {
-      http.post(
+      http
+        .post(
           `/schedule/reservation/${this.getUserID}/${this.date}/${this.time}/${this.concern}`
-         )
+        )
         .then((res) => {
-          // console.log(res.data.mentor)
-          http.get(`/user/users/${res.data.mentor}`)
-            .then((res1) => {
-              this.mentorNum = res1.data.num;
-              console.log(res1.data)
+          http.get(`/user/users/${res.data.mentor}`).then((res1) => {
+            this.mentorNum = res1.data.num;
+	console.log(res1.data)
               console.log(res.data)
               console.log(this.getUserNum)
-              http
-                .post(`/counseling/reserveRequest`, {
-                  mentee: this.getUserNum,
-                  mentor: this.mentorNum,
-                  room: this.createRoomId(),
-                  status: "reserve",
-                  date: `${res.data.sdate}T${res.data.stime}:00`
-                });
+            http.post(`/counseling/reserveRequest`, {
+              mentee: this.getUserNum,
+              mentor: this.mentorNum,
+              room: this.createRoomId(),
+              status: "reserve",
+              date: `${res.data.sdate}T${res.data.stime}:00`,
             });
           });
           alert("예약이 완료되었습니다.");
@@ -273,10 +270,6 @@ export default {
 </script>
 
 <style scoped>
-.reserve-main {
-  /* background-image: linear-gradient(to right, #93dfff, #f5a2bb); */
-  /* height: 100%; */
-}
 .reserve-body {
   height: 100%;
   padding: 2%;
