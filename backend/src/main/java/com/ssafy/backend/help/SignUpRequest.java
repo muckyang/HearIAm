@@ -12,6 +12,7 @@ public class SignUpRequest {
     private String role;
 	private int qualification;
 	private String gender;
+	
 
 	public SignUpRequest(String id, String name, String password, String role, String gender, int qualification) {
 		super();

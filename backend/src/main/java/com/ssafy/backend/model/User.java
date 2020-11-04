@@ -14,6 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }),
 		@UniqueConstraint(columnNames = { "name" }) })
@@ -29,6 +32,8 @@ public class User {
 	private String gender;
 	private String deviceId;
 	private int isSet;
+	private String color;
+	private String icon;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_num"), inverseJoinColumns = @JoinColumn(name = "role_num"))

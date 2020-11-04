@@ -67,6 +67,7 @@ public class CounselingController {
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
+		conRoom.setDate(LocalDateTime.now().plusHours(9));
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm(1L,conRoom.getNum());
 		alarmRepository.save(alarm);
@@ -104,6 +105,7 @@ public class CounselingController {
 	@GetMapping("/counseling/{num}")
 	public ConRoom counseling(@PathVariable(value = "num") Long num) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
+		conRoom.setDate(conRoom.getDate().minusHours(9));
 		return conRoom;
 	}
 
@@ -122,7 +124,6 @@ public class CounselingController {
 	public ResponseEntity<String> finishLive(@PathVariable(value = "num") Long num, @RequestBody ConRoom con) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
 		conRoom.setStatus("finish");
-		conRoom.setTitle(con.getTitle());
 		conRoom.setMemo(con.getMemo());
 		conRoomRepository.save(conRoom);
 
@@ -139,6 +140,9 @@ public class CounselingController {
 	@GetMapping("/menteeMyList/{num}")
 	public List<ConRoom> myList(@PathVariable(value = "num") Long num) {
 		List<ConRoom> list = conRoomRepository.findByMenteeOrderByNumDesc(num);
+		for (ConRoom conRoom : list) {
+			conRoom.setDate(conRoom.getDate().minusHours(9));
+		}
 		return list;
 	}
 
@@ -164,7 +168,10 @@ public class CounselingController {
 	@GetMapping("/myMenteeInfoList/{mentor}/{mentee}")
 	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor,
 			@PathVariable(value = "mentee") Long mentee) {
-		List<ConRoom> list = conRoomRepository.findByMentorAndMentee(mentor, mentee);
+		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeOrderByDateDesc(mentor, mentee);
+		for (ConRoom conRoom : list) {
+			conRoom.setDate(conRoom.getDate().minusHours(9));
+		}
 		return list;
 	}
 

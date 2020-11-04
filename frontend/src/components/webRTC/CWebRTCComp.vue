@@ -1,81 +1,71 @@
 <template>
   <div class="container">
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-row>
-            <v-col>
-              <v-btn
-                v-if="!isProgress"
-                type="button"
-                class="btn btn-primary"
-                @click="onJoin"
-              >
-                상담 시작
-              </v-btn>
-              <v-btn
-                v-else
-                type="button"
-                class="btn btn-primary"
-                @click="onLeave"
-              >
-                상담 종료
-              </v-btn>
+    <v-dialog v-model="dialog" persistent max-width="1300">
+      <v-card>
+        <v-container>
+          <v-row style="height: 120px">
+            <v-col cols="10">
+              <h1 v-if="!menteeName">상담 시작을 눌러주세요!!</h1>
+              <h1 v-else>{{ menteeName }}님과 상담중 입니다.</h1>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col cols="2">
+              <WebRTC
+                ref="webrtc"
+                width="100%"
+                :roomId="roomId"
+                cameraHeight="120"
+                @error="onError"
+                @childs-event="parentsMethod"
+              />
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="5">
-              <Bar :chartData="chartData" :options="options" />
-            </v-col>
             <v-col>
-              <v-row style="height: 220px">
-                <v-col cols="6">
-                  <WebRTC
-                    ref="webrtc"
-                    width="100%"
-                    :roomId="roomId"
-                    cameraHeight="200"
-                    @error="onError"
-                    @childs-event="parentsMethod"
-                  />
+              <v-row>
+                <v-col cols="4">
+                  <Bar :chartData="chartData" :options="options" />
                 </v-col>
-                <v-col cols="6">
-                  <v-select
-                    class="mt-7"
-                    v-model="title"
-                    :items="items"
-                    label="고민이 무엇인가요?"
-                    solo
-                  ></v-select>
-                  <v-text-field
-                    v-if="isSelf"
-                    v-model="title2"
-                    v-bind="attrs"
-                    v-on="on"
-                    hint="자유롭게 고민을 입력해주세요."
-                    persistent-hint
-                  ></v-text-field>
+                <v-col cols="8">
+                  <v-row>
+                    <v-textarea
+                      v-model="memo"
+                      label="메모"
+                      outlined
+                      auto-grow
+                      row-height="30"
+                      rows="12"
+                      background-color="amber lighten-4"
+                      color="orange orange-darken-4"
+                    >
+                    </v-textarea>
+                  </v-row>
                 </v-col>
               </v-row>
               <v-row>
-                <textarea
-                  v-model="memo"
-                  outlined
-                  auto-grow
-                  row-height="30"
-                  rows="12"
-                  style="background-color: white; width: 100%"
+                <v-spacer></v-spacer>
+                <v-btn
+                  v-if="!isProgress"
+                  type="button"
+                  class="btn btn-primary"
+                  @click="onJoin"
                 >
-                </textarea>
+                  상담 시작
+                </v-btn>
+                <v-btn
+                  v-else
+                  type="button"
+                  class="btn btn-primary"
+                  @click="onLeave"
+                >
+                  상담 종료
+                </v-btn>
               </v-row>
             </v-col>
           </v-row>
-          <v-row v-if="isProgress">
-            <v-col> </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
+        </v-container>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -135,6 +125,7 @@ export default {
       isSelf: false,
       menteeNum: null,
       menteeName: null,
+      dialog: true,
     };
   },
   mounted() {
@@ -150,20 +141,21 @@ export default {
       http.put(
         `/counseling/joinLive/${this.$route.params.num}/${this.getUserNum}`
       );
-      http.get(`/counseling/liveMenteeInfo/${this.$route.params.num}`).then((res)=>{
-        this.menteeNum = res.data.num;
-        this.menteeName = res.data.name;
-      })
+      http
+        .get(`/counseling/liveMenteeInfo/${this.$route.params.num}`)
+        .then((res) => {
+          this.menteeNum = res.data.num;
+          this.menteeName = res.data.name;
+        });
       this.$refs.webrtc.join();
     },
     onLeave() {
-      this.$store.commit('changeIsRemote',false);
-      if(this.title == "직접 입력"){
+      this.$store.commit("changeIsRemote", false);
+      if (this.title == "직접 입력") {
         this.title = this.title2;
       }
-      http.put(`/counseling/finishLive/${this.$route.params.num}`,{
-        title: this.title,
-        memo: this.memo
+      http.put(`/counseling/finishLive/${this.$route.params.num}`, {
+        memo: this.memo,
       });
       http.post(`/counseling/saveEmotion`, {
         num: this.$route.params.num,
@@ -177,7 +169,7 @@ export default {
       });
       this.$refs.webrtc.leave();
       alert(`상담 내용이 저장되었습니다.`);
-      this.$router.push(`/myMenteeInfo/${this.menteeNum}&${this.menteeName}`)
+      this.$router.push(`/myMenteeInfo/${this.menteeNum}&${this.menteeName}`);
     },
     onError(error, stream) {
       console.log("On Error Event", error, stream);
@@ -258,7 +250,7 @@ export default {
     title(v) {
       if (v == "직접 입력") {
         this.isSelf = true;
-      }else{
+      } else {
         this.isSelf = false;
       }
     },

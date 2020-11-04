@@ -1,11 +1,12 @@
 <template>
   <div>
     <v-card class="py-3 px-3" id="report-card">
-      <v-card-title>
+      <v-card-title width="500">
         <!-- 제목 -->
         <v-icon large color="red" class="mr-3">mdi-subtitles-outline</v-icon>
-        <h2 v-if="counseling.title != null">{{ counseling.title }}</h2>
-        <h2 v-else>{{ nickname }}님과의 상담내용</h2>
+        <h2>
+          <v-text-field style="width:300px;" name="name" v-model="counseling.title"></v-text-field>
+        </h2>
       </v-card-title>
 
       <v-divider class="mx-4"></v-divider>
@@ -14,7 +15,7 @@
         <v-row cols="12">
           <!-- 감정 그래프 -->
           <v-col cols="7">
-            <div style="width :40vw; height:40vw; margin-left:5%;">
+            <div style="width :28vw; height:28vw; margin-left:5%;">
               <Doughnut :chartData="chartData"/>
             </div>
           </v-col>
@@ -80,6 +81,9 @@ export default {
   components: {
     Doughnut,
   },
+  props: {
+    numIndex: { type: Number },
+  },
   data() {
     return {
       emotion: {},
@@ -97,21 +101,23 @@ export default {
     };
   },
   created() {
-    http.get(`/counseling/counseling/${this.$route.params.num}`).then((res) => {
+    http.get(`/counseling/counseling/${this.numIndex}`).then((res) => {
       this.counseling = res.data;
       this.date = this.setTime(this.counseling.date);
       this.getMenteeName(this.counseling.mentee);
     });
-    http.get(`/counseling/loadEmotion/${this.$route.params.num}`).then((res) => {
+    http.get(`/counseling/loadEmotion/${this.numIndex}`).then((res) => {
       this.emotion = res.data;
-      this.angry = this.avrage(this.emotion.angry.split(`|`).map(Number));
-      this.disgusted = this.avrage(this.emotion.disgusted.split(`|`).map(Number));
-      this.fearful = this.avrage(this.emotion.fearful.split(`|`).map(Number));
-      this.happy = this.avrage(this.emotion.happy.split(`|`).map(Number));
-      this.neutral = this.avrage(this.emotion.neutral.split(`|`).map(Number));
-      this.sad = this.avrage(this.emotion.sad.split(`|`).map(Number));
-      this.surprised = this.avrage(this.emotion.surprised.split(`|`).map(Number));
-      this.fillData();
+      if(this.emotion != '') {
+        this.angry = this.avrage(this.emotion.angry.split(`|`).map(Number));
+        this.disgusted = this.avrage(this.emotion.disgusted.split(`|`).map(Number));
+        this.fearful = this.avrage(this.emotion.fearful.split(`|`).map(Number));
+        this.happy = this.avrage(this.emotion.happy.split(`|`).map(Number));
+        this.neutral = this.avrage(this.emotion.neutral.split(`|`).map(Number));
+        this.sad = this.avrage(this.emotion.sad.split(`|`).map(Number));
+        this.surprised = this.avrage(this.emotion.surprised.split(`|`).map(Number));
+        this.fillData();
+      }
     });
   },
   methods: {
@@ -153,6 +159,7 @@ export default {
         .get(`/user/menteeName/${mentee}`)
         .then((res) => {
           this.nickname = res.data;
+          this.counseling.title = this.nickname + "님과의 상담내용";
         })
         .catch((err) => {
           console.log(err);

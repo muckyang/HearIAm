@@ -1,7 +1,7 @@
 <template>
   <div
       style="
-        height: 100%;
+        height: 100vh;
         width: 100%;
         background: linear-gradient(to right, #93dfff, #f5a2bb);
         padding-top: 64px;
