@@ -189,6 +189,14 @@ public class CounselingController {
 				.orElseThrow(() -> new ResourceNotFoundException("User", "num", num));
 		return user;
 	}
+	
+	@GetMapping("/liveMentorInfo/{roomId}")
+	public User liveMentorInfo(@PathVariable(value = "roomId") String roomId) {
+		ConRoom conRoom = conRoomRepository.findByRoom(roomId);
+		User user = userRepository.findByNum(conRoom.getMentor())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "num", num));
+		return user;
+	}
 
 	@GetMapping("/ReserveList/{mentor}")
 	public List<ConRoom> ReserveList(@PathVariable(value = "mentor") Long mentor) {
