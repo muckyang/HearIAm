@@ -2,16 +2,16 @@ const state = {
     deviceID: localStorage.getItem("deviceID") || "",
     isRemote : false,
     isready : localStorage.getItem("isready") || false,
-    alarmCnt : localStorage.getItem("alarmCnt") || 0,
-    alarmFlag : localStorage.getItem("alarmFlag") || false,
+    alarmList : localStorage.getItem("alarmList") || [],
+    alarmBtn : localStorage.getItem("alarmBtn") || "#0a7a78",
  };
 
 const getters = {  
     getDeviceID : state => state.deviceID,
     getIsRemote : state => state.isRemote,
     getIsReady : state => state.isready, 
-    getAlarmCnt : state => state.alarmCnt,
-    getAlarmFlag : state => state.alarmFlag,
+    getAlarmList : state => state.alarmList,
+    getAlarmBtn : state => state.alarmBtn,
 };
 
 const actions = {   
@@ -33,7 +33,14 @@ const mutations = {
     },
     setAlarmFlag : (state,data) =>{
         state.alarmFlag = data;
+    },
+    changeAlarmBtn : (state, data)=>{
+        state.alarmBtn = data;
+    },
+    setAlarmList : (state, data )=>{
+        state.alarmList = data;
     }
+
 };
 
 export default {
