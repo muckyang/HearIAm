@@ -11,8 +11,13 @@
       <br />
       <v-row>
         <v-col cols="2" v-for="item in menteeList" :key="item.num">
-          <v-card @click="menteeInfo(item.num, item.name)" height="200px">
-            {{ item.name }}
+          <v-card :color="item.color" @click="menteeInfo(item.num, item.name)" height="200px" width="300px">
+            <v-img :src="getIcon(item.icon)"></v-img>
+            <!-- <v-img :src="`../../assets/icons/${item.icon}`" ></v-img> -->
+            <!-- <v-img src="../../assets/icons/bear.png" ></v-img> -->
+            <p>
+              {{ item.name }}
+            </p>
           </v-card>
         </v-col>
       </v-row>
@@ -50,9 +55,12 @@ export default {
     menteeInfo(num, name) {
       this.$router.push(`/myMenteeInfo/${num}&${name}`);
     },
+    getIcon(icon){
+      console.log(icon)
+      return "../../../icons/"+icon;
+    }
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
