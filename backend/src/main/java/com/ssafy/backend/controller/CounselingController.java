@@ -164,7 +164,7 @@ public class CounselingController {
 	@GetMapping("/myMenteeInfoList/{mentor}/{mentee}")
 	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor,
 			@PathVariable(value = "mentee") Long mentee) {
-		List<ConRoom> list = conRoomRepository.findByMentorAndMentee(mentor, mentee);
+		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeOrderByDateDesc(mentor, mentee);
 		return list;
 	}
 
