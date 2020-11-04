@@ -21,46 +21,9 @@
         <router-view />
       </v-main>
     </v-sheet>
-    <v-speed-dial
-      v-model="fab"
-      bottom
-      right
-      fixed
-      direction="top"
-      transition="slide-x-reverse-transition"
-    >
-      <template v-slot:activator>
-        <v-btn v-model="fab" color="#0a7a78" dark fab>
-          <v-icon v-if="fab">mdi-close </v-icon>
-          <v-icon v-else> mdi-bell </v-icon>
-        </v-btn>
-      </template>
-      <v-card min-width="300" style="margin-right: 230px; text-align: center">
-        <v-list dense>
-          <v-header>알람</v-header>
-          <v-list-item-group v-model="alarm" color="primary">
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-bell-alert</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>상담요청이 왔어요!</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-bell-alert</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title
-                  >주문하신 상품이 배송되었어요!</v-list-item-title
-                >
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-card>
-    </v-speed-dial>
+    
+      <alarmComp v-if="getRole == `mentor`"></alarmComp>
+    
   </v-app>
 </template>
 
@@ -69,14 +32,17 @@ import { mapGetters, mapState } from "vuex";
 import { AUTH_LOGOUT } from "@/store/actions/auth";
 import http from "@/util/http-common.js";
 import axios from "axios";
+import alarmComp from "@/components/mentor/alarm.vue";
 
 export default {
   name: "App",
-  components: {},
+  components: {
+    alarmComp
+  },
   data() {
     return {
-      fab: false,
-      alarm: null
+    
+      
     };
   },
   methods: {

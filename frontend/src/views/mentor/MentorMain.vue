@@ -3,7 +3,7 @@
     <div class="main-back">
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
-          <alarmList></alarmList>
+          
           <v-btn v-if="this.getIsReady" @click="unsubscribe()">대기 취소</v-btn>
           <div>
             <v-btn
@@ -94,7 +94,6 @@
 import { AUTH_LOGOUT } from "@/store/actions/auth";
 import http from "@/util/http-common.js";
 import axios from "axios";
-import alarmList from "@/components/mentor/alarm.vue";
 import { mapGetters } from "vuex";
 export default {
   data() {
@@ -102,9 +101,6 @@ export default {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
     };
-  },
-  components: {
-    alarmList,
   },
   methods: {
     subscribe() {

@@ -271,9 +271,9 @@ public class ScheduleController {
         schedule.setIsReser(1);
         scheduleRepository.save(schedule);
         reservationRepository.save(reservation);
-        Alarm alarm = new Alarm();
-        alarm.setMentor(conRoom.getMentor());
-        alarm.setCrNum(conRoom.getNum());
+        // Alarm alarm = new Alarm();
+        // alarm.setMentor(conRoom.getMentor());
+        // alarm.setNum(conRoom.getNum());
         return ResponseEntity.ok("success");
     }
 

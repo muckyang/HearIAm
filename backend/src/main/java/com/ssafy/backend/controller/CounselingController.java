@@ -197,7 +197,7 @@ public class CounselingController {
 		conRoom.setDate(conRoom.getDate().plusHours(9));
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm();
-		alarm.setCrNum(conRoom.getNum());
+		alarm.setNum(conRoom.getNum());
 		alarm.setMentor(conRoom.getMentor());
 		alarmRepository.save(alarm);
 		return ResponseEntity.ok(SUCCESS);
@@ -240,13 +240,12 @@ public class CounselingController {
 	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") Long roomNum) {
 		try {
 			ConRoom cRoom = conRoomRepository.findByNum(roomNum);
-			System.out.println("adasasddsa ::::::: "+cRoom.getMentor());
 			String result = "";
 			if (cRoom.getMentor() == 1) {
 				System.out.println("success");
-				alarmRepository.deleteByCrNum(cRoom.getNum());
+				alarmRepository.deleteByNum(cRoom.getNum());
 				alarmReadyRepository.deleteByMentor(mentor);
-				result = "sucess";
+				result = cRoom.getRoom();
 			} else {
 				result = "fail";
 			}
@@ -271,13 +270,7 @@ public class CounselingController {
 	@GetMapping("/alarmList/{mentorNum}")
 	public List<Alarm> alarmList(@PathVariable(value = "mentorNum") Long mentorNum) {
 		List<Alarm> list = alarmRepository.findAll();
-		List<Alarm> res = new ArrayList<>();
-		for (Alarm alarm : list) {
-			if (alarm.getMentor() == 1 || alarm.getMentor() == mentorNum ) {
-				res.add(alarm);
-			}
-		}
-		return res;
+		return list;
 	}
 
 
@@ -315,6 +308,6 @@ public class CounselingController {
 
 	@DeleteMapping("/deleteReadyMentee/{roonNum}")
 	public void deleteReadyMentee(@PathVariable(value = "roonNum") Long roonNum) {
-		alarmRepository.deleteByCrNum(roonNum);
+		alarmRepository.deleteByNum(roonNum);
 	}
 }

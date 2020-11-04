@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import VueRecord from '../components/Record/index'
 import user from "./modules/user";
 import auth from "./modules/auth";
+import alarm from "./modules/alarm";
 
 Vue.config.productionTip = false
 Vue.use(VueRecord)
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     modules: {
         user,
         auth,
+        alarm,
     },
     strict: debug
 })
