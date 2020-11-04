@@ -11,7 +11,8 @@
             <v-row>
               <v-col v-for="(wait, index) in waitList" :key="index" cols="12" sm="6" md="3">
                 <v-card class="mx-auto">
-                  <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="145px"></v-img>
+                  <!-- <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="145px"></v-img> -->
+                  <v-img :src="getImg(wait)" height="160px"></v-img>
                   <v-card-text>
                     <p class="mb-1 text-area" style="text-align: left;">#{{ wait.keyword1 }} #{{ wait.keyword2 }} #{{ wait.keyword3 }}</p>
                     <p class="text-area" style="font-size: 1rem; color: black; text-align: left;">
@@ -83,6 +84,9 @@ export default {
           console.log(err);
         });
     },
+    getImg(item){
+      return "../../wordcloud/" + item.wordcloudImg
+    }
   },
   computed: {
     ...mapGetters(['getUserNum', 'getUserID']),

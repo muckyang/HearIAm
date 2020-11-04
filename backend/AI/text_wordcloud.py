@@ -26,11 +26,13 @@ def visualize(noun_list, fileName):
     if(socket.gethostname()[:7] == "DESKTOP"):
         wc = WordCloud(font_path='C:\\Windows\\Fonts\\NGULIM.TTF', background_color='white', width=1000, height=1000, max_font_size=300)
         wc.generate_from_frequencies(dict(noun_list))
-        wc.to_file("frontend/words/" + fileName)
+        # wc.to_file("frontend/words/"  + fileName)
+        wc.to_file("frontend/public/wordcloud/"  + fileName)
     else:
         wc = WordCloud(font_path='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', background_color='white', width=1000, height=1000, max_font_size=300)
         wc.generate_from_frequencies(dict(noun_list))
-        wc.to_file("/var/lib/jenkins/workspace/front/frontend/words/" + fileName)
+        # wc.to_file("/var/lib/jenkins/workspace/front/frontend/words/" + fileName)
+        wc.to_file("/var/lib/jenkins/workspace/front/frontend/public/wordcloud/" + fileName)
 
 if __name__ == "__main__":
     sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
