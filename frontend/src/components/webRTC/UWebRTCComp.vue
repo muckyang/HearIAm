@@ -277,7 +277,7 @@ export default {
         console.log("remote 들어옴");
         alert("상담가가 들어옵니다. ");
         this.dialog = false;
-        this.onLeave();
+        // this.onLeave();
       }
     },
     dialog(val) {

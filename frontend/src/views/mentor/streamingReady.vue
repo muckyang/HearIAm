@@ -37,6 +37,8 @@ export default {
         .get(`/counseling/isRoom/${mentorName}/${this.room_num}`)
         .then((res) => {
           console.log(res.data);
+          //예약에 따른 conRoom 찾아서 조건 달기 
+          //list 리턴할때 예약에따라서 알람리스트에 나올 text 저장해두기. conRoom, mentor, text
           if (res.data == "fail") {
             alert("이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ! ");
           } else {
@@ -52,6 +54,7 @@ export default {
     },
     unsubscribe(){
       let token = this.$store.getters["getDeviceID"];
+      this.$store.commit('changeIsReady',false);
       let topic = "streaming";
       axios({
         method: "POST",
@@ -80,7 +83,6 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-        console.log("dekl "+this.$store.getters['getUserNum']);
         http.delete(`/counseling/deleteReadyMentor/${this.$store.getters['getUserNum']}`).then(()=>{
       });
       }

@@ -67,6 +67,7 @@ public class CounselingController {
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
+		conRoom.setDate(LocalDateTime.now().plusHours(9));
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm(1L,conRoom.getNum());
 		alarmRepository.save(alarm);
@@ -104,6 +105,7 @@ public class CounselingController {
 	@GetMapping("/counseling/{num}")
 	public ConRoom counseling(@PathVariable(value = "num") Long num) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
+		conRoom.setDate(conRoom.getDate().minusHours(9));
 		return conRoom;
 	}
 
@@ -139,6 +141,9 @@ public class CounselingController {
 	@GetMapping("/menteeMyList/{num}")
 	public List<ConRoom> myList(@PathVariable(value = "num") Long num) {
 		List<ConRoom> list = conRoomRepository.findByMenteeOrderByNumDesc(num);
+		for (ConRoom conRoom : list) {
+			conRoom.setDate(conRoom.getDate().minusHours(9));
+		}
 		return list;
 	}
 
@@ -165,6 +170,9 @@ public class CounselingController {
 	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor,
 			@PathVariable(value = "mentee") Long mentee) {
 		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeOrderByDateDesc(mentor, mentee);
+		for (ConRoom conRoom : list) {
+			conRoom.setDate(conRoom.getDate().minusHours(9));
+		}
 		return list;
 	}
 
@@ -240,17 +248,15 @@ public class CounselingController {
 	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") Long roomNum) {
 		try {
 			ConRoom cRoom = conRoomRepository.findByNum(roomNum);
-
-			// Optional<Alarm> alarm = conRoomRepository.findByNum(roomNum);
-			// System.out.println(alarm);
+			System.out.println("adasasddsa ::::::: "+cRoom.getMentor());
 			String result = "";
 			if (cRoom.getMentor() == 1) {
-				result = "fail";
-			} else {
 				System.out.println("success");
 				alarmRepository.deleteByCrNum(cRoom.getNum());
 				alarmReadyRepository.deleteByMentor(mentor);
 				result = "sucess";
+			} else {
+				result = "fail";
 			}
 			System.out.println(result);
 			return new ResponseEntity<>(result, HttpStatus.OK);

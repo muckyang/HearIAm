@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     onjoin(data) {
+      console.dir(data);
       let mentorName = this.getUserNum;
       console.log(mentorName + " " + data.room);
       http
@@ -45,6 +46,7 @@ export default {
           console.log(res.data);
           if (res.data == "fail") {
             alert("이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ! ");
+            this.$router.push("/");
           } else {
             alert(" 상담을 시작합니다. ");
             this.unsubscribe();
@@ -57,6 +59,7 @@ export default {
     },
     unsubscribe() {
       let token = this.getDeviceID;
+      this.$store.commit('changeIsReady',false);
       let topic = "streaming";
       axios({
         method: "POST",
@@ -91,16 +94,14 @@ export default {
         .then(() => {});
     },
   },
-  mounted: function () {},
-  watch: {
-    getUserNum() {
-      http.get(`/counseling/alarmList/${this.getUserNum}`).then((res) => {
+  mounted () {
+    this.alert_num = this.getUserNum;
+     http.get(`/counseling/alarmList/${this.getUserNum}`).then((res) => {
         console.dir(res);
         this.list = res.data;
         console.log(this.list.length);
         this.alert_num = this.list.length;
       });
-    },
   },
   computed: {
     ...mapGetters(["getUserName", "getUserNum", "getDeviceID"]),
