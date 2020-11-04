@@ -124,7 +124,6 @@ public class CounselingController {
 	public ResponseEntity<String> finishLive(@PathVariable(value = "num") Long num, @RequestBody ConRoom con) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
 		conRoom.setStatus("finish");
-		conRoom.setTitle(con.getTitle());
 		conRoom.setMemo(con.getMemo());
 		conRoomRepository.save(conRoom);
 
