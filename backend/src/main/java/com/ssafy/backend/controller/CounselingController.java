@@ -240,6 +240,7 @@ public class CounselingController {
 	public Object isMentee(@PathVariable(value = "mentor") Long mentor, @PathVariable(value = "roomNum") Long roomNum) {
 		try {
 			ConRoom cRoom = conRoomRepository.findByNum(roomNum);
+			System.out.println("adasasddsa ::::::: "+cRoom.getMentor());
 			String result = "";
 			if (cRoom.getMentor() == 1) {
 				System.out.println("success");
@@ -249,6 +250,7 @@ public class CounselingController {
 			} else {
 				result = "fail";
 			}
+			System.out.println(result);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

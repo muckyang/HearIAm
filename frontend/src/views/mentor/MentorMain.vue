@@ -5,7 +5,6 @@
         <v-col class="my-auto" align="center">
           <alarmList></alarmList>
           <v-btn v-if="this.getIsReady" @click="unsubscribe()">대기 취소</v-btn>
-          <v-btn @click="logout()">로그아웃</v-btn>
           <div>
             <v-btn
               depressed
@@ -115,7 +114,6 @@ export default {
       http.get(`/counseling/getMenteeCnt`).then((res) => {
         console.log(res.data);
         if (res.data == "empty") {
-          //상담사 대기
           this.subscribeTokenToTopic(this.devecieId, this.topic);
           let mentorname = this.$store.getters["getUserNum"];
           http.get(`/counseling/addReady/${mentorname}`).then((res) => {
