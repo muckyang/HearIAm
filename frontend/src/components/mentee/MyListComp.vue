@@ -31,15 +31,9 @@
                 <td v-else class="text-center">실시간 상담</td>
 
                 <td v-if="item.recordDir != null && item.status == 'finish'">
-                  <v-btn
-                    @click="getAnswer(item)"
-                    small
-                    style="font-size: 0.9rem"
+                  <v-btn @click="getAnswer(item)" small style="font-size: 0.9rem"
                     ><span style="vertical-align: middle; display: inline-flex"
-                      ><v-icon small class="mr-1"
-                        >mdi-message-text-outline</v-icon
-                      >
-                      답변</span
+                      ><v-icon small class="mr-1">mdi-message-text-outline</v-icon> 답변</span
                     ></v-btn
                   >
                 </td>
@@ -49,10 +43,7 @@
                 <td v-else-if="item.status == 'progress'" class="text-center">
                   진행중
                 </td>
-                <td
-                  v-else-if="item.status == 'reserveRequest'"
-                  class="text-center"
-                >
+                <td v-else-if="item.status == 'reserveRequest'" class="text-center">
                   예약중
                 </td>
                 <td v-else class="text-center">대기중</td>
@@ -71,67 +62,53 @@
             </tbody>
           </template>
         </v-simple-table>
-        <v-pagination
-          v-model="cpage"
-          :length="cpageLength"
-          circle
-          class="pb-3"
-        ></v-pagination>
+        <v-pagination v-model="cpage" :length="cpageLength" circle class="pb-3"></v-pagination>
       </v-tab-item>
 
       <!-- 예약 내역 -->
       <v-tab-item>
-        <v-simple-table class="pa-5">
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-center">예약 날짜</th>
-                <th class="text-center">상담사</th>
-                <th class="text-center">예약취소</th>
-                <th class="text-center">실시간 상담</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in rpagingList" :key="item.name">
-                <td class="text-center">{{ item.sdate }} {{ item.stime }}</td>
-                <td class="text-center">{{ item.mentor }}</td>
-                <td class="text-center">
-                  <v-btn small icon color="red" @click="cancelD(item.num)"
-                    ><v-icon>mdi-delete-forever-outline</v-icon></v-btn
-                  >
-                </td>
-                <td>
-                  <v-btn
-                    v-if="
-                      item.sdate.slice(5, 7) == todaytime.getMonth() + 1 &&
-                      item.sdate.slice(8, 10) == todaytime.getDate() &&
-                      item.stime.slice(0, 2) == todaytime.getHours()
-                    "
-                    small
-                    color="orange lighten-4"
-                    text-color="red"
-                    @click="startCounseling(item.num)"
-                    style="font-size: 0.9rem; color: red"
-                    >on-Air</v-btn
-                  >
-                  <v-btn
-                    v-else
-                    disabled
-                    style="font-size: 0.9rem; color: black"
-                    text
-                    >on-air</v-btn
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-        <v-pagination
-          v-model="rpage"
-          :length="rpageLength"
-          circle
-          class="pb-3"
-        ></v-pagination>
+        <v-sheet class="mx-auto pa-5" elevation="3" max-width="100%">
+          <v-row>
+            <v-col v-for="(item, index) in rpagingList" :key="index" cols="12" sm="6" md="3">
+              <v-card class="mx-auto pa-3" height="200">
+                <div align="left" class="d-flex">
+                  <v-col class="pb-0">
+                    <v-chip small color="pink" label text-color="white">
+                      {{ getDday(item.sdate) }}
+                    </v-chip>
+                  </v-col>
+                  <v-col class="pt-2 pb-0">
+                    <v-btn
+                      v-if="
+                        item.sdate.slice(5, 7) == todaytime.getMonth() + 1 &&
+                          item.sdate.slice(8, 10) == todaytime.getDate() &&
+                          item.stime.slice(0, 2) == todaytime.getHours()
+                      "
+                      small
+                      color="orange lighten-4"
+                      text-color="red"
+                      @click="startCounseling(item.num)"
+                      style="font-size: 0.9rem; color: red"
+                      >on-Air</v-btn
+                    >
+                    <v-btn v-else disabled style="font-size: 0.9rem; color: black" text>on-air</v-btn>
+                  </v-col>
+                </div>
+                <div align="left" class="mt-1 pl-3">
+                  <h4> {{ item.sdate }} </h4>
+                </div>
+                <div>
+                  <h1> {{ item.stime }} </h1>
+                </div>
+                <div align="right">
+                  {{ item.mentor }}
+                </div>
+                <v-btn large icon color="red" @click="cancelD(item.num)"><v-icon>mdi-delete-forever-outline</v-icon></v-btn>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3 mt-5"></v-pagination>
+        </v-sheet>
       </v-tab-item>
     </v-tabs-items>
 
@@ -144,17 +121,7 @@
           <span><h1>답변</h1></span>
         </v-card-subtitle>
         <v-card-text>
-          <v-textarea
-            rows="10"
-            readonly
-            auto-grow
-            solo
-            flat
-            class="pa-3"
-            :value="answer"
-            style="white-space: pre-line"
-          >
-          </v-textarea>
+          <v-textarea rows="10" readonly auto-grow solo flat class="pa-3" :value="answer" style="white-space: pre-line"> </v-textarea>
         </v-card-text>
 
         <v-card-actions>
@@ -166,12 +133,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="typeDialog"
-      max-width="500"
-      min-height="500"
-      style="height: 500px"
-    >
+    <v-dialog v-model="typeDialog" max-width="500" min-height="500" style="height: 500px">
       <v-card class="pt-5 px-5">
         <v-card-title class="justify-center pb-7">
           <h2>상담 유형을 선택해주세요.</h2>
@@ -201,37 +163,24 @@
         ><br />
         <v-card-subtitle>
           <span
-            ><h1>
-              {{ reMentor }} 상담사에게 실시간 상담을 재신청합니다.
-            </h1></span
+            ><h1>{{ reMentor }} 상담사에게 실시간 상담을 재신청합니다.</h1></span
           >
         </v-card-subtitle>
         <v-card-text>
           원하시는 날짜와 시간을 선택해주세요.
-          <span style="color: crimson"
-            >재신청은 1회만 가능하므로 신중히 선택해주세요.</span
-          >
+          <span style="color: crimson">재신청은 1회만 가능하므로 신중히 선택해주세요.</span>
           <br />
           (상담 가능한 날짜와 시간만 표시됩니다.)
         </v-card-text>
         <v-container>
           <v-row>
             <v-col class="pb-0">
-              <v-date-picker
-                v-model="date"
-                :allowed-dates="allowedDates"
-                color="#93dfff"
-              ></v-date-picker>
+              <v-date-picker v-model="date" :allowed-dates="allowedDates" color="#93dfff"></v-date-picker>
             </v-col>
             <v-col class="pb-0">
               <div class="px-7" style="height: 100%">
                 <div style="height: 20%">
-                  <v-select
-                    v-model="time"
-                    :items="timeItems"
-                    :label="selLabel"
-                    solo
-                  ></v-select>
+                  <v-select v-model="time" :items="timeItems" :label="selLabel" solo></v-select>
                 </div>
                 <div style="height: 60%"></div>
                 <div align="right" style="height: 20%">
@@ -274,11 +223,11 @@
 </template>
 
 <script>
-import http from "@/util/http-common.js";
-import { mapGetters } from "vuex";
+import http from '@/util/http-common.js';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "MyListComp",
+  name: 'MyListComp',
   data() {
     return {
       myList: [],
@@ -290,7 +239,7 @@ export default {
       dialog: false,
       typeDialog: false,
       cancelDialog: false,
-      reMentor: "",
+      reMentor: '',
       time: null,
       date: null,
       schedule: [],
@@ -301,13 +250,14 @@ export default {
       rpage: 1,
       selitem: [],
       mentorNum: null,
-      cancelNum: "",
+      cancelNum: '',
       answerDialog: false,
-      answer: "",
+      answer: '',
       todaytime: new Date(),
       tab: null,
       timeItems: [],
-      selLabel: "시간을 선택해주세요.",
+      selLabel: '시간을 선택해주세요.',
+      model: null,
     };
   },
   mounted() {
@@ -317,10 +267,10 @@ export default {
     http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
       this.myList = res.data;
       this.cpagingList = this.myList.slice(0, 9);
-      if (this.myList.length % 10 == 0) {
-        this.cpageLength = this.myList.length / 10;
+      if (this.myList.length % 9 == 0) {
+        this.cpageLength = this.myList.length / 9;
       } else {
-        this.cpageLength = parseInt(this.myList.length / 10) + 1;
+        this.cpageLength = parseInt(this.myList.length / 9) + 1;
       }
     });
     http.get(`/schedule/isReservation/${this.getUserID}`).then((res) => {
@@ -328,23 +278,16 @@ export default {
     });
     http.get(`/schedule/myReservation/${this.getUserID}`).then((res) => {
       this.myReservation = res.data;
-      this.rpagingList = this.myReservation.slice(0, 9);
-      if (this.myReservation.length % 10 == 0) {
-        this.rpageLength = this.myReservation.length / 10;
+      this.rpagingList = this.myReservation.slice(0, 8);
+      if (this.myReservation.length % 8 == 0) {
+        this.rpageLength = this.myReservation.length / 8;
       } else {
-        this.rpageLength = parseInt(this.myReservation.length / 10) + 1;
+        this.rpageLength = parseInt(this.myReservation.length / 8) + 1;
       }
     });
   },
   computed: {
-    ...mapGetters([
-      "isProfileLoaded",
-      "getRole",
-      "getQualification",
-      "getUserName",
-      "getUserNum",
-      "getUserID",
-    ]),
+    ...mapGetters(['isProfileLoaded', 'getRole', 'getQualification', 'getUserName', 'getUserNum', 'getUserID']),
   },
   methods: {
     findName(userNum) {
@@ -362,16 +305,7 @@ export default {
       }
     },
     setTime(date) {
-      let time =
-        date.slice(0, 4) +
-        "-" +
-        date.slice(5, 7) +
-        "-" +
-        date.slice(8, 10) +
-        " " +
-        date.slice(11, 13) +
-        ":" +
-        date.slice(14, 16);
+      let time = date.slice(0, 4) + '-' + date.slice(5, 7) + '-' + date.slice(8, 10) + ' ' + date.slice(11, 13) + ':' + date.slice(14, 16);
       return time;
     },
     reapplyType(item) {
@@ -409,12 +343,7 @@ export default {
       for (const schedule of this.schedule) {
         if (this.date == schedule.sdate) {
           if (val == schedule.stime.substr(0, 2)) {
-            var today =
-              date.getFullYear() +
-              "-" +
-              (date.getMonth() + 1) +
-              "-" +
-              date.getDate();
+            var today = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
             if (today == this.date) {
               return val > hour;
             } else {
@@ -431,67 +360,51 @@ export default {
     reqReapply() {
       var mentorId = this.findID(this.selitem.mentor);
       if (this.date != null && this.time != null) {
-        http
-          .get(
-            `/schedule/findScheduleNum/${this.date}/${this.time.substr(
-              0,
-              5
-            )}/${mentorId}`
-          )
-          .then((res) => {
-            http
-              .post(`/schedule/reApply/${this.conRoomNum}`, {
-                mentee: this.getUserID,
-                scheNum: res.data,
-              })
-              .then((success) => {
-                if (success.data == "success") {
-                  http.post(`/counseling/reserveRequest`, {
-                    mentee: this.getUserNum,
-                    mentor: this.mentorNum,
-                    room: this.createRoomId(),
-                    status: "reapply",
-                    date: `${this.date}T${this.time.substr(0, 5)}:00`,
-                  });
-                  alert("재상담 신청 완료되었습니다.");
-                  http
-                    .get(`/counseling/menteeMyList/${this.getUserNum}`)
-                    .then((res) => {
-                      this.myList = res.data;
-                      this.cpagingList = this.myList.slice(0, 9);
-                    });
-                  http
-                    .get(`/schedule/myReservation/${this.getUserID}`)
-                    .then((data) => {
-                      this.myReservation = data.data;
-                    });
-                  this.dialog = false;
-                }
-              });
-          });
+        http.get(`/schedule/findScheduleNum/${this.date}/${this.time.substr(0, 5)}/${mentorId}`).then((res) => {
+          http
+            .post(`/schedule/reApply/${this.conRoomNum}`, {
+              mentee: this.getUserID,
+              scheNum: res.data,
+            })
+            .then((success) => {
+              if (success.data == 'success') {
+                http.post(`/counseling/reserveRequest`, {
+                  mentee: this.getUserNum,
+                  mentor: this.mentorNum,
+                  room: this.createRoomId(),
+                  status: 'reapply',
+                  date: `${this.date}T${this.time.substr(0, 5)}:00`,
+                });
+                alert('재상담 신청 완료되었습니다.');
+                http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
+                  this.myList = res.data;
+                  this.cpagingList = this.myList.slice(0, 9);
+                });
+                http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
+                  this.myReservation = data.data;
+                });
+                this.dialog = false;
+              }
+            });
+        });
       } else {
-        alert("날짜와 시간을 선택해주세요");
+        alert('날짜와 시간을 선택해주세요');
       }
     },
     cancel() {
       this.cancelDialog = false;
-      http
-        .delete(`/schedule/cancelReservation/${this.cancelNum}`)
-        .then((res) => {
-          if (res.data == "success") {
-            alert("예약이 취소되었습니다.");
-            http
-              .get(`/schedule/myReservation/${this.getUserID}`)
-              .then((data) => {
-                this.myReservation = data.data;
-              });
-          }
-        });
+      http.delete(`/schedule/cancelReservation/${this.cancelNum}`).then((res) => {
+        if (res.data == 'success') {
+          alert('예약이 취소되었습니다.');
+          http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
+            this.myReservation = data.data;
+          });
+        }
+      });
     },
     createRoomId(length = 20) {
-      let text = "";
-      const possible =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let text = '';
+      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       Array.from(Array(length)).forEach(() => {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
       });
@@ -503,9 +416,7 @@ export default {
     },
     getAnswer(item) {
       console.log(item.answer);
-      this.answer = item.answer
-        .substring(1, item.answer.length - 1)
-        .replaceAll("\r\n", "<br/>");
+      this.answer = item.answer.substring(1, item.answer.length - 1).replaceAll('\r\n', '<br/>');
       this.answerDialog = true;
     },
     reRecord() {
@@ -516,15 +427,34 @@ export default {
         this.$router.push(`/userWRTC/${res.data.room}`);
       });
     },
+    getDday(day) {
+      var year = day.slice(0, 4);
+      var month = day.slice(5, 7);
+      var d = day.slice(8, 11);
+      var Dday = new Date(year, month - 1, d);
+      var now = new Date();
+      var gap = Dday.getTime() - now.getTime();
+      var result = Math.floor(gap / (1000 * 60 * 60 * 24)) * -1;
+
+      if (result > 0) {
+        result = 'D+' + result;
+      } else if (result == 0) {
+        result = 'D-Day';
+      } else {
+        result = 'D' + result;
+      }
+
+      return result;
+    },
   },
   watch: {
     cpage(page) {
-      var first = (page - 1) * 10;
+      var first = (page - 1) * 9;
       this.cpagingList = this.myList.slice(first, first + 9);
     },
     rpage(page) {
-      var first = (page - 1) * 10;
-      this.rpagingList = this.myReservation.slice(first, first + 9);
+      var first = (page - 1) * 8;
+      this.rpagingList = this.myReservation.slice(first, first + 8);
     },
     date(v) {
       var mentorId = this.findID(this.selitem.mentor);
@@ -537,10 +467,10 @@ export default {
           }
         }
         if (this.timeItems.length == 0) {
-          this.selLabel = "예약 가능한 시간이 없습니다.";
-          this.timeItems.push("예약 가능한 시간이 없습니다.");
+          this.selLabel = '예약 가능한 시간이 없습니다.';
+          this.timeItems.push('예약 가능한 시간이 없습니다.');
         } else {
-          this.selLabel = "시간을 선택해주세요.";
+          this.selLabel = '시간을 선택해주세요.';
         }
       });
     },
@@ -555,13 +485,12 @@ export default {
   cursor: pointer;
   height: 150px;
 }
-.type-title{
+.type-title {
   transform: scale(1);
   transition: all 0.3s;
 }
-.type-title:hover{
+.type-title:hover {
   transform: scale(1.2);
   transition: all 0.3s;
 }
-
 </style>
