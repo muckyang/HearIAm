@@ -1,10 +1,8 @@
 <template>
-  <div class="reserve-main" style="padding-top: 64px;">
-    <div class="reserve-body">
-      <v-sheet class="sheet-body container" rounded="xl" elevation="7">
-        <h1 class="mb-5">실시간 상담 예약하기</h1>
+    <div>
+      <v-sheet class="container">
         <v-row class="d-flex justify-content-center">
-          <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
+          <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
             <v-dialog
               ref="dialogDate"
               v-model="dateModal"
@@ -43,37 +41,8 @@
             </v-dialog>
           </v-col>
         </v-row>
-        <!-- <v-row>
-          <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
-            <v-dialog ref="dialogTime" v-model="timeModal" :return-value.sync="time" persistent width="290px">
-              <template v-slot:activator="{ on, attrs }">
-                <div class="d-flex">
-                  <v-icon class="mr-3" large color="black">mdi-clock-time-four-outline</v-icon>
-                  <v-text-field
-                    class="mt-7"
-                    v-model="time"
-                    label="시간을 선택해주세요."
-                    readonly
-                    solo
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </div>
-              </template>
-              <v-time-picker v-if="timeModal" v-model="time" full-width>
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="timeModal = false">
-                  Cancel
-                </v-btn>
-                <v-btn text color="primary" @click="$refs.dialogTime.save(time)">
-                  OK
-                </v-btn>
-              </v-time-picker>
-            </v-dialog>
-          </v-col>
-        </v-row> -->
         <v-row>
-          <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
+          <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
             <div class="d-flex">
               <v-icon class="mr-3" large color="black"
                 >mdi-clock-time-four-outline</v-icon
@@ -91,7 +60,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
+          <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
             <div class="d-flex">
               <v-icon class="mr-3" large color="black"
                 >mdi-help-circle-outline</v-icon
@@ -109,7 +78,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
+          <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
             <div class="d-flex">
               <v-icon class="mr-3" large color="white"
                 >mdi-help-circle-outline</v-icon
@@ -132,44 +101,38 @@
           </v-col>
         </v-row> -->
         <v-row>
-          <v-col cols="2" class="reserve-data pt-10 px-0">
-            <v-btn color="#ffdc15" @click="reserveD">예약하기</v-btn>
+          <v-col cols="2" class="reserve-data pt-5 px-0">
+            <v-btn class="main-btn" @click="reserveD" large>예약하기</v-btn>
           </v-col>
         </v-row>
       </v-sheet>
-    </div>
       <v-dialog v-model="reserDialog" persistent max-width="400">
       <v-card>
-        <v-card-title style="font-size:1.5rem;">
+        <v-card-title style="font-size: 1.5rem">
           아래 정보로 예약하시겠습니까?
         </v-card-title>
-        <v-card-text class="pt-3" style="text-align:left;">날짜 : {{this.date}} <br>시간 : {{this.time}}</v-card-text>
+        <v-card-text class="pt-3" style="text-align: left"
+          >날짜 : {{ this.date }} <br />시간 : {{ this.time }}</v-card-text
+        >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="reserDialog = false"
-          >
+          <v-btn color="green darken-1" text @click="reserDialog = false">
             아니오
           </v-btn>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="reserve"
-          >
-            예
-          </v-btn>
+          <v-btn color="green darken-1" text @click="reserve"> 예 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </div>
+    </div>
 </template>
 
 <script>
 import http from "@/util/http-common.js";
 import { mapGetters, mapState } from "vuex";
 export default {
+  props: {
+    reser_dialog: { type: Boolean },
+  },
   data() {
     return {
       date: new Date().toISOString().substr(0, 10),
@@ -191,7 +154,7 @@ export default {
       isSelf: false,
       mentorNum: null,
       concern2: "",
-      reserDialog:false,
+      reserDialog: false,
     };
   },
   computed: {
@@ -200,7 +163,7 @@ export default {
       endDate.setDate(this.nDate.getDate() + 7);
       return endDate.toISOString().slice(0, 10);
     },
-    ...mapGetters(["getUserID","getUserNum"]),
+    ...mapGetters(["getUserID", "getUserNum"]),
     ...mapState({
       userID: (state) => `${state.user.getUserID}`,
     }),
@@ -213,6 +176,13 @@ export default {
         this.isSelf = false;
       }
     },
+    reser_dialog(v){
+      if(!v){
+        this.date = "";
+        this.time = "";
+        this.concern="";
+      }
+    }
   },
   created() {
     http
@@ -267,6 +237,7 @@ export default {
                   date: `${res.data.sdate}T${res.data.stime}:00`
                 });
             });
+          });
           alert("예약이 완료되었습니다.");
           this.$router.push("/menteeMain").catch(() => {});
         })
@@ -303,8 +274,8 @@ export default {
 
 <style scoped>
 .reserve-main {
-  background-image: linear-gradient(to right, #93dfff, #f5a2bb);
-  height: 100%;
+  /* background-image: linear-gradient(to right, #93dfff, #f5a2bb); */
+  /* height: 100%; */
 }
 .reserve-body {
   height: 100%;
