@@ -10,21 +10,14 @@
   <div class="text-center">
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="error"
-          fab
-          small
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
+        <v-btn color="error" fab small dark v-bind="attrs" v-on="on">
           {{ alert_num }}
         </v-btn>
       </template>
       <v-list>
         <v-list-item v-for="(item, index) in list" :key="index">
           <v-list-item-title @click="onjoin(item)">
-            {{ item.mentee }} {{ item.room }}</v-list-item-title
+            실시간 상담 요청이 왔습니다!</v-list-item-title
           >
         </v-list-item>
       </v-list>
@@ -43,11 +36,6 @@ export default {
     };
   },
   methods: {
-    getStart() {
-      http.get(`/counseling/alarmListCnt`).then((res) => {
-        this.alert_num = res.data;
-      });
-    },
     onjoin(data) {
       let mentorName = this.getUserNum;
       console.log(mentorName + " " + data.room);
@@ -99,26 +87,23 @@ export default {
         });
       console.log("dekl " + this.getUserNum);
       http
-        .delete(
-          `/counseling/deleteReadyMentor/${this.getUserNum}`
-        )
+        .delete(`/counseling/deleteReadyMentor/${this.getUserNum}`)
         .then(() => {});
     },
   },
-  mounted: function () {
-    http
-      .get(`/counseling/alarmList/${this.getUserNum}`)
-      .then((res) => {
+  mounted: function () {},
+  watch: {
+    getUserNum() {
+      http.get(`/counseling/alarmList/${this.getUserNum}`).then((res) => {
+        console.dir(res);
         this.list = res.data;
+        console.log(this.list.length);
+        this.alert_num = this.list.length;
       });
-    this.getStart();
+    },
   },
   computed: {
-    ...mapGetters([
-      "getUserName",
-      "getUserNum",
-      "getDeviceID",
-    ]),
+    ...mapGetters(["getUserName", "getUserNum", "getDeviceID"]),
   },
 };
 </script>

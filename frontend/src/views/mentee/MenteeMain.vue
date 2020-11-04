@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="main-back">
       <!-- background: linear-gradient(to right, #3D5469, #79B7D1); -->
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
@@ -177,9 +177,9 @@ export default {
           console.log(e);
         });
 
-      http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
-        // alert("삭제 완료");
-      }); 
+      // http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
+      //   // alert("삭제 완료");
+      // }); 
 
     },
   },
