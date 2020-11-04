@@ -110,6 +110,7 @@ export default {
   },
   methods: {
     subscribe() {
+      http.get(`/counseling/liveList`);
       console.log("click subscribe btn");
       this.readyClick= true;
       http.get(`/counseling/getMenteeCnt`).then((res) => {

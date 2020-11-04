@@ -42,7 +42,6 @@
         </div>
       </div>
     </transition>
-
     <!-- Question1 -->
     <div v-if="alertFlag" class="record-alert mx-15" data-sal="slide-right" data-sal-delay="300" data-sal-duration="600">
       <v-alert id="f-alert" elevation="5" prominent dark color="#f5a2bb">
@@ -315,7 +314,7 @@ export default {
 <style scoped>
 .record-main {
   background-image: linear-gradient(to bottom, #93dfff, white);
-  height: 100%;
+  height: 100vh;
 }
 .record-header {
   height: 19%;

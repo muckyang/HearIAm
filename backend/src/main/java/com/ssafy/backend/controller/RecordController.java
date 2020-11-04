@@ -183,6 +183,7 @@ public class RecordController {
             conRoom.setKeyword1(request.getKeyword1());
             conRoom.setKeyword2(request.getKeyword2());
             conRoom.setKeyword3(request.getKeyword3());
+            conRoom.setDate(LocalDateTime.now().plusHours(9));
             conRoomRepository.save(conRoom);
             return new ResponseEntity<>(conRoom.getNum(), HttpStatus.OK);
         } catch (Exception e) {
