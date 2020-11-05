@@ -67,7 +67,7 @@ public class CounselingController {
 
 	@PostMapping("/liveRequest")
 	public ResponseEntity<Long> liveRequest(@RequestBody ConRoom conRoom) {
-		conRoom.setDate(LocalDateTime.now().plusHours(9));
+		conRoom.setDate(LocalDateTime.now());
 		conRoomRepository.save(conRoom);
 		ConRoom cRoom = conRoomRepository.findByRoom(conRoom.getRoom());
 		Alarm alarm = new Alarm(cRoom.getNum(), 1L);
@@ -94,7 +94,7 @@ public class CounselingController {
 		Date now = new Date();
 		
 		for (ConRoom conRoom : list) {
-			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate().minusHours(9));
+			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate());
 			if ((now.getTime() - date2.getTime()) / 60000 > 30) {
 				conRoomRepository.deleteByNum(conRoom.getNum());
 			}
@@ -106,7 +106,7 @@ public class CounselingController {
 	@GetMapping("/counseling/{num}")
 	public ConRoom counseling(@PathVariable(value = "num") Long num) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
-		conRoom.setDate(conRoom.getDate().minusHours(9));
+		conRoom.setDate(conRoom.getDate());
 		return conRoom;
 	}
 
@@ -142,7 +142,7 @@ public class CounselingController {
 	public List<ConRoom> myList(@PathVariable(value = "num") Long num) {
 		List<ConRoom> list = conRoomRepository.findByMenteeOrderByNumDesc(num);
 		for (ConRoom conRoom : list) {
-			conRoom.setDate(conRoom.getDate().minusHours(9));
+			conRoom.setDate(conRoom.getDate());
 		}
 		return list;
 	}
@@ -171,7 +171,7 @@ public class CounselingController {
 			@PathVariable(value = "mentee") Long mentee) {
 		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeOrderByDateDesc(mentor, mentee);
 		for (ConRoom conRoom : list) {
-			conRoom.setDate(conRoom.getDate().minusHours(9));
+			conRoom.setDate(conRoom.getDate());
 		}
 		return list;
 	}
@@ -203,14 +203,14 @@ public class CounselingController {
 		List<ConRoom> list = conRoomRepository.findByMentorAndStatusOrStatusOrderByDateAsc(mentor, "reserve",
 				"reapply");
 		for (ConRoom conRoom : list) {
-			conRoom.setDate(conRoom.getDate().minusHours(9));
+			conRoom.setDate(conRoom.getDate());
 		}
 		return list;
 	}
 
 	@PostMapping("/reserveRequest")
 	public ResponseEntity<String> reserveRequest(@RequestBody ConRoom conRoom) {
-		conRoom.setDate(conRoom.getDate().plusHours(9));
+		conRoom.setDate(conRoom.getDate());
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm();
 		alarm.setNum(conRoom.getNum());
@@ -223,7 +223,7 @@ public class CounselingController {
 	@ApiOperation("상담일지 수정등록")
 	public Object updateReport(@RequestBody ConRoom request) throws IOException, SQLException {
 		try {
-			request.setDate(request.getDate().plusHours(9));
+			request.setDate(request.getDate());
 			conRoomRepository.save(request);
 			return new ResponseEntity<>("report save", HttpStatus.OK);
 		} catch (Exception e) {
@@ -279,7 +279,7 @@ public class CounselingController {
 		User user = userRepository.findById(schedule.getMentor())
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", schedule.getMentor()));
 		LocalDateTime date = LocalDateTime.parse(schedule.getSdate() + "T" + schedule.getStime());
-		ConRoom conRoom = conRoomRepository.findByMentorAndDate(user.getNum(), date.plusHours(9));
+		ConRoom conRoom = conRoomRepository.findByMentorAndDate(user.getNum(), date);
 
 		return conRoom;
 	}
