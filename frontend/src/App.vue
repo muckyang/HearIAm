@@ -6,7 +6,7 @@
         <v-spacer></v-spacer>
         <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goLive()">1:1 상담</v-btn>
         <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goRecord()">음성 상담</v-btn>
-        <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goReserve()">상담 예약</v-btn>
+        <v-btn class="shadow" v-if="getRole == `mentee`" text @click="reser_dialog = true">상담 예약</v-btn>
         <v-btn class="shadow" v-if="getRole == `mentor`" text @click="subscribe()">1:1 상담 현황</v-btn>
         <v-btn class="shadow" v-if="getRole == `mentor`" text @click="goRecordList()">음성 상담 현황</v-btn>
         <v-btn class="shadow" v-if="getRole == `mentor`" text @click="goMyMenteeList()">일지 관리</v-btn>
@@ -22,8 +22,16 @@
       </v-main>
     </v-sheet>
     
-      <alarmComp v-if="getRole == `mentor`"></alarmComp>
-    
+    <alarmComp v-if="getRole == `mentor`"></alarmComp>
+
+    <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
+      <v-card rounded="xl" style="padding: 20px;" >
+        <v-card-title class="text-center justify-center p-8">
+          <h2 style="font-family: 'yg-jalnan'">실시간 상담 예약</h2>
+        </v-card-title>
+        <ReserveMain :reser_dialog="reser_dialog"/>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -33,15 +41,17 @@ import { AUTH_LOGOUT } from "@/store/actions/auth";
 import http from "@/util/http-common.js";
 import axios from "axios";
 import alarmComp from "@/components/mentor/alarm.vue";
+import ReserveMain from "@/views/reserve/ReserveMain.vue";
 
 export default {
   name: "App",
   components: {
-    alarmComp
+    alarmComp,
+    ReserveMain
   },
   data() {
     return {    
-      
+      reser_dialog: false,
     };
   },
     updated() {
