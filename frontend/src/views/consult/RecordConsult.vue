@@ -1,6 +1,5 @@
 <template>
   <div class="record-main">
-    
     <video hidden id="videoTag" width="720" height="560" style="border:1px solid black" muted @playing="addEventListener()"></video>
 
     <!-- S1 -->
@@ -44,7 +43,7 @@
     </transition>
     <!-- Question1 -->
     <div v-if="alertFlag" class="record-alert mx-15" data-sal="slide-right" data-sal-delay="300" data-sal-duration="600">
-      <v-alert id="f-alert" elevation="5" prominent dark color="#f5a2bb">
+      <v-alert id="f-alert" elevation="5" prominent dark color="#bbcfe9">
         <div class="d-flex mb-3">
           <v-icon class="mr-3">mdi-help-circle-outline</v-icon>
           <h2>당신의 고민은 무엇인가요??</h2>
@@ -57,7 +56,11 @@
           <div v-else style="height:50px;"></div>
         </v-col>
         <transition name="bounce">
-          <v-btn v-if="concern != '' && concern != '직접 입력' || myConcern != ''" icon style="float:right;" @click="(flag1 = true), (flag2 = true), (alertFlag = false)"
+          <v-btn
+            v-if="(concern != '' && concern != '직접 입력') || myConcern != ''"
+            icon
+            style="float:right;"
+            @click="(flag1 = true), (flag2 = true), (alertFlag = false)"
             ><v-icon large>mdi-arrow-right-bold-outline</v-icon></v-btn
           >
         </transition>
@@ -67,7 +70,7 @@
     <!-- Question2 -->
     <transition name="slide-fade">
       <div v-if="!alertFlag && !recFlag" class="record-alert mx-15">
-        <v-alert id="f-alert" elevation="5" prominent dark color="#f5a2bb">
+        <v-alert id="f-alert" elevation="5" prominent dark color="#bbcfe9">
           <div class="d-flex mb-3">
             <v-icon class="mr-3">mdi-information-outline</v-icon>
             <h2>녹음상담 사용방법</h2>
@@ -87,7 +90,7 @@
     <!-- Question3 -->
     <transition name="slide-fade">
       <div v-if="flag2 && recFlag" class="record-alert mx-15">
-        <v-alert id="f-alert" elevation="5" prominent dark color="#f5a2bb">
+        <v-alert id="f-alert" elevation="5" prominent dark color="#bbcfe9">
           <div class="d-flex mb-3">
             <v-icon class="mr-3">mdi-antenna</v-icon>
             <h2>녹음을 완료했습니다.</h2>
@@ -103,6 +106,18 @@
         </v-alert>
       </div>
     </transition>
+
+    <!-- progress -->
+    <div class="text-center">
+      <v-dialog v-model="dialog" hide-overlay persistent width="300">
+        <v-card color="#bbcfe9" dark>
+          <v-card-text>
+            녹음 파일 분석중...
+            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -135,7 +150,14 @@ export default {
       flag3: false,
       alertFlag: true,
       concern: '',
-      items: ['시험 성적 때문에 고민이에요..', '진로에 대한 고민이 있어요.', '괴롭힘을 당하고 있어요...', '친구문제로 상담을 받고 싶어요.', '기타', '직접 입력'],
+      items: [
+        '시험 성적 때문에 고민이에요..',
+        '진로에 대한 고민이 있어요.',
+        '괴롭힘을 당하고 있어요...',
+        '친구문제로 상담을 받고 싶어요.',
+        '기타',
+        '직접 입력',
+      ],
       recordMode: {
         audio: 'press',
       },
@@ -155,10 +177,11 @@ export default {
         surprised: '',
       },
       recordInfo: [],
-      cnum: "",
+      cnum: '',
       writeFlag: false,
-      myConcern: "",
+      myConcern: '',
       mentor: 1,
+      dialog: false,
     };
   },
   methods: {
@@ -184,6 +207,7 @@ export default {
       });
     },
     fileUpload() {
+      this.dialog = true;
       var formData = new FormData();
       formData.append('file', this.file);
       http3
@@ -194,6 +218,8 @@ export default {
           this.recordUpload();
         })
         .catch((err) => {
+          alert("녹음을 다시 해주세요.");
+          this.dialog = false;
           console.log(err);
         });
     },
@@ -228,7 +254,7 @@ export default {
           this.allEmotion.sad = this.allEmotion.sad.concat(this.emotion[5], `|`);
           this.allEmotion.surprised = this.allEmotion.surprised.concat(this.emotion[6], `|`);
         }
-        if(this.recFlag) {
+        if (this.recFlag) {
           clearInterval();
           return;
         }
@@ -267,12 +293,13 @@ export default {
           this.emotionUpload();
         })
         .catch((err) => {
+          this.dialog = false;
           console.log(err);
         });
     },
     emotionUpload() {
       http
-        .post("/record/emotion", {
+        .post('/record/emotion', {
           num: this.cnum,
           angry: this.allEmotion.angry,
           disgusted: this.allEmotion.disgusted,
@@ -284,8 +311,9 @@ export default {
         })
         .then((res) => {
           this.log = res;
+          this.dialog = false;
           setTimeout(() => {
-            this.$router.push('/menteeMain');
+            this.$router.push('/menteeMypage');
           }, 1500);
         })
         .catch((err) => {
@@ -301,7 +329,7 @@ export default {
   },
   watch: {
     concern(v) {
-      if(v == "직접 입력") {
+      if (v == '직접 입력') {
         this.writeFlag = true;
       } else {
         this.writeFlag = false;
@@ -313,7 +341,7 @@ export default {
 
 <style scoped>
 .record-main {
-  background-image: linear-gradient(to bottom, #93dfff, white);
+  /* background-image: linear-gradient(to bottom, #93dfff, white); */
   height: 100vh;
 }
 .record-header {
