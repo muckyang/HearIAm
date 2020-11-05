@@ -345,13 +345,11 @@ export default {
         http3
           .post(`/cert/imgCheck`, formData
           )
-          .then(() => {
-            console.log("이벤트 성공");
+          .then((res) => {
+            console.log(res.data)
           })
           .catch((e) => console.log(e));
-        console.log("업로드 파일 이벤트 발동!");
       }
-      console.log("gg");
     },
     validate() {
       this.$refs.form.validate();
