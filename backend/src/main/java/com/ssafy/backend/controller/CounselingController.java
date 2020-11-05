@@ -106,7 +106,6 @@ public class CounselingController {
 	@GetMapping("/counseling/{num}")
 	public ConRoom counseling(@PathVariable(value = "num") Long num) {
 		ConRoom conRoom = conRoomRepository.findByNum(num);
-		conRoom.setDate(conRoom.getDate());
 		return conRoom;
 	}
 
@@ -167,9 +166,6 @@ public class CounselingController {
 	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor,
 			@PathVariable(value = "mentee") Long mentee) {
 		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeOrderByDateDesc(mentor, mentee);
-		for (ConRoom conRoom : list) {
-			conRoom.setDate(conRoom.getDate());
-		}
 		return list;
 	}
 
@@ -199,15 +195,11 @@ public class CounselingController {
 	public List<ConRoom> ReserveList(@PathVariable(value = "mentor") Long mentor) {
 		List<ConRoom> list = conRoomRepository.findByMentorAndStatusOrStatusOrderByDateAsc(mentor, "reserve",
 				"reapply");
-		for (ConRoom conRoom : list) {
-			conRoom.setDate(conRoom.getDate());
-		}
 		return list;
 	}
 
 	@PostMapping("/reserveRequest")
 	public ResponseEntity<String> reserveRequest(@RequestBody ConRoom conRoom) {
-		conRoom.setDate(conRoom.getDate());
 		conRoomRepository.save(conRoom);
 		Alarm alarm = new Alarm();
 		alarm.setNum(conRoom.getNum());
@@ -220,7 +212,6 @@ public class CounselingController {
 	@ApiOperation("상담일지 수정등록")
 	public Object updateReport(@RequestBody ConRoom request) throws IOException, SQLException {
 		try {
-			request.setDate(request.getDate());
 			conRoomRepository.save(request);
 			return new ResponseEntity<>("report save", HttpStatus.OK);
 		} catch (Exception e) {

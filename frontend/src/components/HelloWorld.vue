@@ -16,7 +16,6 @@
         "
         >시작하기<v-icon>mdi-cursor-pointer</v-icon></v-btn
       >
-      <v-btn dark>{{date}}</v-btn>
     </div>
 
     <v-dialog v-model="login_dialog" max-width="500" min-height="700">
@@ -70,7 +69,6 @@ export default {
       login_dialog: false,
       sign_dialog: false,
       role: "",
-      date: new Date(),
     };
   },
   methods: {
