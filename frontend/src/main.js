@@ -40,7 +40,7 @@ messaging.onMessage((payload) => {
     notification.onclick = function(event) {
       event.preventDefault(); // prevent the browser from focusing the Notification's tab
       let num = payload.data.room_num*1;
-      
+      console.log(num);
       if(num>0){ //실시간 상담
         router.push({name: 'stMatch', params: {room: payload.data.room, room_num:num}});
       }

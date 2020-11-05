@@ -8,7 +8,7 @@
     transition="slide-x-reverse-transition"
   >
     <template v-slot:activator>
-      <v-btn v-model="fab" :color="btn_color" dark fab @click="alarmClick()">
+      <v-btn v-model="fab" :color="getAlarmBtn" dark fab @click="alarmClick()">
         <v-icon v-if="fab">mdi-close </v-icon>
         <v-icon v-else> mdi-bell </v-icon>
       </v-btn>
@@ -17,18 +17,23 @@
       <v-list dense>
         <h4>알람</h4>
         <v-list-item-group v-model="alarm" color="primary">
-          <v-list-item>
+          <v-list-item v-if="getAlarmList.length == 0">
             <v-list-item-icon>
               <v-icon>mdi-bell-alert</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>상담요청이 왔어요!</v-list-item-title>
+              <v-list-item-title>알람이 없어요!</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item v-for="(item, index) in list" :key="index">
-            <v-list-item-title @click="onjoin(item)">
-              실시간 상담 요청이 왔습니다!</v-list-item-title
-            >
+          <v-list-item v-for="(item, index) in getAlarmList" :key="index">
+            <v-list-item-icon>
+              <v-icon>mdi-bell-alert</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title @click="onjoin(item)">
+                실시간 상담 요청이 왔습니다!</v-list-item-title
+              >
+            </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -67,14 +72,15 @@ export default {
   data() {
     return {
       alert_num: 0,
-      list: [],
-      btn_color: "#0a7a78", //빨 : #F44336   그린 :  #0a7a78
+      list: this.getAlarmList,
+      btn_color: this.getAlarmBtn, //빨 : #F44336   그린 :  #0a7a78
       fab: false,
       alarm: null,
     };
   },
   methods: {
     onjoin(data) {
+      console.dir(data);
       let mentorName = this.getUserNum;
       if (data.mentor == 1) {
         http
@@ -86,7 +92,9 @@ export default {
             } else {
               alert(" 상담을 시작합니다. ");
               this.unsubscribe();
-              this.$router.push(`/counselorWRTC/${data.room}&${mentorName}`);
+              this.$router.push(
+                `/counselorWRTC/${data.conRoom.room}&${data.num}`
+              );
             }
           })
           .catch((e) => {
@@ -135,29 +143,27 @@ export default {
       //알람 끈다 초록
       // this.$store.commit('setAlarmCnt',0);
       // this.$store.commit('setAlarmFlag',false);
-      this.btn_color = "#0a7a78";
+      this.$store.commit("changeAlarmBtn", "#0a7a78");
     },
   },
-  mounted() {
-    this.alert_num = this.getUserNum;
-    http.get(`/counseling/alarmList/${this.getUserNum}`).then((res) => {
-      this.list = res.data;
-      this.alert_num = this.list.length;
-      // this.getAlarmCnt = this.list.length;
-      // this.$store.commit('setAlarmCnt', this.list.length);
-      // console.log("알람 온 수 : "+ this.getAlarmCnt);
-      if (this.list.length > 0) {
-        this.btn_color = this.btn_color = "#F44336";
-      }
-    });
-  },
+  // updated() {
+  //   http
+  //     .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
+  //     .then((res) => {
+  //       this.$store.commit("setAlarmList", res.data);
+  //       let len = this.$store.getters["getAlarmList"].length;
+  //       if (len > 0) {
+  //         this.$store.commit("changeAlarmBtn", "#F44336");
+  //       }
+  //     });
+  // },
   computed: {
     ...mapGetters([
       "getUserName",
       "getUserNum",
       "getDeviceID",
-      "getAlarmCnt",
-      "getAlarmFlag",
+      "getAlarmList",
+      "getAlarmBtn",
     ]),
   },
   // watch:{
