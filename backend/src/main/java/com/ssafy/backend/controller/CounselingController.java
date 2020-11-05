@@ -287,10 +287,6 @@ public class CounselingController {
 	@GetMapping("/alarmList/{mentorNum}")
 	public List<Alarm> alarmList(@PathVariable(value = "mentorNum") Long mentorNum) {
 		List<Alarm> list = alarmRepository.findAll();
-		System.out.println();
-		for (Alarm alarm : list) {
-			System.out.println(alarm);
-		}
 		return list;
 	}
 
