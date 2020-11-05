@@ -133,7 +133,7 @@ public class CertificationController {
 			  driver = new ChromeDriver(options); // Driver 생성
 		   } else {// aws
 			  res="setProperty";
-			  System.setProperty("webdriver.chrome.driver", "/var/lib/jenkins/workspace/front/backend/src/main/java/com/ssafy/backend/utils/chromedriver");
+			  System.setProperty("webdriver.chrome.driver", "/var/lib/chromedriver");
 			  ChromeOptions options = new ChromeOptions();
 			  options.addArguments("headless");
 			  options.addArguments("no-sandbox");
