@@ -225,6 +225,7 @@
 <script>
 import http from '@/util/http-common.js';
 import { mapGetters } from 'vuex';
+import moment from "moment";
 
 export default {
   name: 'MyListComp',
@@ -305,8 +306,9 @@ export default {
       }
     },
     setTime(date) {
-      let time = date.slice(0, 4) + '-' + date.slice(5, 7) + '-' + date.slice(8, 10) + ' ' + date.slice(11, 13) + ':' + date.slice(14, 16);
-      return time;
+      var momentz = moment(new Date(date));
+      require('moment-timezone'); 
+      return momentz.tz("Asia/Seoul").format("YYYY-MM-DD HH:mm");
     },
     reapplyType(item) {
       this.mentorNum = item.mentor;
