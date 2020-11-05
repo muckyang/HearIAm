@@ -40,8 +40,7 @@ export default {
     alarmComp
   },
   data() {
-    return {
-    
+    return {    
       
     };
   },

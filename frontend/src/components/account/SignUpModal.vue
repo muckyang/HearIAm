@@ -3,8 +3,13 @@
     <v-card-title class="text-center justify-center py-0">
       <!-- <h1 class="font-weight-bold display-3 basil--text">{{ userRole }}</h1> -->
       <p
-        style=" font-size: 2rem; font-weight: 700; word-spacing: 4px;
-  letter-spacing: 4px;font-family: 'yg-jalnan';"
+        style="
+          font-size: 2rem;
+          font-weight: 700;
+          word-spacing: 4px;
+          letter-spacing: 4px;
+          font-family: 'yg-jalnan';
+        "
         class="mb-2"
       >
         회원가입
@@ -24,7 +29,7 @@
             </v-row>
             <v-row justify="center">
               <v-col
-                class=" d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12"
+                class="d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12"
               >
                 <v-icon large color="black" class="mr-2"
                   >mdi-account-outline</v-icon
@@ -60,7 +65,7 @@
 
             <v-row v-if="type" justify="center">
               <v-col
-                class=" d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12"
+                class="d-flex col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12"
               >
                 <v-icon large color="black" class="mr-2"
                   >mdi-account-circle-outline</v-icon
@@ -145,14 +150,22 @@
                   outlined
                   hide-details
                   color="#a2c9d0"
+                  @change="uploadFile()"
                   label="자격증 사진을 등록해주세요."
+                  v-model="files"
                 ></v-file-input>
               </v-col>
             </v-row>
 
             <v-row>
-              <v-col cols="10" style="margin: 0 auto;">
-                <v-btn class="main-btn" width="100%" style="height:3rem" @click="validate">등록</v-btn>
+              <v-col cols="10" style="margin: 0 auto">
+                <v-btn
+                  class="main-btn"
+                  width="100%"
+                  style="height: 3rem"
+                  @click="validate"
+                  >등록</v-btn
+                >
               </v-col>
             </v-row>
           </v-form>
@@ -239,6 +252,7 @@
 </template>
 
 <script>
+import http3 from "@/util/http-common3.js";
 import http2 from "@/util/http-common2.js";
 import http from "@/util/http-common.js";
 
@@ -275,6 +289,7 @@ export default {
       pwdEngNum: false,
       noid: false,
       idchkFlag: false,
+      files: null,
     };
   },
   mounted() {
@@ -322,6 +337,22 @@ export default {
     },
   },
   methods: {
+    uploadFile() {
+      if (this.files) {
+        let formData = new FormData();
+        formData.append("file", this.files);
+        console.log(this.files);
+        http3
+          .post(`/cert/imgCheck`, formData
+          )
+          .then(() => {
+            console.log("이벤트 성공");
+          })
+          .catch((e) => console.log(e));
+        console.log("업로드 파일 이벤트 발동!");
+      }
+      console.log("gg");
+    },
     validate() {
       this.$refs.form.validate();
       if (this.password1 == this.password2) {
