@@ -15,8 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -29,10 +32,11 @@ public class CertificationController {
 	static
 	AuthSelenium authSelenium;
 
-	@GetMapping("/imgCheck/{img}")
+	@PostMapping("/imgCheck")
 	@ApiOperation(value = "자격증 OCR")
-	public Object textCheck(@PathVariable String img) throws SQLException, IOException {
+	public Object textCheck(@RequestPart("file") MultipartFile ff) throws IllegalStateException, SQLException, IOException {
 		System.out.println("Certification Check Python Call");
+		System.out.println(ff);
 		String[] command = new String[3];
 		command[0] = "python";
 		// 경로 확인
@@ -45,13 +49,13 @@ public class CertificationController {
 		}
 
 		// 파일 이름
-		command[2] = img;
-
-		try {
-			return execPython(command);
-		} catch (Exception e) {
-			return "fail";
-		}
+		// command[2] = img;
+		// try {
+			// 	return execPython(command);
+			// } catch (Exception e) {
+				// 	return "fail";
+				// }
+				return 0;
 	}
 
 	public static Object execPython(String[] command) throws IOException, InterruptedException {
