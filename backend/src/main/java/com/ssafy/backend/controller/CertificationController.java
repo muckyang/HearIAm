@@ -7,7 +7,6 @@ import java.net.InetAddress;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-import com.ssafy.backend.utils.AuthSelenium;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
