@@ -3,58 +3,142 @@
     <v-dialog v-model="dialogRTC" persistent max-width="1000">
       <v-card height="650" dark>
         <v-container>
-          <v-row v-if="!isProgress">
-            <v-col>
-              <v-btn
-                type="button"
-                class="btn btn-primary"
-                @click="createRoom"
-              >
-                상담 요청
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-row v-if="dialog" style="padding-top:200px">
-            <v-col>
-              <div>
-                <h4>상담사와 연결중입니다.</h4>
-                <br />
-                <v-progress-circular
-                  :size="100"
-                  :width="7"
-                  color="#0a7a78"
-                  indeterminate
-                >
-                  <v-btn text @click="dialogCancel()">취소</v-btn>
-                </v-progress-circular>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row style="padding-top:0px">
-            <v-col>
-              <h1 v-if="mentorName">{{mentorName}} 상담사와 상담중입니다.</h1><br/>
-              <WebRTC
-                ref="webrtc"
-                width="100%"
-                :roomId="roomId"
-                cameraHeight="450"
-                @error="onError"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-spacer></v-spacer>
-            <v-col>
-              <v-btn
-                v-if="endBtn"
-                type="button"
-                class="btn btn-primary"
-                @click="onLeave"
-              >
-                상담 종료
-              </v-btn>
-            </v-col>
-          </v-row>
+          <v-stepper v-model="e1">
+            <v-stepper-header>
+              <v-stepper-step :complete="e1 > 1" step="1">
+                실시간 상담 설명 1
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="e1 > 2" step="2">
+                실시간 상담 설명 2
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step step="3">
+                실시간 상담 진행
+              </v-stepper-step>
+            </v-stepper-header>
+
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <v-card class="mb-12 pa-7" align="center" color="grey lighten-1" width="auto" height="400px"
+                  ><h1>HEAR I AM 소개 1</h1>
+                  <div style="width:200px; float:left" >
+                     <v-img
+                     style="float:top; width:200px; max-width: 70%; height: auto;"
+                    src="../../assets/icons/face-detection.png"
+                  ></v-img>
+                <br/>
+                  <v-img
+                    style="float:top; width:200px; max-width: 70%; height: auto;"
+                    src="../../assets/icons/graph.png"
+                  ></v-img>
+                  
+                  </div>
+                  <div style="width:200px; float:left" >
+                    <h4> HEAR I AM 은 상담자에게 얼굴이 공개되지 않는 서비스로 사용자의 익명성이 보장됩니다.</h4>
+                  </div>
+                  </v-card>
+
+                <v-btn color="primary" @click="e1 = 2">
+                  다음
+                </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-content step="2">
+                <v-card class="mb-12 pa-7" color="grey lighten-1" height="400px" >
+                  <v-img
+                    style="float:left;"
+                    width="120px"
+                    height="120px"
+                    src="../../assets/icons/face-detection.png"
+                  ></v-img>
+                  <div float:left>
+                  <h4> HEAR I AM 은 상담자에게 얼굴이 공개되지 않는 서비스로 사용자의 익명성이 보장됩니다.</h4>
+                  </div>
+                  <v-img
+                    style="float:left;"
+                    width="120px"
+                    height="120px"
+                    src="../../assets/icons/graph.png"
+                  ></v-img>
+                  <v-img
+                    style="float:left;"
+                    width="120px"
+                    height="120px"
+                    src="../../assets/icons/anonymity.png"
+                  ></v-img>
+                </v-card>
+                <v-btn color="primary" @click="createRoom">
+                  상담시작!
+                </v-btn>
+              </v-stepper-content>
+
+              <v-stepper-content step="3">
+                <!-- <v-row v-if="!isProgress">
+                  <v-col>
+                    <v-btn
+                      type="button"
+                      class="btn btn-primary"
+                      @click="createRoom"
+                    >
+                      상담 요청
+                    </v-btn>
+                  </v-col>
+                </v-row> -->
+                <v-row v-if="dialog" style="padding-top:200px">
+                  <v-col>
+                    <div>
+                      <h4>상담사와 연결중입니다.</h4>
+                      <br />
+                      <v-progress-circular
+                        :size="100"
+                        :width="7"
+                        color="#0a7a78"
+                        indeterminate
+                      >
+                        <v-btn text @click="dialogCancel()">취소</v-btn>
+                      </v-progress-circular>
+                    </div>
+                  </v-col>
+                </v-row>
+                <v-row style="padding-top:0px">
+                  <v-col>
+                    <h1 v-if="mentorName">
+                      {{ mentorName }} 상담사와 상담중입니다.
+                    </h1>
+                    <br />
+                    <WebRTC
+                      ref="webrtc"
+                      width="100%"
+                      :roomId="roomId"
+                      cameraHeight="450"
+                      @error="onError"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-spacer></v-spacer>
+                  <v-col>
+                    <v-btn
+                      v-if="endBtn"
+                      type="button"
+                      class="btn btn-primary"
+                      @click="onLeave"
+                    >
+                      상담 종료
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <!-- <v-btn text>
+                  Cancel
+                </v-btn> -->
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
         </v-container>
       </v-card>
     </v-dialog>
@@ -77,6 +161,7 @@ export default {
   },
   data() {
     return {
+      e1: 1,
       img: null,
       roomId: null,
       message: null,
@@ -120,25 +205,26 @@ export default {
       this.roomId = text;
     },
     createRoom() {
-      console.log("create Room :::::: "+this.getUserNum)
-      if(this.getUserNum == null){
+      this.e1 = 3;
+      console.log("create Room :::::: " + this.getUserNum);
+      if (this.getUserNum == null) {
         this.$router.go();
-      }else{
-      http
-        .post(`/counseling/liveRequest`, {
-          mentee: this.getUserNum,
-          mentor: 1,
-          room: this.roomId,
-          status: "liveRequest",
-          date: new Date(),
-        })
-        .then((res) => {
-          this.checkCnt(res);
-          // this.sendDM(res);
-          this.roomNum = res.data;
-        });
-      this.dialog = true;
-      this.onJoin();
+      } else {
+        http
+          .post(`/counseling/liveRequest`, {
+            mentee: this.getUserNum,
+            mentor: 1,
+            room: this.roomId,
+            status: "liveRequest",
+            date: new Date(),
+          })
+          .then((res) => {
+            this.checkCnt(res);
+            // this.sendDM(res);
+            this.roomNum = res.data;
+          });
+        this.dialog = true;
+        this.onJoin();
       }
     },
     checkCnt(data) {
@@ -176,12 +262,10 @@ export default {
         .post(this.url, message, config)
         .then((response) => {
           if (response.status < 200 || response.status >= 400) {
-            throw (
-              "Error subscribing to topic: " +
+            throw "Error subscribing to topic: " +
               response.status +
               " - " +
-              response.text()
-            );
+              response.text();
           }
         })
         .catch((e) => {
@@ -234,7 +318,7 @@ export default {
     stopVideo() {
       if (this.videoTag.srcObject != null && this.videoTag.srcObject != "") {
         const tracks = this.videoTag.srcObject.getTracks();
-        tracks.forEach(function (track) {
+        tracks.forEach(function(track) {
           track.stop();
         });
         this.videoTag.srcObject = null;
@@ -276,9 +360,7 @@ export default {
         alert("상담가가 들어옵니다. ");
         this.dialog = false;
         this.endBtn = true;
-        http
-        .get(`/counseling/liveMentorInfo/${this.roomId}`)
-        .then((res) => {
+        http.get(`/counseling/liveMentorInfo/${this.roomId}`).then((res) => {
           this.mentorName = res.data.name;
         });
         // this.onLeave();
