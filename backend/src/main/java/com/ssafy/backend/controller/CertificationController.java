@@ -108,7 +108,7 @@ public class CertificationController {
 			text = AuthSelenium.execSelenium(outputList);
 			text = "adadadadadadadadadadad";
 		} catch (Exception e) {
-			text = "qweqweFail";
+			text = e;
 		}
 		System.out.println(text);
 
