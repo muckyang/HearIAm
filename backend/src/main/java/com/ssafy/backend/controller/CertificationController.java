@@ -68,7 +68,7 @@ public class CertificationController {
 		try {
 			return execPython(command);
 		} catch (Exception e) {
-			return "fail";
+			return "sfail";
 		}
 	}
 
@@ -102,11 +102,17 @@ public class CertificationController {
 			System.out.println(string);
 		}
 
+		String text = "impo";
 		// 이름, 생년월일, 자격번호, 발급일, 내지번호
-		// String text = AuthSelenium.execSelenium(outputList);
-		// System.out.println(text);
+		try {
+			text = AuthSelenium.execSelenium(outputList);
+			text = "adadadadadadadadadadad";
+		} catch {
+			text = "qweqweFail";
+		}
+		System.out.println(text);
 
-		return outputList;
+		return text;
 	}
 
 	
