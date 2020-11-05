@@ -1,9 +1,11 @@
 package com.ssafy.backend.controller;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import com.ssafy.backend.utils.AuthSelenium;
 import org.apache.commons.exec.CommandLine;
@@ -28,20 +30,33 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api/cert")
 public class CertificationController {
 
-	@Autowired
-	static
-	AuthSelenium authSelenium;
-
 	@PostMapping("/imgCheck")
 	@ApiOperation(value = "자격증 OCR")
 	public Object textCheck(@RequestPart("file") MultipartFile ff) throws IllegalStateException, SQLException, IOException {
 		System.out.println("Certification Check Python Call");
-		System.out.println(ff);
+
+		String Rec = ff.getOriginalFilename().toLowerCase();
+        long nowtime = datetimeTosec(LocalDateTime.now());
+        
+        File file;
+
+        String hostname = InetAddress.getLocalHost().getHostName();
+        if (hostname.substring(0, 7).equals("DESKTOP")) {// local
+            file = new File(System.getProperty("user.dir") + "\\\\frontend\\public\\images\\" + nowtime + Rec);
+        } else {// aws
+            file = new File("/var/lib/jenkins/workspace/front/frontend/public/images/" + nowtime + Rec);
+		}
+		
+		if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+
+		ff.transferTo(file);
+
 		String[] command = new String[3];
 		command[0] = "python";
+		
 		// 경로 확인
-		String hostname = InetAddress.getLocalHost().getHostName();
-
 		if (hostname.substring(0, 7).equals("DESKTOP")) {// local
 			command[1] = "./backend/AI/ocr.py";
 		} else {// aws
@@ -49,26 +64,32 @@ public class CertificationController {
 		}
 
 		// 파일 이름
-		// command[2] = img;
-		// try {
-			// 	return execPython(command);
-			// } catch (Exception e) {
-				// 	return "fail";
-				// }
-				return 0;
+		command[2] = file.getName();
+		try {
+			return execPython(command);
+		} catch (Exception e) {
+			return "fail";
+		}
 	}
+
+	private long datetimeTosec(LocalDateTime ldt) {
+        long result = 0L;
+        result += ((((((((ldt.getYear() - 2000) * 365) + ldt.getDayOfYear()) * 24) + ldt.getHour()) * 60)
+        + ldt.getMinute()) * 60 + ldt.getSecond());
+        return result;
+    }
 
 	public static Object execPython(String[] command) throws IOException, InterruptedException {
 		CommandLine commandLine = CommandLine.parse(command[0]);
 		for (int i = 1, n = command.length; i < n; i++) {
 			commandLine.addArgument(command[i]);
 		}
-
+		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
 		DefaultExecutor executor = new DefaultExecutor();
 		executor.setStreamHandler(pumpStreamHandler);
-
+		
 		int result = executor.execute(commandLine);
 		System.out.println("result: " + result);
 
@@ -82,7 +103,7 @@ public class CertificationController {
 		}
 
 		// 이름, 생년월일, 자격번호, 발급일, 내지번호
-		String text = authSelenium.execSelenium(outputList);
+		String text = AuthSelenium.execSelenium(outputList);
 		System.out.println(text);
 
 		return outputList;

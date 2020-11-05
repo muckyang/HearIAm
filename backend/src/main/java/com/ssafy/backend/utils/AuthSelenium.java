@@ -1,5 +1,7 @@
 package com.ssafy.backend.utils;
 
+import java.net.InetAddress;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,18 +10,26 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class AuthSelenium {
 
-	public String execSelenium(String[] list) {
+	public static String execSelenium(String[] list) {
 		System.out.println("execselenium");
 		WebDriver driver = null;
 		String res ="";
 		try {
-			System.setProperty("webdriver.chrome.driver", "/var/lib/jenkins/workspace/front/backend/src/main/java/com/ssafy/backend/utils/chromedriver");
-			ChromeOptions options = new ChromeOptions();
-   			options.addArguments("headless");
-			options.addArguments("no-sandbox");
-			options.addArguments("disable-dev-shm-usage");
-			driver = new ChromeDriver(options); // Driver 생성
-
+			String hostname = InetAddress.getLocalHost().getHostName();
+			if (hostname.substring(0, 7).equals("DESKTOP")) {// local
+				System.setProperty("webdriver.chrome.driver", "C:/portfolio202/s03p31b202/backend/src/main/java/com/ssafy/backend/utils/chromedriverw.exe");
+				ChromeOptions options = new ChromeOptions();
+				options.addArguments("headless");
+				driver = new ChromeDriver(options); // Driver 생성
+			} else {// aws
+				System.setProperty("webdriver.chrome.driver", "/var/lib/jenkins/workspace/front/backend/src/main/java/com/ssafy/backend/utils/chromedriver");
+				ChromeOptions options = new ChromeOptions();
+				options.addArguments("headless");
+				options.addArguments("no-sandbox");
+				options.addArguments("disable-dev-shm-usage");
+				driver = new ChromeDriver(options); // Driver 생성
+			}
+			
 			driver.get("https://www.q-net.or.kr/qlf006.do?id=qlf00601&gSite=Q&gId=");
 			WebElement name = driver.findElement(By.id("hgulNm"));
 			name.clear();
@@ -46,10 +56,11 @@ public class AuthSelenium {
 			// System.out.println(check.getText());
 			res = check.getText();
 		} catch (Throwable e) {
-			System.err.println("오류 남!");
-		} finally {
-			driver.close();
-		}
+		System.err.println("fail");
+		driver.close();
+		return "fail";
+	} 
+		driver.close();
 		return res;
 	}
 
