@@ -2,14 +2,12 @@ package com.ssafy.backend.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.hibernate.type.LocalDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 
-import com.google.common.base.Optional;
 import com.ssafy.backend.exception.ResourceNotFoundException;
 import com.ssafy.backend.model.Alarm;
 import com.ssafy.backend.model.AlarmReady;

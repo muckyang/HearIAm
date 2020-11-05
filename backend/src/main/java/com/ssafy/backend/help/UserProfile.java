@@ -10,7 +10,6 @@ public class UserProfile {
 
 	public UserProfile() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public UserProfile(Long num, String id, String name, String role, int qualification) {

@@ -1,9 +1,7 @@
 package com.ssafy.backend.controller;
 
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -24,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.util.concurrent.AbstractScheduledService.Scheduler;
-import com.ssafy.backend.model.Alarm;
 import com.ssafy.backend.model.ConRoom;
 import com.ssafy.backend.model.Reservation;
 import com.ssafy.backend.model.ReserveRes;

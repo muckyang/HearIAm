@@ -1,9 +1,5 @@
 package com.ssafy.backend.help;
 
-import java.util.Date;
-
-import javax.validation.constraints.*;
-
 
 public class SignUpRequest {
     private String id;
