@@ -1,55 +1,83 @@
 <template>
   <div style="position: relative" :style="rootCssVar">
-    <div class="vws-rule-custom mb-5" style="user-select: none">
-      <div class="vws-rule-row">
-        <div class="vws-table-rule">
-          <div class="vws-table-rule-heading">
-            <div class="text-center week-rule"></div>
-            <div
-              class="text-center"
-              v-for="(day, daynum) in dayTable"
-              :key="daynum"
-            >
-              {{ day }}
-            </div>
-          </div>
-          <div class="vws-table-rule-body" id="schelude" ref="draggableArea">
-            <div
-              ref="ruleTime"
-              class="vws-rule-time"
-              v-for="(t, idx) in timeArray"
-              :key="idx"
-            >
-              <div
-                ref="ruleTimeTime"
-                class="vws-time-list vws-rule-time-time vws-time-rule"
-                :data-val="t"
-              >
-                {{ t }}
+    <div align="center" style="font-size: 2rem">
+      <span style="display: inline-flex; vertical-align: middle"
+        ><v-icon class="mr-2" color="black" style="font-size: 2.2rem"
+          >mdi-calendar-check-outline</v-icon
+        >이번 주 일정표</span
+      ><br/>
+      <span style="font-size:1.2rem; display:inline-flex; vertical-align:middle;"><span style="">{{ this.getUserName }}</span>님의 이번 주 일정입니다. <v-btn style="cursor:default;" class="px-2 ml-3 mr-1" small color="#bbcfe9"
+        >일정수정</v-btn
+      >을 클릭하여 원하는 시간을 선택하세요.</span>
+    </div>
+    <div >
+      <div align="right">
+      <v-btn v-if="isModify" @click="saveTime" color="#bbcfe9">완료</v-btn>
+      <v-btn v-if="!isModify" @click="modifyTime" color="#bbcfe9"
+        >일정수정</v-btn
+      >
+      </div>
+    </div>
+    <div align="center">
+      <div style="width: 750px">
+        <div class="vws-rule-custom mb-5" style="user-select: none">
+          <div class="vws-rule-row">
+            <div class="vws-table-rule">
+              <div class="vws-table-rule-heading">
+                <div class="text-center week-rule"></div>
+                <div
+                  class="text-center"
+                  v-for="(day, daynum) in dayTable"
+                  :key="daynum"
+                >
+                  <span style="font-size: 1rem">
+                    {{ day }}
+                  </span>
+                </div>
               </div>
               <div
-                class="day-div"
-                v-for="(day, daynum) in dayTable"
-                :key="daynum"
-                ref="ruleTimeItem"
-                :class="{
-                  'vws-time-list vws-rule-time-item': true,
-                  active:
-                    timetable[daynum].find((el) => el == idx) != undefined
-                      ? true
-                      : false,
-                }"
-                @click="toggleDay(daynum, idx)"
+                class="vws-table-rule-body"
+                id="schelude"
+                ref="draggableArea"
               >
-                <span>{{ day }}</span>
+                <div
+                  ref="ruleTime"
+                  class="vws-rule-time"
+                  v-for="(t, idx) in timeArray"
+                  :key="idx"
+                >
+                  <div
+                    ref="ruleTimeTime"
+                    class="vws-time-list vws-rule-time-time vws-time-rule"
+                    :data-val="t"
+                  >
+                    <span style="font-size: 0.8rem">
+                      {{ t }}
+                    </span>
+                  </div>
+                  <div
+                    class="day-div"
+                    v-for="(day, daynum) in dayTable"
+                    :key="daynum"
+                    ref="ruleTimeItem"
+                    :class="{
+                      'vws-time-list vws-rule-time-item': true,
+                      active:
+                        timetable[daynum].find((el) => el == idx) != undefined
+                          ? true
+                          : false,
+                    }"
+                    @click="toggleDay(daynum, idx)"
+                  >
+                    <span style="font-size: 0.8rem">{{ day }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <v-btn v-if="isModify" @click="saveTime" color="#bbcfe9">완료</v-btn>
-    <v-btn v-if="!isModify" @click="modifyTime" color="#bbcfe9">일정수정</v-btn>
     <v-dialog v-model="monDialog" persistent max-width="400">
       <v-card>
         <v-card-title style="font-size: 1.5rem">
@@ -149,7 +177,7 @@ export default {
         console.log(res.data);
         if (res.data == 1) {
           this.monDialog = false;
-        }else if(res.data==0){
+        } else if (res.data == 0) {
           this.monDialog = true;
         }
       })
@@ -269,9 +297,10 @@ export default {
         "--vws-text": this.textColor,
       };
     },
-    ...mapGetters(["getUserID"]),
+    ...mapGetters(["getUserID", "getUserName"]),
     ...mapState({
       userID: (state) => `${state.user.getUserID}`,
+      userName: (state) => `${state.user.getUserName}`,
     }),
   },
 };
@@ -281,5 +310,6 @@ export default {
 @import url("../../assets/schedule_style.css");
 .day-div {
   pointer-events: none;
+  color:
 }
 </style>

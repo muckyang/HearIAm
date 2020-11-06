@@ -14,8 +14,8 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <div style="width: 700px; margin: 0 auto; padding: 20px">
-            <Scheduler v-model="schedule" :dayTable="dayTable" bg="#223642" bgHover="#84dafc7a" bgActive="#84c9fc" textColor="#000" />
+          <div style=" margin: 0 auto; padding: 20px">
+            <Scheduler v-model="schedule" :dayTable="dayTable" bg="#edf4fd" bgHover="#bbcfe9" bgActive="#bbcfe9" textColor="#000" />
           </div>
         </v-tab-item>
         <v-tab-item>
