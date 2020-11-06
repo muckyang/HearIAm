@@ -134,22 +134,22 @@
     </v-dialog>
 
     <v-dialog v-model="typeDialog" max-width="500" min-height="500" style="height: 500px">
-      <v-card class="pt-5 px-5">
+      <v-card class="pt-5">
         <v-card-title class="justify-center pb-7">
           <h2>상담 유형을 선택해주세요.</h2>
         </v-card-title>
         <v-card-text>
           <v-row class="justify-center">
             <v-col cols="5" @click="reapply" class="mr-1 type-box"
-              ><div class="type-title" style="width:100%;height:100%;padding-top:30%;">실시간 상담</div></v-col
+              ><div class="type-title" style="width:100%;height:100%;padding-top:15%;">실시간 상담</div></v-col
             >
             <v-col cols="5" @click="reRecord" class="type-box"
-              ><div class="type-title" style="width:100%;height:100%;padding-top:30%;">녹화 상담</div></v-col
+              ><div class="type-title" style="width:100%;height:100%;padding-top:15%;">녹화 상담</div></v-col
             >
           </v-row>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions class="px-0 py-0">
           <v-spacer></v-spacer>
           <v-btn color="red darken-1" text @click="typeDialog = false">
             취소
@@ -485,7 +485,8 @@ export default {
   border: 2px solid lightgray;
   font-size: 1.3rem;
   cursor: pointer;
-  height: 150px;
+  height: 100px;
+  border-radius:30px;
 }
 .type-title {
   transform: scale(1);
