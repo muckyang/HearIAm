@@ -435,8 +435,7 @@ export default {
       var d = day.slice(8, 11);
       var Dday = new Date(year, month - 1, d);
       var now = new Date();
-      var gap = Dday.getTime() - now.getTime();
-      var result = Math.floor(gap / (1000 * 60 * 60 * 24)) * -1;
+      var result = now.getDate() - Dday.getDate();
 
       if (result > 0) {
         result = 'D+' + result;
