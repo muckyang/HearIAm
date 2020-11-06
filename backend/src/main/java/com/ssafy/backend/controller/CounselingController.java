@@ -198,10 +198,10 @@ public class CounselingController {
 	@PostMapping("/reserveRequest")
 	public ResponseEntity<String> reserveRequest(@RequestBody ConRoom conRoom) {
 		conRoomRepository.save(conRoom);
-		Alarm alarm = new Alarm();
-		alarm.setNum(conRoom.getNum());
-		alarm.setMentor(conRoom.getMentor());
-		alarmRepository.save(alarm);
+		// Alarm alarm = new Alarm();
+		// alarm.setNum(conRoom.getNum());
+		// alarm.setMentor(conRoom.getMentor());
+		// alarmRepository.save(alarm);
 		return ResponseEntity.ok(SUCCESS);
 	}
 
