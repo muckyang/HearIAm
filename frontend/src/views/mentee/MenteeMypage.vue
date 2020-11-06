@@ -5,6 +5,7 @@
       width: 100%;
       padding-top: 64px;
     "
+    class="back"
   >
     <v-container>
       <v-col>
@@ -26,4 +27,8 @@ export default {
 </script>
 
 <style>
+.back{
+  background-image: url('../../assets/starBack.png');
+  background-size: cover;
+}
 </style>

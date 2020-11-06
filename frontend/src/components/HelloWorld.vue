@@ -1,7 +1,8 @@
 <template>
   <div align="center" class="main-back" style="height:100vh">
-    <div>
+    <div style="padding-top:50px;">
       <span class="main-title"> Hear I Am</span>
+      <br>
       <v-btn
         large
         elevation="4"
@@ -12,7 +13,8 @@
           height: 4rem;
           border-radius: 20px;
           font-size: 1.2rem;
-          background: white;
+          background: #333478;
+          color:white;
         "
         >시작하기<v-icon>mdi-cursor-pointer</v-icon></v-btn
       >
@@ -95,7 +97,7 @@ export default {
 <style>
 @import "../../node_modules/sal.js/dist/sal.css";
 .main-back {
-  background-image: url("../assets/mainBack.jpg");
+  background-image: url("../assets/main-colorful.png");
   background-size: cover;
   /* background: linear-gradient(to right, #93dfff, #f5a2bb); */
   /* background: linear-gradient(to bottom, #f5e9b3, #f2d867); */
@@ -105,8 +107,8 @@ export default {
 .main-title {
   font-family: "Capriola", sans-serif;
   font-size: 7rem;
-  color: white;
-  text-shadow: 1px 1px 2px black, 0 0 1em white, 0 0 0.2em white;
-  font-weight: 700;
+  color: black;
+  /* text-shadow: 1px 1px 2px black, 0 0 1em white, 0 0 0.2em white; */
+  font-weight: 600;
 }
 </style>
