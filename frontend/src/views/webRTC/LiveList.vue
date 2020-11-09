@@ -23,6 +23,19 @@
         </v-list-item-group>
       </v-list>
     </v-card>
+
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -38,6 +51,8 @@ export default {
   data() {
     return {
       liveList: [],
+      errorSnack: false,
+      altMsg: "",
     };
   },
   created() {
@@ -45,7 +60,8 @@ export default {
       if (res.data != null) {
         this.liveList = res.data;
       } else {
-        alert(`대기중인 상담 요청이 없습니다.`);
+        this.errorSnack = true;
+        this.altMsg = "대기중인 상담 요청이 없습니다.";
       }
     });
   },

@@ -143,6 +143,19 @@
       </v-card>
     </v-dialog>
     <video id="videoTag" muted hidden @playing="addEventListener()"></video>
+
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -176,6 +189,8 @@ export default {
       dialogRTC: true,
       endBtn: false,
       mentorName: null,
+      successSnack: false,
+      altMsg: "",
     };
   },
   mounted() {
@@ -357,7 +372,8 @@ export default {
       console.log("isremote + " + val);
       if (val) {
         console.log("remote 들어옴");
-        alert("상담가가 들어옵니다. ");
+        this.successSnack = true;
+        this.altMsg = "상담가가 들어옵니다.";
         this.dialog = false;
         this.endBtn = true;
         http.get(`/counseling/liveMentorInfo/${this.roomId}`).then((res) => {

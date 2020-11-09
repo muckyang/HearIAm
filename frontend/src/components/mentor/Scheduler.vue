@@ -5,17 +5,26 @@
         ><v-icon class="mr-2" color="black" style="font-size: 2.2rem"
           >mdi-calendar-check-outline</v-icon
         >이번 주 일정표</span
-      ><br/>
-      <span style="font-size:1.2rem; display:inline-flex; vertical-align:middle;"><span style="">{{ this.getUserName }}</span>님의 이번 주 일정입니다. <v-btn style="cursor:default;" class="px-2 ml-3 mr-1" small color="#bbcfe9"
-        >일정수정</v-btn
-      >을 클릭하여 원하는 시간을 선택하세요.</span>
-    </div>
-    <div >
-      <div align="right">
-      <v-btn v-if="isModify" @click="saveTime" color="#bbcfe9">완료</v-btn>
-      <v-btn v-if="!isModify" @click="modifyTime" color="#bbcfe9"
-        >일정수정</v-btn
+      ><br />
+      <span
+        style="font-size: 1.2rem; display: inline-flex; vertical-align: middle"
+        ><span style="">{{ this.getUserName }}</span
+        >님의 이번 주 일정입니다.
+        <v-btn
+          style="cursor: default"
+          class="px-2 ml-3 mr-1"
+          small
+          color="#bbcfe9"
+          >일정수정</v-btn
+        >을 클릭하여 원하는 시간을 선택하세요.</span
       >
+    </div>
+    <div>
+      <div align="right">
+        <v-btn v-if="isModify" @click="saveTime" color="#bbcfe9">완료</v-btn>
+        <v-btn v-if="!isModify" @click="modifyTime" color="#bbcfe9"
+          >일정수정</v-btn
+        >
       </div>
     </div>
     <div align="center">
@@ -94,6 +103,32 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -167,6 +202,9 @@ export default {
       dayTable: ["일", "월", "화", "수", "목", "금", "토"],
       isModify: false,
       monDialog: false,
+      errorSnack: false,
+      successSnack: false,
+      altMsg: "",
     };
   },
   created() {
@@ -199,7 +237,8 @@ export default {
       this.isModify = false;
     },
     saveTime() {
-      alert("일정이 수정되었습니다.");
+      this.successSnack = true;
+      this.altMsg = "일정이 수정되었습니다.";
       this.isModify = false;
       var daydiv_arr = document.getElementsByClassName("day-div");
       for (var i = 0; i < daydiv_arr.length; i++) {
@@ -220,7 +259,8 @@ export default {
         .get(`/schedule/checkTime/${this.getUserID}/${day}/${time}`)
         .then((res) => {
           if (res.data == 0) {
-            alert("이미 예약된 시간입니다.");
+            this.errorSnack = true;
+            this.altMsg = "이미 예약된 시간입니다.";
             return;
           } else {
             let indexDay = this.timetable[day].findIndex((el) => el == time);
@@ -310,6 +350,6 @@ export default {
 @import url("../../assets/schedule_style.css");
 .day-div {
   pointer-events: none;
-  color:
+  color: ;
 }
 </style>

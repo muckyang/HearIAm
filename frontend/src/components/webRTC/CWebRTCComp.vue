@@ -66,6 +66,19 @@
         </v-container>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -126,6 +139,8 @@ export default {
       menteeNum: null,
       menteeName: null,
       dialog: true,
+      successSnack: false,
+      altMsg: "",
     };
   },
   mounted() {
@@ -168,7 +183,8 @@ export default {
         surprised: this.allEmotion.surprised,
       });
       this.$refs.webrtc.leave();
-      alert(`상담 내용이 저장되었습니다.`);
+      this.successSnack = true;
+      this.altMsg = "상담 내용이 저장되었습니다.";
       this.$router.push(`/myMenteeInfo/${this.menteeNum}&${this.menteeName}`);
     },
     onError(error, stream) {

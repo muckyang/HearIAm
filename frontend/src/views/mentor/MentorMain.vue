@@ -3,7 +3,6 @@
     <div class="main-back">
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
-          
           <v-btn v-if="this.getIsReady" @click="unsubscribe()">대기 취소</v-btn>
           <div>
             <v-btn
@@ -87,6 +86,18 @@
         </v-col>
       </div>
     </div>
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -100,13 +111,15 @@ export default {
     return {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
+      successSnack: false,
+      altMsg: "",
     };
   },
   methods: {
     subscribe() {
       http.get(`/counseling/liveList`);
       console.log("click subscribe btn");
-      this.readyClick= true;
+      this.readyClick = true;
       this.$store.commit("changeIsReady", true);
       http.get(`/counseling/getMenteeCnt`).then((res) => {
         if (res.data == "empty") {
@@ -117,7 +130,8 @@ export default {
           });
         } else {
           // 학생 대기
-          alert(" 상담을 시작합니다. ");
+          this.successSnack = true;
+          this.altMsg = "상담을 시작합니다.";
           this.$router.push(`/counselorWRTC/${res.data.room}&${res.data.num}`);
         }
       });
@@ -151,7 +165,7 @@ export default {
     },
     logout: function () {
       this.unsubscribe();
-      
+
       this.$store.dispatch(AUTH_LOGOUT).then(() => {});
       // this.$router.push("/").catch(() => {});
       window.location.href = "/";

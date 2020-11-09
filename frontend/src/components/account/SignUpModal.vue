@@ -174,77 +174,84 @@
         <v-snackbar
           v-model="idFlag"
           top
-          right
           flat
           color="error"
+          rounded="pill"
           :timeout="2000"
         >
-          <p class="snackText">존재하는 아이디입니다.</p>
+          <span class="snackText">존재하는 아이디입니다.</span>
         </v-snackbar>
         <v-snackbar
           v-model="idOk"
           top
-          right
           flat
           color="success"
+          rounded="pill"
           :timeout="2000"
         >
-          <p class="snackText">사용 가능한 아이디입니다.</p>
+          <span class="snackText">사용 가능한 아이디입니다.</span>
         </v-snackbar>
         <v-snackbar
           v-model="noidOk"
           top
-          right
           flat
           color="error"
+          rounded="pill"
           :timeout="2000"
         >
-          <p class="snackText">아이디를 체크 해주세요.</p>
+          <span class="snackText">아이디를 체크 해주세요.</span>
         </v-snackbar>
         <v-snackbar
           v-model="pwdNo"
           top
-          right
           flat
           color="error"
+          rounded="pill"
           :timeout="2000"
         >
-          <p class="snackText">비밀번호가 다릅니다.</p>
+          <span class="snackText">비밀번호가 다릅니다.</span>
         </v-snackbar>
         <v-snackbar
           v-model="signOk"
           top
-          right
           flat
           color="success"
+          rounded="pill"
           :timeout="2000"
         >
-          <p class="snackText">가입이 완료되었습니다.</p>
+          <span class="snackText">가입이 완료되었습니다.</span>
         </v-snackbar>
         <v-snackbar
           v-model="pwdLength"
           top
-          right
           flat
           color="error"
+          rounded="pill"
           :timeout="2000"
         >
-          <p class="snackText">
+          <span class="snackText">
             비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.
-          </p>
+          </span>
         </v-snackbar>
         <v-snackbar
           v-model="pwdEngNum"
           top
-          right
           flat
           color="error"
+          rounded="pill"
           :timeout="2000"
         >
-          <p class="snackText">비밀번호는 숫자와 영문자를 혼용하여야 합니다.</p>
+          <span class="snackText">비밀번호는 숫자와 영문자를 혼용하여야 합니다.</span>
         </v-snackbar>
-        <v-snackbar v-model="noid" top right flat color="error" :timeout="2000">
-          <p class="snackText">아이디를 입력해주세요.</p>
+        <v-snackbar
+          v-model="noid"
+          top
+          flat
+          color="error"
+          rounded="pill"
+          :timeout="2000"
+        >
+          <span class="snackText">아이디를 입력해주세요.</span>
         </v-snackbar>
       </v-container>
     </div>
@@ -343,10 +350,9 @@ export default {
         formData.append("file", this.files);
         console.log(this.files);
         http3
-          .post(`/cert/imgCheck`, formData
-          )
+          .post(`/cert/imgCheck`, formData)
           .then((res) => {
-            console.log(res.data)
+            console.log(res.data);
           })
           .catch((e) => console.log(e));
       }
@@ -422,12 +428,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .snackText {
   margin-bottom: 0;
   font-weight: bold;
   font-size: 1rem;
   word-spacing: 2px;
   letter-spacing: 2px;
+  display: inline-block;
+  width: 100%; 
+  text-align: center;
 }
 </style>

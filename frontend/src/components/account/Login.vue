@@ -31,19 +31,18 @@
       >
     </v-form>
 
-    <v-snackbar v-model="match" top right flat color="error" :timeout="2000"
-      ><p
-        style="
-          margin-bottom: 0;
-          font-weight: bold;
-          font-size: 1rem;
-          word-spacing: 2px;
-          letter-spacing: 2px;
-        "
-      >
-        아이디와 비밀번호를 확인해주세요.
-      </p></v-snackbar
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
     >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -61,44 +60,50 @@ export default {
     return {
       userId: "",
       password: "",
-      match: false,
+      errorSnack: false,
       dialog: false,
+      altMsg: "",
     };
   },
   methods: {
     loginRequest() {
-      http.get(`user/users/${this.userId}`).then((res) => {
-        // if (res.data.role != this.role) {
-        //   this.match = true;
-        //   this.userId = "";
-        //   this.password = "";
-        // } else {
-        const { userId, password } = this;
-        this.$store
-          .dispatch(AUTH_REQUEST, { userId, password })
-          .then(() => {
-            this.setDeviceId(this.userId);
+      if (this.userId == "" || this.password == "") {
+        this.errorSnack = true;
+        this.altMsg = "아이디와 비밀번호를 입력해주세요.";
+      } else {
+        http
+          .get(`user/users/${this.userId}`)
+          .then((res) => {
+            const { userId, password } = this;
+            this.$store
+              .dispatch(AUTH_REQUEST, { userId, password })
+              .then(() => {
+                this.setDeviceId(this.userId);
 
-            this.userId = "";
-            this.password = "";
-            this.nowlogin = !this.nowlogin;
+                this.userId = "";
+                this.password = "";
+                this.nowlogin = !this.nowlogin;
 
-            if (res.data.role == `mentee`) {
-              //청소년 페이지로 가주세요
-              this.$router.push("/menteeMain");
-            } else {
-              //상담사 페이지로 가주세요
-              this.$router.push("/mentorMain");
-            }
+                if (res.data.role == `mentee`) {
+                  //청소년 페이지로 가주세요
+                  this.$router.push("/menteeMain");
+                } else {
+                  //상담사 페이지로 가주세요
+                  this.$router.push("/mentorMain");
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+                this.errorSnack = true;
+                this.altMsg = "아이디와 비밀번호를 확인해주세요.";
+              });
           })
-          .catch(() => {
-            this.match = true;
-            this.userId = "";
-            this.password = "";
-            this.$router.push;
+          .catch((err) => {
+            console.log(err);
+            this.errorSnack = true;
+            this.altMsg = "존재하지 않는 아이디 입니다.";
           });
-        // }
-      })
+      }
     },
     setDeviceId(userId) {
       //device id 가져옴.

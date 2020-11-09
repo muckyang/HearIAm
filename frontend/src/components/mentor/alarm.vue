@@ -38,6 +38,31 @@
         </v-list-item-group>
       </v-list>
     </v-card>
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </v-speed-dial>
   <!-- <div>
     <div class="my-2">
@@ -76,6 +101,9 @@ export default {
       btn_color: this.getAlarmBtn, //빨 : #F44336   그린 :  #0a7a78
       fab: false,
       alarm: null,
+      errorSnack: false,
+      successSnack: false,
+      altMsg: "",
     };
   },
   methods: {
@@ -87,10 +115,13 @@ export default {
           .get(`/counseling/isRoom/${mentorName}/${data.num}`)
           .then((res) => {
             if (res.data == "fail") {
-              alert("이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ! ");
+              this.errorSnack = true;
+              this.altMsg =
+                "이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ!";
               this.$router.push("/");
             } else {
-              alert(" 상담을 시작합니다. ");
+              this.successSnack = true;
+              this.altMsg = "상담을 시작합니다.";
               this.unsubscribe();
               this.$router.push(
                 `/counselorWRTC/${data.conRoom.room}&${data.num}`
@@ -101,7 +132,8 @@ export default {
             console.log(e);
           });
       } else {
-        alert("이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ! ");
+        this.errorSnack = true;
+        this.altMsg = "이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ!";
       }
     },
     unsubscribe() {

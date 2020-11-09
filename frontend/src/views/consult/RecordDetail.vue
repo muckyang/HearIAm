@@ -2,10 +2,10 @@
   <div class="record-main container">
     <v-sheet color="#bbcfe9" class="pa-5" rounded="xl">
       <h2 align="center">음성 상담에 대한 답변</h2>
-      <v-row style="height:70%">
+      <v-row style="height: 70%">
         <v-col cols="6">
           <div align="center">
-            <Bar :chartData="chartData" :options="options" style="width:95%;" />
+            <Bar :chartData="chartData" :options="options" style="width: 95%" />
           </div>
         </v-col>
         <v-col cols="6" class="pb-0 pt-10">
@@ -15,7 +15,7 @@
             v-model="answer"
             no-resize
             rows="14"
-            style="white-space:pre-line"
+            style="white-space: pre-line"
             placeholder="상담 내용을 입력해주세요."
             class="mb-0"
           ></v-textarea>
@@ -24,33 +24,46 @@
       <v-row>
         <v-col class="col-lg-6 col-md-6 col-sm-12 col-xs-12"></v-col>
         <v-col class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <v-btn @click="loadTransform()" v-if="!isPlay">재생하기</v-btn>
-            <audio :src="getAudio(record.recordDir)" id="audio"></audio>
-            <audio id="convert" :controls="isPlay"></audio>
+          <v-btn @click="loadTransform()" v-if="!isPlay">재생하기</v-btn>
+          <audio :src="getAudio(record.recordDir)" id="audio"></audio>
+          <audio id="convert" :controls="isPlay"></audio>
         </v-col>
         <v-col class="mb-6 col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <v-btn @click="send" style="text-align:right;">답변하기</v-btn>
+          <v-btn @click="send" style="text-align: right">답변하기</v-btn>
         </v-col>
       </v-row>
     </v-sheet>
+
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
-import http from '@/util/http-common.js';
-import Bar from '@/components/webRTC/Bar.js';
-import bufferToWav from 'audiobuffer-to-wav';
-import { mapGetters, mapState } from 'vuex';
+import http from "@/util/http-common.js";
+import Bar from "@/components/webRTC/Bar.js";
+import bufferToWav from "audiobuffer-to-wav";
+import { mapGetters, mapState } from "vuex";
 
 export default {
-  name: 'RecordList',
+  name: "RecordList",
   components: {
     Bar,
   },
   data() {
     return {
       record: [],
-      answer: '',
+      answer: "",
       options: {
         scales: {
           yAxes: [
@@ -74,6 +87,8 @@ export default {
       surprised: {},
       playtime: null,
       isPlay: false,
+      successSnack: false,
+      altMsg: "",
     };
   },
   created() {
@@ -85,21 +100,23 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-    http.get(`/counseling/loadEmotion/${this.$route.params.num}`).then((res) => {
-      this.angry = res.data.angry.split(`|`).map(Number);
-      this.disgusted = res.data.disgusted.split(`|`).map(Number);
-      this.fearful = res.data.fearful.split(`|`).map(Number);
-      this.happy = res.data.happy.split(`|`).map(Number);
-      this.neutral = res.data.neutral.split(`|`).map(Number);
-      this.sad = res.data.sad.split(`|`).map(Number);
-      this.surprised = res.data.surprised.split(`|`).map(Number);
-    });
+    http
+      .get(`/counseling/loadEmotion/${this.$route.params.num}`)
+      .then((res) => {
+        this.angry = res.data.angry.split(`|`).map(Number);
+        this.disgusted = res.data.disgusted.split(`|`).map(Number);
+        this.fearful = res.data.fearful.split(`|`).map(Number);
+        this.happy = res.data.happy.split(`|`).map(Number);
+        this.neutral = res.data.neutral.split(`|`).map(Number);
+        this.sad = res.data.sad.split(`|`).map(Number);
+        this.surprised = res.data.surprised.split(`|`).map(Number);
+      });
     this.fillData();
   },
   mounted() {
     let that = this;
-    let audio = document.getElementById('convert');
-    audio.addEventListener('timeupdate', function() {
+    let audio = document.getElementById("convert");
+    audio.addEventListener("timeupdate", function () {
       that.playtime = audio.currentTime.toFixed();
     });
   },
@@ -110,10 +127,14 @@ export default {
     },
     send() {
       http
-        .post(`/record/sendAnswer/${this.$route.params.num}/${this.getUserNum}`, this.answer)
+        .post(
+          `/record/sendAnswer/${this.$route.params.num}/${this.getUserNum}`,
+          this.answer
+        )
         .then(() => {
-          alert('답변이 완료되었습니다.');
-          this.$router.push('/recordList');
+          this.successSnack = true;
+          this.altMsg = "답변이 완료되었습니다.";
+          this.$router.push("/recordList");
         })
         .catch((err) => {
           console.log(err);
@@ -121,11 +142,19 @@ export default {
     },
     fillData() {
       this.chartData = {
-        labels: ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised'],
+        labels: [
+          "angry",
+          "disgusted",
+          "fearful",
+          "happy",
+          "neutral",
+          "sad",
+          "surprised",
+        ],
         datasets: [
           {
-            label: 'Emotion',
-            backgroundColor: '#f87979',
+            label: "Emotion",
+            backgroundColor: "#f87979",
             data: this.emotion,
           },
         ],
@@ -134,18 +163,20 @@ export default {
 
     async loadTransform() {
       this.isPlay = true;
-      let arrayBuffer = await (await fetch(this.getAudio(this.record.recordDir))).arrayBuffer();
+      let arrayBuffer = await (
+        await fetch(this.getAudio(this.record.recordDir))
+      ).arrayBuffer();
 
       let AudioBuffer = await new AudioContext().decodeAudioData(arrayBuffer);
 
       let outputAudioBuffer = this.robot1Transform(AudioBuffer);
 
-      outputAudioBuffer.then(function(result) {
-        var anchor = document.getElementById('convert');
+      outputAudioBuffer.then(function (result) {
+        var anchor = document.getElementById("convert");
 
         var wav = bufferToWav(result);
         var blob = new window.Blob([new DataView(wav)], {
-          type: 'audio/wav',
+          type: "audio/wav",
         });
 
         var url = window.URL.createObjectURL(blob);
@@ -155,7 +186,11 @@ export default {
     },
 
     async robot1Transform(audioBuffer) {
-      let ctx = new OfflineAudioContext(audioBuffer.numberOfChannels, audioBuffer.length, audioBuffer.sampleRate);
+      let ctx = new OfflineAudioContext(
+        audioBuffer.numberOfChannels,
+        audioBuffer.length,
+        audioBuffer.sampleRate
+      );
 
       // Source
       let source = ctx.createBufferSource();
@@ -164,13 +199,13 @@ export default {
       // Wobble
       let oscillator1 = ctx.createOscillator();
       oscillator1.frequency.value = 10;
-      oscillator1.type = 'sawtooth';
+      oscillator1.type = "sawtooth";
       let oscillator2 = ctx.createOscillator();
       oscillator2.frequency.value = 30;
-      oscillator2.type = 'sawtooth';
+      oscillator2.type = "sawtooth";
       let oscillator3 = ctx.createOscillator();
       oscillator3.frequency.value = 10;
-      oscillator3.type = 'sawtooth';
+      oscillator3.type = "sawtooth";
       // ---
       let oscillatorGain = ctx.createGain();
       oscillatorGain.gain.value = 0.004;
@@ -210,7 +245,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getUserNum', 'getUserID']),
+    ...mapGetters(["getUserNum", "getUserID"]),
     ...mapState({
       userNum: (state) => `${state.user.getUserNum}`,
       userID: (state) => `${state.user.getUserID}`,

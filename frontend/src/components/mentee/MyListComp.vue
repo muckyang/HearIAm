@@ -219,6 +219,32 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -259,6 +285,9 @@ export default {
       timeItems: [],
       selLabel: '시간을 선택해주세요.',
       model: null,
+      errorSnack: false,
+      successSnack: false,
+      altMsg: "",
     };
   },
   mounted() {
@@ -377,7 +406,8 @@ export default {
                   status: 'reapply',
                   date: `${this.date}T${this.time.substr(0, 5)}:00`,
                 });
-                alert('재상담 신청 완료되었습니다.');
+                this.successSnack = true;
+                this.altMsg = "재상담 신청 완료되었습니다.";
                 http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
                   this.myList = res.data;
                   this.cpagingList = this.myList.slice(0, 9);
@@ -390,14 +420,16 @@ export default {
             });
         });
       } else {
-        alert('날짜와 시간을 선택해주세요');
+        this.errorSnack = true;
+        this.altMsg = "날짜와 시간을 선택해주세요.";
       }
     },
     cancel() {
       this.cancelDialog = false;
       http.delete(`/schedule/cancelReservation/${this.cancelNum}`).then((res) => {
         if (res.data == 'success') {
-          alert('예약이 취소되었습니다.');
+          this.successSnack = true;
+          this.altMsg = "예약이 취소되었습니다.";
           http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
             this.myReservation = data.data;
           });

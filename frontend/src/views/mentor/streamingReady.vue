@@ -7,13 +7,38 @@
         background: linear-gradient(to right, #93dfff, #f5a2bb);
       "
     >
-    <div style="height: 100vh" class="d-flex justify-content-center">
-      <v-col class="my-auto" align="center">
-    <v-btn @click="onjoin()"> ready </v-btn>
-      </v-col>
-      
-  </div>
+      <div style="height: 100vh" class="d-flex justify-content-center">
+        <v-col class="my-auto" align="center">
+          <v-btn @click="onjoin()"> ready </v-btn>
+        </v-col>
+      </div>
     </div>
+
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 <script>
@@ -30,19 +55,29 @@ export default {
       default: 0,
     },
   },
+  data() {
+    return {
+      errorSnack: false,
+      successSnack: false,
+      altMsg: "",
+    };
+  },
   methods: {
     onjoin() {
-      let mentorName = this.$store.getters['getUserNum'];
+      let mentorName = this.$store.getters["getUserNum"];
       http
         .get(`/counseling/isRoom/${mentorName}/${this.room_num}`)
         .then((res) => {
           console.log(res.data);
-          //예약에 따른 conRoom 찾아서 조건 달기 
+          //예약에 따른 conRoom 찾아서 조건 달기
           //list 리턴할때 예약에따라서 알람리스트에 나올 text 저장해두기. conRoom, mentor, text
           if (res.data == "fail") {
-            alert("이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ! ");
+            this.errorSnack = true;
+            this.altMsg =
+              "이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ!";
           } else {
-            alert(" 상담을 시작합니다. ")
+            this.successSnack = true;
+            this.altMsg = "상담을 시작합니다.";
             this.unsubscribe();
             this.$router.push(`/counselorWRTC/${this.room}&${this.room_num}`);
           }
@@ -50,11 +85,10 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-      
     },
-    unsubscribe(){
+    unsubscribe() {
       let token = this.$store.getters["getDeviceID"];
-      this.$store.commit('changeIsReady',false);
+      this.$store.commit("changeIsReady", false);
       let topic = "streaming";
       axios({
         method: "POST",
@@ -83,9 +117,12 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-        http.delete(`/counseling/deleteReadyMentor/${this.$store.getters['getUserNum']}`).then(()=>{
-      });
-      }
+      http
+        .delete(
+          `/counseling/deleteReadyMentor/${this.$store.getters["getUserNum"]}`
+        )
+        .then(() => {});
     },
+  },
 };
 </script>
