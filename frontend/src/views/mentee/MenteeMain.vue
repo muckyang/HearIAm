@@ -1,98 +1,55 @@
 <template>
-  <div>
-    <div class="main-back">
-      <!-- background: linear-gradient(to right, #3D5469, #79B7D1); -->
-      <div style="height: 100vh" class="d-flex justify-content-center">
-        <v-col class="my-auto" align="center">
-          <div>
-            <v-btn
-              depressed
-              elevation="9"
-              fab
-              icon
-              style="
-                width: 260px;
-                height: 250px;
-                background: linear-gradient(to top, black, #0a7a78);
-              "
+  <div style="height: 100%; width: 100%" class="main-back">
+    <v-row
+      class="fill-height"
+      align="center"
+      justify="center"
+      style="padding: 0"
+    >
+      <template v-for="(item, i) in items" >
+        <v-col :key="i" cols="12" md="3" style="padding: 0" >
+          <v-hover v-slot="{ hover }" > 
+            <v-expand-transition>
+            <v-card
+              :elevation="hover ? 12 : 2"
+              :class="{ 'on-hover': hover }"
+              height="100vh"
+              @click="itemClick(i)"
             >
-              <div
-                style="width: 260px; height: 250px; padding: 17px"
-                class="justify-content-center mb-5;"
-                text-align="center"
-              >
-                <img
-                  src="@/assets/icons/stream_btnm.png"
-                  style="width: 100%; height: 100%"
-                  @click="goLive()"
-                />
-              </div>
-            </v-btn>
-          </div>
+              <v-container fill-height>
+                <v-layout align-center justify-center>
+                  <v-card-title class="title white--text" style="opacity: 1">
+                    <div>
+                      <p class="ma-0 font-weight-bold text-center"
+                      style="font-size: 2em;">
+                        {{ item.text }}
+                      </p>
+                      <v-divider
+                        class="my-10 white"
+                        style="opacity: 1"
+                      ></v-divider>
+                      <p
+                        class="font-weight-medium text-center mx-10" 
+                        style="opacity:.5; font-size: .8em"
+                      >
+                        {{ item.subtext }}
+                      </p>
+                    </div>
+                  </v-card-title>
+                </v-layout>
+              </v-container>
+            </v-card>
+            </v-expand-transition>
+          </v-hover>
         </v-col>
-        <v-col class="my-auto" align="center">
-          <div>
-            <v-btn
-              depressed
-              elevation="9"
-              fab
-              icon
-              style="
-                width: 260px;
-                height: 250px;
-                background: linear-gradient(to top, black, #0a7a78);
-              "
-              @click="goRecord()"
-            >
-              <div
-                style="width: 260px; height: 250px; padding: 17px"
-                class="justify-content-center mb-5;"
-                text-align="center"
-              >
-                <img
-                  src="@/assets/icons/voice_btn.png"
-                  style="width: 100%; height: 100%"
-                />
-              </div>
-            </v-btn>
-          </div>
-        </v-col>
-        <v-col class="my-auto" align="center">
-          <div>
-            <v-btn
-              depressed
-              elevation="9"
-              fab
-              icon
-              style="
-                width: 260px;
-                height: 250px;
-                background: linear-gradient(to top, black, #0a7a78);
-              "
-            >
-              <div
-                style="width: 260px; height: 250px; padding: 17px"
-                class="justify-content-center mb-5;"
-                text-align="center"
-              >
-                <img
-                  src="@/assets/icons/res_btn.png"
-                  style="width: 100%; height: 100%"
-                  @click="reser_dialog = true"
-                />
-              </div>
-            </v-btn>
-          </div>
-          
-        </v-col>
-      </div>
-    </div>
-    <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
-      <v-card rounded="xl" style="padding: 20px;" >
+      </template>
+    </v-row>
+     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
+      <v-card rounded="xl" style="padding: 20px; background-color:white" >
         <v-card-title class="text-center justify-center p-8">
           <h2 style="font-family: 'yg-jalnan'">실시간 상담 예약</h2>
         </v-card-title>
-    <ReserveMain :reser_dialog="reser_dialog"/>
+        <ReserveMain :reser_dialog="reser_dialog"/>
       </v-card>
     </v-dialog>
   </div>
@@ -103,19 +60,49 @@ import http from "@/util/http-common.js";
 import axios from "axios";
 import ReserveMain from "@/views/reserve/ReserveMain.vue";
 export default {
-  components:{
+  components: {
     ReserveMain,
   },
   data() {
     return {
       devecieId: this.$store.getters["getDeviceID"],
       topic: "streaming",
-      reser_dialog:false,
+      reser_dialog: false,
+      items: [
+        {
+          text:"1:1 상담",
+          subtext: "전문 상담사와 예약 없이 바로 상담해보세요. ",
+        },
+        {
+          text: "음성 상담",
+          subtext: "상담사와 미팅이 부담스럽다면 당신의 목소리로 고민을 말해보세요.",
+        },
+        {
+          text: "상담 예약",
+          subtext: "담당 상담사가 없다면 예약서비스를 이용해보세요",
+        },
+        {
+          text: "마이 페이지",
+          subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
+        },
+      ],
+      transparent: "rgba(255, 255, 255, 0)",
     };
   },
   methods: {
+    itemClick(i){
+      if(i === 0){
+         this.goLive();
+      }else if(i===1){
+        this.goRecord()
+      }else if(i===2){
+        this.reser_dialog = true;
+      }else{
+        this.goMypage()
+      }
+    },
     goLive() {
-       http
+      http
         .get(`/counseling/isMentee`)
         .then((res) => {
           console.dir(res);
@@ -123,12 +110,12 @@ export default {
           if (res.data == 0) {
             alert("대기중인 멘토가 없어요! 예약하기를 이용해주세요! ");
           } else {
-             this.$router.push(`/userWRTC`);
+            this.$router.push(`/userWRTC`);
           }
         })
         .catch((e) => {
           console.log(e);
-        });     
+        });
     },
     logout: function () {
       this.unsubscribe();
@@ -143,7 +130,7 @@ export default {
       this.$router.push(`/reserveMain`).catch(() => {});
     },
     goRecord() {
-      this.$router.push("/recordConsult/1").catch(()=>{});
+      this.$router.push("/recordConsult/1").catch(() => {});
     },
     unsubscribe() {
       this.unsubscribeTokenToTopic(this.devecieId, this.topic);
@@ -179,10 +166,22 @@ export default {
 
       // http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
       //   // alert("삭제 완료");
-      // }); 
-
+      // });
     },
   },
-  
 };
 </script>
+<style scoped>
+.v-card {
+  transition: .4s ease-in;
+  background-color: rgb(14, 1, 27, 0.2);
+}
+
+.v-card:not(.on-hover) {
+  background-color: rgb(14, 1, 27, 0.8);
+}
+
+.show-btns {
+  color: rgba(255, 255, 255, 1) !important;
+}
+</style>
