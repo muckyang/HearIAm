@@ -52,6 +52,19 @@
         <ReserveMain :reser_dialog="reser_dialog"/>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 <script>
@@ -87,6 +100,9 @@ export default {
         },
       ],
       transparent: "rgba(255, 255, 255, 0)",
+      reser_dialog:false,
+      errorSnack: false,
+      altMsg: "",
     };
   },
   methods: {
@@ -108,7 +124,8 @@ export default {
           console.dir(res);
           console.log(res.data);
           if (res.data == 0) {
-            alert("대기중인 멘토가 없어요! 예약하기를 이용해주세요! ");
+            this.errorSnack = true;
+            this.altMsg = "대기중인 멘토가 없어요! 예약하기를 이용해주세요!";
           } else {
             this.$router.push(`/userWRTC`);
           }

@@ -1,98 +1,98 @@
 <template>
-    <div>
-      <v-sheet class="container">
-        <v-row class="d-flex justify-content-center">
-          <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
-            <v-dialog
-              ref="dialogDate"
-              v-model="dateModal"
-              :return-value.sync="date"
-              persistent
-              width="290px"
+  <div>
+    <v-sheet class="container">
+      <v-row class="d-flex justify-content-center">
+        <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
+          <v-dialog
+            ref="dialogDate"
+            v-model="dateModal"
+            :return-value.sync="date"
+            persistent
+            width="290px"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <div class="d-flex">
+                <v-icon class="mr-3" large color="black">mdi-calendar</v-icon>
+                <v-text-field
+                  class="pt-7"
+                  v-model="date"
+                  label="날짜를 선택해주세요."
+                  readonly
+                  solo
+                  v-bind="attrs"
+                  v-on="on"
+                  hint="일주일 단위로 예약이 가능합니다."
+                  persistent-hint
+                ></v-text-field>
+              </div>
+            </template>
+            <v-date-picker
+              v-model="date"
+              scrollable
+              :min="nowDate"
+              :max="getEndDate"
             >
-              <template v-slot:activator="{ on, attrs }">
-                <div class="d-flex">
-                  <v-icon class="mr-3" large color="black">mdi-calendar</v-icon>
-                  <v-text-field
-                    class="pt-7"
-                    v-model="date"
-                    label="날짜를 선택해주세요."
-                    readonly
-                    solo
-                    v-bind="attrs"
-                    v-on="on"
-                    hint="일주일 단위로 예약이 가능합니다."
-                    persistent-hint
-                  ></v-text-field>
-                </div>
-              </template>
-              <v-date-picker
-                v-model="date"
-                scrollable
-                :min="nowDate"
-                :max="getEndDate"
-              >
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="dateModal = false">
-                  Cancel
-                </v-btn>
-                <v-btn text color="primary" @click="setDate"> OK </v-btn>
-              </v-date-picker>
-            </v-dialog>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
-            <div class="d-flex">
-              <v-icon class="mr-3" large color="black"
-                >mdi-clock-time-four-outline</v-icon
-              >
-              <v-select
-                class="mt-7"
-                v-model="time"
-                :items="timeItems"
-                label="시간을 선택해주세요."
-                hint="예약 가능한 시간만 보여집니다."
-                solo
-                persistent-hint
-              ></v-select>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
-            <div class="d-flex">
-              <v-icon class="mr-3" large color="black"
-                >mdi-help-circle-outline</v-icon
-              >
-              <v-select
-                class="mt-7"
-                v-model="concern"
-                :items="items"
-                label="고민이 무엇인가요?"
-                solo
-                hint="대략적인 고민을 입력해주세요."
-                persistent-hint
-              ></v-select>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
-            <div class="d-flex">
-              <v-icon class="mr-3" large color="white"
-                >mdi-help-circle-outline</v-icon
-              >
-              <v-text-field
-                v-if="isSelf"
-                v-model="concern2"
-                hint="자유롭게 고민을 입력해주세요."
-                persistent-hint
-              ></v-text-field>
-            </div>
-          </v-col>
-        </v-row>
-        <!-- <v-row>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="dateModal = false">
+                Cancel
+              </v-btn>
+              <v-btn text color="primary" @click="setDate"> OK </v-btn>
+            </v-date-picker>
+          </v-dialog>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
+          <div class="d-flex">
+            <v-icon class="mr-3" large color="black"
+              >mdi-clock-time-four-outline</v-icon
+            >
+            <v-select
+              class="mt-7"
+              v-model="time"
+              :items="timeItems"
+              label="시간을 선택해주세요."
+              hint="예약 가능한 시간만 보여집니다."
+              solo
+              persistent-hint
+            ></v-select>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
+          <div class="d-flex">
+            <v-icon class="mr-3" large color="black"
+              >mdi-help-circle-outline</v-icon
+            >
+            <v-select
+              class="mt-7"
+              v-model="concern"
+              :items="items"
+              label="고민이 무엇인가요?"
+              solo
+              hint="대략적인 고민을 입력해주세요."
+              persistent-hint
+            ></v-select>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
+          <div class="d-flex">
+            <v-icon class="mr-3" large color="white"
+              >mdi-help-circle-outline</v-icon
+            >
+            <v-text-field
+              v-if="isSelf"
+              v-model="concern2"
+              hint="자유롭게 고민을 입력해주세요."
+              persistent-hint
+            ></v-text-field>
+          </div>
+        </v-col>
+      </v-row>
+      <!-- <v-row>
           <v-col cols="12" sm="6" md="6" class="reserve-data py-1 px-0">
             <div class="d-flex">
               <v-icon class="mr-3" large color="black">mdi-account-check-outline</v-icon>
@@ -100,13 +100,13 @@
             </div>
           </v-col>
         </v-row> -->
-        <v-row>
-          <v-col cols="2" class="reserve-data pt-5 px-0">
-            <v-btn class="main-btn" @click="reserveD" large>예약하기</v-btn>
-          </v-col>
-        </v-row>
-      </v-sheet>
-      <v-dialog v-model="reserDialog" persistent max-width="400">
+      <v-row>
+        <v-col cols="2" class="reserve-data pt-5 px-0">
+          <v-btn class="main-btn" @click="reserveD" large>예약하기</v-btn>
+        </v-col>
+      </v-row>
+    </v-sheet>
+    <v-dialog v-model="reserDialog" persistent max-width="400">
       <v-card>
         <v-card-title style="font-size: 1.5rem">
           아래 정보로 예약하시겠습니까?
@@ -123,7 +123,33 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    </div>
+
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="successSnack"
+      top
+      flat
+      color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
@@ -155,6 +181,9 @@ export default {
       mentorNum: null,
       concern2: "",
       reserDialog: false,
+      errorSnack: false,
+      successSnack: false,
+      altMsg: "",
     };
   },
   computed: {
@@ -176,13 +205,13 @@ export default {
         this.isSelf = false;
       }
     },
-    reser_dialog(v){
-      if(!v){
+    reser_dialog(v) {
+      if (!v) {
         this.date = "";
         this.time = "";
-        this.concern="";
+        this.concern = "";
       }
-    }
+    },
   },
   created() {
     http
@@ -224,9 +253,9 @@ export default {
         .then((res) => {
           http.get(`/user/users/${res.data.mentor}`).then((res1) => {
             this.mentorNum = res1.data.num;
-	console.log(res1.data)
-              console.log(res.data)
-              console.log(this.getUserNum)
+            console.log(res1.data);
+            console.log(res.data);
+            console.log(this.getUserNum);
             http.post(`/counseling/reserveRequest`, {
               mentee: this.getUserNum,
               mentor: this.mentorNum,
@@ -235,7 +264,8 @@ export default {
               date: `${res.data.sdate}T${res.data.stime}:00`,
             });
           });
-          alert("예약이 완료되었습니다.");
+          this.successSnack = true;
+          this.altMsg = "예약이 완료되었습니다.";
           this.$router.push("/menteeMain").catch(() => {});
         })
         .catch((e) => {
@@ -256,10 +286,12 @@ export default {
         this.concern = this.concern2;
       }
       if (this.date == "" || this.time == "" || this.concern == "") {
-        alert("예약 정보를 모두 입력해주세요.");
+        this.errorSnack = true;
+        this.altMsg = "예약 정보를 모두 입력해주세요.";
         return;
       } else if (this.time == "예약 가능한 시간이 없습니다.") {
-        alert("예약 시간을 다시 확인해주세요.");
+        this.errorSnack = true;
+        this.altMsg = "예약 시간을 다시 확인해주세요.";
         return;
       } else {
         this.reserDialog = true;
