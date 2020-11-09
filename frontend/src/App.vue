@@ -16,6 +16,7 @@
     <v-sheet
         id="scrolling-techniques-4"
         class="overflow-y-auto"
+        style=" height: 100% !important;"
       >
       <v-main>
         <router-view />
@@ -243,4 +244,7 @@ html {
 .shadow { 
   text-shadow:#464646 3px 3px 3px; 
 }
+/* .v-sheet {
+    height: 100% !important;
+} */
 </style>

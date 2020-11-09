@@ -1,20 +1,25 @@
 <template>
   <div align="center" class="main-back" style="height:100vh">
-    <div>
-      <span class="main-title"> Hear I Am</span>
+    <div style="padding-top:10%;">
+      <span class="main-title"> Hear I Am</span><br>
+      <!-- <span class="main-title" style="font-size:2rem !important; font-family:S-CoreDream-5Medium !important"> 들어줄게, 너의 곁에 있어줄게</span> -->
+      <br>
+      <br>
+      <br>
+
       <v-btn
+      id="lock"
         large
-        elevation="4"
         @click="login_dialog = true"
         class="mt-5"
+        text
+        icon
         style="
-          font-weight: bold;
           height: 4rem;
-          border-radius: 20px;
-          font-size: 1.2rem;
-          background: white;
+          font-size: 5rem;
+          color:white;
         "
-        >시작하기<v-icon>mdi-cursor-pointer</v-icon></v-btn
+        ><v-icon style="font-size:7rem;">mdi-lock</v-icon></v-btn
       >
     </div>
 
@@ -95,18 +100,22 @@ export default {
 <style>
 @import "../../node_modules/sal.js/dist/sal.css";
 .main-back {
-  background-image: url("../assets/mainBack.jpg");
+  background-image: url("../assets/mainStar.png");
+  /* background-size: 100% 100%; */
   background-size: cover;
+  /* object-fit:fill; */
   /* background: linear-gradient(to right, #93dfff, #f5a2bb); */
   /* background: linear-gradient(to bottom, #f5e9b3, #f2d867); */
   /* background: #ffdc15 ; */
   /* font-family: "yg-jalnan"; */
 }
 .main-title {
-  font-family: "Capriola", sans-serif;
-  font-size: 7rem;
+  /* font-family: "Capriola", sans-serif; */
+  font-family: 'Short Stack', cursive;
+  font-size: 8rem;
   color: white;
-  text-shadow: 1px 1px 2px black, 0 0 1em white, 0 0 0.2em white;
-  font-weight: 700;
+  text-shadow: 1px 1px 1px black, 0 0 0.2em white, 0 0 0.1em white;
+  font-weight: 600;
 }
+
 </style>
