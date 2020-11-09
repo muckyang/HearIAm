@@ -1,5 +1,89 @@
 <template>
   <div>
+    <div class="main-back">
+      <div style="height: 100vh" class="d-flex justify-content-center">
+        <v-col class="my-auto" align="center">
+          
+          <v-btn v-if="this.getIsReady" @click="unsubscribe()">대기 취소</v-btn>
+          <div>
+            <v-btn
+              depressed
+              elevation="9"
+              fab
+              icon
+              style="
+                width: 260px;
+                height: 250px;
+                background: linear-gradient(to top, black, #0a7a78);
+              "
+            >
+              <div
+                style="width: 260px; height: 250px; padding: 17px"
+                class="justify-content-center mb-5;"
+                text-align="center"
+              >
+                <img
+                  src="@/assets/icons/t_stream_btn.png"
+                  style="width: 100%; height: 100%"
+                  @click="subscribe()"
+                />
+              </div>
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col class="my-auto" align="center">
+          <div>
+            <v-btn
+              depressed
+              elevation="9"
+              fab
+              icon
+              style="
+                width: 260px;
+                height: 250px;
+                background: linear-gradient(to top, black, #0a7a78);
+              "
+            >
+              <div
+                style="width: 260px; height: 250px; padding: 17px"
+                class="justify-content-center mb-5;"
+                text-align="center"
+              >
+                <img
+                  src="@/assets/icons/t_voice_btn.png"
+                  style="width: 100%; height: 100%"
+                  @click="goRecordList()"
+                />
+              </div>
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col class="my-auto" align="center">
+          <div>
+            <v-btn
+              depressed
+              elevation="9"
+              fab
+              icon
+              style="
+                width: 260px;
+                height: 250px;
+                background: linear-gradient(to top, black, #0a7a78);
+              "
+              @click="goMyMenteeList()"
+            >
+              <div
+                style="width: 260px; height: 250px; padding: 17px"
+                class="justify-content-center mb-5;"
+                text-align="center"
+              >
+                <img
+                  src="@/assets/icons/t_report_btn.png"
+                  style="width: 100%; height: 100%"
+                />
+              </div>
+            </v-btn>
+          </div>
     <div
       style="
         height: 100%;
@@ -41,6 +125,7 @@
     </v-snackbar>
   </div>
 </template>
+
 <script>
 import http from "@/util/http-common.js";
 import axios from "axios";
