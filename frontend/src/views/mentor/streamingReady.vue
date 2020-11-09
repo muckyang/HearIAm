@@ -3,7 +3,6 @@
     <div class="main-back">
       <div style="height: 100vh" class="d-flex justify-content-center">
         <v-col class="my-auto" align="center">
-          
           <v-btn v-if="this.getIsReady" @click="unsubscribe()">대기 취소</v-btn>
           <div>
             <v-btn
@@ -84,20 +83,22 @@
               </div>
             </v-btn>
           </div>
-    <div
-      style="
-        height: 100%;
-        width: 100%;
-        background: linear-gradient(to right, #93dfff, #f5a2bb);
-      "
-    >
-      <div style="height: 100vh" class="d-flex justify-content-center">
-        <v-col class="my-auto" align="center">
-          <v-btn @click="onjoin()"> ready </v-btn>
         </v-col>
+        <div
+          style="
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to right, #93dfff, #f5a2bb);
+          "
+        >
+          <div style="height: 100vh" class="d-flex justify-content-center">
+            <v-col class="my-auto" align="center">
+              <v-btn @click="onjoin()"> ready </v-btn>
+            </v-col>
+          </div>
+        </div>
       </div>
     </div>
-
     <v-snackbar
       v-model="errorSnack"
       top
