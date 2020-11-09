@@ -28,7 +28,7 @@
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
       <v-card rounded="xl" style="padding: 20px;" >
         <v-card-title class="text-center justify-center p-8">
-          <h2 style="font-family: 'yg-jalnan'">실시간 상담 예약</h2>
+          <h2>실시간 상담 예약</h2>
         </v-card-title>
         <ReserveMain :reser_dialog="reser_dialog"/>
       </v-card>
