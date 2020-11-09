@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-tabs v-model="tab" background-color="#bbcfe9" color="black" grow>
-      <v-tab>상담 내역</v-tab>
-      <v-tab>예약 내역</v-tab>
+    <v-tabs v-model="tab" background-color="" color="black" grow >
+      <v-tab style="font-size:1.2rem;">상담 내역</v-tab>
+      <v-tab style="font-size:1.2rem;">예약 내역</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
@@ -30,15 +30,15 @@
                 </td>
                 <td v-else class="text-center">실시간 상담</td>
 
-                <td v-if="item.recordDir != null && item.status == 'finish'">
-                  <v-btn @click="getAnswer(item)" small style="font-size: 0.9rem"
-                    ><span style="vertical-align: middle; display: inline-flex"
-                      ><v-icon small class="mr-1">mdi-message-text-outline</v-icon> 답변</span
+                <td v-if="item.recordDir != null && item.status == 'finish'" align="center">
+                  <v-btn text @click="getAnswer(item)" small style="font-size: 0.9rem"
+                    ><span style="vertical-align: middle; display: inline-flex; color:crimson"
+                      ><v-icon small class="mr-1">mdi-message-text-outline</v-icon> 답변보기</span
                     ></v-btn
                   >
                 </td>
                 <td v-else-if="item.status == 'finish'" class="text-center">
-                  상담완료
+                  상담 완료
                 </td>
                 <td v-else-if="item.status == 'progress'" class="text-center">
                   진행중
@@ -51,10 +51,11 @@
                 <td class="text-center">
                   <v-btn
                     small
-                    v-if="item.status == 'finish'"
+                    v-if="item.status == 'finish' && item.isreapply == 0"
                     :disabled="item.isreapply != 0"
                     @click="reapplyType(item)"
-                    style="font-size: 0.9rem"
+                    style="font-size: 0.9rem; color:white"
+                    color="#262272"
                     >신청</v-btn
                   >
                 </td>
@@ -62,18 +63,18 @@
             </tbody>
           </template>
         </v-simple-table>
-        <v-pagination v-model="cpage" :length="cpageLength" circle class="pb-3"></v-pagination>
+        <v-pagination v-model="cpage" :length="cpageLength" circle class="pb-3" color="#262272"></v-pagination>
       </v-tab-item>
 
       <!-- 예약 내역 -->
       <v-tab-item>
-        <v-sheet class="mx-auto pa-5" elevation="3" max-width="100%">
+        <v-sheet class="mx-auto pa-5" max-width="100%">
           <v-row>
             <v-col v-for="(item, index) in rpagingList" :key="index" cols="12" sm="6" md="3">
               <v-card class="mx-auto pa-3" height="200">
                 <div align="left" class="d-flex">
                   <v-col class="pb-0">
-                    <v-chip small color="pink" label text-color="white">
+                    <v-chip small color="#262272" label text-color="white">
                       {{ getDday(item.sdate) }}
                     </v-chip>
                   </v-col>
@@ -107,7 +108,7 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3 mt-5"></v-pagination>
+          <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3 mt-5" color="#262272"></v-pagination>
         </v-sheet>
       </v-tab-item>
     </v-tabs-items>
@@ -134,17 +135,18 @@
     </v-dialog>
 
     <v-dialog v-model="typeDialog" max-width="500" min-height="500" style="height: 500px">
-      <v-card class="pt-5">
-        <v-card-title class="justify-center pb-7">
-          <h2>상담 유형을 선택해주세요.</h2>
+      <v-card>
+        <v-card-title class="justify-center pt-3">
+          <span style="font-size:2rem;">상담 유형을 선택하세요</span>
         </v-card-title>
-        <v-card-text>
+        <v-divider></v-divider>
+        <v-card-text class="pt-5 pb-1">
           <v-row class="justify-center">
-            <v-col cols="5" @click="reapply" class="mr-1 type-box"
-              ><div class="type-title" style="width:100%;height:100%;padding-top:15%;">실시간 상담</div></v-col
+            <v-col cols="5" @click="reapply" class="mr-5 type-box"
+              ><div class="type-title">실시간 상담</div></v-col
             >
             <v-col cols="5" @click="reRecord" class="type-box"
-              ><div class="type-title" style="width:100%;height:100%;padding-top:15%;">녹화 상담</div></v-col
+              ><div class="type-title">녹화 상담</div></v-col
             >
           </v-row>
         </v-card-text>
@@ -152,7 +154,7 @@
         <v-card-actions class="px-0 py-0">
           <v-spacer></v-spacer>
           <v-btn color="red darken-1" text @click="typeDialog = false">
-            취소
+            닫기
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -163,8 +165,9 @@
         ><br />
         <v-card-subtitle>
           <span
-            ><h1>{{ reMentor }} 상담사에게 실시간 상담을 재신청합니다.</h1></span
+            ><h1 style="color:black;">실시간 상담 재신청</h1></span
           >
+          <!-- {{ reMentor }}-->
         </v-card-subtitle>
         <v-card-text>
           원하시는 날짜와 시간을 선택해주세요.
@@ -175,7 +178,7 @@
         <v-container>
           <v-row>
             <v-col class="pb-0">
-              <v-date-picker v-model="date" :allowed-dates="allowedDates" color="#93dfff"></v-date-picker>
+              <v-date-picker v-model="date" :allowed-dates="allowedDates" color="#a23bbe"></v-date-picker>
             </v-col>
             <v-col class="pb-0">
               <div class="px-7" style="height: 100%">
@@ -187,7 +190,7 @@
                   <v-btn color="red darken-1" text @click="dialog = false">
                     취소
                   </v-btn>
-                  <v-btn color="blue darken-1" text @click="reqReapply()">
+                  <v-btn color="#262272" text @click="reqReapply()">
                     신청
                   </v-btn>
                 </div>
@@ -513,13 +516,16 @@ export default {
 
 <style scoped>
 .type-box {
-  border: 2px solid lightgray;
+  border: 3px solid #262272;
   font-size: 1.3rem;
   cursor: pointer;
-  height: 100px;
+  height: 70px;
   border-radius:30px;
+  background:#262272;
 }
 .type-title {
+  color:white;
+  width:100%;height:100%;padding-top:5%;
   transform: scale(1);
   transition: all 0.3s;
 }
