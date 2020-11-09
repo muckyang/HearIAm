@@ -100,7 +100,6 @@ export default {
         },
       ],
       transparent: "rgba(255, 255, 255, 0)",
-      reser_dialog:false,
       errorSnack: false,
       altMsg: "",
     };
