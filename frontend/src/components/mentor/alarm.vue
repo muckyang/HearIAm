@@ -8,7 +8,11 @@
     transition="slide-x-reverse-transition"
   >
     <template v-slot:activator>
-      <v-btn v-model="fab" :color="getAlarmBtn" dark fab @click="alarmClick()">
+      <!-- <v-btn v-model="fab" color="yellow" dark fab @click="alarmClick()">
+        <v-icon v-if="fab">mdi-close </v-icon>
+        <v-icon v-else> mdi-bell </v-icon>
+      </v-btn> -->
+       <v-btn v-model="fab" :color="getAlarmBtn" dark fab @click="alarmClick()">
         <v-icon v-if="fab">mdi-close </v-icon>
         <v-icon v-else> mdi-bell </v-icon>
       </v-btn>
