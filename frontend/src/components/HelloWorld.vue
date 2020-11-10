@@ -9,8 +9,6 @@
       <span class="main-title">Hear I Am</span><br />
       <!-- <span class="main-title" style="font-size:2rem !important; font-family:S-CoreDream-5Medium !important"> 들어줄게, 너의 곁에 있어줄게</span> -->
       <br />
-      <br />
-      <br />
       <div class="swap-on-hover">
         <img class="swap-on-hover__front-image" src="../assets/lock.png" />
         <img class="swap-on-hover__back-image" src="../assets/unlock.png" @click="login_dialog = true" />
