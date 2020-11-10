@@ -84,7 +84,7 @@ export default {
         });
     },
     getImg(item){
-      return "../../wordcloud/" + item.wordcloudImg
+      return "../../../wordcloud/" + item.wordcloudImg
     }
   },
   computed: {

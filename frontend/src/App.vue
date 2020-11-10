@@ -195,10 +195,10 @@ export default {
       this.$router.push("/recordConsult/1").catch(() => {});
     },
     goMyMenteeList() {
-      this.$router.push(`/myMenteeList`).catch(() => {});;
+      this.$router.push(`/myMenteeList`).catch(() => {});
     },
     goRecordList() {
-      this.$router.push(`/recordList`).catch(() => {});;
+      this.$router.push(`/recordList`).catch(() => {});
     },
     subscribe() {
       http.get(`/counseling/liveList`);
