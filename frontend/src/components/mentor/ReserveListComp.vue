@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card-text v-if = "conList.length > 0">
+    <v-card-text v-if = "conList.length > 0" >
       <v-timeline align-top dense>
         <v-timeline-item color="#262272" small v-for="(item, index) in conList" :key="index">
           <v-row class="pt-1">
