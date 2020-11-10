@@ -134,10 +134,10 @@ export default {
 
 <style>
 .main-btn {
-  background: #bbcfe9 !important;
-  font-weight: bold !important;
+  background: #262272 !important;
+  /* font-weight: bold !important; */
   color: white !important;
-  font-size: 1.1rem !important;
+  font-size: 1rem !important;
 }
 body {
   -ms-overflow-style: none;

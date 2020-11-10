@@ -1,36 +1,70 @@
 <template>
   <v-app>
-    <v-app-bar v-if="getRole" fixed flat dark hide-on-scroll
-        scroll-target="#scrolling-techniques-4" style="background-color: rgba(255, 255, 255, 0);">
-        <v-btn class="shadow" text @click="goHome()"><h2>Hear I Am</h2></v-btn>
-        <v-spacer></v-spacer>
-        <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goLive()">1:1 상담</v-btn>
-        <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goRecord()">음성 상담</v-btn>
-        <v-btn class="shadow" v-if="getRole == `mentee`" text @click="reser_dialog = true">상담 예약</v-btn>
-        <v-btn class="shadow" v-if="getRole == `mentor`" text @click="subscribe()">1:1 상담 현황</v-btn>
-        <v-btn class="shadow" v-if="getRole == `mentor`" text @click="goRecordList()">음성 상담 현황</v-btn>
-        <v-btn class="shadow" v-if="getRole == `mentor`" text @click="goMyMenteeList()">일지 관리</v-btn>
-        <v-btn class="shadow" text @click="goMypage()">마이페이지</v-btn>
-        <v-btn class="shadow" text @click="logout()">로그아웃</v-btn>
+    <v-app-bar
+      v-if="getRole"
+      fixed
+      flat
+      dark
+      hide-on-scroll
+      scroll-target="#scrolling-techniques-4"
+      style="background-color: rgba(255, 255, 255, 0)"
+    >
+      <v-btn class="shadow" text @click="goHome()"><h2>Hear I Am</h2></v-btn>
+      <v-spacer></v-spacer>
+      <v-btn class="default" v-if="getIsReady" text @click="unsubscribe()"
+        >상담 취소</v-btn
+      >
+      <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goLive()"
+        >1:1 상담</v-btn
+      >
+      <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goRecord()"
+        >음성 상담</v-btn
+      >
+      <v-btn
+        class="shadow"
+        v-if="getRole == `mentee`"
+        text
+        @click="reser_dialog = true"
+        >상담 예약</v-btn
+      >
+      <v-btn class="shadow" v-if="getRole == `mentor`" text @click="subscribe()"
+        >1:1 상담 현황</v-btn
+      >
+      <v-btn
+        class="shadow"
+        v-if="getRole == `mentor`"
+        text
+        @click="goRecordList()"
+        >음성 상담 현황</v-btn
+      >
+      <v-btn
+        class="shadow"
+        v-if="getRole == `mentor`"
+        text
+        @click="goMyMenteeList()"
+        >일지 관리</v-btn
+      >
+      <v-btn class="shadow" text @click="goMypage()">마이페이지</v-btn>
+      <v-btn class="shadow" text @click="logout()">로그아웃</v-btn>
     </v-app-bar>
     <v-sheet
-        id="scrolling-techniques-4"
-        class="overflow-y-auto"
-        style=" height: 100% !important;"
-      >
+      id="scrolling-techniques-4"
+      class="overflow-y-auto"
+      style="height: 100% !important"
+    >
       <v-main>
         <router-view />
       </v-main>
     </v-sheet>
-    
+
     <alarmComp v-if="getRole == `mentor`"></alarmComp>
 
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
-      <v-card rounded="xl" style="padding: 20px;" >
+      <v-card rounded="xl" style="padding: 20px">
         <v-card-title class="text-center justify-center p-8">
           <h2>실시간 상담 예약</h2>
         </v-card-title>
-        <ReserveMain :reser_dialog="reser_dialog"/>
+        <ReserveMain :reser_dialog="reser_dialog" />
       </v-card>
     </v-dialog>
 
@@ -61,10 +95,10 @@ export default {
   name: "App",
   components: {
     alarmComp,
-    ReserveMain
+    ReserveMain,
   },
   data() {
-    return {    
+    return {
       reser_dialog: false,
       errorSnack: false,
       altMsg: "",
@@ -90,7 +124,7 @@ export default {
         this.drawer = false;
       });
       // this.$router.push("/").catch(() => {});
-      window.location.href="/";
+      window.location.href = "/";
     },
     goHome() {
       this.$router.push("/").catch(() => {});
@@ -134,7 +168,7 @@ export default {
     subscribe() {
       http.get(`/counseling/liveList`);
       console.log("click subscribe btn");
-      this.subscribeTokenToTopic(this.devecieId, this.topic);
+      this.subscribeTokenToTopic(this.getDeviceID, this.topic);
       // let mentorname = this.$store.getters['getUserNum'];
       http.get(`/counseling/addReady/${this.getUserNum}`).then((res) => {
         console.log("add ready success : " + res);
@@ -166,8 +200,11 @@ export default {
         });
     },
     unsubscribe() {
-      this.$store.commit('changeIsReady',false);
-      this.unsubscribeTokenToTopic(this.devecieId);
+      this.errorSnack = true;
+      (this.altMsg = "상담이 취소되었습니다. "),
+        this.$store.commit("changeIsReady", false);
+      this.unsubscribeTokenToTopic(this.getDeviceID);
+      this.errorSnack = false;
     },
     unsubscribeTokenToTopic(token) {
       axios({
@@ -198,10 +235,8 @@ export default {
           console.log(e);
         });
 
-         let num = this.getUserNum;
-      http.delete(`/counseling/deleteReadyMentor/${num}`).then(()=>{
-      });
-       
+      let num = this.getUserNum;
+      http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
     },
   },
   computed: {
@@ -212,6 +247,8 @@ export default {
       "getUserName",
       "getUserNum",
       "getUserID",
+      "getIsReady",
+      "getDeviceID",
     ]),
     ...mapState({
       authLoading: (state) => state.auth.status === "loading",
@@ -222,7 +259,6 @@ export default {
       userID: (state) => `${state.user.getUserID}`,
     }),
   },
-
 };
 </script>
 <style>
@@ -259,8 +295,8 @@ html {
 #create .v-btn--floating {
   position: relative;
 }
-.shadow { 
-  text-shadow:#464646 3px 3px 3px; 
+.shadow {
+  text-shadow: #464646 3px 3px 3px;
 }
 /* .v-sheet {
     height: 100% !important;
