@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,9 @@ public interface ConRoomRepository extends JpaRepository<ConRoom, Long> {
     @Modifying
     void deleteByNum(Long num);
     List<ConRoom> findByMentorAndStatus(Long mentor, String status);
+    List<ConRoom> findByMentorAndStatusOrderByDateAsc(Long mentor, String status);
     List<ConRoom> findByMentorAndStatusOrStatusOrderByDateAsc(Long mentor, String status1,String status2);
     List<ConRoom> findByStatusOrderByDateDesc(String status, Pageable page);
+    @Query("select r from ConRoom r where r.date > :time AND r.mentor = :num AND (r.status = 'reapply' OR r.status = 'reserve' ) order by date asc")
+    List<ConRoom> findByAfterReservation(@Param("num") Long mentor, @Param("time") LocalDateTime time);
 }

@@ -13,7 +13,7 @@
       </v-slide-group>
 
       <v-expand-transition>
-        <v-sheet v-if="model != null" height="200" tile class="pt-5">
+        <v-sheet v-if="conList.length != 0" height="200" tile class="pt-5">
           <div>
             <p>{{ getKeyword(conList[model]) }}</p>
           </div>
@@ -35,6 +35,12 @@
           </div>
           <div>
             <v-btn small @click="startCounseling(conList[model])" style="font-size:0.9rem;" color="#bbcfe9">상담시작</v-btn>
+          </div>
+        </v-sheet>
+        <v-sheet v-else >
+           <div>
+            <p> 녹화 상담 리스트가 없습니다!</p>
+            <br/>
           </div>
         </v-sheet>
       </v-expand-transition>
@@ -139,6 +145,8 @@ export default {
       this.$router.push(`/myMenteeInfo/${item.mentee}&${menteeName}`);
     },
     getKeyword(item) {
+
+      console.log(item)
       let str = '';
       
       if (item.keyword1 != null && item.keyword1 != 'none') {

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -254,7 +255,8 @@ public class ScheduleController {
 
     @GetMapping("/allowScheduleTime/{mentor}/{sdate}")
     public List<String> counselingTime(@PathVariable(value = "mentor") String mentor, @PathVariable String sdate) {
-        List<Schedule> list = scheduleRepository.findByMentorAndSdateAndIsReserOrderByTimeidxAsc( mentor, LocalDate.parse(sdate),0);
+        List<Schedule> list = scheduleRepository.findByMentorAndSdateAndIsReserOrderByTimeidxAsc(mentor,
+                LocalDate.parse(sdate), 0);
         String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
                 "19:00", "20:00", "21:00", "22:00", "23:00" };
         List<String> timeList = new LinkedList<>();
@@ -270,8 +272,10 @@ public class ScheduleController {
     }
 
     @GetMapping("/findScheduleNum/{date}/{time}/{mentor}")
-    public Long findScheduleNum(@PathVariable(value = "date") String date, @PathVariable(value = "time") String time, @PathVariable String mentor) {
-        Schedule schedule = scheduleRepository.findScheduleByMentorAndSdateAndStime(mentor, LocalDate.parse(date), time);
+    public Long findScheduleNum(@PathVariable(value = "date") String date, @PathVariable(value = "time") String time,
+            @PathVariable String mentor) {
+        Schedule schedule = scheduleRepository.findScheduleByMentorAndSdateAndStime(mentor, LocalDate.parse(date),
+                time);
         Long num = schedule.getNum();
         return num;
     }
@@ -304,12 +308,12 @@ public class ScheduleController {
         for (Reservation reservation : numList) {
             list.add(scheduleRepository.findByNum(reservation.getScheNum()));
         }
-        list.sort(new Comparator<Schedule>(){
+        list.sort(new Comparator<Schedule>() {
             @Override
             public int compare(Schedule o1, Schedule o2) {
-                if(o1.getSdate().getDayOfYear() < o2.getSdate().getDayOfYear()) {
+                if (o1.getSdate().getDayOfYear() < o2.getSdate().getDayOfYear()) {
                     return 1;
-                } else if(o1.getSdate().getDayOfYear() == o2.getSdate().getDayOfYear()) {
+                } else if (o1.getSdate().getDayOfYear() == o2.getSdate().getDayOfYear()) {
                     return 0;
                 } else {
                     return -1;
@@ -347,7 +351,10 @@ public class ScheduleController {
 
     @DeleteMapping("/reset/{mentor}")
     public Object reset(@PathVariable String mentor) {
-        userRepository.findById(mentor).get().setIsSet(1);
+        User umentor = userRepository.findById(mentor).get();
+        umentor.setIsSet(1);
+        userRepository.save(umentor);
+
         List<Schedule> list = scheduleRepository.findByMentor(mentor);
         for (Schedule s : list) {
             scheduleRepository.delete(s);
@@ -362,7 +369,9 @@ public class ScheduleController {
 
     @PutMapping("/maintain/{mentor}")
     public Object maintain(@PathVariable String mentor) {
-        userRepository.findById(mentor).get().setIsSet(1);
+        User umentor = userRepository.findById(mentor).get();
+        umentor.setIsSet(1);
+        userRepository.save(umentor);
         List<Schedule> list = scheduleRepository.findByMentor(mentor);
         LocalDate today = LocalDate.now();
         System.out.println(today);
@@ -398,6 +407,7 @@ public class ScheduleController {
         List<User> list = userRepository.findAll();
         for (User u : list) {
             u.setIsSet(0);
+            userRepository.save(u);
         }
     }
 
