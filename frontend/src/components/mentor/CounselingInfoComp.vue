@@ -27,7 +27,7 @@
           </v-col>
           <!-- 상담일, 키워드 -->
           <v-col cols="5" class="pl-15 pt-5" style="text-align: left">
-            <v-card-title class="px-0" style="color:black;">
+            <v-card-title class="px-0" style="color:black;font-weight:bold;">
               <v-icon large color="#262272" class="mr-2"
                 >mdi-calendar-range</v-icon
               >
@@ -35,7 +35,7 @@
             </v-card-title>
             <h2 class="mb-10">{{ date }}</h2>
 
-            <v-card-title class="px-0" style="color:black;">
+            <v-card-title class="px-0" style="color:black;font-weight:bold;">
               <v-icon large color="#262272" class="mr-2"
                 >mdi-tag-heart-outline</v-icon
               >
@@ -75,7 +75,7 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>
+      <v-card-title style="font-weight:bold;">
         <v-icon large color="#262272" class="mr-2"
           >mdi-book-open-outline</v-icon
         >
@@ -84,7 +84,7 @@
       <v-card-text class="pb-0">
         <v-textarea outlined no-resize v-model="counseling.memo"></v-textarea>
       </v-card-text>
-      <v-card-title class="pt-0">
+      <v-card-title class="pt-0" style="font-weight:bold;">
         <v-icon large color="#262272" class="mr-1"
           >mdi-pencil-plus-outline</v-icon
         >
@@ -104,7 +104,7 @@
           class="mb-3 main-btn"
           @click="reportSave()"
         >
-          저장
+          저장하기
         </v-btn>
       </v-card-actions>
     <!-- </v-card> -->

@@ -27,5 +27,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.content-box2{
+  width:90%;
+  height:98%;
+  background: -moz-linear-gradient(top left, #ff7987, #a23bbe);
+  background: -webkit-linear-gradient(top left, #ff7987, #a23bbe);
+  -moz-background-origin: border;
+  background-origin: border-box;
+  border: 10px solid transparent;
+  border-radius: 25px;
+  box-shadow:
+    0 0 12px white, /* Outset shadow */
+    inset 0 0 0 white; /* The background color */
+  }
 </style>

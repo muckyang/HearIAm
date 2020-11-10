@@ -6,12 +6,13 @@
       <v-tabs v-model="tab" background-color="#262272" center-active dark>
         <v-tab v-for="(item, index) in myMenteeInfoList" :key="index">{{ setDate(item.date) }}</v-tab>
       </v-tabs>
+    </v-card>
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="(item, idx) in myMenteeInfoList" :key="idx">
           <CounselingInfoComp :numIndex="item.num" />
         </v-tab-item>
       </v-tabs-items>
-    </v-card>
+    <!-- </v-card> -->
   </div>
 </template>
 
