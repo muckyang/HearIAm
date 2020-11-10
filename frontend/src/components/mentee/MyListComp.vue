@@ -65,7 +65,7 @@
       <v-tab-item>
         <v-sheet class="mx-auto pa-5" max-width="100%">
           <v-row>
-            <v-col v-if="!rpagingList" style="margin-top: 205px">예약 내역이 없습니다.</v-col>
+            <v-col v-if="rpagingList.length == 0" style="margin-top: 205px">예약 내역이 없습니다.</v-col>
             <v-col v-for="(item, index) in rpagingList" :key="index" cols="12" sm="6" md="3">
               <v-card class="mx-auto pa-3" height="200">
                 <div align="left" class="d-flex">
@@ -104,7 +104,7 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-pagination v-model="rpage" v-if="rpagingList" :length="rpageLength" circle class="pb-3 mt-5" color="#262272"></v-pagination>
+          <v-pagination v-model="rpage" v-if="rpagingList.length != 0" :length="rpageLength" circle class="pb-3 mt-5" color="#262272"></v-pagination>
         </v-sheet>
       </v-tab-item>
     </v-tabs-items>
@@ -413,6 +413,12 @@ export default {
                 });
                 http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
                   this.myReservation = data.data;
+                  this.rpagingList = this.myReservation.slice(0, 8);
+                  if (this.myReservation.length % 8 == 0) {
+                    this.rpageLength = this.myReservation.length / 8;
+                  } else {
+                    this.rpageLength = parseInt(this.myReservation.length / 8) + 1;
+                  }
                 });
                 this.dialog = false;
               }
@@ -431,6 +437,12 @@ export default {
           this.altMsg = "예약이 취소되었습니다.";
           http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
             this.myReservation = data.data;
+            this.rpagingList = this.myReservation.slice(0, 8);
+                  if (this.myReservation.length % 8 == 0) {
+                    this.rpageLength = this.myReservation.length / 8;
+                  } else {
+                    this.rpageLength = parseInt(this.myReservation.length / 8) + 1;
+                  }
           });
         }
       });
