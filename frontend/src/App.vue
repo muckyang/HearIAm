@@ -11,12 +11,24 @@
     >
       <v-btn class="shadow" text @click="goHome()"><h2>Hear I Am</h2></v-btn>
       <v-spacer></v-spacer>
-      <v-btn class="default" v-if="getIsReady" text @click="unsubscribe()"
-        >상담 취소</v-btn
+      <v-btn
+        class="shadow"
+        v-if="getIsReady && getRole == `mentor`"
+        text
+        @click="unsubscribe()"
+        >상담 대기 취소</v-btn
+      >
+      <v-btn
+        class="shadow"
+        v-if="!getIsReady && getRole == `mentor`"
+        text
+        @click="subscribe()"
+        >1:1 상담 대기</v-btn
       >
       <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goLive()"
         >1:1 상담</v-btn
       >
+
       <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goRecord()"
         >음성 상담</v-btn
       >
@@ -27,9 +39,7 @@
         @click="reser_dialog = true"
         >상담 예약</v-btn
       >
-      <v-btn class="shadow" v-if="getRole == `mentor`" text @click="subscribe()"
-        >1:1 상담 현황</v-btn
-      >
+
       <v-btn
         class="shadow"
         v-if="getRole == `mentor`"
@@ -105,7 +115,7 @@ export default {
     };
   },
   updated() {
-    if(this.getRole == "mentor"){
+    if (this.getRole == "mentor") {
       http
         .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
         .then((res) => {
@@ -118,7 +128,7 @@ export default {
     }
   },
   methods: {
-    logout: function () {
+    logout: function() {
       this.unsubscribe();
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
         this.drawer = false;
@@ -168,6 +178,7 @@ export default {
     subscribe() {
       http.get(`/counseling/liveList`);
       console.log("click subscribe btn");
+      this.$store.commit("changeIsReady", true);
       this.subscribeTokenToTopic(this.getDeviceID, this.topic);
       // let mentorname = this.$store.getters['getUserNum'];
       http.get(`/counseling/addReady/${this.getUserNum}`).then((res) => {
@@ -186,12 +197,10 @@ export default {
       })
         .then((response) => {
           if (response.status < 200 || response.status >= 400) {
-            throw (
-              "Error subscribing to topic: " +
+            throw "Error subscribing to topic: " +
               response.status +
               " - " +
-              response.text()
-            );
+              response.text();
           }
           console.log("subscribe success : " + response);
         })
@@ -201,8 +210,8 @@ export default {
     },
     unsubscribe() {
       this.errorSnack = true;
-      (this.altMsg = "상담이 취소되었습니다. "),
-        this.$store.commit("changeIsReady", false);
+      this.altMsg = "상담이 취소되었습니다. ";
+      this.$store.commit("changeIsReady", false);
       this.unsubscribeTokenToTopic(this.getDeviceID);
       this.errorSnack = false;
     },
@@ -222,12 +231,10 @@ export default {
       })
         .then((response) => {
           if (response.status < 200 || response.status >= 400) {
-            throw (
-              "Error subscribing to topic: " +
+            throw "Error subscribing to topic: " +
               response.status +
               " - " +
-              response.text()
-            );
+              response.text();
           }
           console.log("unsubscribe success : " + response);
         })
