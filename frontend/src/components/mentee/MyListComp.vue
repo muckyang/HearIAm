@@ -540,5 +540,6 @@ export default {
 .type-title:hover {
   transform: scale(1.2);
   transition: all 0.3s;
+  color:#d9d6ff
 }
 </style>
