@@ -11,7 +11,7 @@
     <div class="content-box">
       <RecordListComp />
       <div style="position:absolute; bottom:2.3rem;">
-        <span class="icon-line ml-2" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>뒤로</span>
+        <span class="icon-line ml-2" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span>
       </div>
     </div>
   </div>
@@ -25,8 +25,8 @@ export default {
     RecordListComp,
   },
   methods:{
-    goBack(){
-      window.history.back();
+   goBack(){
+      this.$router.push("/")
     },
   },
 };
