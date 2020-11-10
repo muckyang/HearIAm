@@ -108,7 +108,7 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3 mt-5" color="#262272"></v-pagination>
+          <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3 mt-5" color="#262272" style="bottom:0px;"></v-pagination>
         </v-sheet>
       </v-tab-item>
     </v-tabs-items>
