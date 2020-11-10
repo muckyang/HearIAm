@@ -366,11 +366,11 @@ export default {
     });
     http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
       this.myList = res.data;
-      this.cpagingList = this.myList.slice(0, 9);
-      if (this.myList.length % 9 == 0) {
-        this.cpageLength = this.myList.length / 9;
+      this.cpagingList = this.myList.slice(0, 8);
+      if (this.myList.length % 8 == 0) {
+        this.cpageLength = this.myList.length / 8;
       } else {
-        this.cpageLength = parseInt(this.myList.length / 9) + 1;
+        this.cpageLength = parseInt(this.myList.length / 8) + 1;
       }
     });
     http.get(`/schedule/isReservation/${this.getUserID}`).then((res) => {
@@ -596,8 +596,8 @@ export default {
   },
   watch: {
     cpage(page) {
-      var first = (page - 1) * 9;
-      this.cpagingList = this.myList.slice(first, first + 9);
+      var first = (page - 1) * 8;
+      this.cpagingList = this.myList.slice(first, first + 8);
     },
     rpage(page) {
       var first = (page - 1) * 8;
