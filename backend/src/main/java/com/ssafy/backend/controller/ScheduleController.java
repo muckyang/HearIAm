@@ -2,6 +2,7 @@ package com.ssafy.backend.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -336,6 +337,9 @@ public class ScheduleController {
         Schedule schedule = scheduleRepository.findByNum(scheNum);
         schedule.setIsReser(0);
         scheduleRepository.save(schedule);
+        User user = userRepository.findById(schedule.getMentor()).get();
+        LocalDateTime date = LocalDateTime.parse(schedule.getSdate()+"T"+schedule.getStime());
+        conRoomRepository.deleteByMentorAndDate(user.getNum(), date);
         return ResponseEntity.ok("success");
     }
 
