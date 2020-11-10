@@ -64,7 +64,7 @@
         <v-card-title class="text-center justify-center p-8">
           <h2>실시간 상담 예약</h2>
         </v-card-title>
-        <ReserveMain :reser_dialog="reser_dialog" />
+        <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()"/>
       </v-card>
     </v-dialog>
 
@@ -238,6 +238,9 @@ export default {
       let num = this.getUserNum;
       http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
     },
+    reserveDone(msg){
+      this.reser_dialog = msg;
+    }
   },
   computed: {
     ...mapGetters([
