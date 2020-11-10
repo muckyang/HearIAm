@@ -54,7 +54,7 @@
           <div>
             <ReserveListComp />
           </div>
-        <div style="position:absolute;bottom:1rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
+        <div style="position:absolute;bottom:1rem;background-color:white"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
         </v-tab-item>
       </v-tabs-items>
 
