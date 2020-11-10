@@ -23,10 +23,10 @@
         v-if="!getIsReady && getRole == `mentor`"
         text
         @click="subscribe()"
-        >1:1 상담 대기</v-btn
+        >실시간 상담 대기</v-btn
       >
       <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goLive()"
-        >1:1 상담</v-btn
+        >실시간 상담</v-btn
       >
 
       <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goRecord()"
@@ -45,7 +45,7 @@
         v-if="getRole == `mentor`"
         text
         @click="goRecordList()"
-        >음성 상담 현황</v-btn
+        >녹음 상담 현황</v-btn
       >
       <v-btn
         class="shadow"
@@ -67,12 +67,35 @@
       </v-main>
     </v-sheet>
 
+    <v-speed-dial
+    v-model="center"
+    v-if="getRole == `mentee`"
+    bottom
+    right
+    fixed
+    direction="top"
+    transition="slide-x-reverse-transition"
+    >
+      <template v-slot:activator>
+        <v-btn v-model="center" color="#49358b" dark fab @click="viewCenter()">
+          <v-icon> mdi-map </v-icon>
+        </v-btn>
+      </template>
+    </v-speed-dial>
+
     <alarmComp v-if="getRole == `mentor`"></alarmComp>
 
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
        <div class="px-5 pt-5 reser-back">
           <h1>실시간 상담 예약</h1>
         <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()"/>
+       </div>
+    </v-dialog>
+
+    <v-dialog v-model="center_dialog" max-width="1200" max-height="500">
+       <div class="px-5 pt-5 content-box">
+          <h1>상담센터 찾기</h1>
+        <CounsultingCenter />
        </div>
     </v-dialog>
 
@@ -98,18 +121,22 @@ import http from "@/util/http-common.js";
 import axios from "axios";
 import alarmComp from "@/components/mentor/alarm.vue";
 import ReserveMain from "@/views/reserve/ReserveMain.vue";
+import CounsultingCenter from "@/views/ConsultingCenter.vue";
 
 export default {
   name: "App",
   components: {
     alarmComp,
     ReserveMain,
+    CounsultingCenter
   },
   data() {
     return {
       reser_dialog: false,
       errorSnack: false,
       altMsg: "",
+      center: false,
+      center_dialog: false,
     };
   },
   updated() {
@@ -168,10 +195,10 @@ export default {
       this.$router.push("/recordConsult/1").catch(() => {});
     },
     goMyMenteeList() {
-      this.$router.push(`/myMenteeList`);
+      this.$router.push(`/myMenteeList`).catch(() => {});
     },
     goRecordList() {
-      this.$router.push(`/recordList`);
+      this.$router.push(`/recordList`).catch(() => {});
     },
     subscribe() {
       http.get(`/counseling/liveList`);
@@ -245,7 +272,10 @@ export default {
     },
     reserveDone(msg){
       this.reser_dialog = msg;
-    }
+    },
+    viewCenter(){
+      this.center_dialog = true;
+    },
   },
   computed: {
     ...mapGetters([

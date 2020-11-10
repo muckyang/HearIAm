@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-sheet class="mx-auto" elevation="5" max-width="100%">
+  <div class="pt-7">
+    <!-- <v-sheet class="mx-auto" elevation="5" max-width="100%"> -->
       <v-slide-group v-model="model" class="pa-4" show-arrows>
         <v-slide-item v-for="(n, idx) in conList" :key="idx" v-slot="{ active, toggle }">
           <v-card class="ma-4" height="200" width="200" @click="toggle" :disabled="active?true:false">
@@ -13,13 +13,13 @@
       <v-expand-transition>
         <v-sheet v-if="conList.length != 0" height="200" tile class="pt-5">
           <div>
-            <p>{{ getKeyword(conList[model]) }}</p>
+            <p style="font-size:1.3rem;">{{ getKeyword(conList[model]) }}</p>
           </div>
           <div>
             <p>
               <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
-                  <span style="color:pink" v-bind="attrs" v-on="on" id="mentee-name-text" @click="MenteeHistory(conList[model])">
+                  <span style="color:#262272;font-weight:bold;font-size:1.3rem;" v-bind="attrs" v-on="on" id="mentee-name-text" @click="MenteeHistory(conList[model])">
                     {{ findName(conList[model].mentee) }}
                   </span>
                 </template>
@@ -29,10 +29,10 @@
             </p>
           </div>
           <div>
-            <p> {{ setTime(conList[model].date) }} </p>
+            <p style="font-size:1rem;"> 등록일자 : {{ setTime(conList[model].date) }} </p>
           </div>
           <div>
-            <v-btn small @click="startCounseling(conList[model])" style="font-size:0.9rem;" color="#bbcfe9">상담시작</v-btn>
+            <v-btn @click="startCounseling(conList[model])" class="main-btn mt-3" style="height:3rem">상담시작</v-btn>
           </div>
         </v-sheet>
         <v-sheet v-else >
@@ -42,7 +42,7 @@
           </div>
         </v-sheet>
       </v-expand-transition>
-    </v-sheet>
+    <!-- </v-sheet> -->
     <!-- <v-timeline align-top :dense="$vuetify.breakpoint.smAndDown">
       <v-timeline-item v-for="(item, index) in conList" :key="index">
         <v-card color="#bbcfe9">

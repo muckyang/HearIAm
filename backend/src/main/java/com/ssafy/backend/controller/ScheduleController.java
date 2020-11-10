@@ -319,15 +319,15 @@ public class ScheduleController {
             @Override
             public int compare(Schedule o1, Schedule o2) {
                 if (o1.getSdate().getDayOfYear() < o2.getSdate().getDayOfYear()) {
-                    return 1;
+                    return -1;
                 } else if (o1.getSdate().getDayOfYear() == o2.getSdate().getDayOfYear()) {
                     return 0;
                 } else {
-                    return -1;
+                    return 1;
                 }
             }
         });
-
+        
         return list;
     }
 

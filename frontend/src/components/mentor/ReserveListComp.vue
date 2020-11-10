@@ -2,15 +2,15 @@
   <div>
     <v-card-text v-if = "conList.length > 0">
       <v-timeline align-top dense>
-        <v-timeline-item color="pink" small v-for="(item, index) in conList" :key="index">
+        <v-timeline-item color="#262272" small v-for="(item, index) in conList" :key="index">
           <v-row class="pt-1">
             <v-col class="col-lg-4 col-md-4 col-sm-3 col-xs-10">
-              <strong>{{ setTime(item.date) }}</strong>
+              <span style="color:black; font-size:1.1rem; !important">{{ setTime(item.date) }}</span>
             </v-col>
             <v-col class="col-lg-4 col-md-4 col-sm-3 col-xs-10">
-              <strong>
-                {{ findName(item.mentee) }} 학생
-              </strong>
+              <span style="color:black; font-size:1.1rem; !important">
+                <span style="font-weight:bold;color:#ff7987">{{ findName(item.mentee) }}</span> 님
+              </span>
                 <!-- <v-btn small disabled style="font-size:0.9rem;">{{ findName(item.mentee) }}</v-btn> -->
               <div class="caption">
                 <v-btn
@@ -23,24 +23,24 @@
                     color="orange lighten-4"
                     text-color="red"
                     @click="startCounseling(item)"
-                    style="font-size:0.9rem;color:red"
+                    style="font-size:1rem;color:red"
                     >on-Air</v-btn
                   >
                   <v-btn v-else disabled text style="font-size:0.9rem;color:black">on-Air</v-btn>
               </div>
             </v-col>
             <v-col class="col-lg-4 col-md-4 col-sm-3 col-xs-10">
-              <v-btn small @click="MenteeHistory(item)" style="font-size:0.9rem;" color="#bbcfe9">이전 상담 내역</v-btn>
+              <v-btn small @click="MenteeHistory(item)" style="font-size:0.9rem; height:2.3rem;" class="main-btn">이전 상담내역</v-btn>
             </v-col>
           </v-row>
         </v-timeline-item>
       </v-timeline>
     </v-card-text>
-   <v-sheet v-else class="mx-auto" elevation="5" max-width="100%">
+   <div v-else class="mx-auto mt-7" max-width="100%">
     <br/>
     <p>예약 내역이 없습니다.</p>
     <br/>
-   </v-sheet>
+   </div>
   </div>
 </template>
 
@@ -102,7 +102,7 @@ export default {
     },
 
     setTime(date) {
-      let time = date.slice(0, 4) + '-' + date.slice(5, 7) + '-' + date.slice(8, 10) + ' ' + date.slice(11, 13) + ':' + date.slice(14, 16);
+      let time = date.slice(0, 4) + '-' + date.slice(5, 7) + '-' + date.slice(8, 10) + '  ' + date.slice(11, 13) + ':' + date.slice(14, 16);
       return time;
     },
     startCounseling(item) {
