@@ -3,9 +3,7 @@
     <v-sheet class="mx-auto" elevation="5" max-width="100%">
       <v-slide-group v-model="model" class="pa-4" show-arrows>
         <v-slide-item v-for="(n, idx) in conList" :key="idx" v-slot="{ active, toggle }">
-          <v-card class="ma-4" height="200" width="200" @click="toggle">
-            <!-- <v-img v-if="!active" src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="100%" width="100%"></v-img>
-            <v-img v-else src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="100%" width="100%" style="filter: brightness(50%);"></v-img> -->
+          <v-card class="ma-4" height="200" width="200" @click="toggle" :disabled="active?true:false">
             <v-img v-if="!active" :src="getImg(n)" height="100%" width="100%"></v-img>
             <v-img v-else :src="getImg(n)" height="100%" width="100%" style="filter: brightness(50%);"></v-img>
           </v-card>
@@ -146,7 +144,7 @@ export default {
     },
     getKeyword(item) {
 
-      console.log(item)
+      // console.log(item)
       let str = '';
       
       if (item.keyword1 != null && item.keyword1 != 'none') {

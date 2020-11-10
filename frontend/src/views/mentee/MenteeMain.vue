@@ -50,7 +50,7 @@
         <v-card-title class="text-center justify-center p-8"> -->
           <h1>실시간 상담 예약</h1>
         <!-- </v-card-title> -->
-        <ReserveMain :reser_dialog="reser_dialog"/>
+        <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()"/>
       <!-- </v-card> -->
        </div>
     </v-dialog>
@@ -186,6 +186,9 @@ export default {
       //   // alert("삭제 완료");
       // });
     },
+    reserveDone(msg){
+      this.reser_dialog = msg;
+    }
   },
 };
 </script>

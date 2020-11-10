@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card-text>
+    <v-card-text v-if = "conList.length > 0">
       <v-timeline align-top dense>
         <v-timeline-item color="pink" small v-for="(item, index) in conList" :key="index">
           <v-row class="pt-1">
@@ -36,6 +36,11 @@
         </v-timeline-item>
       </v-timeline>
     </v-card-text>
+   <v-sheet v-else class="mx-auto" elevation="5" max-width="100%">
+    <br/>
+    <p>예약 내역이 없습니다.</p>
+    <br/>
+   </v-sheet>
   </div>
 </template>
 
