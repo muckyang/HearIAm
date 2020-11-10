@@ -67,12 +67,35 @@
       </v-main>
     </v-sheet>
 
+    <v-speed-dial
+    v-model="center"
+    v-if="getRole == `mentee`"
+    bottom
+    right
+    fixed
+    direction="top"
+    transition="slide-x-reverse-transition"
+    >
+      <template v-slot:activator>
+        <v-btn v-model="center" color="blue lighten-1" dark fab @click="viewCenter()">
+          <v-icon> mdi-map </v-icon>
+        </v-btn>
+      </template>
+    </v-speed-dial>
+
     <alarmComp v-if="getRole == `mentor`"></alarmComp>
 
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
        <div class="px-5 pt-5 reser-back">
           <h1>실시간 상담 예약</h1>
         <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()"/>
+       </div>
+    </v-dialog>
+
+    <v-dialog v-model="center_dialog" max-width="1200" max-height="500">
+       <div class="px-5 pt-5 content-box">
+          <h1>상담센터 찾기</h1>
+        <CounsultingCenter />
        </div>
     </v-dialog>
 
@@ -98,18 +121,22 @@ import http from "@/util/http-common.js";
 import axios from "axios";
 import alarmComp from "@/components/mentor/alarm.vue";
 import ReserveMain from "@/views/reserve/ReserveMain.vue";
+import CounsultingCenter from "@/views/ConsultingCenter.vue";
 
 export default {
   name: "App",
   components: {
     alarmComp,
     ReserveMain,
+    CounsultingCenter
   },
   data() {
     return {
       reser_dialog: false,
       errorSnack: false,
       altMsg: "",
+      center: false,
+      center_dialog: false,
     };
   },
   updated() {
@@ -245,7 +272,10 @@ export default {
     },
     reserveDone(msg){
       this.reser_dialog = msg;
-    }
+    },
+    viewCenter(){
+      this.center_dialog = true;
+    },
   },
   computed: {
     ...mapGetters([
