@@ -190,9 +190,10 @@ public class CounselingController {
 	}
 
 	@GetMapping("/ReserveList/{mentor}")
-	public List<ConRoom> ReserveList(@PathVariable(value = "mentor") Long mentor) {
-		List<ConRoom> list = conRoomRepository.findByMentorAndStatusOrStatusOrderByDateAsc(mentor, "reserve",
-				"reapply");
+	public List<ConRoom> ReserveList(@PathVariable(value = "mentor") Long mentor) { 	
+		// List<ConRoom> list = conRoomRepository.findByMentorAndStatusOrStatusOrderByDateAsc(mentor, "reserve",
+		// 		"reapply");
+		List<ConRoom> list = conRoomRepository.findByAfterReservation(mentor,LocalDateTime.now());
 		return list;
 	}
 
