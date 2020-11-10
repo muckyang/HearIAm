@@ -95,49 +95,64 @@ export default {
     };
   },
   mounted() {
+    // window.addEventListener("keypress", function (event) {
+    //   if (event.key == "F5") {
+    //     console.log("key press");
+    //     this.getKey = true;
+    //   }
+    // });
+
     // window.addEventListener("beforeunload", function (event) {
     //   console.log("unload");
-    //   if (event.key != "F5") {
-    //       console.log("press f5!");
-    //       event.preventDefault;
-    //       event.returnValue = "";
-    //     }
-    //     else {
+
+    //   if (!this.getKey) {
+    //     console.log("press f5!");
+    //     this.getKey = false;
+    //     // event.preventDefault;
+    //     // event.returnValue = "";
+    //   } else {
     //     console.log("else");
+    //     console.log(this.getKey);
+
+    //     // this.unsubscribe();
+    //     // if (this.getIsReady) {
+    //       console.log("s;hdfisd;dsbsdkbsd");
+    //       axios({
+    //         method: "POST",
+    //         url: "https://iid.googleapis.com/iid/v1:batchRemove",
+    //         data: {
+    //           to: "/topics/streaming",
+    //           registration_tokens: [this.getDeviceID],
+    //         },
+    //         headers: {
+    //           "Content-type": "application/json",
+    //           Authorization:
+    //             "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+    //         },
+    //       })
+    //         .then((response) => {
+    //           if (response.status < 200 || response.status >= 400) {
+    //             throw (
+    //               "Error subscribing to topic: " +
+    //               response.status +
+    //               " - " +
+    //               response.text()
+    //             );
+    //           }
+    //           console.log("unsubscribe success : " + response);
+    //         })
+    //         .catch((e) => {
+    //           console.log(e);
+    //         });
+
+    //       let num = this.getUserNum;
+    //       http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
+    //     }
+        
+        
     //     event.preventDefault;
     //     event.returnValue = "";
-        // this.unsubscribe();
-      //   axios({
-      //     method: "POST",
-      //     url: "https://iid.googleapis.com/iid/v1:batchRemove",
-      //     data: {
-      //       to: "/topics/streaming",
-      //       registration_tokens: [this.getDeviceID],
-      //     },
-      //     headers: {
-      //       "Content-type": "application/json",
-      //       Authorization:
-      //         "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
-      //     },
-      //   })
-      //     .then((response) => {
-      //       if (response.status < 200 || response.status >= 400) {
-      //         throw (
-      //           "Error subscribing to topic: " +
-      //           response.status +
-      //           " - " +
-      //           response.text()
-      //         );
-      //       }
-      //       console.log("unsubscribe success : " + response);
-      //     })
-      //     .catch((e) => {
-      //       console.log(e);
-      //     });
-
-      //   let num = this.getUserNum;
-      //   http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
-    //   }
+    //   // }
     // });
   },
   methods: {
