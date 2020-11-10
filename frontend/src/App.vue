@@ -105,15 +105,17 @@ export default {
     };
   },
   updated() {
-    http
-      .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
-      .then((res) => {
-        this.$store.commit("setAlarmList", res.data);
-        let len = this.$store.getters["getAlarmList"].length;
-        if (len > 0) {
-          this.$store.commit("changeAlarmBtn", "#F44336");
-        }
-      });
+    if(this.getRole == "mentor"){
+      http
+        .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
+        .then((res) => {
+          this.$store.commit("setAlarmList", res.data);
+          let len = this.$store.getters["getAlarmList"].length;
+          if (len > 0) {
+            this.$store.commit("changeAlarmBtn", "#F44336");
+          }
+        });
+    }
   },
   methods: {
     logout: function () {

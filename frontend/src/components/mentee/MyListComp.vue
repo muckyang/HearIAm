@@ -7,7 +7,8 @@
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
       <v-tab-item>
-        <v-simple-table class="pa-5">
+        <v-col v-if="!cpagingList" style="margin-top: 220px">상담 내역이 없습니다.</v-col>
+        <v-simple-table v-if="cpagingList" class="pa-5">
           <template v-slot:default>
             <thead>
               <tr>
@@ -30,21 +31,15 @@
                 </td>
                 <td v-else class="text-center">실시간 상담</td>
 
-                <td v-if="item.recordDir != null && item.status == 'finish'" align="center">
+                <td v-if="item.recordDir != null && item.answer != null" align="center">
                   <v-btn text @click="getAnswer(item)" small style="font-size: 0.9rem"
                     ><span style="vertical-align: middle; display: inline-flex; color:crimson"
                       ><v-icon small class="mr-1">mdi-message-text-outline</v-icon> 답변보기</span
                     ></v-btn
                   >
                 </td>
-                <td v-else-if="item.status == 'finish'" class="text-center">
+                <td v-else-if="item.recordDir == null" class="text-center">
                   상담 완료
-                </td>
-                <td v-else-if="item.status == 'progress'" class="text-center">
-                  진행중
-                </td>
-                <td v-else-if="item.status == 'reserveRequest'" class="text-center">
-                  예약중
                 </td>
                 <td v-else class="text-center">대기중</td>
 
@@ -63,13 +58,14 @@
             </tbody>
           </template>
         </v-simple-table>
-        <v-pagination v-model="cpage" :length="cpageLength" circle class="pb-3" color="#262272"></v-pagination>
+        <v-pagination v-model="cpage" v-if="cpagingList" :length="cpageLength" circle class="pb-3" color="#262272"></v-pagination>
       </v-tab-item>
 
       <!-- 예약 내역 -->
       <v-tab-item>
         <v-sheet class="mx-auto pa-5" max-width="100%">
           <v-row>
+            <v-col v-if="rpagingList.length == 0" style="margin-top: 205px">예약 내역이 없습니다.</v-col>
             <v-col v-for="(item, index) in rpagingList" :key="index" cols="12" sm="6" md="3">
               <v-card class="mx-auto pa-3" height="200">
                 <div align="left" class="d-flex">
@@ -108,7 +104,7 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3 mt-5" color="#262272" style="bottom:0px;"></v-pagination>
+          <v-pagination v-model="rpage" v-if="rpagingList.length != 0" :length="rpageLength" circle class="pb-3 mt-5" color="#262272"></v-pagination>
         </v-sheet>
       </v-tab-item>
     </v-tabs-items>
@@ -357,7 +353,7 @@ export default {
       var mentorId = this.findID(this.selitem.mentor);
       http.get(`/schedule/allowSchedule/${mentorId}`).then((res) => {
         this.schedule = res.data;
-        console.log(this.schedule);
+        // console.log(this.schedule);
       });
     },
     allowedDates(val) {
@@ -417,6 +413,12 @@ export default {
                 });
                 http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
                   this.myReservation = data.data;
+                  this.rpagingList = this.myReservation.slice(0, 8);
+                  if (this.myReservation.length % 8 == 0) {
+                    this.rpageLength = this.myReservation.length / 8;
+                  } else {
+                    this.rpageLength = parseInt(this.myReservation.length / 8) + 1;
+                  }
                 });
                 this.dialog = false;
               }
@@ -435,6 +437,12 @@ export default {
           this.altMsg = "예약이 취소되었습니다.";
           http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
             this.myReservation = data.data;
+            this.rpagingList = this.myReservation.slice(0, 8);
+                  if (this.myReservation.length % 8 == 0) {
+                    this.rpageLength = this.myReservation.length / 8;
+                  } else {
+                    this.rpageLength = parseInt(this.myReservation.length / 8) + 1;
+                  }
           });
         }
       });
@@ -452,8 +460,8 @@ export default {
       this.cancelDialog = true;
     },
     getAnswer(item) {
-      console.log(item.answer);
-      this.answer = item.answer.substring(1, item.answer.length - 1).replaceAll('\r\n', '<br/>');
+      // console.log(item.answer);
+      this.answer = item.answer.substring(0, item.answer.length).replaceAll('\r\n', '<br/>');
       this.answerDialog = true;
     },
     reRecord() {
