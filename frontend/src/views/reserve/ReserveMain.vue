@@ -102,7 +102,7 @@
         </v-row> -->
       <v-row class ="mt-4" justify="center">
         <!-- <v-col class="pt-5 px-0 d-flex" align="center" justify="center"> -->
-          <v-btn class="main-btn mr-2" @click="reser_dialog=false">취소</v-btn>
+          <v-btn class="main-btn mr-2" @click="closeDialog">취소</v-btn>
           <v-btn class="main-btn" @click="reserveD" >예약하기</v-btn>
         <!-- </v-col> -->
       </v-row>
@@ -302,6 +302,9 @@ export default {
         this.reserDialog = true;
       }
     },
+    closeDialog(){
+      this.$emit("reserve", false);
+    }
   },
 };
 </script>

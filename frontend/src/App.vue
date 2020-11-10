@@ -60,12 +60,10 @@
     <alarmComp v-if="getRole == `mentor`"></alarmComp>
 
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
-      <v-card rounded="xl" style="padding: 20px">
-        <v-card-title class="text-center justify-center p-8">
-          <h2>실시간 상담 예약</h2>
-        </v-card-title>
+       <div class="px-5 pt-5 reser-back">
+          <h1>실시간 상담 예약</h1>
         <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()"/>
-      </v-card>
+       </div>
     </v-dialog>
 
     <v-snackbar
@@ -304,4 +302,17 @@ html {
 /* .v-sheet {
     height: 100% !important;
 } */
+.reser-back{
+  background-color:white;
+  background: -moz-linear-gradient(top left, #ff7987, #a23bbe);
+  background: -webkit-linear-gradient(top left, #ff7987, #a23bbe);
+  -moz-background-origin: border;
+  background-origin: border-box;
+  border: 10px solid transparent;
+  border-radius: 25px;
+  box-shadow:
+    inset 0 0 2px white, /* Inset shadow */
+    /*0 0 12px white, /* Outset shadow */
+    inset -999px 0 0 white; /* The background color */
+}
 </style>
