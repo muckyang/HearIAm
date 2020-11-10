@@ -1,6 +1,6 @@
 <template>
   <div class="record-main container">
-      <v-tabs v-if="page > 0" color="deep-purple accent-4" right v-model="nowPage">
+      <v-tabs v-if="page > 0" color="#262272" right v-model="nowPage">
         <v-tab v-for="i in page" :key="i" class="tab-menu-page">
           {{ i }}
         </v-tab>
@@ -23,8 +23,8 @@
           </v-container>
         </v-tab-item>
       </v-tabs>
-      <div v-if="page < 0">
-          <h1 style="margin-top:250px;">등록된 녹음상담이 없습니다.</h1>
+      <div v-if="this.waitList.length <= 0">
+          <h1 style="margin-top:250px;">등록된 녹음 상담이 없습니다.</h1>
       </div>
   </div>
 </template>
