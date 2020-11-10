@@ -305,8 +305,14 @@ public class ScheduleController {
     public List<Schedule> myReservation(@PathVariable(value = "mentee") String mentee) {
         List<Reservation> numList = reservationRepository.findByMentee(mentee);
         List<Schedule> list = new ArrayList<Schedule>();
+        
+        LocalDate today = LocalDate.now();
         for (Reservation reservation : numList) {
-            list.add(scheduleRepository.findByNum(reservation.getScheNum()));
+        	Schedule schedule = scheduleRepository.findByNum(reservation.getScheNum());
+        	if(!schedule.getSdate().isBefore(today)) {
+        		list.add(schedule);
+			}
+            
         }
         list.sort(new Comparator<Schedule>() {
             @Override
@@ -320,6 +326,7 @@ public class ScheduleController {
                 }
             }
         });
+
         return list;
     }
 

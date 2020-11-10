@@ -54,8 +54,9 @@ export default {
       this.$router.push('/menteeMain');
     } else if (this.getRole == `mentor`) {
       this.$router.push('/mentorMain');
+    } else {
+      this.fadeOut();
     }
-    this.fadeOut();
   },
   components: {
     // LoginModal,
