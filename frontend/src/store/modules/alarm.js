@@ -3,7 +3,7 @@ const state = {
     isRemote : false,
     isready : localStorage.getItem("isready") || false,
     alarmList : localStorage.getItem("alarmList") || [],
-    alarmBtn : localStorage.getItem("alarmBtn") || "#0a7a78",
+    alarmBtn : localStorage.getItem("alarmBtn") || "#49358b",
  };
 
 const getters = {  

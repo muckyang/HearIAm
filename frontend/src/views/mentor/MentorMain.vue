@@ -177,7 +177,6 @@ export default {
           this.successSnack = false;
         }, 1000);
       } else {
-        this.readyClick = true;
         this.$store.commit("changeIsReady", true);
         http.get(`/counseling/getMenteeCnt`).then((res) => {
           if (res.data == "empty") {
@@ -239,7 +238,7 @@ export default {
     unsubscribe() {
       console.log("hhhhhhh");
       this.errorSnack = true;
-      (this.altMsg = "상담이 취소되었습니다. "),
+      this.altMsg = "상담이 취소되었습니다. ";
         this.$store.commit("changeIsReady", false);
       this.unsubscribeTokenToTopic(this.getDeviceID);
       this.errorSnack = false;
