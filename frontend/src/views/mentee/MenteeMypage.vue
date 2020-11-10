@@ -11,7 +11,7 @@
     <!-- <v-container> -->
       <div class="px-5 pt-5 content-box">
         <MyListComp />
-        <div style="position:absolute; bottom:2.3rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>뒤로</span></div>
+        <div style="position:absolute; bottom:2.3rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
       </div>
     <!-- </v-container> -->
   </div>
@@ -27,7 +27,7 @@ export default {
   },
   methods:{
     goBack(){
-      window.history.back();
+      this.$router.push("/")
     }
   }
 };

@@ -1,14 +1,25 @@
 <template>
-  <div class="record-main container">
-    <v-sheet color="#bbcfe9" class="pa-5" rounded="xl">
-      <h2 align="center">음성 상담에 대한 답변</h2>
+  <div
+    style="
+      width: 100%;
+      padding-top: 70px;
+      background-color: #0f0d2d;
+      padding-bottom: 30px;
+      height: 100%;
+    "
+    align="center"
+  >
+    <div class="px-5 pt-5 content-box">
+        <div style="position:absolute;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>뒤로</span></div>
+
+      <h1 align="center">녹음 상담 답변하기</h1>
       <v-row style="height: 70%">
-        <v-col cols="6">
+        <v-col cols="5">
           <div align="center">
-            <Bar :chartData="chartData" :options="options" style="width: 95%" />
+            <Bar :chartData="chartData" :options="options" />
           </div>
         </v-col>
-        <v-col cols="6" class="pb-0 pt-10">
+        <v-col cols="7" class="pb-0 pt-10">
           <v-textarea
             solo
             rounded
@@ -19,20 +30,32 @@
             placeholder="상담 내용을 입력해주세요."
             class="mb-0"
           ></v-textarea>
+          <v-row justify="center">
+            <v-col class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+              <v-btn @click="loadTransform()" v-if="!isPlay" class="main-btn" large
+                >재생하기</v-btn
+              >
+              <audio :src="getAudio(record.recordDir)" id="audio"></audio>
+              <audio id="convert" :controls="isPlay"></audio>
+            </v-col>
+            <v-col class="mb-6 col-lg-5 col-md-5 col-sm-12 col-xs-12">
+              <v-btn @click="send" class="main-btn" large>답변하기</v-btn>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
-      <v-row>
+      <!-- <v-row>
         <v-col class="col-lg-6 col-md-6 col-sm-12 col-xs-12"></v-col>
         <v-col class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <v-btn @click="loadTransform()" v-if="!isPlay">재생하기</v-btn>
+          <v-btn @click="loadTransform()" v-if="!isPlay" class="main-btn">재생하기</v-btn>
           <audio :src="getAudio(record.recordDir)" id="audio"></audio>
           <audio id="convert" :controls="isPlay"></audio>
         </v-col>
         <v-col class="mb-6 col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <v-btn @click="send" style="text-align: right">답변하기</v-btn>
+          <v-btn @click="send" class="main-btn">답변하기</v-btn>
         </v-col>
-      </v-row>
-    </v-sheet>
+      </v-row> -->
+    </div>
 
     <v-snackbar
       v-model="successSnack"
@@ -121,6 +144,9 @@ export default {
     });
   },
   methods: {
+    goBack(){
+      window.history.back();
+    },
     getAudio(audio) {
       // return 'http://localhost:3000/record/' + audio;
       return "../../../record/" + audio;
@@ -255,8 +281,4 @@ export default {
 </script>
 
 <style scoped>
-.record-main {
-  margin-top: 80px;
-  /* height: 100%; */
-}
 </style>
