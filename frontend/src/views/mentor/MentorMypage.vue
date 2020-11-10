@@ -19,13 +19,13 @@
         >
         <v-tab style="font-size: 1.3rem" @click="setH(1)"
           ><v-icon class="mr-1" style="font-size: 1.5rem"
-            >mdi-calendar-check-outline</v-icon
-          >내게 온 녹화</v-tab
+            >mdi-microphone-outline</v-icon
+          >내게 온 녹음상담</v-tab
         >
-        <v-tab style="font-size: 1.3rem" @click="setH(1)"
+        <v-tab style="font-size: 1.3rem" @click="setH(0)"
           ><v-icon class="mr-1" style="font-size: 1.5rem"
-            >mdi-calendar-check-outline</v-icon
-          >실시간 상담 예약</v-tab
+            >mdi-monitor</v-icon
+          >실시간상담 예약내역</v-tab
         >
       </v-tabs>
 
