@@ -1,11 +1,17 @@
 <template>
   <div>
-    <v-card class="py-3 px-3" id="report-card">
+    <!-- <v-card class="py-3 px-3" id="report-card" style="border:none;"> -->
       <v-card-title width="500">
         <!-- 제목 -->
-        <v-icon large color="red" class="mr-3">mdi-subtitles-outline</v-icon>
+        <v-icon large color="#262272" class="mr-3"
+          >mdi-subtitles-outline</v-icon
+        >
         <h2>
-          <v-text-field style="width:300px;" name="name" v-model="counseling.title"></v-text-field>
+          <v-text-field
+            style="width: 300px"
+            name="name"
+            v-model="counseling.title"
+          ></v-text-field>
         </h2>
       </v-card-title>
 
@@ -15,32 +21,52 @@
         <v-row cols="12">
           <!-- 감정 그래프 -->
           <v-col cols="7">
-            <div style="width :28vw; height:28vw; margin-left:5%;">
-              <Doughnut :chartData="chartData"/>
+            <div style="width: 28vw; height: 28vw; margin-left: 5%">
+              <Doughnut :chartData="chartData" />
             </div>
           </v-col>
           <!-- 상담일, 키워드 -->
-          <v-col cols="5" class="pl-15 pt-5" style="text-align:left;">
-            <v-icon large color="red" class="mb-3 mr-3">mdi-calendar-range</v-icon>DATE
-            <h2 class="mb-10">{{date}}</h2>
+          <v-col cols="5" class="pl-15 pt-5" style="text-align: left">
+            <v-card-title class="px-0" style="color:black;">
+              <v-icon large color="#262272" class="mr-2"
+                >mdi-calendar-range</v-icon
+              >
+              상담일자
+            </v-card-title>
+            <h2 class="mb-10">{{ date }}</h2>
 
-            <v-icon large color="red" class="mb-3 mr-3">mdi-tag-heart-outline</v-icon>KEYWORD
+            <v-card-title class="px-0" style="color:black;">
+              <v-icon large color="#262272" class="mr-2"
+                >mdi-tag-heart-outline</v-icon
+              >
+              키워드
+            </v-card-title>
+
             <div class="d-flex">
               <h2 class="mt-6 mr-3">#</h2>
               <h2 class="mb-4">
-                <v-text-field name="name" v-model="counseling.keyword1"></v-text-field>
+                <v-text-field
+                  name="name"
+                  v-model="counseling.keyword1"
+                ></v-text-field>
               </h2>
             </div>
             <div class="d-flex">
               <h2 class="mt-6 mr-3">#</h2>
               <h2 class="mb-4">
-                <v-text-field name="name" v-model="counseling.keyword2"></v-text-field>
+                <v-text-field
+                  name="name"
+                  v-model="counseling.keyword2"
+                ></v-text-field>
               </h2>
             </div>
             <div class="d-flex">
               <h2 class="mt-6 mr-3">#</h2>
               <h2 class="mb-4">
-                <v-text-field name="name" v-model="counseling.keyword3"></v-text-field>
+                <v-text-field
+                  name="name"
+                  v-model="counseling.keyword3"
+                ></v-text-field>
               </h2>
             </div>
           </v-col>
@@ -48,36 +74,49 @@
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
-      
+
       <v-card-title>
-        <v-icon large color="red" class="mr-3">mdi-book-open-outline</v-icon>
-        MEMO
+        <v-icon large color="#262272" class="mr-2"
+          >mdi-book-open-outline</v-icon
+        >
+        상담기록
       </v-card-title>
-      <v-card-text>
-        <v-textarea solo no-resize v-model="counseling.memo"></v-textarea>
+      <v-card-text class="pb-0">
+        <v-textarea outlined no-resize v-model="counseling.memo"></v-textarea>
       </v-card-text>
-      <v-card-title>
-        <v-icon large color="red" class="mr-3">mdi-pencil-plus-outline</v-icon>
-        RESULT
+      <v-card-title class="pt-0">
+        <v-icon large color="#262272" class="mr-1"
+          >mdi-pencil-plus-outline</v-icon
+        >
+        상담결과
       </v-card-title>
-      <v-card-text>
-        <v-textarea solo no-resize v-model="counseling.answer" style="white-space:pre-line"></v-textarea>
+      <v-card-text class="pb-0">
+        <v-textarea
+          outlined
+          no-resize
+          v-model="counseling.answer"
+          style="white-space: pre-line"
+        ></v-textarea>
       </v-card-text>
-        <v-card-actions>
-        <v-btn color="deep-purple lighten-2" style="color:white;margin:0 auto;" class="mb-3" @click="reportSave()">
-          등록하기
+      <v-card-actions>
+        <v-btn
+          style="color: white; margin: 0 auto"
+          class="mb-3 main-btn"
+          @click="reportSave()"
+        >
+          저장
         </v-btn>
       </v-card-actions>
-    </v-card>
+    <!-- </v-card> -->
   </div>
 </template>
 
 <script>
-import Doughnut from '@/components/mentor/Doughnut.js';
-import http from '@/util/http-common.js';
+import Doughnut from "@/components/mentor/Doughnut.js";
+import http from "@/util/http-common.js";
 
 export default {
-  name: 'CounselingInfoComp',
+  name: "CounselingInfoComp",
   components: {
     Doughnut,
   },
@@ -97,7 +136,7 @@ export default {
       chartData: null,
       counseling: {},
       date: null,
-      nickname: '',
+      nickname: "",
     };
   },
   created() {
@@ -108,14 +147,18 @@ export default {
     });
     http.get(`/counseling/loadEmotion/${this.numIndex}`).then((res) => {
       this.emotion = res.data;
-      if(this.emotion != '') {
+      if (this.emotion != "") {
         this.angry = this.avrage(this.emotion.angry.split(`|`).map(Number));
-        this.disgusted = this.avrage(this.emotion.disgusted.split(`|`).map(Number));
+        this.disgusted = this.avrage(
+          this.emotion.disgusted.split(`|`).map(Number)
+        );
         this.fearful = this.avrage(this.emotion.fearful.split(`|`).map(Number));
         this.happy = this.avrage(this.emotion.happy.split(`|`).map(Number));
         this.neutral = this.avrage(this.emotion.neutral.split(`|`).map(Number));
         this.sad = this.avrage(this.emotion.sad.split(`|`).map(Number));
-        this.surprised = this.avrage(this.emotion.surprised.split(`|`).map(Number));
+        this.surprised = this.avrage(
+          this.emotion.surprised.split(`|`).map(Number)
+        );
         this.fillData();
       }
     });
@@ -124,15 +167,15 @@ export default {
     setTime(date) {
       let time =
         Number(date.slice(0, 4)) +
-        '년 ' +
+        "년 " +
         Number(date.slice(5, 7)) +
-        '월 ' +
+        "월 " +
         Number(date.slice(8, 10)) +
-        '일 ' +
+        "일 " +
         Number(date.slice(11, 13)) +
-        '시 ' +
+        "시 " +
         Number(date.slice(14, 16)) +
-        '분';
+        "분";
       return time;
     },
     avrage(arr) {
@@ -144,12 +187,44 @@ export default {
     },
     fillData() {
       this.chartData = {
-        labels: ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised'],
+        labels: [
+          "angry",
+          "disgusted",
+          "fearful",
+          "happy",
+          "neutral",
+          "sad",
+          "surprised",
+        ],
         datasets: [
           {
-            borderColor: ['red', 'orange', '#ffff00', 'green', 'blue', '#000080', 'purple'],
-            backgroundColor: ['red', 'orange', '#ffff00', 'green', 'blue', '#000080', 'purple'],
-            data: [this.angry, this.disgusted, this.fearful, this.happy, this.neutral, this.sad, this.surprised],
+            borderColor: [
+              "red",
+              "orange",
+              "#ffff00",
+              "green",
+              "blue",
+              "#000080",
+              "purple",
+            ],
+            backgroundColor: [
+              "red",
+              "orange",
+              "#ffff00",
+              "green",
+              "blue",
+              "#000080",
+              "purple",
+            ],
+            data: [
+              this.angry,
+              this.disgusted,
+              this.fearful,
+              this.happy,
+              this.neutral,
+              this.sad,
+              this.surprised,
+            ],
           },
         ],
       };
@@ -166,16 +241,17 @@ export default {
         });
     },
     reportSave() {
-      http.put(`/counseling/update`, this.counseling)
-      .then(res => {
-        console.log(res.data);
-        setTimeout(() => {
-          this.$router.push("/");
-        }, 1000);
-      })
-      .catch(err => {
-        console.log(err);
-      })
+      http
+        .put(`/counseling/update`, this.counseling)
+        .then((res) => {
+          console.log(res.data);
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

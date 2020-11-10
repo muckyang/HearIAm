@@ -1,17 +1,18 @@
 <template>
   <div
     style="
-      height: 100%;
       width: 100%;
-      background: linear-gradient(to left, #93dfff, #f5a2bb);
-      padding-top: 64px;
+      background-color: #0f0d2d;
+      padding-top: 70px;
+      padding-bottom:30px;
     "
+    align="center"
   >
-  <v-container>
+  <div class="px-5 pt-3 content-box">
     <v-col>
     <MenteeInfoComp />
     </v-col>
-  </v-container>
+  </div>
   </div>
 </template>
 
