@@ -36,11 +36,11 @@
         </v-timeline-item>
       </v-timeline>
     </v-card-text>
-   <v-sheet v-else class="mx-auto" elevation="5" max-width="100%">
+   <div v-else class="mx-auto mt-7" max-width="100%">
     <br/>
     <p>예약 내역이 없습니다.</p>
     <br/>
-   </v-sheet>
+   </div>
   </div>
 </template>
 

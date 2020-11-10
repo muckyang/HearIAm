@@ -1,34 +1,13 @@
 <template>
   <div style="position: relative" :style="rootCssVar">
-    <div align="center" style="font-size: 2rem">
-      <span style="display: inline-flex; vertical-align: middle"
-        ><v-icon class="mr-2" color="black" style="font-size: 2.2rem"
-          >mdi-calendar-check-outline</v-icon
-        >이번 주 일정표</span
-      ><br />
-      <span
-        style="font-size: 1.2rem; display: inline-flex; vertical-align: middle"
-        ><span style="">{{ this.getUserName }}</span
-        >님의 이번 주 일정입니다.
-        <v-btn
-          style="cursor: default"
-          class="px-2 ml-3 mr-1"
-          small
-          color="#bbcfe9"
-          >일정수정</v-btn
-        >을 클릭하여 원하는 시간을 선택하세요.</span
-      >
-    </div>
-    <div>
-      <div align="right">
-        <v-btn v-if="isModify" @click="saveTime" color="#bbcfe9">완료</v-btn>
-        <v-btn v-if="!isModify" @click="modifyTime" color="#bbcfe9"
-          >일정수정</v-btn
-        >
-      </div>
-    </div>
     <div align="center">
       <div style="width: 750px">
+        <div align="right" class="mb-2">
+        <v-btn v-if="isModify" @click="saveTime" class="main-btn">완료</v-btn>
+        <v-btn v-if="!isModify" @click="modifyTime"  style="font-size:1rem;" class="main-btn"
+          >일정 수정하기</v-btn
+        >
+      </div>
         <div class="vws-rule-custom mb-5" style="user-select: none">
           <div class="vws-rule-row">
             <div class="vws-table-rule">
@@ -78,13 +57,16 @@
                     }"
                     @click="toggleDay(daynum, idx)"
                   >
-                    <span style="font-size: 0.8rem">{{ day }}</span>
+                    <span style="font-size: 0.8rem; color:white;">{{ day }}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div align="center" style="font-size: 0.9rem">
+        * 이번 주 상담 가능한 시간을 관리해보세요. 이미 예약이 잡힌 시간은 수정할 수 없습니다.
+    </div>
       </div>
     </div>
     <v-dialog v-model="monDialog" persistent max-width="400">
@@ -350,6 +332,5 @@ export default {
 @import url("../../assets/schedule_style.css");
 .day-div {
   pointer-events: none;
-  color: ;
 }
 </style>
