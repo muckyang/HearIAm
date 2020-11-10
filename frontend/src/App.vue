@@ -11,12 +11,24 @@
     >
       <v-btn class="shadow" text @click="goHome()"><h2>Hear I Am</h2></v-btn>
       <v-spacer></v-spacer>
-      <v-btn class="default" v-if="getIsReady" text @click="unsubscribe()"
-        >상담 취소</v-btn
+      <v-btn
+        class="shadow"
+        v-if="getIsReady && getRole == `mentor`"
+        text
+        @click="unsubscribe()"
+        >상담 대기 취소</v-btn
+      >
+      <v-btn
+        class="shadow"
+        v-if="!getIsReady && getRole == `mentor`"
+        text
+        @click="subscribe()"
+        >1:1 상담 대기</v-btn
       >
       <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goLive()"
         >1:1 상담</v-btn
       >
+
       <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goRecord()"
         >음성 상담</v-btn
       >
@@ -27,9 +39,7 @@
         @click="reser_dialog = true"
         >상담 예약</v-btn
       >
-      <v-btn class="shadow" v-if="getRole == `mentor`" text @click="subscribe()"
-        >1:1 상담 현황</v-btn
-      >
+
       <v-btn
         class="shadow"
         v-if="getRole == `mentor`"
@@ -60,12 +70,10 @@
     <alarmComp v-if="getRole == `mentor`"></alarmComp>
 
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
-      <v-card rounded="xl" style="padding: 20px">
-        <v-card-title class="text-center justify-center p-8">
-          <h2>실시간 상담 예약</h2>
-        </v-card-title>
-        <ReserveMain :reser_dialog="reser_dialog" />
-      </v-card>
+       <div class="px-5 pt-5 reser-back">
+          <h1>실시간 상담 예약</h1>
+        <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()"/>
+       </div>
     </v-dialog>
 
     <v-snackbar
@@ -105,7 +113,7 @@ export default {
     };
   },
   updated() {
-    if(this.getRole == "mentor"){
+    if (this.getRole == "mentor") {
       http
         .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
         .then((res) => {
@@ -118,7 +126,7 @@ export default {
     }
   },
   methods: {
-    logout: function () {
+    logout: function() {
       this.unsubscribe();
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
         this.drawer = false;
@@ -168,6 +176,7 @@ export default {
     subscribe() {
       http.get(`/counseling/liveList`);
       console.log("click subscribe btn");
+      this.$store.commit("changeIsReady", true);
       this.subscribeTokenToTopic(this.getDeviceID, this.topic);
       // let mentorname = this.$store.getters['getUserNum'];
       http.get(`/counseling/addReady/${this.getUserNum}`).then((res) => {
@@ -186,12 +195,10 @@ export default {
       })
         .then((response) => {
           if (response.status < 200 || response.status >= 400) {
-            throw (
-              "Error subscribing to topic: " +
+            throw "Error subscribing to topic: " +
               response.status +
               " - " +
-              response.text()
-            );
+              response.text();
           }
           console.log("subscribe success : " + response);
         })
@@ -201,8 +208,8 @@ export default {
     },
     unsubscribe() {
       this.errorSnack = true;
-      (this.altMsg = "상담이 취소되었습니다. "),
-        this.$store.commit("changeIsReady", false);
+      this.altMsg = "상담이 취소되었습니다. ";
+      this.$store.commit("changeIsReady", false);
       this.unsubscribeTokenToTopic(this.getDeviceID);
       this.errorSnack = false;
     },
@@ -222,12 +229,10 @@ export default {
       })
         .then((response) => {
           if (response.status < 200 || response.status >= 400) {
-            throw (
-              "Error subscribing to topic: " +
+            throw "Error subscribing to topic: " +
               response.status +
               " - " +
-              response.text()
-            );
+              response.text();
           }
           console.log("unsubscribe success : " + response);
         })
@@ -238,6 +243,9 @@ export default {
       let num = this.getUserNum;
       http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
     },
+    reserveDone(msg){
+      this.reser_dialog = msg;
+    }
   },
   computed: {
     ...mapGetters([
@@ -301,4 +309,17 @@ html {
 /* .v-sheet {
     height: 100% !important;
 } */
+.reser-back{
+  background-color:white;
+  background: -moz-linear-gradient(top left, #ff7987, #a23bbe);
+  background: -webkit-linear-gradient(top left, #ff7987, #a23bbe);
+  -moz-background-origin: border;
+  background-origin: border-box;
+  border: 10px solid transparent;
+  border-radius: 25px;
+  box-shadow:
+    inset 0 0 2px white, /* Inset shadow */
+    /*0 0 12px white, /* Outset shadow */
+    inset -999px 0 0 white; /* The background color */
+}
 </style>

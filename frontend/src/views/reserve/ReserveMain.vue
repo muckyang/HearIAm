@@ -102,7 +102,7 @@
         </v-row> -->
       <v-row class ="mt-4" justify="center">
         <!-- <v-col class="pt-5 px-0 d-flex" align="center" justify="center"> -->
-          <v-btn class="main-btn mr-2" @click="reser_dialog=false">취소</v-btn>
+          <v-btn class="main-btn mr-2" @click="closeDialog">취소</v-btn>
           <v-btn class="main-btn" @click="reserveD" >예약하기</v-btn>
         <!-- </v-col> -->
       </v-row>
@@ -268,9 +268,10 @@ export default {
               date: `${res.data.sdate}T${res.data.stime}:00`,
             });
           });
+          this.reserDialog = false;
+          this.$emit("reserve", false);
           this.successSnack = true;
           this.altMsg = "예약이 완료되었습니다.";
-          this.$router.push("/menteeMain").catch(() => {});
         })
         .catch((e) => {
           console.log(e);
@@ -301,6 +302,9 @@ export default {
         this.reserDialog = true;
       }
     },
+    closeDialog(){
+      this.$emit("reserve", false);
+    }
   },
 };
 </script>
