@@ -7,7 +7,8 @@
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
       <v-tab-item>
-        <v-simple-table class="pa-5">
+        <v-col v-if="!cpagingList" style="margin-top: 220px">상담 내역이 없습니다.</v-col>
+        <v-simple-table v-if="cpagingList" class="pa-5">
           <template v-slot:default>
             <thead>
               <tr>
@@ -40,12 +41,6 @@
                 <td v-else-if="item.status == 'finish'" class="text-center">
                   상담 완료
                 </td>
-                <td v-else-if="item.status == 'progress'" class="text-center">
-                  진행중
-                </td>
-                <td v-else-if="item.status == 'reserveRequest'" class="text-center">
-                  예약중
-                </td>
                 <td v-else class="text-center">대기중</td>
 
                 <td class="text-center">
@@ -63,14 +58,14 @@
             </tbody>
           </template>
         </v-simple-table>
-        <v-pagination v-model="cpage" :length="cpageLength" circle class="pb-3" color="#262272"></v-pagination>
+        <v-pagination v-model="cpage" v-if="cpagingList" :length="cpageLength" circle class="pb-3" color="#262272"></v-pagination>
       </v-tab-item>
 
       <!-- 예약 내역 -->
       <v-tab-item>
         <v-sheet class="mx-auto pa-5" max-width="100%">
           <v-row>
-            <v-col v-if="!rpagingList">예약 내역이 없습니다.</v-col>
+            <v-col v-if="!rpagingList" style="margin-top: 205px">예약 내역이 없습니다.</v-col>
             <v-col v-for="(item, index) in rpagingList" :key="index" cols="12" sm="6" md="3">
               <v-card class="mx-auto pa-3" height="200">
                 <div align="left" class="d-flex">
@@ -454,7 +449,7 @@ export default {
     },
     getAnswer(item) {
       // console.log(item.answer);
-      this.answer = item.answer.substring(1, item.answer.length - 1).replaceAll('\r\n', '<br/>');
+      this.answer = item.answer.substring(0, item.answer.length - 1).replaceAll('\r\n', '<br/>');
       this.answerDialog = true;
     },
     reRecord() {

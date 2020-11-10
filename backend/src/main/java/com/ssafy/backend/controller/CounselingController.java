@@ -136,7 +136,8 @@ public class CounselingController {
 
 	@GetMapping("/menteeMyList/{num}")
 	public List<ConRoom> myList(@PathVariable(value = "num") Long num) {
-		List<ConRoom> list = conRoomRepository.findByMenteeOrderByNumDesc(num);
+		List<ConRoom> list = conRoomRepository.findByMenteeAndStatusOrderByDateDesc(num, "finish");
+		
 		return list;
 	}
 
