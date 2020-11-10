@@ -31,14 +31,14 @@
                 </td>
                 <td v-else class="text-center">실시간 상담</td>
 
-                <td v-if="item.recordDir != null && item.status == 'finish'" align="center">
+                <td v-if="item.recordDir != null && item.answer != null" align="center">
                   <v-btn text @click="getAnswer(item)" small style="font-size: 0.9rem"
                     ><span style="vertical-align: middle; display: inline-flex; color:crimson"
                       ><v-icon small class="mr-1">mdi-message-text-outline</v-icon> 답변보기</span
                     ></v-btn
                   >
                 </td>
-                <td v-else-if="item.status == 'finish'" class="text-center">
+                <td v-else-if="item.recordDir == null" class="text-center">
                   상담 완료
                 </td>
                 <td v-else class="text-center">대기중</td>
@@ -449,7 +449,7 @@ export default {
     },
     getAnswer(item) {
       // console.log(item.answer);
-      this.answer = item.answer.substring(0, item.answer.length - 1).replaceAll('\r\n', '<br/>');
+      this.answer = item.answer.substring(0, item.answer.length).replaceAll('\r\n', '<br/>');
       this.answerDialog = true;
     },
     reRecord() {
