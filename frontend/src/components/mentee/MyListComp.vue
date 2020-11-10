@@ -70,6 +70,7 @@
       <v-tab-item>
         <v-sheet class="mx-auto pa-5" max-width="100%">
           <v-row>
+            <v-col v-if="!rpagingList">예약 내역이 없습니다.</v-col>
             <v-col v-for="(item, index) in rpagingList" :key="index" cols="12" sm="6" md="3">
               <v-card class="mx-auto pa-3" height="200">
                 <div align="left" class="d-flex">
@@ -108,7 +109,7 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3 mt-5" color="#262272"></v-pagination>
+          <v-pagination v-model="rpage" v-if="rpagingList" :length="rpageLength" circle class="pb-3 mt-5" color="#262272"></v-pagination>
         </v-sheet>
       </v-tab-item>
     </v-tabs-items>
@@ -357,7 +358,7 @@ export default {
       var mentorId = this.findID(this.selitem.mentor);
       http.get(`/schedule/allowSchedule/${mentorId}`).then((res) => {
         this.schedule = res.data;
-        console.log(this.schedule);
+        // console.log(this.schedule);
       });
     },
     allowedDates(val) {
@@ -452,7 +453,7 @@ export default {
       this.cancelDialog = true;
     },
     getAnswer(item) {
-      console.log(item.answer);
+      // console.log(item.answer);
       this.answer = item.answer.substring(1, item.answer.length - 1).replaceAll('\r\n', '<br/>');
       this.answerDialog = true;
     },
