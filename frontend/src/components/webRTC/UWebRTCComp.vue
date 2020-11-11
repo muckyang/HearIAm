@@ -97,7 +97,7 @@
                       <v-progress-circular
                         :size="100"
                         :width="7"
-                        color="#0a7a78"
+                        color="#49358b"
                         indeterminate
                       >
                         <v-btn text @click="dialogCancel()">취소</v-btn>
