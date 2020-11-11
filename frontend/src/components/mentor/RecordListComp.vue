@@ -9,8 +9,11 @@
             <v-row>
               <v-col v-for="(wait, index) in waitList" :key="index" cols="12" sm="6" md="3">
                 <v-card class="mx-auto">
-                  <v-img :src="getImg(wait)" height="130px"></v-img>
-                  <v-card-text>
+                  <div style="overflow:hidden; height:140px;">
+                  <!-- <img :src="getImg(wait)" style="height:140px; width:80%;"> -->
+                  <img id="rcard" src="../../../public/wordcloud/keyword1604473900392.png" style="height:140px; width:80%;">
+                  </div>
+                  <v-card-text class="pt-1 pb-2">
                     <p class="mb-1 text-area" style="text-align: left;">#{{ wait.keyword1 }} #{{ wait.keyword2 }} #{{ wait.keyword3 }}</p>
                     <p class="mb-2 text-area" style="font-size: 1rem; color: black; text-align: left;">
                       {{ wait.title }}
@@ -121,5 +124,13 @@ export default {
   text-overflow:ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+#rcard{
+  transform: scale(1);
+  transition: all 0.3s;
+}
+#rcard:hover{
+  transform: scale(1.1);
+  transition: all 0.3s;
 }
 </style>
