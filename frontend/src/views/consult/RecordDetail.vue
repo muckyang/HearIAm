@@ -10,7 +10,12 @@
     align="center"
   >
     <div class="px-5 pt-5 content-box">
-        <div style="position:absolute;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>뒤로</span></div>
+      <div style="position:absolute;">
+        <span class="icon-line" @click="goBack()"
+          ><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon
+          >뒤로</span
+        >
+      </div>
 
       <h1 align="center">녹음 상담 답변하기</h1>
       <v-row style="height: 70%">
@@ -32,13 +37,17 @@
           ></v-textarea>
           <v-row justify="center">
             <v-col class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-              <v-btn @click="loadTransform()" v-if="!isPlay" class="main-btn" large
+              <v-btn
+                @click="loadTransform()"
+                v-if="!isPlay"
+                class="main-btn"
+                large
                 >재생하기</v-btn
               >
               <audio :src="getAudio(record.recordDir)" id="audio"></audio>
               <audio id="convert" :controls="isPlay"></audio>
             </v-col>
-            <v-col class="mb-6 col-lg-5 col-md-5 col-sm-12 col-xs-12">
+            <v-col class="mb-6 ml-13 col-lg-5 col-md-5 col-sm-12 col-xs-12">
               <v-btn @click="send" class="main-btn" large>답변하기</v-btn>
             </v-col>
           </v-row>
@@ -139,12 +148,12 @@ export default {
   mounted() {
     let that = this;
     let audio = document.getElementById("convert");
-    audio.addEventListener("timeupdate", function () {
+    audio.addEventListener("timeupdate", function() {
       that.playtime = audio.currentTime.toFixed();
     });
   },
   methods: {
-    goBack(){
+    goBack() {
       window.history.back();
     },
     getAudio(audio) {
@@ -152,19 +161,27 @@ export default {
       return "../../../record/" + audio;
     },
     send() {
-      http
-        .post(
-          `/record/sendAnswer/${this.$route.params.num}/${this.getUserNum}`,
-          this.answer
-        )
-        .then(() => {
+      // if (this.answer = "" || this.answer.length == 0) {
+      //   alert("상담내용을 입력 해주세요 !");
+      // } else if (!this.isPlay) {
+      //   alert("녹음내용을 확인하세요!");
+      // } else {
+        http
+          .post(
+            `/record/sendAnswer/${this.$route.params.num}/${this.getUserNum}`,
+            this.answer
+          )
+          .then(() => {
+            // console.log(res.data)
+            
+          })
+          .catch((err) => {
+            console.log(err);
+          });
           this.successSnack = true;
-          this.altMsg = "답변이 완료되었습니다.";
-          this.$router.push("/recordList");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+            this.altMsg = "답변이 완료되었습니다.";
+            this.$router.push("/");
+      // }
     },
     fillData() {
       this.chartData = {
@@ -197,7 +214,7 @@ export default {
 
       let outputAudioBuffer = this.robot1Transform(AudioBuffer);
 
-      outputAudioBuffer.then(function (result) {
+      outputAudioBuffer.then(function(result) {
         var anchor = document.getElementById("convert");
 
         var wav = bufferToWav(result);
@@ -280,5 +297,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

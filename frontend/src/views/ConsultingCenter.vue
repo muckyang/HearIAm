@@ -83,8 +83,10 @@ export default {
       pagingList: [],
       pageLength: 0,
       page: 1,
+      // markerImg:
+      //   "https://blog.kakaocdn.net/dn/pe3Gt/btqKibc7VPl/JMG0zmTTAZuBAegMSA2c9k/img.png",
       markerImg:
-        "https://blog.kakaocdn.net/dn/pe3Gt/btqKibc7VPl/JMG0zmTTAZuBAegMSA2c9k/img.png",
+        "https://ifh.cc/g/6YadFc.png",
       kakaomap: "",
       markers: [],
       word: "전체",
@@ -149,7 +151,7 @@ export default {
         // 마커 이미지를 생성합니다
         var imageSrc = this.markerImg;
         // 마커 이미지의 이미지 크기 입니다
-        var imageSize = new kakao.maps.Size(55, 55);
+        var imageSize = new kakao.maps.Size(35, 35);
         var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
         // 마커를 생성합니다
         var latlng = new kakao.maps.LatLng(
