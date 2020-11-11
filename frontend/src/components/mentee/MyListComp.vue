@@ -99,7 +99,7 @@
               sm="6"
               md="3"
             >
-              <v-card class="mx-auto pa-3" height="200">
+              <v-card class="mx-auto pa-3" height="195">
                 <div align="left" class="d-flex">
                   <v-col class="pb-0">
                     <v-chip small color="#262272" label text-color="white">
@@ -399,6 +399,13 @@ export default {
     ]),
   },
   methods: {
+    findNameById(userid) {
+      for (let index = 0; index < this.userList.length; index++) {
+        if (this.userList[index].id == userid) {
+          return this.userList[index].name;
+        }
+      }
+    },
     findName(userNum) {
       for (let index = 0; index < this.userList.length; index++) {
         if (this.userList[index].num == userNum) {
