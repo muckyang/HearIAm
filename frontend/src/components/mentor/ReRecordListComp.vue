@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-7">
+  <div class="pt-7">
     <!-- <v-sheet class="mx-auto" elevation="5" max-width="100%"> -->
       <v-slide-group v-model="model" class="pa-4" show-arrows>
         <v-slide-item v-for="(n, idx) in conList" :key="idx" v-slot="{ active, toggle }">

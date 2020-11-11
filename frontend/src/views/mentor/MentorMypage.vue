@@ -9,7 +9,8 @@
     "
     align="center"
   >
-    <div class="px-5 pt-5 content-box3">
+
+    <div class="px-5 pt-5 content-box3" style="overflow:scroll;">
       <v-tabs v-model="tab" color="black" grow>
         <v-tab style="font-size: 1.3rem" @click="setH(0)">
           <v-icon class="mr-1" style="font-size: 1.5rem"
@@ -19,13 +20,13 @@
         >
         <v-tab style="font-size: 1.3rem" @click="setH(1)"
           ><v-icon class="mr-1" style="font-size: 1.5rem"
-            >mdi-calendar-check-outline</v-icon
-          >내게 온 녹화</v-tab
+            >mdi-microphone-outline</v-icon
+          >내게 온 녹음상담</v-tab
         >
         <v-tab style="font-size: 1.3rem" @click="setH(1)"
           ><v-icon class="mr-1" style="font-size: 1.5rem"
-            >mdi-calendar-check-outline</v-icon
-          >실시간 상담 예약</v-tab
+            >mdi-monitor</v-icon
+          >실시간상담 예약내역</v-tab
         >
       </v-tabs>
 
@@ -40,19 +41,23 @@
               bgActive="#4f4c86"
               textColor="#000"
             />
+        <!-- <div style="position:absolute;bottom:1rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div> -->
           </div>
         </v-tab-item>
         <v-tab-item>
           <div>
             <ReRecordListComp />
           </div>
+        <!-- <div style="position:absolute;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div> -->
         </v-tab-item>
-        <v-tab-item>
+        <v-tab-item >
           <div>
             <ReserveListComp />
           </div>
+        <!-- <div style="position:absolute;bottom:1rem;background-color:white"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div> -->
         </v-tab-item>
       </v-tabs-items>
+
     </div>
   </div>
 </template>

@@ -23,10 +23,10 @@
         v-if="!getIsReady && getRole == `mentor`"
         text
         @click="subscribe()"
-        >1:1 상담 대기</v-btn
+        >실시간 상담 대기</v-btn
       >
       <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goLive()"
-        >1:1 상담</v-btn
+        >실시간 상담</v-btn
       >
 
       <v-btn class="shadow" v-if="getRole == `mentee`" text @click="goRecord()"
@@ -45,7 +45,7 @@
         v-if="getRole == `mentor`"
         text
         @click="goRecordList()"
-        >음성 상담 현황</v-btn
+        >녹음 상담 현황</v-btn
       >
       <v-btn
         class="shadow"
@@ -77,7 +77,7 @@
     transition="slide-x-reverse-transition"
     >
       <template v-slot:activator>
-        <v-btn v-model="center" color="blue lighten-1" dark fab @click="viewCenter()">
+        <v-btn v-model="center" color="#49358b" dark fab @click="viewCenter()">
           <v-icon> mdi-map </v-icon>
         </v-btn>
       </template>
@@ -147,7 +147,7 @@ export default {
           this.$store.commit("setAlarmList", res.data);
           let len = this.$store.getters["getAlarmList"].length;
           if (len > 0) {
-            this.$store.commit("changeAlarmBtn", "#F44336");
+            this.$store.commit("changeAlarmBtn", "#49358b");
           }
         });
     }
@@ -195,10 +195,10 @@ export default {
       this.$router.push("/recordConsult/1").catch(() => {});
     },
     goMyMenteeList() {
-      this.$router.push(`/myMenteeList`);
+      this.$router.push(`/myMenteeList`).catch(() => {});
     },
     goRecordList() {
-      this.$router.push(`/recordList`);
+      this.$router.push(`/recordList`).catch(() => {});
     },
     subscribe() {
       http.get(`/counseling/liveList`);

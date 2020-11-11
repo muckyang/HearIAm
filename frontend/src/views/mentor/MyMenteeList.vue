@@ -43,6 +43,8 @@
           </v-card>
         </v-col>
       </v-row>
+              <div style="position:absolute; bottom:2.3rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
+
     </div>
   </div>
 </template>
@@ -80,6 +82,9 @@ export default {
     getIcon(icon) {
       console.log(icon);
       return "../../../icons/" + icon;
+    },
+    goBack(){
+      this.$router.push("/")
     },
   },
 };

@@ -1,65 +1,72 @@
 <template>
-  <div class="container">
+  <div style="height: 100%; width: 100%" class="webRtc-back">
     <v-dialog v-model="dialog" persistent max-width="1300">
-      <v-card>
+      <v-card style="background-color: white; border: 1px solid white" outlined>
+        <v-container v-if="!menteeName" style="opacity: 1">
+          <h1 class="mt-15">
+            상담 준비가 완료 되었다면 <br />
+            시작버튼을 눌러주세요.
+          </h1>
+          <v-btn
+            v-if="!isProgress"
+            style="font-size: 0.9rem; color:white"
+             color="#262272"
+            class="btn btn-primary mt-5"
+            @click="onJoin"
+          >
+            상담 시작
+          </v-btn>
+        </v-container>
         <v-container>
-          <v-row style="height: 120px">
-            <v-col cols="10">
-              <h1 v-if="!menteeName">상담 시작을 눌러주세요!!</h1>
-              <h1 v-else>{{ menteeName }}님과 상담중 입니다.</h1>
+          <v-row align="center"
+             justify="center">
+            <v-col cols="4" v-if="menteeName"> 
+              <h2>{{ menteeName }}님과 상담중 입니다.</h2>
+              <p>상담이 끝났다면 버튼을 눌러주세요.</p>
+              <v-btn
+                v-if="isProgress"
+                style="font-size: 0.9rem; color:white"
+                color="#262272"
+                class="btn btn-primary"
+                @click="onLeave"
+              >
+                상담 종료
+              </v-btn>
             </v-col>
-            <v-spacer></v-spacer>
-            <v-col cols="2">
-              <WebRTC
-                ref="webrtc"
-                width="100%"
-                :roomId="roomId"
-                cameraHeight="120"
-                @error="onError"
-                @childs-event="parentsMethod"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-row>
-                <v-col cols="4">
+            <v-divider vertical v-if="menteeName" ></v-divider>
+            <v-col cols="7">
+              <v-row >
+                <v-col cols="5" v-if="menteeName"  class="ml-10" >
                   <Bar :chartData="chartData" :options="options" />
                 </v-col>
-                <v-col cols="8">
-                  <v-row>
-                    <v-textarea
-                      v-model="memo"
-                      label="메모"
-                      outlined
-                      auto-grow
-                      row-height="30"
-                      rows="12"
-                      background-color="amber lighten-4"
-                      color="orange orange-darken-4"
-                    >
-                    </v-textarea>
-                  </v-row>
+                <v-col cols="4">
+                  <WebRTC
+                    class="mt-5"
+                    ref="webrtc"
+                    width="100%"
+                    :roomId="roomId"
+                    cameraHeight="200"
+                    @error="onError"
+                    @childs-event="parentsMethod"
+                  />
                 </v-col>
               </v-row>
-              <v-row>
-                <v-spacer></v-spacer>
-                <v-btn
-                  v-if="!isProgress"
-                  type="button"
-                  class="btn btn-primary"
-                  @click="onJoin"
-                >
-                  상담 시작
-                </v-btn>
-                <v-btn
-                  v-else
-                  type="button"
-                  class="btn btn-primary"
-                  @click="onLeave"
-                >
-                  상담 종료
-                </v-btn>
+              <v-row
+                style="height: 250px"
+                v-if="menteeName"
+                align="center"
+                justify="center"
+              >
+                <v-col cols="10" class="mt-8">
+                  <v-textarea
+                    v-model="memo"
+                    label="memo"
+                    outlined
+                    row-height="100"
+                    color="black"
+                  >
+                  </v-textarea>
+                </v-col>
               </v-row>
             </v-col>
           </v-row>
@@ -89,7 +96,7 @@ import * as io from "socket.io-client";
 window.io = io;
 import { mapGetters } from "vuex";
 import http from "@/util/http-common.js";
-
+import axios from "axios";
 export default {
   name: "CWebRTCComp",
   components: {
@@ -163,9 +170,9 @@ export default {
           this.menteeName = res.data.name;
         });
       this.$refs.webrtc.join();
+      this.unsubscribe();
     },
     onLeave() {
-      this.$store.commit("changeIsRemote", false);
       if (this.title == "직접 입력") {
         this.title = this.title2;
       }
@@ -251,6 +258,43 @@ export default {
         ],
       };
     },
+    unsubscribe() {
+      this.$store.commit("changeIsReady", false);
+      this.unsubscribeTokenToTopic(this.getDeviceID);
+    },
+    unsubscribeTokenToTopic(token) {
+      console.log("unsubscribeTokenToTopic");
+      axios({
+        method: "POST",
+        url: "https://iid.googleapis.com/iid/v1:batchRemove",
+        data: {
+          to: "/topics/streaming",
+          registration_tokens: [token],
+        },
+        headers: {
+          "Content-type": "application/json",
+          Authorization:
+            "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+        },
+      })
+        .then((response) => {
+          if (response.status < 200 || response.status >= 400) {
+            throw (
+              "Error subscribing to topic: " +
+              response.status +
+              " - " +
+              response.text()
+            );
+          }
+          console.log("unsubscribe success : " + response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      let num = this.getUserNum;
+      http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
+    },
   },
   computed: {
     ...mapGetters([
@@ -260,6 +304,7 @@ export default {
       "getUserName",
       "getUserNum",
       "getUserID",
+      "getDeviceID",
     ]),
   },
   watch: {
@@ -273,3 +318,9 @@ export default {
   },
 };
 </script>
+<style>
+.webRtc-back {
+  background-image: url("../../assets/webBack.png");
+  background-size: cover;
+}
+</style>
