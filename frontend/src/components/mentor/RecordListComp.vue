@@ -87,7 +87,7 @@ export default {
         });
     },
     getImg(item){
-      return "https://k3b202.p.ssafy.io/wordcloud/" + item.wordcloudImg
+      return "../../../wordcloud/" + item.wordcloudImg
     }
   },
   computed: {
