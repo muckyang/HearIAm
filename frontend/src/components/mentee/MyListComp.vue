@@ -10,7 +10,7 @@
         <v-col v-if="!cpagingList" style="margin-top: 220px"
           >상담 내역이 없습니다.</v-col
         >
-        <v-simple-table v-if="cpagingList" class="pa-5">
+        <v-simple-table v-if="cpagingList" class="py-5">
           <template v-slot:default>
             <thead>
               <tr>
