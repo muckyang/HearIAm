@@ -66,7 +66,7 @@ export default {
     });
     http.get(`/counseling/ReserveList/${this.getUserNum}`).then((res) => {
       this.conList = res.data;
-      console.log(this.conList)
+      // console.log(this.conList)
       // this.pagingList = this.conList.slice(0, 9);
       // if (this.conList.length % 10 == 0) {
       //   this.pageLength = this.conList.length / 10;

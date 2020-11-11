@@ -36,7 +36,7 @@ export default {
   created() {
     http.get(`/counseling/myMenteeInfoList/${this.getUserNum}/${this.$route.params.num}`).then((res) => {
       this.myMenteeInfoList = res.data;
-      console.log(this.myMenteeInfoList);
+      // console.log(this.myMenteeInfoList);
     });
     this.name = this.$route.params.name;
   },

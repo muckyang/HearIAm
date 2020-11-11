@@ -80,7 +80,7 @@ export default {
       this.$router.push(`/myMenteeInfo/${num}&${name}`);
     },
     getIcon(icon) {
-      console.log(icon);
+      // console.log(icon);
       return "../../../icons/" + icon;
     },
     goBack(){
