@@ -75,11 +75,11 @@ export default {
       getKey: false,
       items: [
         {
-          text: "1:1 상담",
+          text: "실시간 상담 대기",
           subtext: "대기를 하면 빠른 상담을 원하는 학생과 매칭이 됩니다.",
         },
         {
-          text: "음성 상담",
+          text: "녹음 상담",
           subtext: "학생의 고민을 듣고 조언해주세요. 상담 후 매칭이 됩니다",
         },
         {
@@ -87,7 +87,7 @@ export default {
           subtext: "담당 내담자의 상담 일지를 관리해보세요. ",
         },
         {
-          text: "마이 페이지",
+          text: "마이페이지",
           subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
         },
       ],

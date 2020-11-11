@@ -1,7 +1,7 @@
 <template>
   <div class="pt-7">
     <!-- <v-sheet class="mx-auto" elevation="5" max-width="100%"> -->
-      <v-slide-group v-model="model" class="pa-4" show-arrows>
+      <v-slide-group v-model="model" class="pa-4" show-arrows center-active>
         <v-slide-item v-for="(n, idx) in conList" :key="idx" v-slot="{ active, toggle }">
           <v-card class="ma-4" height="200" width="200" @click="toggle" :disabled="active?true:false">
             <v-img v-if="!active" :src="getImg(n)" height="100%" width="100%"></v-img>

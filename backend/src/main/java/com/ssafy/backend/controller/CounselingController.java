@@ -74,9 +74,31 @@ public class CounselingController {
 
 	@PostMapping("/saveEmotion")
 	public ResponseEntity<String> saveEmotion(@RequestBody Emotion emotion) {
+		emotion.setAngry(emotion.getAngry()+"1");
+		emotion.setDisgusted(emotion.getDisgusted()+"1");
+		emotion.setFearful(emotion.getFearful()+"1");
+		emotion.setHappy(emotion.getHappy()+"1");
+		emotion.setNeutral(emotion.getNeutral()+"1");
+		emotion.setSad(emotion.getSad()+"1");
+		emotion.setSurprised(emotion.getSurprised()+"1");
 		emotionRepository.save(emotion);
 
 		return ResponseEntity.ok(SUCCESS);
+	}
+	
+	@GetMapping("/alllemotions")
+	public void alllemotion() {
+		List<Emotion> list = emotionRepository.findByAngry("");
+		for (Emotion emotion : list) {
+			emotion.setAngry("1");
+			emotion.setDisgusted("1");
+			emotion.setFearful("1");
+			emotion.setHappy("1");
+			emotion.setNeutral("1");
+			emotion.setSad("1");
+			emotion.setSurprised("1");
+			emotionRepository.save(emotion);
+		}
 	}
 
 	@GetMapping("/loadEmotion/{num}")
@@ -142,7 +164,7 @@ public class CounselingController {
 
 	@GetMapping("/myMenteeList/{num}")
 	public List<User> myMenteeList(@PathVariable(value = "num") Long num) {
-		List<ConRoom> list = conRoomRepository.findByMentor(num);
+		List<ConRoom> list = conRoomRepository.findByMentorAndStatus(num, "finish");
 		List<Long> result = new ArrayList<Long>();
 		for (ConRoom conRoom : list) {
 			result.add(conRoom.getMentee());
@@ -162,7 +184,7 @@ public class CounselingController {
 	@GetMapping("/myMenteeInfoList/{mentor}/{mentee}")
 	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor,
 			@PathVariable(value = "mentee") Long mentee) {
-		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeOrderByDateDesc(mentor, mentee);
+		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeAndStatusOrderByDateDesc(mentor, mentee, "finish");
 		return list;
 	}
 

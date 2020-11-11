@@ -1,8 +1,12 @@
 <template>
   <div>
     <v-tabs v-model="tab" background-color="" color="black" grow>
-      <v-tab style="font-size: 1.2rem">상담 내역</v-tab>
-      <v-tab style="font-size: 1.2rem">예약 내역</v-tab>
+      <v-tab style="font-size: 1.3rem"><v-icon class="mr-1" style="font-size: 1.5rem"
+            >mdi-book-open-outline</v-icon
+          >상담 내역</v-tab>
+      <v-tab style="font-size: 1.3rem"><v-icon class="mr-1" style="font-size: 1.5rem"
+            >mdi-clock-time-four-outline</v-icon
+          >예약 내역</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
@@ -108,22 +112,22 @@
                   </v-col>
                   <v-col class="pt-2 pb-0">
                     <v-btn
+                    text
+                    class="px-2 mt-1"
                       v-if="
                         item.date.slice(5, 7) == todaytime.getMonth() + 1 &&
                         item.date.slice(8, 10) == todaytime.getDate() &&
                         item.date.slice(11, 13) == todaytime.getHours()
                       "
-                      small
-                      color="orange lighten-4"
-                      text-color="red"
                       @click="startCounseling(item.num)"
-                      style="font-size: 0.9rem; color: red"
-                      >on-Air</v-btn
+                      style="font-size: 1rem; color: white;background-color:crimson; font-weight: bold; border:2px solid; border-radius:20px;height:30px;"
+                      
+                      >ON-AIR</v-btn
                     >
                     <v-btn
                       v-else
                       disabled
-                      style="font-size: 0.9rem; color: black"
+                      style="font-size: 1rem; color: black"
                       text
                       >on-Air</v-btn
                     >
@@ -282,10 +286,10 @@
         <v-card-text></v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="cancelDialog = false">
+          <v-btn color="#262272" text @click="cancelDialog = false">
             아니오
           </v-btn>
-          <v-btn color="green darken-1" text @click="cancel"> 예 </v-btn>
+          <v-btn color="#262272" text @click="cancel"> 예 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -378,7 +382,7 @@ export default {
     });
     http.get(`/schedule/myReservation/${this.getUserID}`).then((res) => {
       this.myReservation = res.data;
-      console.log(res.data)
+      // console.log(res.data)
       this.rpagingList = this.myReservation.slice(0, 8);
       // console.log(this.rpagingList)
       if (this.myReservation.length % 8 == 0) {
