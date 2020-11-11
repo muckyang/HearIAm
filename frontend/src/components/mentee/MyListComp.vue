@@ -101,39 +101,43 @@
             >
               <v-card class="mx-auto pa-3" height="195">
                 <div align="left" class="d-flex">
-                  <v-chip small color="#262272" label text-color="white">
-                    {{ getDday(item.sdate) }}
-                  </v-chip>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    v-if="
-                      item.sdate.slice(5, 7) == todaytime.getMonth() + 1 &&
-                      item.sdate.slice(8, 10) == todaytime.getDate() &&
-                      item.stime.slice(0, 2) == todaytime.getHours()
-                    "
-                    small
-                    color="orange lighten-4"
-                    text-color="red"
-                    @click="startCounseling(item.num)"
-                    style="font-size: 0.9rem; color: red"
-                    >on-Air</v-btn
-                  >
-                  <v-btn
-                    v-else
-                    small
-                    disabled
-                    style="font-size: 0.9rem; color: black"
-                    text
-                    >on-Air</v-btn
-                  >
+                  <v-col class="pb-0">
+                    <v-chip small color="#262272" label text-color="white">
+                      {{ getDday(item.date) }}
+                    </v-chip>
+                  </v-col>
+                  <v-col class="pt-2 pb-0">
+                    <v-btn
+                      v-if="
+                        item.date.slice(5, 7) == todaytime.getMonth() + 1 &&
+                        item.date.slice(8, 10) == todaytime.getDate() &&
+                        item.date.slice(11, 13) == todaytime.getHours()
+                      "
+                      small
+                      color="orange lighten-4"
+                      text-color="red"
+                      @click="startCounseling(item.num)"
+                      style="font-size: 0.9rem; color: red"
+                      >on-Air</v-btn
+                    >
+                    <v-btn
+                      v-else
+                      disabled
+                      style="font-size: 0.9rem; color: black"
+                      text
+                      >on-Air</v-btn
+                    >
+                  </v-col>
                 </div>
                 <div align="left" class="mt-1 pl-3">
-                  <h4>{{ item.sdate }}</h4>
+                  <h4>{{ item.date.slice(0,10) }}</h4>
                 </div>
                 <div>
-                  <h1>{{ item.stime }}</h1>
+                  <h1>{{ item.date.slice(11,16) }}</h1>
                 </div>
-                <div align="right">{{ findNameById(item.mentor) }} 상담사</div>
+                <div align="right">
+                  {{ findName(item.mentor) }} 상담사
+                </div>
                 <v-btn large icon color="red" @click="cancelD(item.num)"
                   ><v-icon>mdi-delete-forever-outline</v-icon></v-btn
                 >
@@ -374,7 +378,9 @@ export default {
     });
     http.get(`/schedule/myReservation/${this.getUserID}`).then((res) => {
       this.myReservation = res.data;
+      console.log(res.data)
       this.rpagingList = this.myReservation.slice(0, 8);
+      // console.log(this.rpagingList)
       if (this.myReservation.length % 8 == 0) {
         this.rpageLength = this.myReservation.length / 8;
       } else {
@@ -510,6 +516,7 @@ export default {
                     .get(`/schedule/myReservation/${this.getUserID}`)
                     .then((data) => {
                       this.myReservation = data.data;
+                      console.log(this.myReservation)
                       this.rpagingList = this.myReservation.slice(0, 8);
                       if (this.myReservation.length % 8 == 0) {
                         this.rpageLength = this.myReservation.length / 8;
@@ -539,6 +546,8 @@ export default {
               .get(`/schedule/myReservation/${this.getUserID}`)
               .then((data) => {
                 this.myReservation = data.data;
+                      console.log(this.myReservation)
+
                 this.rpagingList = this.myReservation.slice(0, 8);
                 if (this.myReservation.length % 8 == 0) {
                   this.rpageLength = this.myReservation.length / 8;
@@ -581,7 +590,7 @@ export default {
     getDday(day) {
       var year = day.slice(0, 4);
       var month = day.slice(5, 7);
-      var d = day.slice(8, 11);
+      var d = day.slice(8, 10);
       var Dday = new Date(year, month - 1, d);
       var now = new Date();
       var result = now.getDate() - Dday.getDate();

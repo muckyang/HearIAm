@@ -302,32 +302,44 @@ public class ScheduleController {
         return bool;
     }
 
-    @GetMapping("/myReservation/{mentee}")
-    public List<Schedule> myReservation(@PathVariable(value = "mentee") String mentee) {
-        List<Reservation> numList = reservationRepository.findByMentee(mentee);
-        List<Schedule> list = new ArrayList<Schedule>();
+
+    //멘토 
+    
+    // @GetMapping("/myReservation/{mentee}")
+    // public List<Schedule> myReservation(@PathVariable(value = "mentee") String mentee) {
+    //     List<Reservation> numList = reservationRepository.findByMentee(mentee);
+    //     List<Schedule> list = new ArrayList<Schedule>();
         
-        LocalDate today = LocalDate.now();
-        for (Reservation reservation : numList) {
-        	Schedule schedule = scheduleRepository.findByNum(reservation.getScheNum());
-        	if(!schedule.getSdate().isBefore(today)) {
-        		list.add(schedule);
-			}
+        
+    //     LocalDate today = LocalDate.now();
+    //     for (Reservation reservation : numList) {
+    //     	Schedule schedule = scheduleRepository.findByNum(reservation.getScheNum());
+    //     	if(!schedule.getSdate().isBefore(today)) {
+    //     		list.add(schedule);
+	// 		}
             
-        }
-        list.sort(new Comparator<Schedule>() {
-            @Override
-            public int compare(Schedule o1, Schedule o2) {
-                if (o1.getSdate().getDayOfYear() < o2.getSdate().getDayOfYear()) {
-                    return -1;
-                } else if (o1.getSdate().getDayOfYear() == o2.getSdate().getDayOfYear()) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            }
-        });
+    //     }
+    //     list.sort(new Comparator<Schedule>() {
+    //         @Override
+    //         public int compare(Schedule o1, Schedule o2) {
+    //             if (o1.getSdate().getDayOfYear() < o2.getSdate().getDayOfYear()) {
+    //                 return -1;
+    //             } else if (o1.getSdate().getDayOfYear() == o2.getSdate().getDayOfYear()) {
+    //                 return 0;
+    //             } else {
+    //                 return 1;
+    //             }
+    //         }
+    //     });
         
+    //     return list;
+    // }
+    @GetMapping("/myReservation/{mentee}")
+    public List<ConRoom> myReservation(@PathVariable(value = "mentee") String mentee) {
+        User user = userRepository.findById(mentee).get();
+        System.out.println(mentee);
+        List<ConRoom> list = conRoomRepository.findByAfterMenteeReservation(user.getNum(),LocalDateTime.now().plusHours(-1));
+        System.out.println(list.toString());
         return list;
     }
 
