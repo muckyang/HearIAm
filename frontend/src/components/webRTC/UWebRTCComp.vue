@@ -6,13 +6,13 @@
           <v-stepper v-model="e1">
             <v-stepper-header>
               <v-stepper-step :complete="e1 > 1" step="1">
-                실시간 상담 설명 1
+                익명성 보장
               </v-stepper-step>
 
               <v-divider></v-divider>
 
               <v-stepper-step :complete="e1 > 2" step="2">
-                실시간 상담 설명 2
+                사후 관리
               </v-stepper-step>
 
               <v-divider></v-divider>
@@ -25,21 +25,16 @@
             <v-stepper-items>
               <v-stepper-content step="1">
                 <v-card class="mb-12 pa-7" align="center" color="grey lighten-1" width="auto" height="400px"
-                  ><h1>HEAR I AM 소개 1</h1>
-                  <div style="width:200px; float:left" >
-                     <v-img
-                     style="float:top; width:200px; max-width: 70%; height: auto;"
-                    src="../../assets/icons/face-detection.png"
+                  ><h1>사용자의 익명성 보장</h1>
+                  <div class="mt-10" style="width:200px; float:left" >
+                   <v-img
+                     style="float:top; width:100%; max-width: 70%; height: auto;"
+                    src="../../assets/icons/anonymity.png"
                   ></v-img>
-                <br/>
-                  <v-img
-                    style="float:top; width:200px; max-width: 70%; height: auto;"
-                    src="../../assets/icons/graph.png"
-                  ></v-img>
-                  
                   </div>
-                  <div style="width:200px; float:left" >
-                    <h4> HEAR I AM 은 상담자에게 얼굴이 공개되지 않는 서비스로 사용자의 익명성이 보장됩니다.</h4>
+                  <div class="ml-15 mt-10" style="width:60%; height:auto; float:left;" >
+                     <p style=" font-size:1.5em;">HEAR I AM 은 상담자에게 얼굴이 공개되지 않는 서비스로 청소년의 익명성이 보장됩니다.</p>
+                     <p style=" font-size:1.5em;">다만, 청소년의 얼굴을 인식하여 감정분석의 용도로만 사용됩니다.</p>
                   </div>
                   </v-card>
 
@@ -50,27 +45,23 @@
 
               <v-stepper-content step="2">
                 <v-card class="mb-12 pa-7" color="grey lighten-1" height="400px" >
-                  <v-img
-                    style="float:left;"
-                    width="120px"
-                    height="120px"
-                    src="../../assets/icons/face-detection.png"
-                  ></v-img>
-                  <div float:left>
-                  <h4> HEAR I AM 은 상담자에게 얼굴이 공개되지 않는 서비스로 사용자의 익명성이 보장됩니다.</h4>
-                  </div>
-                  <v-img
-                    style="float:left;"
-                    width="120px"
-                    height="120px"
+              <h1>사후 관리</h1>
+                     <div class="mt-4 ml-15 " style="width:200px; float:left" >
+                  
+                       <v-img
+                     style="width:60%; max-width: 70%; height: auto;"
                     src="../../assets/icons/graph.png"
                   ></v-img>
-                  <v-img
-                    style="float:left;"
-                    width="120px"
-                    height="120px"
-                    src="../../assets/icons/anonymity.png"
+                       <v-img
+                     style="width:60%; max-width: 70%; height: auto;"
+                    src="../../assets/icons/document.png"
                   ></v-img>
+                   </div>
+                   <div class="ml-7 mt-10" style="width:60%; height:auto; float:left;" >
+                     <p style=" font-size:1.5em;">HEAR I AM 은 상담자에게 얼굴이 공개되지 않는 서비스로 청소년의 익명성이 보장됩니다.</p>
+                     <p style=" font-size:1.5em;">다만, 청소년의 얼굴을 인식하여 감정분석의 용도로만 사용됩니다.</p>
+                  </div>
+                
                 </v-card>
                 <v-btn color="primary" @click="createRoom">
                   상담시작!

@@ -451,6 +451,9 @@ export default {
       }
     },
     signUpRequest() {
+      if(this.name == ""){
+        this.name = "청소년";
+      }
       http2
         .post("/signup", {
           id: this.id,

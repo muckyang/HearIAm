@@ -9,7 +9,9 @@
       scroll-target="#scrolling-techniques-4"
       style="background-color: rgba(255, 255, 255, 0)"
     >
-      <v-btn class="shadow d-none d-sm-flex" text @click="goHome()"><h2>Hear I Am</h2></v-btn>
+      <v-btn class="shadow d-none d-sm-flex" text @click="goHome()"
+        ><h2>Hear I Am</h2></v-btn
+      >
       <v-spacer class="d-none d-sm-flex"></v-spacer>
       <v-btn
         class="shadow d-none d-sm-flex"
@@ -25,11 +27,19 @@
         @click="subscribe()"
         >실시간 상담 대기</v-btn
       >
-      <v-btn class="shadow d-none d-sm-flex" v-if="getRole == `mentee`" text @click="goLive()"
+      <v-btn
+        class="shadow d-none d-sm-flex"
+        v-if="getRole == `mentee`"
+        text
+        @click="goLive()"
         >실시간 상담</v-btn
       >
 
-      <v-btn class="shadow d-none d-sm-flex" v-if="getRole == `mentee`" text @click="goRecord()"
+      <v-btn
+        class="shadow d-none d-sm-flex"
+        v-if="getRole == `mentee`"
+        text
+        @click="goRecord()"
         >녹음 상담</v-btn
       >
       <v-btn
@@ -54,16 +64,23 @@
         @click="goMyMenteeList()"
         >일지 관리</v-btn
       >
-      <v-btn class="shadow d-none d-sm-flex" text @click="goMypage()">마이페이지</v-btn>
-      <v-btn class="shadow d-none d-sm-flex" text @click="logout()">로그아웃</v-btn>
+      <v-btn class="shadow d-none d-sm-flex" text @click="goMypage()"
+        >마이페이지</v-btn
+      >
+      <v-btn class="shadow d-none d-sm-flex" text @click="logout()"
+        >로그아웃</v-btn
+      >
     </v-app-bar>
     <v-sheet
       id="scrolling-techniques-4"
       class="overflow-y-auto"
       style="height: 100% !important"
     >
-      <div v-if="getUserName != ''" class="d-flex d-sm-none" 
-      style="position: absolute">
+      <div
+        v-if="getUserName != ''"
+        class="d-flex d-sm-none"
+        style="position: absolute"
+      >
         <input type="checkbox" id="menu__active" />
         <label for="menu__active" class="menu__active">
           <div class="menu__toggle">
@@ -73,37 +90,74 @@
           </div>
           <div class="menu__listings">
             <ul class="circle">
+              <li></li>
+              <li></li>
+              <li @click="logout()">
+                <p
+                  style="
+                    transform: rotate(185deg) skewY(54deg);
+                    position: absolute;
+                    top: 105px;
+                    left: 40px;
+                  "
+                >
+                  로그<br />아웃
+                </p>
+              </li>
+              <li @click="reser_dialog = true">
+                <p
+                  style="
+                    transform: rotate(185deg) skewY(54deg);
+                    position: absolute;
+                    top: 80px;
+                    left: 25px;
+                  "
+                >
+                  상담<br />예약
+                </p>
+              </li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
               <li>
+                <p
+                  @click="goMypage()"
+                  style="
+                    transform: rotate(185deg) skewY(55deg);
+                    position: absolute;
+                    top: 80px;
+                    left: 15px;
+                  "
+                >
+                  마이<br />페이지
+                </p>
               </li>
               <li>
+                <p
+                  style="
+                    transform: rotate(185deg) skewY(54deg);
+                    position: absolute;
+                    top: 90px;
+                    left: 15px;
+                  "
+                >
+                  실시간<br />상담
+                </p>
               </li>
-              <li  @click="logout()">
-                <p style="transform: rotate(185deg) skewY(54deg); 
-                    position:absolute; top:105px; left: 40px">로그<br />아웃</p>
+              <li @click="a()">
+                <p
+                  style="
+                    transform: rotate(185deg) skewY(54deg);
+                    position: absolute;
+                    top: 80px;
+                    left: 20px;
+                  "
+                >
+                  녹음<br />
+                  상담
+                </p>
               </li>
-              <li  @click="reser_dialog = true">
-                    <p style="transform: rotate(185deg) skewY(54deg); 
-                    position:absolute; top:80px; left: 25px">상담<br />예약</p>
-              </li>
-              <li>
-              </li>
-              <li>
-              </li>
-              <li>
-              </li>
-              <li>
-              </li>
-              <li>
-                  <p @click="goMypage()" style="transform: rotate(185deg) skewY(55deg); 
-                    position:absolute; top:80px; left: 15px">마이<br />페이지</p>
-              </li>
-              <li >
-                    <p style="transform: rotate(185deg) skewY(54deg); position:absolute; top:90px; left: 15px">실시간<br />상담</p>
-              </li>
-              <li  @click="a();" >
-                    <p style="transform: rotate(185deg) skewY(54deg); position:absolute; top:80px; left: 20px" >녹음<br /> 상담</p>
-              </li>
-              
             </ul>
           </div>
         </label>
@@ -113,40 +167,74 @@
       </v-main>
     </v-sheet>
 
-    <v-speed-dial
-      v-model="center"
-      v-if="getRole == `mentee`"
-      bottom
-      right
-      fixed
-      direction="top"
-      transition="slide-x-reverse-transition"
-    >
-      <template v-slot:activator>
-        <v-btn class="d-none d-sm-flex" v-model="center" color="#49358b" dark fab @click="viewCenter()">
-          <v-icon> mdi-map </v-icon>
-        </v-btn>
-        <v-btn class="d-flex d-sm-none" v-model="center" color="#49358b" dark small fab @click="viewCenter()">
-          <v-icon small> mdi-map </v-icon>
-        </v-btn>
+    <v-tooltip right>
+      <template v-slot:activator="{ on, attrs }">
+        <span v-bind="attrs" v-on="on">
+          <v-speed-dial
+            v-model="center"
+            v-if="getRole == `mentee`"
+            bottom
+            right
+            fixed
+            direction="top"
+            transition="slide-x-reverse-transition"
+          >
+            <template v-slot:activator>
+              <v-btn
+                class="d-none d-sm-flex"
+                v-model="center"
+                color="#49358b"
+                dark
+                fab
+                @click="viewCenter()"
+              >
+                <v-icon> mdi-map </v-icon>
+              </v-btn>
+              <v-btn
+                class="d-flex d-sm-none"
+                v-model="center"
+                color="#49358b"
+                dark
+                small
+                fab
+                @click="viewCenter()"
+              >
+                <v-icon small> mdi-map </v-icon>
+              </v-btn>
+            </template>
+          </v-speed-dial>
+        </span>
       </template>
-    </v-speed-dial>
-
+      <span>상담센터 검색</span>
+    </v-tooltip>
     <alarmComp v-if="getRole == `mentor`"></alarmComp>
 
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
-      <div class="px-5 pt-5 reser-back">
-        <h1>실시간 상담 예약</h1>
+      <div class="px-5 pt-5 reser-back" >
+        <span style="font-size: 2rem; font-weight:bold;">실시간 상담 예약</span>
+        <v-icon
+          class="mb-3"
+          color="red"
+          style="float: right"
+          @click="reser_dialog=false"
+          >mdi-close</v-icon
+        >
         <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()" />
       </div>
     </v-dialog>
 
     <v-dialog v-model="center_dialog" width="90%">
-       <div class="px-5 pt-5 content-box container" style="overflow-y:scroll;">
-          <span style="font-size:1.8rem;">상담센터 찾기</span>
-          <v-icon class="mb-3" color="red" style="float:right;" @click="center_dialog = false">mdi-close</v-icon>
-          <CounsultingCenter />
-       </div>
+      <div class="px-5 pt-5 center-back" style="overflow-y: scroll">
+        <span style="font-size: 2rem; font-weight:bold;">청소년 상담센터 찾기</span>
+        <v-icon
+          class="mb-3"
+          color="red"
+          style="float: right"
+          @click="center_dialog = false"
+          >mdi-close</v-icon
+        >
+        <CounsultingCenter />
+      </div>
     </v-dialog>
 
     <v-snackbar
@@ -203,10 +291,10 @@ export default {
     }
   },
   methods: {
-    a(){
+    a() {
       alert("a");
     },
-    b(){
+    b() {
       alert("b");
     },
     logout: function () {
@@ -407,8 +495,20 @@ html {
   background-origin: border-box;
   border: 10px solid transparent;
   border-radius: 25px;
-  box-shadow: inset 0 0 2px white,
+  box-shadow: inset 0 0 0px white,
     /* Inset shadow */ /*0 0 12px white, /* Outset shadow */ inset -999px 0 0 white; /* The background color */
+}
+
+.center-back {
+  background-color: white;
+  background: -moz-linear-gradient(top left, #ff7987, #a23bbe);
+  background: -webkit-linear-gradient(top left, #ff7987, #a23bbe);
+  -moz-background-origin: border;
+  background-origin: border-box;
+  border: 10px solid transparent;
+  border-radius: 25px;
+  box-shadow: inset 0 0 2px white,
+    /* Inset shadow */ /*0 0 12px white, /* Outset shadow */ inset -1500px 0 0 white; /* The background color */
 }
 
 .icon {

@@ -2,7 +2,7 @@
   <div style="height: 100%; width: 100%" class="webRtc-back">
     <v-dialog v-model="dialog" persistent max-width="1300">
       <v-card style="background-color: white; border: 1px solid white;" outlined>
-        <v-container v-if="!menteeName" style="opacity: 1; height:400px;">
+        <v-container v-if="!isSangdam" style="opacity: 1; height:400px;">
           <h1 class="mt-15">
             상담 준비가 완료 되었다면 <br />
             시작버튼을 눌러주세요.
@@ -12,12 +12,12 @@
             style="font-size: 0.9rem; color:white"
              color="#262272"
             class="btn btn-primary mt-5"
-            @click="onJoin"
+            @click="sangdamStart()"
           >
             상담 시작
           </v-btn>
         </v-container>
-        <div style="height:600px;">
+        <div style="height:600px;" v-if="isSangdam">
           <v-row align="center" justify="center" style="height:100%;">
             <v-col cols="3" v-if="menteeName"> 
               <h2><span style="color:#262272">{{ menteeName }}</span>님과 상담중 입니다.</h2>
@@ -42,7 +42,7 @@
                 </div>
               </div>
             </v-col>
-            <v-col cols="4" style="height:100%; padding-top:4%;" v-if="menteeName">
+            <v-col cols="4" style="height:100%; padding-top:4%;">
               <div
                 v-if="menteeName"
                 align="center"
@@ -163,6 +163,7 @@ export default {
       dialog: true,
       successSnack: false,
       altMsg: "",
+      isSangdam: false,
     };
   },
   mounted() {
@@ -173,6 +174,12 @@ export default {
     this.fillData();
   },
   methods: {
+    sangdamStart(){
+      this.isSangdam = true;
+      setTimeout(() => {
+        this.onJoin();
+      }, 1000);
+    },
     onJoin() {
       this.isProgress = true;
       http.put(
