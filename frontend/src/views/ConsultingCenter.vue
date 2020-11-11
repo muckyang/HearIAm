@@ -4,7 +4,7 @@
       <v-row>
         <v-col class="pt-7 col-lg-5 col-md-5 col-sm-12 col-xs-12">
           <v-card> <div id="map" style="height: 365px; width: 100%" /> </v-card><br />
-          <v-btn color="#262272" style="color:white;" small @click="goNowLocation()">현위치로 이동</v-btn>
+          <v-btn color="#262272" style="color:white; border-radius:30px;" small @click="goNowLocation()"> <v-icon small dark>mdi-map-marker</v-icon>내 위치로 이동</v-btn>
         </v-col>
         <v-col class="pt-0" align="center">
           <v-row class="d-none d-sm-flex">
@@ -31,10 +31,10 @@
                     <tr v-for="item in pagingList" :key="item.address">
                       <td class="text-center">
                         <v-btn
+                        text
                           small
                           @click="goCenter(item)"
-                          style="font-size: 0.9rem;color:white;"
-                          color="#262272"
+                          style="font-size: 0.9rem;color:#262272; font-weight:bold;"
                         >
                           {{ item.name }}
                         </v-btn>

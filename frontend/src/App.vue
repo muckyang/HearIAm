@@ -210,15 +210,22 @@
     <alarmComp v-if="getRole == `mentor`"></alarmComp>
 
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
-      <div class="px-5 pt-5 reser-back">
-        <h1>실시간 상담 예약</h1>
+      <div class="px-5 pt-5 reser-back" >
+        <span style="font-size: 2rem; font-weight:bold;">실시간 상담 예약</span>
+        <v-icon
+          class="mb-3"
+          color="red"
+          style="float: right"
+          @click="reser_dialog=false"
+          >mdi-close</v-icon
+        >
         <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()" />
       </div>
     </v-dialog>
 
     <v-dialog v-model="center_dialog" width="90%">
-      <div class="px-5 pt-5 content-box container" style="overflow-y: scroll">
-        <span style="font-size: 1.8rem">청소년 상담센터 찾기</span>
+      <div class="px-5 pt-5 center-back" style="overflow-y: scroll">
+        <span style="font-size: 2rem; font-weight:bold;">청소년 상담센터 찾기</span>
         <v-icon
           class="mb-3"
           color="red"
@@ -488,8 +495,20 @@ html {
   background-origin: border-box;
   border: 10px solid transparent;
   border-radius: 25px;
-  box-shadow: inset 0 0 2px white,
+  box-shadow: inset 0 0 0px white,
     /* Inset shadow */ /*0 0 12px white, /* Outset shadow */ inset -999px 0 0 white; /* The background color */
+}
+
+.center-back {
+  background-color: white;
+  background: -moz-linear-gradient(top left, #ff7987, #a23bbe);
+  background: -webkit-linear-gradient(top left, #ff7987, #a23bbe);
+  -moz-background-origin: border;
+  background-origin: border-box;
+  border: 10px solid transparent;
+  border-radius: 25px;
+  box-shadow: inset 0 0 2px white,
+    /* Inset shadow */ /*0 0 12px white, /* Outset shadow */ inset -1500px 0 0 white; /* The background color */
 }
 
 .icon {
