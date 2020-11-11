@@ -235,24 +235,32 @@ export default {
         this.emotion[6],
         `|`
       );
-      console.dir(this.allEmotion);
+      // console.dir(this.allEmotion);
       this.fillData();
     },
     fillData() {
       this.chartData = {
         labels: [
-          "angry",
-          "disgusted",
-          "fearful",
-          "happy",
-          "neutral",
-          "sad",
-          "surprised",
+          "화남",
+          "역겨움",
+          "두려움",
+          "행복",
+          "무표정",
+          "슬픔",
+          "놀람",
         ],
         datasets: [
           {
             label: "Emotion",
-            backgroundColor: "#f87979",
+            backgroundColor: [
+              "#031926",
+              "#468189",
+              "#77ACA2",
+              "#9DBEBB",
+              "#F4E9CD",
+              "#E9D758",
+              "#FF8552",
+            ],
             data: this.emotion,
           },
         ],

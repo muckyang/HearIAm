@@ -124,8 +124,11 @@
       transition="slide-x-reverse-transition"
     >
       <template v-slot:activator>
-        <v-btn v-model="center" color="#49358b" dark fab @click="viewCenter()">
+        <v-btn class="d-none d-sm-flex" v-model="center" color="#49358b" dark fab @click="viewCenter()">
           <v-icon> mdi-map </v-icon>
+        </v-btn>
+        <v-btn class="d-flex d-sm-none" v-model="center" color="#49358b" dark small fab @click="viewCenter()">
+          <v-icon small> mdi-map </v-icon>
         </v-btn>
       </template>
     </v-speed-dial>
@@ -228,8 +231,8 @@ export default {
       http
         .get(`/counseling/isMentee`)
         .then((res) => {
-          console.dir(res);
-          console.log(res.data);
+          // console.dir(res);
+          // console.log(res.data);
           if (res.data == 0) {
             this.errorSnack = true;
             this.altMsg = "대기중인 멘토가 없어요! 예약하기를 이용해주세요!";
@@ -255,7 +258,7 @@ export default {
     },
     subscribe() {
       http.get(`/counseling/liveList`);
-      console.log("click subscribe btn");
+      // console.log("click subscribe btn");
       this.$store.commit("changeIsReady", true);
       this.subscribeTokenToTopic(this.getDeviceID, this.topic);
       // let mentorname = this.$store.getters['getUserNum'];

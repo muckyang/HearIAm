@@ -108,7 +108,7 @@ export default {
     setDeviceId(userId) {
       //device id 가져옴.
       let devecieId = this.$store.getters["getDeviceID"];
-      console.log("store - " + devecieId);
+      // console.log("store - " + devecieId);
       http
         .put(`/user/userDId/${userId}/${devecieId}`)
         .then((res) => {

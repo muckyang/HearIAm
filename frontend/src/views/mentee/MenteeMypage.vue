@@ -9,9 +9,10 @@
     align="center"
   >
     <!-- <v-container> -->
-      <div class="px-5 pt-5 content-box">
+      <div class="px-5 pt-5 content-box" style="overflow-y:scroll;">
         <MyListComp />
-        <div style="position:absolute; bottom:2.3rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
+        <div class="d-none d-sm-flex" style="position:absolute; bottom:2.3rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
+        <div class="d-flex d-sm-none" style="position:absolute; left:35px;top:85px;color:black;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon></span></div>
       </div>
     <!-- </v-container> -->
   </div>

@@ -12,7 +12,7 @@
 
     <!-- S1 -->
     <div v-if="!flag1" class="record-first-ment" style="height:300px; padding-top:50px;">
-      <h1 style="color:white;font-size:4rem;">당신의 고민은 무엇인가요?</h1>
+      <h1 style="color:white;font-size:6vw;">당신의 고민은 무엇인가요?</h1>
     </div>
 
     <!-- S2 -->
@@ -35,7 +35,7 @@
                   <v-layout align-center justify-center>
                     <v-card-title class="title white--text" style="opacity: 1;" @click="clickBtn(i)">
                       <div>
-                        <p class="ma-0 font-weight-bold text-center" style="font-size: 2em;">
+                        <p class="ma-0 font-weight-bold text-center" style="font-size: 3.5vw;">
                           {{ itm.text }}
                         </p>
                         <v-divider class="my-10 white" style="opacity: 1"></v-divider>
@@ -54,16 +54,16 @@
     </v-row>
 
     <!-- Question1 -->
-    <div v-if="alertFlag" class="record-alert mx-15" data-sal="slide-right" data-sal-delay="300" data-sal-duration="600">
-      <v-alert id="f-alert" elevation="10" prominent dark color="#49358b">
+    <div v-if="alertFlag" class="record-alert mx-10" data-sal="slide-right" data-sal-delay="300" data-sal-duration="600">
+      <v-alert id="f-alert" elevation="10" prominent dark color="#49358b" class="ma-0">
         <div class="d-flex mb-3">
           <v-icon class="mr-3">mdi-help-circle-outline</v-icon>
-          <h2>고민을 선택해주세요.</h2>
+          <h3>고민을 선택해주세요.</h3>
         </div>
-        <v-col cols="12" sm="7" class="pb-0">
+        <v-col cols="10" lg="6" class="pb-0" align="left">
           <v-select v-model="concern" class="ml-5" :items="items" light label="고민이 무엇인가요?" solo></v-select>
         </v-col>
-        <v-col cols="7" class="py-0">
+        <v-col cols="12" lg="7" class="py-0">
           <v-text-field class="py-0 ml-5" v-if="writeFlag" v-model="myConcern" label="고민을 입력해주세요"></v-text-field>
           <div v-else style="height: 50px"></div>
         </v-col>
@@ -71,7 +71,7 @@
           <v-btn
             v-if="(concern != '' && concern != '직접 입력') || myConcern != ''"
             icon
-            style="float: right"
+            style="float: left"
             @click="(flag1 = true), (flag2 = true), (alertFlag = false)"
             ><v-icon large>mdi-arrow-right-bold-outline</v-icon></v-btn
           >
@@ -85,15 +85,17 @@
         <v-alert id="f-alert" elevation="5" prominent dark color="#49358b">
           <div class="d-flex mb-3">
             <v-icon class="mr-3">mdi-information-outline</v-icon>
-            <h2>녹음상담 사용방법</h2>
+            <h3>녹음상담 사용방법</h3>
           </div>
-          <div class="d-flex ml-8 mt-5">
-            <v-img max-height="50" max-width="50" src="../../assets/rec1.png"></v-img>
-            <h3 class="mt-2 ml-5">버튼을 누르면 녹음이 시작됩니다.</h3>
+          <div class="d-flex ml-8 mt-8">
+            <v-img class="d-none d-sm-flex" max-height="50" max-width="50" src="../../assets/rec1.png"></v-img>
+            <v-img class="d-flex d-sm-none" max-height="30" max-width="30" src="../../assets/rec1.png"></v-img>
+            <h3 class="mt-1 ml-5" style="font-size:2vw;">버튼을 누르면 녹음이 시작됩니다.</h3>
           </div>
-          <div class="d-flex ml-8 mt-5">
-            <v-img max-height="50" max-width="50" src="../../assets/rec2.png"></v-img>
-            <h3 class="mt-2 ml-5">버튼을 누르면 녹음이 종료됩니다.</h3>
+          <div class="d-flex ml-8 mt-8">
+            <v-img class="d-none d-sm-flex" max-height="50" max-width="50" src="../../assets/rec2.png"></v-img>
+            <v-img class="d-flex d-sm-none" max-height="30" max-width="30" src="../../assets/rec2.png"></v-img>
+            <h3 class="mt-1 ml-5" style="font-size:2vw;">버튼을 누르면 녹음이 종료됩니다.</h3>
           </div>
         </v-alert>
       </div>

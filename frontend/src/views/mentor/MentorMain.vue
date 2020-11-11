@@ -236,7 +236,7 @@ export default {
       this.$router.push(`/recordList`);
     },
     unsubscribe() {
-      console.log("hhhhhhh");
+      // console.log("hhhhhhh");
       this.errorSnack = true;
       this.altMsg = "상담이 취소되었습니다. ";
         this.$store.commit("changeIsReady", false);
