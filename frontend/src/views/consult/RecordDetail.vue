@@ -24,7 +24,9 @@
         </v-col>
         <v-col cols="7" class="pb-0 pt-10">
           <div align="left" class="ml-3 mb-2" style="font-size: 0.9rem">
-            <span>* 재생하기 버튼을 눌러 녹음 내용을 들은 후, 답변을 입력해주세요.</span
+            <span
+              >* 재생하기 버튼을 눌러 녹음 내용을 들은 후, 답변을
+              입력해주세요.</span
             >
           </div>
           <v-textarea
@@ -39,10 +41,7 @@
           ></v-textarea>
           <v-row justify="center">
             <v-col class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-              <v-btn
-                @click="playAudio()"
-                class="main-btn"
-                large
+              <v-btn @click="playAudio()" class="main-btn" large
                 >재생하기</v-btn
               >
               <audio id="audio"></audio>
@@ -152,20 +151,22 @@ export default {
     http
       .get(`/counseling/loadEmotion/${this.$route.params.num}`)
       .then((res) => {
-        this.angry = res.data.angry.split(`|`).map(Number);
-        this.disgusted = res.data.disgusted.split(`|`).map(Number);
-        this.fearful = res.data.fearful.split(`|`).map(Number);
-        this.happy = res.data.happy.split(`|`).map(Number);
-        this.neutral = res.data.neutral.split(`|`).map(Number);
-        this.sad = res.data.sad.split(`|`).map(Number);
-        this.surprised = res.data.surprised.split(`|`).map(Number);
+        if (res.data != null) {
+          this.angry = res.data.angry.split(`|`).map(Number);
+          this.disgusted = res.data.disgusted.split(`|`).map(Number);
+          this.fearful = res.data.fearful.split(`|`).map(Number);
+          this.happy = res.data.happy.split(`|`).map(Number);
+          this.neutral = res.data.neutral.split(`|`).map(Number);
+          this.sad = res.data.sad.split(`|`).map(Number);
+          this.surprised = res.data.surprised.split(`|`).map(Number);
+        }
       });
     this.fillData();
   },
   mounted() {
     let that = this;
     let audio = document.getElementById("audio");
-    audio.addEventListener("timeupdate", function() {
+    audio.addEventListener("timeupdate", function () {
       that.playtime = audio.currentTime.toFixed();
     });
   },
@@ -210,15 +211,7 @@ export default {
     },
     fillData() {
       this.chartData = {
-        labels: [
-          "화남",
-          "역겨움",
-          "두려움",
-          "행복",
-          "무표정",
-          "슬픔",
-          "놀람",
-        ],
+        labels: ["화남", "역겨움", "두려움", "행복", "무표정", "슬픔", "놀람"],
         datasets: [
           {
             label: "실시간 감정 정보",
