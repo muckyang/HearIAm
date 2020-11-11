@@ -108,22 +108,22 @@
                   </v-col>
                   <v-col class="pt-2 pb-0">
                     <v-btn
+                    text
+                    class="px-2 mt-1"
                       v-if="
                         item.date.slice(5, 7) == todaytime.getMonth() + 1 &&
                         item.date.slice(8, 10) == todaytime.getDate() &&
                         item.date.slice(11, 13) == todaytime.getHours()
                       "
-                      small
-                      color="orange lighten-4"
-                      text-color="red"
                       @click="startCounseling(item.num)"
-                      style="font-size: 0.9rem; color: red"
-                      >on-Air</v-btn
+                      style="font-size: 1rem; color: white;background-color:crimson; font-weight: bold; border:2px solid; border-radius:20px;height:30px;"
+                      
+                      >ON-AIR</v-btn
                     >
                     <v-btn
                       v-else
                       disabled
-                      style="font-size: 0.9rem; color: black"
+                      style="font-size: 1rem; color: black"
                       text
                       >on-Air</v-btn
                     >
