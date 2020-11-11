@@ -4,14 +4,15 @@
       height: 100%;
       width: 100%;
       background-color: #0f0d2d;
-      padding-top: 64px;
+      padding-top: 70px;
     "
     align="center"
   >
     <div class="px-5 pt-3 content-box">
-      <h1>나의 학생 일지 관리</h1>
-      <v-divider class="mt-3 mb-3"></v-divider>
-      <v-row>
+      <h1 class="mb-1">청소년 일지 관리</h1>
+      <span>내가 상담한 청소년의 상담 일지를 날짜별로 확인할 수 있습니다.</span>
+      <!-- <v-divider class="mt-3 mb-3"></v-divider> -->
+      <v-row class="mt-5" style="padding-left:50px;padding-right:50px">
         <v-col
           cols="12"
           sm="6"
@@ -24,6 +25,7 @@
             @click="menteeInfo(item.num, item.name)"
             height="200"
             style="overflow:hidden;"
+            elevation="4"
           >
             <div class="one-box" align="center" style="height:100%;width:100%;">
               <div style="width: 80%; height: 75%">
@@ -43,7 +45,7 @@
           </v-card>
         </v-col>
       </v-row>
-              <div style="position:absolute; bottom:2.3rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
+      <div style="position:absolute; bottom:2.3rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
 
     </div>
   </div>
