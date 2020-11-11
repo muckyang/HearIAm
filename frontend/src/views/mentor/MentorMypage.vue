@@ -31,6 +31,11 @@
       </v-tabs>
 
       <v-tabs-items v-model="tab">
+        <div style="padding-top:1rem;">
+        </div>
+        <div style="position:absolute;">
+        <span class="icon-line ml-2" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span>
+      </div>
         <v-tab-item>
           <div style="margin: 0 auto; padding: 20px">
             <Scheduler
@@ -97,6 +102,9 @@ export default {
       }else if(n==0){
         document.getElementById('mypage').style.height="auto";
       }
+    },
+    goBack(){
+      this.$router.push("/")
     }
   }
 };
