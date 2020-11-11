@@ -142,11 +142,12 @@
       </div>
     </v-dialog>
 
-    <v-dialog v-model="center_dialog" max-width="1200" max-height="500">
-      <div class="px-5 pt-5 content-box">
-        <h1>상담센터 찾기</h1>
-        <CounsultingCenter />
-      </div>
+    <v-dialog v-model="center_dialog" width="90%">
+       <div class="px-5 pt-5 content-box container" style="overflow-y:scroll;">
+          <span style="font-size:1.8rem;">상담센터 찾기</span>
+          <v-icon class="mb-3" color="red" style="float:right;" @click="center_dialog = false">mdi-close</v-icon>
+          <CounsultingCenter />
+       </div>
     </v-dialog>
 
     <v-snackbar
