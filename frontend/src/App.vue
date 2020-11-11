@@ -175,8 +175,8 @@ export default {
       http
         .get(`/counseling/isMentee`)
         .then((res) => {
-          console.dir(res);
-          console.log(res.data);
+          // console.dir(res);
+          // console.log(res.data);
           if (res.data == 0) {
             this.errorSnack = true;
             this.altMsg = "대기중인 멘토가 없어요! 예약하기를 이용해주세요!";
@@ -202,7 +202,7 @@ export default {
     },
     subscribe() {
       http.get(`/counseling/liveList`);
-      console.log("click subscribe btn");
+      // console.log("click subscribe btn");
       this.$store.commit("changeIsReady", true);
       this.subscribeTokenToTopic(this.getDeviceID, this.topic);
       // let mentorname = this.$store.getters['getUserNum'];

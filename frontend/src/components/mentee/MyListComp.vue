@@ -125,7 +125,7 @@
                       disabled
                       style="font-size: 0.9rem; color: black"
                       text
-                      >on-air</v-btn
+                      >on-Air</v-btn
                     >
                   </v-col>
                 </div>

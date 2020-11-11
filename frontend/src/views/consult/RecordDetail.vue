@@ -168,7 +168,7 @@ export default {
   mounted() {
     let that = this;
     let audio = document.getElementById("convert");
-    audio.addEventListener("timeupdate", function () {
+    audio.addEventListener("timeupdate", function() {
       that.playtime = audio.currentTime.toFixed();
     });
   },
@@ -242,7 +242,7 @@ export default {
 
       let outputAudioBuffer = this.robot1Transform(AudioBuffer);
 
-      outputAudioBuffer.then(function (result) {
+      outputAudioBuffer.then(function(result) {
         var anchor = document.getElementById("convert");
 
         var wav = bufferToWav(result);
@@ -325,5 +325,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
