@@ -18,7 +18,7 @@
     <v-dialog v-model="login_dialog" max-width="500" min-height="700">
       <v-card rounded style="padding: 50px;">
         <v-card-title class="text-center justify-center p-8">
-          <p style="font-family: 'Capriola'; font-size: 3rem; font-weight: 700">
+          <p style="font-family: 'Short Stack', cursive; font-size: 4vw; font-weight: 700">
             Hear I Am
           </p>
         </v-card-title>
@@ -81,7 +81,7 @@ export default {
       setTimeout(() => {
         document.getElementById('fade-out').setAttribute('style', 'display:none');
         this.mainFlag = true;
-      }, 6000);
+      }, 4000);
     },
   },
   computed: {
@@ -141,8 +141,8 @@ export default {
   opacity: 100;
 }
 .fade-in {
-  -webkit-animation: fadeIn 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  animation: fadeIn 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  -webkit-animation: fadeIn 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: fadeIn 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .first-text {
   position: absolute;
