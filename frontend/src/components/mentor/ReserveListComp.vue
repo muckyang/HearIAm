@@ -20,13 +20,18 @@
                         item.date.slice(11, 13) == todaytime.getHours()
                     "
                     small
-                    color="orange lighten-4"
+                    text
                     text-color="red"
                     @click="startCounseling(item)"
-                    style="font-size:1rem;color:red"
-                    >on-Air</v-btn
-                  >
-                  <v-btn v-else disabled text style="font-size:0.9rem;color:black">on-Air</v-btn>
+                    style="font-size:1rem;color:red;"
+                    >ON-AIR</v-btn
+                  ><br>
+                  <span v-if="
+                      item.date.slice(5, 7) == todaytime.getMonth() + 1 &&
+                        item.date.slice(8, 10) == todaytime.getDate() &&
+                        item.date.slice(11, 13) == todaytime.getHours()
+                    "> ON-AIR를 클릭하여 상담을 시작하세요!</span>
+                  <v-btn v-else disabled text style="font-size:1rem;color:black">on-Air</v-btn>
               </div>
             </v-col>
             <v-col class="col-lg-4 col-md-4 col-sm-3 col-xs-10">
