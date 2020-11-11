@@ -155,17 +155,17 @@ export default {
       this.$store.commit("changeAlarmBtn", "#49358b");
     },
   },
-  // updated() {
-  //   http
-  //     .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
-  //     .then((res) => {
-  //       this.$store.commit("setAlarmList", res.data);
-  //       let len = this.$store.getters["getAlarmList"].length;
-  //       if (len > 0) {
-  //         this.$store.commit("changeAlarmBtn", "#F44336");
-  //       }
-  //     });
-  // },
+  updated() {
+    http
+      .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
+      .then((res) => {
+        this.$store.commit("setAlarmList", res.data);
+        let len = this.$store.getters["getAlarmList"].length;
+        if (len > 0) {
+          this.$store.commit("changeAlarmBtn", "#F44336");
+        }
+      });
+  },
   computed: {
     ...mapGetters([
       "getUserName",
