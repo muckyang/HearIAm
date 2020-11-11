@@ -99,35 +99,33 @@
               sm="6"
               md="3"
             >
-              <v-card class="mx-auto pa-3" height="200">
+              <v-card class="mx-auto pa-3" height="195">
                 <div align="left" class="d-flex">
-                  <v-col class="pb-0">
-                    <v-chip small color="#262272" label text-color="white">
-                      {{ getDday(item.sdate) }}
-                    </v-chip>
-                  </v-col>
-                  <v-col class="pt-2 pb-0">
-                    <v-btn
-                      v-if="
-                        item.sdate.slice(5, 7) == todaytime.getMonth() + 1 &&
-                        item.sdate.slice(8, 10) == todaytime.getDate() &&
-                        item.stime.slice(0, 2) == todaytime.getHours()
-                      "
-                      small
-                      color="orange lighten-4"
-                      text-color="red"
-                      @click="startCounseling(item.num)"
-                      style="font-size: 0.9rem; color: red"
-                      >on-Air</v-btn
-                    >
-                    <v-btn
-                      v-else
-                      disabled
-                      style="font-size: 0.9rem; color: black"
-                      text
-                      >on-Air</v-btn
-                    >
-                  </v-col>
+                  <v-chip small color="#262272" label text-color="white">
+                    {{ getDday(item.sdate) }}
+                  </v-chip>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    v-if="
+                      item.sdate.slice(5, 7) == todaytime.getMonth() + 1 &&
+                      item.sdate.slice(8, 10) == todaytime.getDate() &&
+                      item.stime.slice(0, 2) == todaytime.getHours()
+                    "
+                    small
+                    color="orange lighten-4"
+                    text-color="red"
+                    @click="startCounseling(item.num)"
+                    style="font-size: 0.9rem; color: red"
+                    >on-Air</v-btn
+                  >
+                  <v-btn
+                    v-else
+                    small
+                    disabled
+                    style="font-size: 0.9rem; color: black"
+                    text
+                    >on-Air</v-btn
+                  >
                 </div>
                 <div align="left" class="mt-1 pl-3">
                   <h4>{{ item.sdate }}</h4>
@@ -135,9 +133,7 @@
                 <div>
                   <h1>{{ item.stime }}</h1>
                 </div>
-                <div align="right">
-                  {{ item.mentor }}
-                </div>
+                <div align="right">{{ findNameById(item.mentor) }} 상담사</div>
                 <v-btn large icon color="red" @click="cancelD(item.num)"
                   ><v-icon>mdi-delete-forever-outline</v-icon></v-btn
                 >
@@ -397,6 +393,13 @@ export default {
     ]),
   },
   methods: {
+    findNameById(userid) {
+      for (let index = 0; index < this.userList.length; index++) {
+        if (this.userList[index].id == userid) {
+          return this.userList[index].name;
+        }
+      }
+    },
     findName(userNum) {
       for (let index = 0; index < this.userList.length; index++) {
         if (this.userList[index].num == userNum) {
