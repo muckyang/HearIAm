@@ -4,14 +4,17 @@
       width: 100%;
       padding-top: 70px;
       background-color: #0f0d2d;
-      padding-bottom: 30px;
       height: 100%;
     "
     align="center"
   >
     <div class="px-5 pt-5 content-box">
-        <div style="position:absolute;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>뒤로</span></div>
-
+      <div style="position: absolute">
+        <span class="icon-line" @click="goBack()"
+          ><v-icon style="color: crimson">mdi-arrow-left-thick</v-icon
+          >뒤로</span
+        >
+      </div>
       <h1 align="center">녹음 상담 답변하기</h1>
       <v-row style="height: 70%">
         <v-col cols="5">
@@ -20,6 +23,10 @@
           </div>
         </v-col>
         <v-col cols="7" class="pb-0 pt-10">
+          <div align="left" class="ml-3 mb-2" style="font-size: 0.9rem">
+            <span>* 재생하기 버튼을 눌러 녹음 내용을 들은 후, 답변을 입력해주세요.</span
+            >
+          </div>
           <v-textarea
             solo
             rounded
@@ -32,29 +39,37 @@
           ></v-textarea>
           <v-row justify="center">
             <v-col class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-              <v-btn @click="loadTransform()" v-if="!isPlay" class="main-btn" large
+              <v-btn
+                @click="loadTransform()"
+                v-if="!isPlay"
+                class="main-btn"
+                large
                 >재생하기</v-btn
               >
               <audio :src="getAudio(record.recordDir)" id="audio"></audio>
               <audio id="convert" :controls="isPlay"></audio>
             </v-col>
             <v-col class="mb-6 col-lg-5 col-md-5 col-sm-12 col-xs-12">
-              <v-btn @click="send" class="main-btn" large>답변하기</v-btn>
+              <v-btn @click="sendD" class="main-btn" large>답변완료</v-btn>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
-      <!-- <v-row>
-        <v-col class="col-lg-6 col-md-6 col-sm-12 col-xs-12"></v-col>
-        <v-col class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <v-btn @click="loadTransform()" v-if="!isPlay" class="main-btn">재생하기</v-btn>
-          <audio :src="getAudio(record.recordDir)" id="audio"></audio>
-          <audio id="convert" :controls="isPlay"></audio>
-        </v-col>
-        <v-col class="mb-6 col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <v-btn @click="send" class="main-btn">답변하기</v-btn>
-        </v-col>
-      </v-row> -->
+      <v-dialog v-model="sendDialog" persistent max-width="400">
+        <v-card>
+          <v-card-title style="font-size: 1.5rem">
+            답변을 완료하시겠습니까?
+          </v-card-title>
+          <v-card-text></v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="#262272" text @click="sendDialog = false">
+              아니오
+            </v-btn>
+            <v-btn color="#262272" text @click="send"> 예 </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
 
     <v-snackbar
@@ -62,6 +77,18 @@
       top
       flat
       color="success"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+    <v-snackbar
+      v-model="failSnack"
+      top
+      flat
+      color="error"
       rounded="pill"
       :timeout="2000"
     >
@@ -111,7 +138,9 @@ export default {
       playtime: null,
       isPlay: false,
       successSnack: false,
+      failSnack: false,
       altMsg: "",
+      sendDialog: false,
     };
   },
   created() {
@@ -144,14 +173,26 @@ export default {
     });
   },
   methods: {
-    goBack(){
+    goBack() {
       window.history.back();
     },
     getAudio(audio) {
       // return 'http://localhost:3000/record/' + audio;
       return "../../../record/" + audio;
     },
+    sendD() {
+      if (!this.isPlay) {
+        this.failSnack = true;
+        this.altMsg = "녹음 내용을 먼저 확인해주세요.";
+      } else if (this.answer.length == 0) {
+        this.failSnack = true;
+        this.altMsg = "답변을 입력해주세요.";
+      } else {
+        this.sendDialog = true;
+      }
+    },
     send() {
+      this.sendDialog = false;
       http
         .post(
           `/record/sendAnswer/${this.$route.params.num}/${this.getUserNum}`,
@@ -160,7 +201,11 @@ export default {
         .then(() => {
           this.successSnack = true;
           this.altMsg = "답변이 완료되었습니다.";
-          this.$router.push("/recordList");
+          setTimeout(() => {
+            this.$router.push("/recordList").catch((err) => {
+              console.log(err);
+            });
+          }, 1500);
         })
         .catch((err) => {
           console.log(err);
