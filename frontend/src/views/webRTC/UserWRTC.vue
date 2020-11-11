@@ -1,25 +1,29 @@
 <template>
   <div
-      style="
+    id="student-con"
+    style="
         height: 100vh;
         width: 100%;
-        background: linear-gradient(to right, #93dfff, #f5a2bb);
         padding-top: 64px;
       "
-    >
+  >
     <WebRTCComp />
   </div>
 </template>
 
 <script>
-import WebRTCComp from "@/components/webRTC/UWebRTCComp.vue";
+import WebRTCComp from '@/components/webRTC/UWebRTCComp.vue';
 export default {
-  name: "UserWRTC",
+  name: 'UserWRTC',
   components: {
     WebRTCComp,
   },
 };
 </script>
 
-<style>
+<style scoped>
+#student-con {
+  background-image: url('../../assets/recordMain.png');
+  background-size: cover;
+}
 </style>
