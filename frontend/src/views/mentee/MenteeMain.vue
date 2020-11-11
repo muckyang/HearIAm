@@ -122,8 +122,8 @@ export default {
       http
         .get(`/counseling/isMentee`)
         .then((res) => {
-          console.dir(res);
-          console.log(res.data);
+          // console.dir(res);
+          // console.log(res.data);
           if (res.data == 0) {
             this.errorSnack = true;
             this.altMsg = "대기중인 멘토가 없어요! 예약하기를 이용해주세요!";
