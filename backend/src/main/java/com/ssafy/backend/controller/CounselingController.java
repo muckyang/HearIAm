@@ -85,6 +85,21 @@ public class CounselingController {
 
 		return ResponseEntity.ok(SUCCESS);
 	}
+	
+	@GetMapping("/alllemotions")
+	public void alllemotion() {
+		List<Emotion> list = emotionRepository.findByAngry("");
+		for (Emotion emotion : list) {
+			emotion.setAngry("1");
+			emotion.setDisgusted("1");
+			emotion.setFearful("1");
+			emotion.setHappy("1");
+			emotion.setNeutral("1");
+			emotion.setSad("1");
+			emotion.setSurprised("1");
+			emotionRepository.save(emotion);
+		}
+	}
 
 	@GetMapping("/loadEmotion/{num}")
 	public Emotion loadEmotion(@PathVariable(value = "num") Long num) {
