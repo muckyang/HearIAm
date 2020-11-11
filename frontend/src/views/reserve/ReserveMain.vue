@@ -100,10 +100,10 @@
             </div>
           </v-col>
         </v-row> -->
-      <v-row class ="mt-4" justify="center">
+      <v-row class="mt-4" justify="center">
         <!-- <v-col class="pt-5 px-0 d-flex" align="center" justify="center"> -->
-          <v-btn class="main-btn mr-2" @click="closeDialog">취소</v-btn>
-          <v-btn class="main-btn" @click="reserveD" >예약하기</v-btn>
+        <v-btn class="main-btn mr-2" @click="closeDialog">취소</v-btn>
+        <v-btn class="main-btn" @click="reserveD">예약하기</v-btn>
         <!-- </v-col> -->
       </v-row>
     </v-sheet>
@@ -162,7 +162,7 @@ export default {
   },
   data() {
     return {
-      date: new Date().toISOString().substr(0, 10),
+      date: '',
       dateModal: false,
       timeModal: false,
       time: "",
@@ -185,7 +185,7 @@ export default {
       errorSnack: false,
       successSnack: false,
       altMsg: "",
-      selLabel:"시간을 선택해주세요.",
+      selLabel: "시간을 선택해주세요.",
     };
   },
   computed: {
@@ -242,7 +242,16 @@ export default {
           if (res.data.length == 0) {
             this.timeItems.push("예약 가능한 시간이 없습니다.");
           } else {
-            this.timeItems = res.data;
+            // this.timeItems = res.data;
+            for (const stime of res.data) {
+              if (this.date.split("-")[2] == new Date().getDate().toString()) {
+                if (stime.substr(0, 2) > new Date().getHours()) {
+                  this.timeItems.push(stime);
+                }
+              } else {
+                this.timeItems.push(stime);
+              }
+            }
           }
         })
         .catch((e) => {
@@ -302,9 +311,9 @@ export default {
         this.reserDialog = true;
       }
     },
-    closeDialog(){
+    closeDialog() {
       this.$emit("reserve", false);
-    }
+    },
   },
 };
 </script>
