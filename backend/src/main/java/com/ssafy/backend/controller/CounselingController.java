@@ -74,6 +74,13 @@ public class CounselingController {
 
 	@PostMapping("/saveEmotion")
 	public ResponseEntity<String> saveEmotion(@RequestBody Emotion emotion) {
+		emotion.setAngry(emotion.getAngry()+"1");
+		emotion.setDisgusted(emotion.getDisgusted()+"1");
+		emotion.setFearful(emotion.getFearful()+"1");
+		emotion.setHappy(emotion.getHappy()+"1");
+		emotion.setNeutral(emotion.getNeutral()+"1");
+		emotion.setSad(emotion.getSad()+"1");
+		emotion.setSurprised(emotion.getSurprised()+"1");
 		emotionRepository.save(emotion);
 
 		return ResponseEntity.ok(SUCCESS);

@@ -378,7 +378,7 @@ export default {
     });
     http.get(`/schedule/myReservation/${this.getUserID}`).then((res) => {
       this.myReservation = res.data;
-      console.log(res.data)
+      // console.log(res.data)
       this.rpagingList = this.myReservation.slice(0, 8);
       // console.log(this.rpagingList)
       if (this.myReservation.length % 8 == 0) {
