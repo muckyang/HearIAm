@@ -2,13 +2,12 @@
   <div>
     <v-container>
       <v-row>
-        <v-col cols="5">
-          <v-card> <div id="map" style="height: 450px; width: 100%" /> </v-card
-          ><br />
-          <v-btn small @click="goNowLocation()">현위치로 이동</v-btn>
+        <v-col class="pt-7 col-lg-5 col-md-5 col-sm-12 col-xs-12">
+          <v-card> <div id="map" style="height: 365px; width: 100%" /> </v-card><br />
+          <v-btn color="#262272" style="color:white;" small @click="goNowLocation()">현위치로 이동</v-btn>
         </v-col>
-        <v-col>
-          <v-row>
+        <v-col class="pt-0" align="center">
+          <v-row class="d-none d-sm-flex">
             <v-select
               :items="regions"
               item-text="region"
@@ -34,7 +33,8 @@
                         <v-btn
                           small
                           @click="goCenter(item)"
-                          style="font-size: 0.9rem"
+                          style="font-size: 0.9rem;color:white;"
+                          color="#262272"
                         >
                           {{ item.name }}
                         </v-btn>
@@ -51,6 +51,45 @@
               </v-simple-table>
             </v-card>
           </v-row>
+
+          <v-row class="d-flex d-sm-none">
+            <v-select
+              :items="regions"
+              item-text="region"
+              item-value="region"
+              label="region"
+              solo
+              class="mt-7"
+              v-model="word"
+            ></v-select>
+            <v-simple-table style="width:500px;">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-center">기관 정보</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in pagingList" :key="item.address">
+                      <td class="text-center" style="font-size: 0.7rem;">
+                        <v-btn
+                          small
+                          @click="goCenter(item)"
+                          style="color:white;"
+                          color="#262272"
+                          class="my-2"
+                        >
+                          {{ item.name }}
+                        </v-btn>
+                        <p class="my-2">{{ item.phone }}</p>
+                        <p class="my-2">{{ item.address }}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+          </v-row>
+          
           <v-row>
             <v-col>
               <v-pagination
@@ -129,11 +168,11 @@ export default {
         document.head.appendChild(script);
       }
 
-      this.pagingList = this.centerList.slice(0, 6);
-      if (this.centerList.length % 6 == 0) {
-        this.pageLength = this.centerList.length / 6;
+      this.pagingList = this.centerList.slice(0, 5);
+      if (this.centerList.length % 5 == 0) {
+        this.pageLength = this.centerList.length / 5;
       } else {
-        this.pageLength = parseInt(this.centerList.length / 6) + 1;
+        this.pageLength = parseInt(this.centerList.length / 5) + 1;
       }
     });
   },
@@ -215,11 +254,11 @@ export default {
         );
         this.kakaomap.setLevel(this.selectedRegion.scale);
         this.centerList = res.data;
-        this.pagingList = this.centerList.slice(0, 6);
-        if (this.centerList.length % 6 == 0) {
-          this.pageLength = this.centerList.length / 6;
+        this.pagingList = this.centerList.slice(0, 5);
+        if (this.centerList.length % 5 == 0) {
+          this.pageLength = this.centerList.length / 5;
         } else {
-          this.pageLength = parseInt(this.centerList.length / 6) + 1;
+          this.pageLength = parseInt(this.centerList.length / 5) + 1;
         }
       });
     },
@@ -285,8 +324,8 @@ export default {
   },
   watch: {
     page(page) {
-      var first = (page - 1) * 6;
-      this.pagingList = this.centerList.slice(first, first + 6);
+      var first = (page - 1) * 5;
+      this.pagingList = this.centerList.slice(first, first + 5);
     },
     word() {
       this.onSubmit();
