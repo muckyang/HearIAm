@@ -1,24 +1,24 @@
 <template>
-  <div class="record-main container">
+  <div>
       <v-tabs v-if="page > 0" color="#262272" right v-model="nowPage">
         <v-tab v-for="i in page" :key="i" class="tab-menu-page">
           {{ i }}
         </v-tab>
         <v-tab-item v-for="n in page" :key="n">
-          <v-container>
+          <v-container class="pt-0">
             <v-row>
               <v-col v-for="(wait, index) in waitList" :key="index" cols="12" sm="6" md="3">
                 <v-card class="mx-auto">
-                  <div style="overflow:hidden; height:140px;">
+                  <div style="overflow:hidden; height:130px;">
                   <!-- <img :src="getImg(wait)" style="height:140px; width:80%;"> -->
-                  <img id="rcard" src="../../../public/wordcloud/keyword1604473900392.png" style="height:140px; width:80%;">
+                  <img id="rcard" src="../../../public/wordcloud/keyword1604473900392.png" style="height:130px; width:70%;">
                   </div>
                   <v-card-text class="pt-1 pb-2">
                     <p class="mb-1 text-area" style="text-align: left;">#{{ wait.keyword1 }} #{{ wait.keyword2 }} #{{ wait.keyword3 }}</p>
                     <p class="mb-2 text-area" style="font-size: 1rem; color: black; text-align: left;">
                       {{ wait.title }}
                     </p>
-                    <v-btn class="m-2" color="#262272" small @click="goDetail(wait.num)" style="color:white;"> 상담하기 </v-btn>
+                    <v-btn class="m-2" color="#262272"  @click="setNum(wait.num)" style="color:white;border-radius:20px;"> 상담하기 </v-btn>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -29,6 +29,21 @@
       <div v-if="this.waitList.length <= 0">
           <h1 style="margin-top:250px;">등록된 녹음 상담이 없습니다.</h1>
       </div>
+      <v-dialog v-model="getDialog" persistent max-width="400">
+        <v-card>
+          <v-card-title style="font-size: 1.5rem">
+            상담을 담당하시겠습니까?
+          </v-card-title>
+          <v-card-text align="left">한 번 담당한 내역은 마이페이지에 저장됩니다.</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="#262272" text @click="getDialog = false">
+              아니오
+            </v-btn>
+            <v-btn color="#262272" text @click="goDetail(selNum)"> 예 </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
   </div>
 </template>
 
@@ -44,6 +59,8 @@ export default {
       page: -1,
       nowPage: 0,
       total: 0,
+      selNum:0,
+      getDialog : false,
     };
   },
   created() {
@@ -51,6 +68,10 @@ export default {
     this.getTotal();
   },
   methods: {
+    setNum(num){
+      this.getDialog = true;
+      this.selNum = num;
+    },
     getWaitList() {
       http
         .get('record/getRecordPage/' + this.nowPage)
@@ -113,10 +134,7 @@ export default {
 </script>
 
 <style scoped>
-.record-main {
-  height: 100%;
-  overflow: scroll;
-}
+
 .record-header {
   height: 19%;
 }
