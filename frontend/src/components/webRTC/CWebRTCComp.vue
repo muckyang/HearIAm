@@ -42,7 +42,7 @@
                 </div>
               </div>
             </v-col>
-            <v-col cols="4" style="height:100%; padding-top:4%;" v-if="menteeName">
+            <v-col cols="4" style="height:100%; padding-top:4%;">
               <div
                 v-if="menteeName"
                 align="center"
