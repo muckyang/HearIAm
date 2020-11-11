@@ -27,7 +27,11 @@
         </v-tab-item>
       </v-tabs>
       <div v-if="this.waitList.length <= 0">
-          <h1 style="margin-top:250px;">등록된 녹음 상담이 없습니다.</h1>
+          <div style="margin-top:130px;font-size:1.5rem">
+            
+            <img src="@/assets/noResult.png" style="height:200px; width:200px;">
+            <br>
+            등록된 녹음 상담이 없습니다.</div>
       </div>
       <v-dialog v-model="getDialog" persistent max-width="400">
         <v-card>

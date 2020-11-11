@@ -153,11 +153,11 @@ export default {
       reser_dialog: false,
       items: [
         {
-          text: "1:1 상담",
+          text: "실시간 상담",
           subtext: "전문 상담사와 예약 없이 바로 상담해보세요. ",
         },
         {
-          text: "음성 상담",
+          text: "녹음 상담",
           subtext:
             "상담사와 미팅이 부담스럽다면 당신의 목소리로 고민을 말해보세요.",
         },
@@ -166,7 +166,7 @@ export default {
           subtext: "담당 상담사가 없다면 예약서비스를 이용해보세요",
         },
         {
-          text: "마이 페이지",
+          text: "마이페이지",
           subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
         },
       ],
