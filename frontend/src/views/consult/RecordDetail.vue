@@ -32,7 +32,7 @@
             rounded
             v-model="answer"
             no-resize
-            rows="14"
+            rows="13"
             style="white-space: pre-line"
             placeholder="상담 내용을 입력해주세요."
             class="mb-0"
@@ -40,14 +40,12 @@
           <v-row justify="center">
             <v-col class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
               <v-btn
-                @click="loadTransform()"
-                v-if="!isPlay"
+                @click="playAudio()"
                 class="main-btn"
                 large
                 >재생하기</v-btn
               >
-              <audio :src="getAudio(record.recordDir)" id="audio"></audio>
-              <audio id="convert" :controls="isPlay"></audio>
+              <audio id="audio"></audio>
             </v-col>
             <v-col class="mb-6 col-lg-5 col-md-5 col-sm-12 col-xs-12">
               <v-btn @click="sendD" class="main-btn" large>답변완료</v-btn>
@@ -102,7 +100,6 @@
 <script>
 import http from "@/util/http-common.js";
 import Bar from "@/components/webRTC/Bar.js";
-import bufferToWav from "audiobuffer-to-wav";
 import { mapGetters, mapState } from "vuex";
 
 export default {
@@ -167,7 +164,7 @@ export default {
   },
   mounted() {
     let that = this;
-    let audio = document.getElementById("convert");
+    let audio = document.getElementById("audio");
     audio.addEventListener("timeupdate", function() {
       that.playtime = audio.currentTime.toFixed();
     });
@@ -214,93 +211,36 @@ export default {
     fillData() {
       this.chartData = {
         labels: [
-          "angry",
-          "disgusted",
-          "fearful",
-          "happy",
-          "neutral",
-          "sad",
-          "surprised",
+          "화남",
+          "역겨움",
+          "두려움",
+          "행복",
+          "무표정",
+          "슬픔",
+          "놀람",
         ],
         datasets: [
           {
-            label: "Emotion",
-            backgroundColor: "#f87979",
+            label: "실시간 감정 정보",
+            backgroundColor: [
+              "#031926",
+              "#468189",
+              "#77ACA2",
+              "#9DBEBB",
+              "#F4E9CD",
+              "#E9D758",
+              "#FF8552",
+            ],
             data: this.emotion,
           },
         ],
       };
     },
-
-    async loadTransform() {
+    playAudio() {
       this.isPlay = true;
-      let arrayBuffer = await (
-        await fetch(this.getAudio(this.record.recordDir))
-      ).arrayBuffer();
-
-      let AudioBuffer = await new AudioContext().decodeAudioData(arrayBuffer);
-
-      let outputAudioBuffer = this.robot1Transform(AudioBuffer);
-
-      outputAudioBuffer.then(function(result) {
-        var anchor = document.getElementById("convert");
-
-        var wav = bufferToWav(result);
-        var blob = new window.Blob([new DataView(wav)], {
-          type: "audio/wav",
-        });
-
-        var url = window.URL.createObjectURL(blob);
-        anchor.src = url;
-        anchor.play();
-      });
-    },
-
-    async robot1Transform(audioBuffer) {
-      let ctx = new OfflineAudioContext(
-        audioBuffer.numberOfChannels,
-        audioBuffer.length,
-        audioBuffer.sampleRate
-      );
-
-      // Source
-      let source = ctx.createBufferSource();
-      source.buffer = audioBuffer;
-
-      // Wobble
-      let oscillator1 = ctx.createOscillator();
-      oscillator1.frequency.value = 10;
-      oscillator1.type = "sawtooth";
-      let oscillator2 = ctx.createOscillator();
-      oscillator2.frequency.value = 30;
-      oscillator2.type = "sawtooth";
-      let oscillator3 = ctx.createOscillator();
-      oscillator3.frequency.value = 10;
-      oscillator3.type = "sawtooth";
-      // ---
-      let oscillatorGain = ctx.createGain();
-      oscillatorGain.gain.value = 0.004;
-      // ---
-      let delay = ctx.createDelay();
-      delay.delayTime.value = 0.01;
-
-      // Create graph
-      oscillator1.connect(oscillatorGain);
-      oscillator2.connect(oscillatorGain);
-      // oscillator3.connect(oscillatorGain);
-      oscillatorGain.connect(delay.delayTime);
-      // ---
-      source.connect(delay);
-      delay.connect(ctx.destination);
-
-      // Render
-      oscillator1.start(0);
-      oscillator2.start(0);
-      oscillator3.start(0);
-      source.start(0);
-      // fire.start(0);
-      let outputAudioBuffer = await ctx.startRendering();
-      return outputAudioBuffer;
+      var audio = document.getElementById("audio");
+      audio.src = this.getAudio(this.record.recordDir);
+      audio.play();
     },
   },
   watch: {

@@ -251,7 +251,7 @@ export default {
         ],
         datasets: [
           {
-            label: "Emotion",
+            label: "실시간 감정 정보",
             backgroundColor: [
               "#031926",
               "#468189",
