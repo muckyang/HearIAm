@@ -86,7 +86,7 @@ export default {
       // markerImg:
       //   "https://blog.kakaocdn.net/dn/pe3Gt/btqKibc7VPl/JMG0zmTTAZuBAegMSA2c9k/img.png",
       markerImg:
-        "https://ifh.cc/g/6YadFc.png",
+        "https://ifh.cc/g/JkmS8N.png",
       kakaomap: "",
       markers: [],
       word: "전체",
