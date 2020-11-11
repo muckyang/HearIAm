@@ -235,7 +235,7 @@ export default {
         this.emotion[6],
         `|`
       );
-      console.dir(this.allEmotion);
+      // console.dir(this.allEmotion);
       this.fillData();
     },
     fillData() {

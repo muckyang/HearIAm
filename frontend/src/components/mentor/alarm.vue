@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     onjoin(data) {
-      console.dir(data);
+      // console.dir(data);
       let mentorName = this.getUserNum;
       if (data.mentor == 1) {
         http
