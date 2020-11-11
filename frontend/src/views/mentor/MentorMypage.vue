@@ -92,7 +92,7 @@ export default {
     setH(n){
       // console.log("in")
       if(n==1){
-        console.log(n)
+        // console.log(n)
       document.getElementById('mypage').style.height="100%";
       }else if(n==0){
         document.getElementById('mypage').style.height="auto";
