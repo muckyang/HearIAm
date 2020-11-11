@@ -35,5 +35,11 @@ public interface ConRoomRepository extends JpaRepository<ConRoom, Long> {
     List<ConRoom> findByMentorAndStatusOrStatusOrderByDateAsc(Long mentor, String status1,String status2);
     List<ConRoom> findByStatusOrderByDateDesc(String status, Pageable page);
     @Query("select r from ConRoom r where r.date > :time AND r.mentor = :num AND (r.status = 'reapply' OR r.status = 'reserve' ) order by date asc")
-    List<ConRoom> findByAfterReservation(@Param("num") Long mentor, @Param("time") LocalDateTime time);
+    List<ConRoom> findByAfterReservation(@Param("num") Long num, @Param("time") LocalDateTime time);
+    
+    @Query("select r from ConRoom r where r.date > :time AND r.mentee = :num AND (r.status = 'reapply' OR r.status = 'reserve' ) order by date asc")
+    List<ConRoom> findByAfterMenteeReservation(@Param("num") Long num, @Param("time") LocalDateTime time);
+
+
+
 }
