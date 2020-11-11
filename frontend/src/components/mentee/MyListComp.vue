@@ -1,8 +1,12 @@
 <template>
   <div>
     <v-tabs v-model="tab" background-color="" color="black" grow>
-      <v-tab style="font-size: 1.2rem">상담 내역</v-tab>
-      <v-tab style="font-size: 1.2rem">예약 내역</v-tab>
+      <v-tab style="font-size: 1.3rem"><v-icon class="mr-1" style="font-size: 1.5rem"
+            >mdi-book-open-outline</v-icon
+          >상담 내역</v-tab>
+      <v-tab style="font-size: 1.3rem"><v-icon class="mr-1" style="font-size: 1.5rem"
+            >mdi-clock-time-four-outline</v-icon
+          >예약 내역</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
@@ -282,10 +286,10 @@
         <v-card-text></v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="cancelDialog = false">
+          <v-btn color="#262272" text @click="cancelDialog = false">
             아니오
           </v-btn>
-          <v-btn color="green darken-1" text @click="cancel"> 예 </v-btn>
+          <v-btn color="#262272" text @click="cancel"> 예 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
