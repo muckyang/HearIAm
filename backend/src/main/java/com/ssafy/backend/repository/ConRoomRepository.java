@@ -20,7 +20,7 @@ public interface ConRoomRepository extends JpaRepository<ConRoom, Long> {
     List<ConRoom> findByMenteeOrderByNumDesc(Long mentee);
     List<ConRoom> findByMenteeAndStatusOrStatusOrStatusOrderByDateDesc(Long mentee, String status1, String status2, String status3);
     List<ConRoom> findByMentor(Long mentor);
-    List<ConRoom> findByMentorAndMenteeOrderByDateDesc(Long mentor, Long mentee);
+    List<ConRoom> findByMentorAndMenteeAndStatusOrderByDateDesc(Long mentor, Long mentee, String status);
     ConRoom findByRoom(String room);
     ConRoom findByNum(Long num);
     ConRoom findByMentorAndDate(Long mentor, LocalDateTime date);

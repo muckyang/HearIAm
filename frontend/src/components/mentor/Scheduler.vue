@@ -194,7 +194,7 @@ export default {
     http
       .get(`/schedule/checkUpdate/${this.getUserID}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data == 1) {
           this.monDialog = false;
         } else if (res.data == 0) {

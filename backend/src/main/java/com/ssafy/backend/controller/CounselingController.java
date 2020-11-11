@@ -142,7 +142,7 @@ public class CounselingController {
 
 	@GetMapping("/myMenteeList/{num}")
 	public List<User> myMenteeList(@PathVariable(value = "num") Long num) {
-		List<ConRoom> list = conRoomRepository.findByMentor(num);
+		List<ConRoom> list = conRoomRepository.findByMentorAndStatus(num, "finish");
 		List<Long> result = new ArrayList<Long>();
 		for (ConRoom conRoom : list) {
 			result.add(conRoom.getMentee());
@@ -162,7 +162,7 @@ public class CounselingController {
 	@GetMapping("/myMenteeInfoList/{mentor}/{mentee}")
 	public List<ConRoom> myMenteeInfoList(@PathVariable(value = "mentor") Long mentor,
 			@PathVariable(value = "mentee") Long mentee) {
-		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeOrderByDateDesc(mentor, mentee);
+		List<ConRoom> list = conRoomRepository.findByMentorAndMenteeAndStatusOrderByDateDesc(mentor, mentee, "finish");
 		return list;
 	}
 
