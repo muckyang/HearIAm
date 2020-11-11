@@ -10,8 +10,8 @@
               <v-col v-for="(wait, index) in waitList" :key="index" cols="12" sm="6" md="3">
                 <v-card class="mx-auto">
                   <div style="overflow:hidden; height:130px;">
-                  <!-- <img :src="getImg(wait)" style="height:140px; width:80%;"> -->
-                  <img id="rcard" src="../../../public/wordcloud/keyword1604473900392.png" style="height:130px; width:70%;">
+                  <img id="rcard" :src="getImg(wait)" style="height:130px; width:70%;">
+                  <!-- <img id="rcard" src="../../../public/wordcloud/keyword1604473900392.png" style="height:130px; width:70%;"> -->
                   </div>
                   <v-card-text class="pt-1 pb-2">
                     <p class="mb-1 text-area" style="text-align: left;">#{{ wait.keyword1 }} #{{ wait.keyword2 }} #{{ wait.keyword3 }}</p>
