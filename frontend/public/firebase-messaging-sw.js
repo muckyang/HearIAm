@@ -21,18 +21,16 @@ self.addEventListener('notificationclick', function (event) {
   event.waitUntil(clients.openWindow(event.notification.data));
 });
 // 백그라운드 상태에서 받은 알림 처리
-messaging.setBackgroundMessageHandler((payload) => {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload)
-  // Customize notification here
-  const notificationTitle = 'Hear I am';
-  const notificationOptions = {
-    body: '알림이 왔습니다. 확인해주세요!',
-    icon: '../src/assets/logo.png',
-    data: 'https://k3b201.p.ssafy.io/'
-  };
-  
-
-  return self.registration.showNotification(notificationTitle, notificationOptions);
-})
+// messaging.setBackgroundMessageHandler((payload) => {
+//   console.log('[firebase-messaging-sw.js] Received background message ', payload)
+//   // Customize notification here
+//   const notificationTitle = 'Hear I am';
+//   const notificationOptions = {
+//     body: '알림이 왔습니다. 확인해주세요!',
+//     icon: '../src/assets/logo.png',
+//     data: 'https://k3b202.p.ssafy.io/'
+//   };
+//   return self.registration.showNotification(notificationTitle, notificationOptions);
+// })
 
 
