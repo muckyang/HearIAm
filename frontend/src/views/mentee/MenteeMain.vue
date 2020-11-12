@@ -51,7 +51,7 @@
     <div class="d-flex d-sm-none fill-height">
       <v-container style="padding: 0">
         <v-row no-gutters style="height: 50vh">
-           <v-col cols="6">
+           <v-col cols="6" @click="itemClick(1)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, .5);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -65,7 +65,7 @@
               </v-container>
             </v-card>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="6" @click="itemClick(0)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, .2);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -81,7 +81,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters style="height: 50vh">
-          <v-col cols="6">
+          <v-col cols="6" @click="itemClick(3)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, 0.2);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -95,7 +95,7 @@
               </v-container>
             </v-card>
           </v-col>
-           <v-col cols="6">
+           <v-col cols="6" @click="itemClick(2)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, 0.5);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -114,12 +114,15 @@
     </div>
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
       <div class="px-5 pt-5 reser-back">
-        <!-- <v-card rounded="xl" style="padding: 20px; background-color:white;">
-        <v-card-title class="text-center justify-center p-8"> -->
-        <h1>실시간 상담 예약</h1>
-        <!-- </v-card-title> -->
+        <span style="font-size: 2rem; font-weight:bold;">실시간 상담 예약</span>
+        <v-icon
+          class="mb-3"
+          style="float: right; color:crimson"
+          @click="reser_dialog=false"
+          >mdi-close</v-icon
+        >
         <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()" />
-        <!-- </v-card> -->
+       
       </div>
     </v-dialog>
 

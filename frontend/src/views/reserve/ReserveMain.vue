@@ -35,10 +35,10 @@
               :max="getEndDate"
             >
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="dateModal = false">
-                Cancel
+              <v-btn text color="#262272" @click="dateModal = false">
+                닫기
               </v-btn>
-              <v-btn text color="primary" @click="setDate"> OK </v-btn>
+              <v-btn text color="#262272" @click="setDate"> 선택 </v-btn>
             </v-date-picker>
           </v-dialog>
         </v-col>
@@ -105,7 +105,7 @@
       <v-row class="mt-4" justify="center">
         <!-- <v-col class="pt-5 px-0 d-flex" align="center" justify="center"> -->
         
-        <v-btn class="main-btn" @click="reserveD">예약하기</v-btn>
+        <v-btn class="main-btn" large @click="reserveD" style="border-radius:20px;">예약하기</v-btn>
         <!-- </v-col> -->
       </v-row>
     </v-sheet>
