@@ -2,7 +2,7 @@
   <div align="center" class="main-back" id="main-first" style="height:100vh;">
     <!-- 소개글 -->
     <div class="mb-0 first-text" id="fade-out">
-      <h1 class="fade-in" style="font-size:5rem;color:white;margin-top:300px;">다 들어줄게, 난 항상 네 옆에 있어</h1>
+      <h1 class="fade-in" style="font-family:'Dovemayo-Bold';font-size:7vw;color:white;margin-top:300px;">다 들어줄게, 난 항상 네 옆에 있어</h1>
     </div>
 
     <div v-show="mainFlag" style="padding-top:10%;">
@@ -104,7 +104,7 @@ export default {
 .main-title {
   /* font-family: "Capriola", sans-serif; */
   font-family: 'Short Stack', cursive;
-  font-size: 8rem;
+  font-size: 10vw;
   color: white;
   text-shadow: 1px 1px 1px black, 0 0 0.2em white, 0 0 0.1em white;
   font-weight: 600;
@@ -188,5 +188,11 @@ export default {
     filter: blur(0);
     opacity: 1;
   }
+}
+@font-face {
+    font-family: 'Dovemayo-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.0/Dovemayo-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 </style>
