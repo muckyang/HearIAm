@@ -94,6 +94,9 @@ export default {
       transparent: "rgba(255, 255, 255, 0)",
     };
   },
+  created() {
+    http.delete(`/counseling/liveList`);
+  },
   methods: {
     itemClick(i) {
       if (i === 0) {
@@ -107,7 +110,6 @@ export default {
       }
     },
     subscribe() {
-      http.get(`/counseling/liveList`);
       if (this.getIsReady) {
         this.successSnack = true;
         this.altMsg = "이미 상담 대기 중입니다.";
