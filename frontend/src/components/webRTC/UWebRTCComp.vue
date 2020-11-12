@@ -1,11 +1,12 @@
 <template>
   <div>
     <!-- 설명서 -->
-    <v-dialog v-model="dialogRTC" persistent>
-      <v-alert dark id="step-alert" class="container pa-10">
+    <v-dialog v-model="dialogRTC" width="75%"  >
+      <div style="width:100%; height:100%;border:3px solid white; border-radius:10px;">
+      <div style="margin:50px 50px; color:white">
         <div class="d-flex mb-7">
           <v-img max-height="100" max-width="100" src="../../assets/face2.png"></v-img>
-          <h2 class="mt-7 ml-7 step-text">HEAR I AM 은 얼굴이 공개되지 않는 서비스로 사용자의 익명성이 보장됩니다.</h2>
+          <h2 class="mt-7 ml-7 step-text">HEAR I AM 은 얼굴이 공개되지 않는 서비스로 익명성이 보장됩니다.</h2>
         </div>
         <div class="d-flex mb-7">
           <v-img max-height="100" max-width="100" src="../../assets/face1.png"></v-img>
@@ -13,12 +14,13 @@
         </div>
         <div class="d-flex mb-7">
           <v-img max-height="100" max-width="100" src="../../assets/face3.png"></v-img>
-          <h2 class="mt-7 ml-7 step-text">버튼을 누르면 상담사가 매칭됩니다.</h2>
+          <h2 class="mt-7 ml-7 step-text">시작 버튼을 누르면 상담사가 매칭됩니다.</h2>
         </div>
         <div v-if="!dialog">
-          <v-btn class="heartbeat mt-7" color="#262272" @click="dialog = true, dialogRTC2 = true, createRoom()">상담시작</v-btn>
+          <v-btn class="heartbeat mt-3" dark x-large style="font-size:1.2rem;border-radius:30px;" color="#ff7987 " @click="dialog = true, dialogRTC2 = true, createRoom()">상담시작</v-btn>
         </div>
-      </v-alert>
+      </div>
+      </div>
     </v-dialog>
     
     <!-- RTC -->
@@ -198,6 +200,7 @@ export default {
       }
       this.stopVideo();
       this.deleteDB();
+      http.delete(`/counseling/liveList`); //conroom 삭제
       this.$router.push('/');
     },
     onError(error, stream) {
@@ -389,4 +392,5 @@ export default {
     animation-timing-function: ease-out;
   }
 }
+
 </style>
