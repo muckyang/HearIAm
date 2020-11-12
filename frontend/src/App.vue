@@ -21,8 +21,8 @@
         >상담 대기 취소</v-btn
       >
       <v-btn
-        class=" d-none d-sm-flex"
-        v-if="!getIsReady && getRole == `mentor`"
+        class="d-none d-sm-flex"
+        v-if="getRole == `mentor`"
         text
         @click="subscribe()"
         >실시간 상담 대기</v-btn

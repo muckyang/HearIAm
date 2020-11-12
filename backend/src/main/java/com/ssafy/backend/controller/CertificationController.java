@@ -156,6 +156,7 @@ public class CertificationController {
 			element.click();
 			Thread.sleep(500);
 			WebElement check = driver.findElement(By.xpath("//div[@id='PInfo']/div/table/tbody/tr/td"));
+			res = check.getText();
 		} catch (Throwable e) {
 			driver.close();
 			return "fail";

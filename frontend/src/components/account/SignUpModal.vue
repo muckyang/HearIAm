@@ -413,6 +413,7 @@ export default {
         http3
           .post(`/cert/imgCheck`, formData)
           .then((res) => {
+            console.log(res);
             if (res.data == "眞(정상적으로 발급된 자격증입니다.)") {
               this.imgCheck = true;
               this.imgOk=true;
