@@ -129,7 +129,7 @@ public class ScheduleController {
 
         // 아직 매칭 안된 스케줄 중에 시간일치하는것 뽑아옴
 
-        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(LocalDate.parse(date),
+        List<Schedule> list = scheduleRepository.findScheduleBySdateAndStimeAndIsReser(date,
                 time.split(" ")[0], 0);
 
         // 랜덤돌려서 매칭
@@ -144,7 +144,7 @@ public class ScheduleController {
         reservationRepository.save(reser);
         ReserveRes res = new ReserveRes();
         res.setMentor(sche.getMentor());
-        res.setSdate(sche.getSdate());
+        res.setSdate(LocalDate.parse(sche.getSdate()));
         res.setStime(sche.getStime());
 
         return res;
@@ -223,7 +223,7 @@ public class ScheduleController {
         } else {
             sdate = today;
         }
-        Schedule sche = scheduleRepository.findScheduleByMentorAndSdateAndTimeidx(mentor, sdate, timeidx);
+        Schedule sche = scheduleRepository.findScheduleByMentorAndSdateAndTimeidx(mentor, sdate.toString(), timeidx);
         if (sche != null) { // 스케줄이 이미 존재하면
             if (sche.getIsReser() == 0) { // 예약이 안되어있으면
                 scheduleRepository.delete(sche);
@@ -238,7 +238,7 @@ public class ScheduleController {
             stime = timeArr[timeidx];
             Schedule schedule = new Schedule();
             schedule.setMentor(mentor);
-            schedule.setSdate(sdate);
+            schedule.setSdate(sdate.toString());
             schedule.setStime(stime);
             schedule.setTimeidx(timeidx);
             schedule.setDateidx(dayidx);
@@ -257,7 +257,7 @@ public class ScheduleController {
     @GetMapping("/allowScheduleTime/{mentor}/{sdate}")
     public List<String> counselingTime(@PathVariable(value = "mentor") String mentor, @PathVariable String sdate) {
         List<Schedule> list = scheduleRepository.findByMentorAndSdateAndIsReserOrderByTimeidxAsc(mentor,
-                LocalDate.parse(sdate), 0);
+                sdate, 0);
         String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
                 "19:00", "20:00", "21:00", "22:00", "23:00" };
         List<String> timeList = new LinkedList<>();
@@ -275,7 +275,7 @@ public class ScheduleController {
     @GetMapping("/findScheduleNum/{date}/{time}/{mentor}")
     public Long findScheduleNum(@PathVariable(value = "date") String date, @PathVariable(value = "time") String time,
             @PathVariable String mentor) {
-        Schedule schedule = scheduleRepository.findScheduleByMentorAndSdateAndStime(mentor, LocalDate.parse(date),
+        Schedule schedule = scheduleRepository.findScheduleByMentorAndSdateAndStime(mentor, date,
                 time);
         Long num = schedule.getNum();
         return num;
@@ -359,7 +359,7 @@ public class ScheduleController {
     public Object getTimeByDate(@PathVariable String sdate) {
         String[] timeArr = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
                 "19:00", "20:00", "21:00", "22:00", "23:00" };
-        List<Schedule> list = scheduleRepository.findBySdateAndIsReserOrderByTimeidxAsc(LocalDate.parse(sdate), 0);
+        List<Schedule> list = scheduleRepository.findBySdateAndIsReserOrderByTimeidxAsc(sdate, 0);
         List<String> timeList = new LinkedList<>();
         for (Schedule s : list) {
             int idx = s.getTimeidx();
@@ -406,7 +406,7 @@ public class ScheduleController {
         int todayWeek = DayOfWeek.from(LocalDate.now()).getValue();
         for (Schedule s : list) {
             LocalDate sdate;
-            int dayidx = DayOfWeek.from(s.getSdate()).getValue();
+            int dayidx = DayOfWeek.from(LocalDate.parse(s.getSdate())).getValue();
             if (dayidx < todayWeek) { // 오늘보다 이전이면
                 sdate = today.minusDays(todayWeek - dayidx);
             } else if (dayidx > todayWeek) {
@@ -414,7 +414,7 @@ public class ScheduleController {
             } else {
                 sdate = today;
             }
-            s.setSdate(sdate);
+            s.setSdate(sdate.toString());
             scheduleRepository.save(s);
         }
         return list;
