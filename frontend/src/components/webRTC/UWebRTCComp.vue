@@ -80,7 +80,7 @@ export default {
       isProgress: false,
       url: 'https://fcm.googleapis.com/fcm/send',
       devecieId: this.getDeviceID,
-      topic: 'streaming',
+      topic: 'streaming1',
       dialog: false,
       roomNum: null,
       dialogRTC: true,
@@ -162,7 +162,7 @@ export default {
           room: this.roomId,
           room_num: res.data,
         },
-        to: '/topics/streaming',
+        to: '/topics/streaming1',
       };
       const config = {
         headers: {
