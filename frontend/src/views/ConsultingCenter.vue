@@ -17,6 +17,7 @@
               class="mt-7"
               v-model="word"
             ></v-select>
+            <div style="width:100%;">
             <v-card>
               <v-simple-table>
                 <template v-slot:default>
@@ -50,6 +51,7 @@
                 </template>
               </v-simple-table>
             </v-card>
+            </div>
           </v-row>
 
           <v-row class="d-flex d-sm-none">

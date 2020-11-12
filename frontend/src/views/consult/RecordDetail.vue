@@ -4,17 +4,12 @@
       width: 100%;
       padding-top: 70px;
       background-color: #0f0d2d;
-      height: 100%;
+      min-height: 100%;
     "
     align="center"
   >
     <div class="px-5 pt-5 content-box">
-      <div style="position: absolute">
-        <span class="icon-line" @click="goBack()"
-          ><v-icon style="color: crimson">mdi-arrow-left-thick</v-icon
-          >뒤로</span
-        >
-      </div>
+      
       <h1 align="center">녹음 상담 답변하기</h1>
       <v-row style="height: 70%">
         <v-col cols="5">
@@ -67,6 +62,12 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <div style="position: absolute; bottom:3.3rem;">
+        <span class="icon-line" @click="goBack()"
+          ><v-icon style="color: crimson">mdi-arrow-left-thick</v-icon
+          >뒤로</span
+        >
+      </div>
     </div>
 
     <v-snackbar

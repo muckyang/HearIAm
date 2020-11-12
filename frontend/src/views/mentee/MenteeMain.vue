@@ -114,12 +114,15 @@
     </div>
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
       <div class="px-5 pt-5 reser-back">
-        <!-- <v-card rounded="xl" style="padding: 20px; background-color:white;">
-        <v-card-title class="text-center justify-center p-8"> -->
-        <h1>실시간 상담 예약</h1>
-        <!-- </v-card-title> -->
+        <span style="font-size: 2rem; font-weight:bold;">실시간 상담 예약</span>
+        <v-icon
+          class="mb-3"
+          style="float: right; color:crimson"
+          @click="reser_dialog=false"
+          >mdi-close</v-icon
+        >
         <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()" />
-        <!-- </v-card> -->
+       
       </div>
     </v-dialog>
 
