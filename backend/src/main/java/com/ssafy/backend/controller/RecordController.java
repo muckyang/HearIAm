@@ -201,13 +201,13 @@ public class RecordController {
             System.out.println(request.toString());
             Emotion emotion = new Emotion();
             emotion.setNum(request.getNum());
-            emotion.setAngry(request.getAngry());
-            emotion.setDisgusted(request.getDisgusted());
-            emotion.setFearful(request.getFearful());
-            emotion.setHappy(request.getHappy());
-            emotion.setNeutral(request.getNeutral());
-            emotion.setSad(request.getSad());
-            emotion.setSurprised(request.getSurprised());
+            emotion.setAngry(request.getAngry()+"1");
+            emotion.setDisgusted(request.getDisgusted()+"1");
+            emotion.setFearful(request.getFearful()+"1");
+            emotion.setHappy(request.getHappy()+"1");
+            emotion.setNeutral(request.getNeutral()+"1");
+            emotion.setSad(request.getSad()+"1");
+            emotion.setSurprised(request.getSurprised()+"1");
             emotionRepository.save(emotion);
             return new ResponseEntity<>("emotion succ", HttpStatus.OK);
         } catch (Exception e) {
