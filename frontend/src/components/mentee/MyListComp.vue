@@ -11,16 +11,20 @@
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
       <v-tab-item>
-        <v-col v-if="cpagingList == 0" style="margin-top: 220px"
-          >상담 내역이 없습니다.</v-col
+
+        <v-col v-if="cpagingList == 0"
+          ><div style="margin-top:130px;font-size:1.5rem">
+            <img src="@/assets/noResult3.png" style="height:200px; width:200px;">
+            <br>
+            상담 내역이 없습니다.</div></v-col
         >
         <v-simple-table v-if="cpagingList != 0" class="py-5">
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-center" style="width: 20%">상담 날짜</th>
+                <th class="text-center" style="width: 20%">상담 일자</th>
                 <th class="text-center" style="width: 20%">상담사</th>
-                <th class="text-center" style="width: 20%">종류</th>
+                <th class="text-center" style="width: 20%">상담 종류</th>
                 <th class="text-center" style="width: 20%">현황</th>
                 <th class="text-center" style="width: 20%">재상담 신청</th>
               </tr>
@@ -94,8 +98,12 @@
       <v-tab-item>
         <v-sheet class="mx-auto pa-5" max-width="100%">
           <v-row>
-            <v-col v-if="rpagingList.length == 0" style="margin-top: 205px"
-              >예약 내역이 없습니다.</v-col
+            <v-col v-if="rpagingList.length == 0"
+              ><div style="margin-top:130px;font-size:1.5rem">
+            
+            <img src="@/assets/noResult3.png" style="height:200px; width:200px;">
+            <br>
+            예약 내역이 없습니다.</div></v-col
             >
             <v-col
               v-for="(item, index) in rpagingList"
