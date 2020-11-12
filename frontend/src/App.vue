@@ -9,26 +9,26 @@
       scroll-target="#scrolling-techniques-4"
       style="background-color: rgba(255, 255, 255, 0)"
     >
-      <v-btn class="shadow d-none d-sm-flex" text @click="goHome()"
+      <v-btn class="d-none d-sm-flex" text @click="goHome()"
         ><h2>Hear I Am</h2></v-btn
       >
       <v-spacer class="d-none d-sm-flex"></v-spacer>
       <v-btn
-        class="shadow d-none d-sm-flex"
+        class=" d-none d-sm-flex"
         v-if="getIsReady && getRole == `mentor`"
         text
         @click="unsubscribe()"
         >상담 대기 취소</v-btn
       >
       <v-btn
-        class="shadow d-none d-sm-flex"
+        class=" d-none d-sm-flex"
         v-if="!getIsReady && getRole == `mentor`"
         text
         @click="subscribe()"
         >실시간 상담 대기</v-btn
       >
       <v-btn
-        class="shadow d-none d-sm-flex"
+        class=" d-none d-sm-flex"
         v-if="getRole == `mentee`"
         text
         @click="goLive()"
@@ -36,14 +36,14 @@
       >
 
       <v-btn
-        class="shadow d-none d-sm-flex"
+        class=" d-none d-sm-flex"
         v-if="getRole == `mentee`"
         text
         @click="goRecord()"
         >녹음 상담</v-btn
       >
       <v-btn
-        class="shadow d-none d-sm-flex"
+        class=" d-none d-sm-flex"
         v-if="getRole == `mentee`"
         text
         @click="reser_dialog = true"
@@ -51,23 +51,23 @@
       >
 
       <v-btn
-        class="shadow d-none d-sm-flex"
+        class=" d-none d-sm-flex"
         v-if="getRole == `mentor`"
         text
         @click="goRecordList()"
         >녹음 상담 현황</v-btn
       >
       <v-btn
-        class="shadow d-none d-sm-flex"
+        class=" d-none d-sm-flex"
         v-if="getRole == `mentor`"
         text
         @click="goMyMenteeList()"
         >일지 관리</v-btn
       >
-      <v-btn class="shadow d-none d-sm-flex" text @click="goMypage()"
+      <v-btn class=" d-none d-sm-flex" text @click="goMypage()"
         >마이페이지</v-btn
       >
-      <v-btn class="shadow d-none d-sm-flex" text @click="logout()"
+      <v-btn class=" d-none d-sm-flex" text @click="logout()"
         >로그아웃</v-btn
       >
     </v-app-bar>
@@ -214,8 +214,7 @@
         <span style="font-size: 2rem; font-weight:bold;">실시간 상담 예약</span>
         <v-icon
           class="mb-3"
-          color="red"
-          style="float: right"
+          style="float: right; color:crimson"
           @click="reser_dialog=false"
           >mdi-close</v-icon
         >
