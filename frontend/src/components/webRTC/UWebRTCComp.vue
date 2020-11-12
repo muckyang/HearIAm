@@ -279,12 +279,12 @@ export default {
         return;
       }
       console.log('isremote ' + this.getIsRemote);
-      // setTimeout(() => {
-      //   this.dialog = false;
-      //   // this.failMatching = true;
-      //   this.onLeave();
-      // }, 60000);
-      //1분
+      setTimeout(() => {
+        this.dialog = false;
+        // this.failMatching = true;
+        this.onLeave();
+      }, 60000);
+      // 1분
     },
   },
 };
