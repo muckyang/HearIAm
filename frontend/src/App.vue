@@ -20,13 +20,13 @@
         @click="unsubscribe()"
         >상담 대기 취소</v-btn
       >
-      <v-btn
+      <!-- <v-btn
         class="d-none d-sm-flex"
         v-if="getRole == `mentor`"
         text
         @click="subscribe()"
         >실시간 상담 대기</v-btn
-      >
+      > -->
       <v-btn
         class=" d-none d-sm-flex"
         v-if="getRole == `mentee`"
@@ -337,16 +337,16 @@ export default {
     goRecordList() {
       this.$router.push(`/recordList`).catch(() => {});
     },
-    subscribe() {
-      http.delete(`/counseling/liveList`);
-      // console.log("click subscribe btn");
-      this.$store.commit("changeIsReady", true);
-      this.subscribeTokenToTopic(this.getDeviceID, this.topic);
-      // let mentorname = this.$store.getters['getUserNum'];
-      http.get(`/counseling/addReady/${this.getUserNum}`).then((res) => {
-        console.log("add ready success : " + res);
-      });
-    },
+    // subscribe() {
+    //   http.delete(`/counseling/liveList`);
+    //   // console.log("click subscribe btn");
+    //   this.$store.commit("changeIsReady", true);
+    //   this.subscribeTokenToTopic(this.getDeviceID, this.topic);
+    //   // let mentorname = this.$store.getters['getUserNum'];
+    //   http.get(`/counseling/addReady/${this.getUserNum}`).then((res) => {
+    //     console.log("add ready success : " + res);
+    //   });
+    // },
     subscribeTokenToTopic(token, topic) {
       axios({
         method: "POST",
