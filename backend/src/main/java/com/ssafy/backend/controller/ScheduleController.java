@@ -371,6 +371,11 @@ public class ScheduleController {
         }
         return timeList;
     }
+    
+    @GetMapping("/siganHwakIn/{sdate}")
+    public LocalDate siganHwakIn(@PathVariable String sdate) {
+    	return LocalDate.parse(sdate);
+    }
 
     @DeleteMapping("/reset/{mentor}")
     public Object reset(@PathVariable String mentor) {
