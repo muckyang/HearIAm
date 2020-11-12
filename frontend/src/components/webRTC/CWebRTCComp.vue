@@ -242,19 +242,19 @@ export default {
       http
         .get(`/counseling/isRoom/${this.getUserNum}/${this.$route.params.num}`)
         .then((res) => {
-          if (res.data == "fail") {
-            this.errorSnack = true;
-            this.altMsg = "이미 상담 중입니다. 다른 학생과 상담하세요.";
-            setTimeout(() => {
-              this.$router.push("/");
-            }, 1500);
-          } else {
+          if (res.data != "fail") {
             this.successSnack = true;
             this.altMsg = "상담을 시작합니다.";
             this.isSangdam = true;
             setTimeout(() => {
               this.onJoin();
             }, 1000);
+          } else {
+            this.errorSnack = true;
+            this.altMsg = "이미 상담 중입니다. 다른 학생과 상담하세요.";
+            setTimeout(() => {
+              this.$router.push("/");
+            }, 1500);
           }
         });
     },
