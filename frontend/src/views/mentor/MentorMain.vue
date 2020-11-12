@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       devecieId: this.getDeviceID,
-      topic: "streaming",
+      topic: "streaming1",
       successSnack: false,
       altMsg: "",
       getKey: false,
@@ -193,7 +193,7 @@ export default {
         method: "POST",
         url: "https://iid.googleapis.com/iid/v1:batchRemove",
         data: {
-          to: "/topics/streaming",
+          to: "/topics/streaming1",
           registration_tokens: [token],
         },
         headers: {
@@ -251,7 +251,7 @@ export default {
     //         method: "POST",
     //         url: "https://iid.googleapis.com/iid/v1:batchRemove",
     //         data: {
-    //           to: "/topics/streaming",
+    //           to: "/topics/streaming1",
     //           registration_tokens: [this.getDeviceID],
     //         },
     //         headers: {

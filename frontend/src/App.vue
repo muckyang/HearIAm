@@ -384,7 +384,7 @@ export default {
         method: "POST",
         url: "https://iid.googleapis.com/iid/v1:batchRemove",
         data: {
-          to: "/topics/streaming",
+          to: "/topics/streaming1",
           registration_tokens: [token],
         },
         headers: {

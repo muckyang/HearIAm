@@ -117,13 +117,6 @@ const routes = [{
         name: 'ConsultingCenter',
         component: ConsultingCenter
     },
-    {
-        path: '/stMatch',
-        component: () =>
-            import ('@/views/mentor/streamingReady'),
-        name: 'stMatch',
-        props: true
-    },
 ]
 
 const router = new VueRouter({

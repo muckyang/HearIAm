@@ -152,7 +152,7 @@ export default {
   data() {
     return {
       devecieId: this.$store.getters["getDeviceID"],
-      topic: "streaming",
+      topic: "streaming1",
       reser_dialog: false,
       items: [
         {
