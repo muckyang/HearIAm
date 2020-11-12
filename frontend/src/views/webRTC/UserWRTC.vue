@@ -2,9 +2,8 @@
   <div
     id="student-con"
     style="
-        height: 100vh;
-        width: 100%;
-        padding-top: 64px;
+        height: 100%;
+        padding-top: 70px;
       "
   >
     <WebRTCComp />

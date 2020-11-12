@@ -1,21 +1,24 @@
 <template>
   <div style="height: 100%; width: 100%" class="webRtc-back">
     <v-dialog v-model="dialog" persistent max-width="1300">
-      <v-card style="background-color: white; border: 1px solid white" outlined>
-        <v-container v-if="!isSangdam" style="opacity: 1; height: 400px">
-          <h1 class="mt-15">
+      <div style="border: 3px solid white; border-radius:10px;color:white;" outlined>
+        <v-container v-if="!isSangdam" style="height:400px; padding-top:9%;">
+          <div>
+          <h1>
             상담 준비가 완료 되었다면 <br />
             시작버튼을 눌러주세요.
           </h1>
           <v-btn
             v-if="!isProgress"
-            style="font-size: 0.9rem; color: white"
-            color="#262272"
-            class="btn btn-primary mt-5"
+            x-large
+            style="font-size:1.2rem;border-radius:30px; color:white"
+             color="#ff7987"
+            class="btn btn-primary mt-5 heartbeat"
             @click="sangdamStart()"
           >
             상담 시작
           </v-btn>
+          </div>
         </v-container>
         <div style="height: 600px" v-if="isSangdam">
           <v-row align="center" justify="center" style="height: 100%">
@@ -118,7 +121,7 @@
             </v-col>
           </v-row>
         </div>
-      </v-card>
+      </div>
     </v-dialog>
 
     <v-snackbar
@@ -408,5 +411,77 @@ export default {
 .webRtc-back {
   background-image: url("../../assets/webBack.png");
   background-size: cover;
+}
+.heartbeat {
+  -webkit-animation: heartbeat 2s ease-in-out infinite both;
+  animation: heartbeat 2s ease-in-out infinite both;
+}
+@-webkit-keyframes heartbeat {
+  from {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+    transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+    transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+}
+@keyframes heartbeat {
+  from {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+    transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+    transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
 }
 </style>

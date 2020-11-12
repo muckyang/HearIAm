@@ -164,7 +164,7 @@ export default {
   },
   data() {
     return {
-      date: '',
+      date: new Date().toISOString().substr(0, 10),
       dateModal: false,
       timeModal: false,
       time: "",
@@ -211,8 +211,23 @@ export default {
     },
     reser_dialog(v) {
       if (!v) {
-        this.date = "";
+        this.date = new Date().toISOString().substr(0, 10);
         this.time = "";
+        this.timeItems = [];
+        http
+      .get(`/schedule/getTimeByDate/${this.nowDate}`)
+      .then((res) => {
+        if (res.data.length == 0) {
+          this.timeItems.push("예약 가능한 시간이 없습니다.");
+          this.selLabel = "예약 가능한 시간이 없습니다.";
+        } else {
+          this.timeItems = res.data;
+          this.selLabel = "시간을 선택해주세요.";
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
         this.concern = "";
       }
     },
