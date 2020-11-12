@@ -11,13 +11,14 @@
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
       <v-tab-item>
-        <v-col v-if="!cpagingList"
+
+        <v-col v-if="cpagingList == 0"
           ><div style="margin-top:130px;font-size:1.5rem">
             <img src="@/assets/noResult3.png" style="height:200px; width:200px;">
             <br>
             상담 내역이 없습니다.</div></v-col
         >
-        <v-simple-table v-if="cpagingList" class="py-5">
+        <v-simple-table v-if="cpagingList != 0" class="py-5">
           <template v-slot:default>
             <thead>
               <tr>
@@ -84,11 +85,12 @@
         </v-simple-table>
         <v-pagination
           v-model="cpage"
-          v-if="cpagingList"
+          v-if="cpagingList != 0"
           :length="cpageLength"
           circle
           class="pb-3"
           color="#262272"
+          :total-visible="9"
         ></v-pagination>
       </v-tab-item>
 

@@ -8,6 +8,7 @@ import firebase from 'firebase/app'
 import '@firebase/messaging'
 import configset from './fcm/firebaseConfig'
 // import { mapMutations } from "vuex";
+import http from "@/util/http-common.js";
 
 firebase.initializeApp(configset);
 
@@ -40,10 +41,29 @@ messaging.onMessage((payload) => {
     notification.onclick = function(event) {
         event.preventDefault(); // prevent the browser from focusing the Notification's tab
         let num = payload.data.room_num * 1;
-        // console.log(num);
-        if (num > 0) { //실시간 상담
-            router.push({ name: 'stMatch', params: { room: payload.data.room, room_num: num } });
-        }
+        console.dir(payload);
+        console.dir(payload.data.room);
+        let mentorNum = store.getters['getUserNum'];
+        http
+          .get(`/counseling/isRoom/${mentorNum}/${num}`)
+          .then((res) => {
+            if (res.data == "fail") {
+              alert("이미 상담 중입니다. 다음엔 차례를 기다려 주세요.");
+              router.push("/");
+            } else {             
+              router.push(
+                `/counselorWRTC/${payload.data.room}&${num}`
+              );
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+        console.log(num);
+        // if (num > 0) { //실시간 상담
+        //     router.push({ name: 'stMatch', params: { room: payload.data.room, room_num: num } });
+        // }
     }
     return notification;
 });

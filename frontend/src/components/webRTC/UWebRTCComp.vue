@@ -28,7 +28,7 @@
         <div style="padding-top:40px">
           <v-col>
             <h1 style="font-size:3vw;color:white;" class="mb-7" v-if="mentorName">{{ mentorName }} 상담사와 상담중입니다.</h1>
-            <WebRTC ref="webrtc" cameraHeight="400" :roomId="roomId" @error="onError"  class="mb-7"/>
+            <WebRTC ref="webrtc" cameraHeight="400" :roomId="roomId" @error="onError"  class="mb-7" @isLeave="finishLive()"/>
           </v-col>
         </div>
         <div>
@@ -47,6 +47,11 @@
     <video id="videoTag" muted hidden @playing="addEventListener()"></video>
 
     <v-snackbar v-model="successSnack" top flat color="success" rounded="pill" :timeout="2000">
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+    <v-snackbar v-model="errorSnack" top flat color="error" rounded="pill" :timeout="2000">
       <span class="snackText">
         {{ altMsg }}
       </span>
@@ -77,15 +82,15 @@ export default {
       isProgress: false,
       url: 'https://fcm.googleapis.com/fcm/send',
       devecieId: this.getDeviceID,
-      topic: 'streaming',
+      topic: 'streaming1',
       dialog: false,
-      // failMatching: false,
       roomNum: null,
       dialogRTC: true,
       dialogRTC2: false,
       endBtn: false,
       mentorName: null,
       successSnack: false,
+      errorSnack: false,
       altMsg: '',
       startFlag: true,
     };
@@ -159,7 +164,7 @@ export default {
           room: this.roomId,
           room_num: res.data,
         },
-        to: '/topics/streaming',
+        to: '/topics/streaming1',
       };
       const config = {
         headers: {
@@ -190,7 +195,9 @@ export default {
     },
     onLeave() {
       this.$store.commit('changeIsRemote', false);
-      this.$refs.webrtc.leave();
+      if(this.$refs.webrtc){
+        this.$refs.webrtc.leave();
+      }
       this.stopVideo();
       this.deleteDB();
       this.$router.push('/');
@@ -248,6 +255,13 @@ export default {
     deleteDB() {
       http.delete(`/counseling/deleteReadyMentee/${this.roomNum}`).then(() => {});
     },
+    finishLive() {
+      this.successSnack = true;
+      this.altMsg = '상담이 종료되었습니다.';
+      setTimeout(() => {
+        this.onLeave();
+      }, 2000);
+    }
   },
   computed: {
     ...mapGetters([
@@ -267,7 +281,7 @@ export default {
       if (val) {
         console.log('remote 들어옴');
         this.successSnack = true;
-        this.altMsg = '상담가가 들어옵니다.';
+        this.altMsg = '상담사가 들어옵니다.';
         this.dialog = false;
         this.endBtn = true;
         http.get(`/counseling/liveMentorInfo/${this.roomId}`).then((res) => {
@@ -281,12 +295,16 @@ export default {
         return;
       }
       console.log('isremote ' + this.getIsRemote);
-      // setTimeout(() => {
-      //   this.dialog = false;
-      //   // this.failMatching = true;
-      //   this.onLeave();
-      // }, 60000);
-      //1분
+      setTimeout(() => {
+        if(!this.getIsRemote){
+          this.dialog = false;
+          this.errorSnack = true;
+          this.altMsg = '매칭에 실패했습니다.';
+          setTimeout(() => {
+            this.onLeave();
+          }, 2000);
+        }
+      }, 60000);
     },
   },
 };

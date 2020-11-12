@@ -227,7 +227,7 @@
           flat
           color="error"
           rounded="pill"
-          :timeout="2000"
+          :timeout="1000"
         >
           <span class="snackText">
             비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.
@@ -413,6 +413,7 @@ export default {
         http3
           .post(`/cert/imgCheck`, formData)
           .then((res) => {
+            console.log(res);
             if (res.data == "眞(정상적으로 발급된 자격증입니다.)") {
               this.imgCheck = true;
               this.imgOk=true;
@@ -470,7 +471,7 @@ export default {
             this.signOk = true;
             setTimeout(() => {
               this.$router.go();
-            }, 1500);
+            }, 500);
           }
         })
         .catch((e) => {

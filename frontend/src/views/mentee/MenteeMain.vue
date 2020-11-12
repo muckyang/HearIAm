@@ -51,7 +51,7 @@
     <div class="d-flex d-sm-none fill-height">
       <v-container style="padding: 0">
         <v-row no-gutters style="height: 50vh">
-           <v-col cols="6">
+           <v-col cols="6" @click="itemClick(1)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, .5);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -65,7 +65,7 @@
               </v-container>
             </v-card>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="6" @click="itemClick(0)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, .2);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -81,7 +81,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters style="height: 50vh">
-          <v-col cols="6">
+          <v-col cols="6" @click="itemClick(3)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, 0.2);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -95,7 +95,7 @@
               </v-container>
             </v-card>
           </v-col>
-           <v-col cols="6">
+           <v-col cols="6" @click="itemClick(2)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, 0.5);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -152,7 +152,7 @@ export default {
   data() {
     return {
       devecieId: this.$store.getters["getDeviceID"],
-      topic: "streaming",
+      topic: "streaming1",
       reser_dialog: false,
       items: [
         {
@@ -177,6 +177,9 @@ export default {
       errorSnack: false,
       altMsg: "",
     };
+  },
+  created() {
+    http.delete(`/counseling/liveList`);
   },
   methods: {
     itemClick(i) {

@@ -40,6 +40,7 @@ export default {
       localVideo: null,
       videoList: [],
       canvas: null,
+      isLeave: false,
     };
   },
   props: {
@@ -86,11 +87,15 @@ export default {
   },
   watch: {
     videoList(){
+      if(this.isLeave){
+        this.$emit("isLeave");
+      }
       if(this.videoList.length>1){
         this.$store.commit("changeIsRemote",true);
         console.log("remote 들어옴 : "+ this.$store.getters['getIsRemote'])
+        this.isLeave = true;
       }
-    }
+    },
   },
   mounted() {
     var that = this;

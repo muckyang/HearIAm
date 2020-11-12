@@ -21,8 +21,8 @@
         >상담 대기 취소</v-btn
       >
       <v-btn
-        class=" d-none d-sm-flex"
-        v-if="!getIsReady && getRole == `mentor`"
+        class="d-none d-sm-flex"
+        v-if="getRole == `mentor`"
         text
         @click="subscribe()"
         >실시간 상담 대기</v-btn
@@ -133,7 +133,7 @@
                   마이<br />페이지
                 </p>
               </li>
-              <li>
+              <li @click="goLive()">
                 <p
                   style="
                     transform: rotate(185deg) skewY(54deg);
@@ -145,7 +145,7 @@
                   실시간<br />상담
                 </p>
               </li>
-              <li @click="a()">
+              <li @click="goRecord()">
                 <p
                   style="
                     transform: rotate(185deg) skewY(54deg);
@@ -290,12 +290,6 @@ export default {
     }
   },
   methods: {
-    a() {
-      alert("a");
-    },
-    b() {
-      alert("b");
-    },
     logout: function () {
       this.unsubscribe();
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
@@ -344,7 +338,7 @@ export default {
       this.$router.push(`/recordList`).catch(() => {});
     },
     subscribe() {
-      http.get(`/counseling/liveList`);
+      http.delete(`/counseling/liveList`);
       // console.log("click subscribe btn");
       this.$store.commit("changeIsReady", true);
       this.subscribeTokenToTopic(this.getDeviceID, this.topic);
@@ -390,7 +384,7 @@ export default {
         method: "POST",
         url: "https://iid.googleapis.com/iid/v1:batchRemove",
         data: {
-          to: "/topics/streaming",
+          to: "/topics/streaming1",
           registration_tokens: [token],
         },
         headers: {
