@@ -1,8 +1,9 @@
 <template>
   <div style="height: 100%; width: 100%" class="webRtc-back">
     <v-dialog v-model="dialog" persistent max-width="1300">
-      <div style="border: 3px solid white; border-radius:10px;color:white;" outlined>
-        <v-container v-if="!isSangdam" style="height:400px; padding-top:9%;">
+      <div >
+        <div v-if="!isSangdam" style="border: 3px solid white; border-radius:10px;color:white;">
+        <v-container style="height:400px; padding-top:9%;">
           <div>
           <h1>
             상담 준비가 완료 되었다면 <br />
@@ -20,12 +21,13 @@
           </v-btn>
           </div>
         </v-container>
-        <div style="height: 600px" v-if="isSangdam">
+        </div>
+        <div style="height: 600px; background-color:white;" v-if="isSangdam">
           <v-row align="center" justify="center" style="height: 100%">
             <v-col cols="3" v-if="menteeName">
               <h2>
                 <span style="color: #262272">{{ menteeName }}</span
-                >님과 상담중 입니다.
+                >님과 상담중
               </h2>
               <p>상담이 끝났다면 아래 버튼을 눌러주세요.</p>
               <v-btn
