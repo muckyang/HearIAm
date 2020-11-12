@@ -1,6 +1,5 @@
 package com.ssafy.backend.model;
 
-import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +18,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long num;
     private String mentor;
-    private LocalDate sdate;
+    private String sdate;
     private String stime;
     private int isReser;
     private int timeidx;

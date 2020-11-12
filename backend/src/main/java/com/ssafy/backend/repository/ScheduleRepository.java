@@ -1,34 +1,33 @@
 package com.ssafy.backend.repository;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import com.ssafy.backend.model.Schedule;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.ssafy.backend.model.Schedule;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAll();
 
-    Schedule findScheduleByMentorAndSdateAndStime(String Mentor, LocalDate sdate, String stime);
+    Schedule findScheduleByMentorAndSdateAndStime(String Mentor, String sdate, String stime);
     
-    Schedule findBySdateAndStime(LocalDate sdate, String stime);
+    Schedule findBySdateAndStime(String sdate, String stime);
     
     Schedule findByNum(Long num);
 
-    List<Schedule> findScheduleBySdateAndStimeAndIsReser(LocalDate sdate, String stime, int flag);
+    List<Schedule> findScheduleBySdateAndStimeAndIsReser(String sdate, String stime, int flag);
 
     List<Schedule> findByMentor(String mentor);
     
     List<Schedule> findByMentorAndIsReser(String mentor, int isReser);
 
-    Schedule findScheduleByMentorAndSdateAndTimeidx(String Mentor, LocalDate sdate, int timeidx);
+    Schedule findScheduleByMentorAndSdateAndTimeidx(String Mentor, String sdate, int timeidx);
 
-    List<Schedule> findBySdateAndIsReser(LocalDate sdate, int isReser);
+    List<Schedule> findBySdateAndIsReser(String sdate, int isReser);
     
-    List<Schedule> findBySdateAndIsReserOrderByTimeidxAsc(LocalDate sdate, int isReser);
+    List<Schedule> findBySdateAndIsReserOrderByTimeidxAsc(String sdate, int isReser);
 
-    List<Schedule> findByMentorAndSdateAndIsReserOrderByTimeidxAsc(String mentor, LocalDate sdate, int isReser);
+    List<Schedule> findByMentorAndSdateAndIsReserOrderByTimeidxAsc(String mentor, String sdate, int isReser);
 }
