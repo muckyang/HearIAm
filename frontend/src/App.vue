@@ -133,7 +133,7 @@
                   마이<br />페이지
                 </p>
               </li>
-              <li>
+              <li @click="goLive()">
                 <p
                   style="
                     transform: rotate(185deg) skewY(54deg);
@@ -145,7 +145,7 @@
                   실시간<br />상담
                 </p>
               </li>
-              <li @click="a()">
+              <li @click="goRecord()">
                 <p
                   style="
                     transform: rotate(185deg) skewY(54deg);
@@ -291,12 +291,6 @@ export default {
     }
   },
   methods: {
-    a() {
-      alert("a");
-    },
-    b() {
-      alert("b");
-    },
     logout: function () {
       this.unsubscribe();
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
