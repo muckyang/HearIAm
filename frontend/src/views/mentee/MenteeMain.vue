@@ -175,6 +175,9 @@ export default {
       altMsg: "",
     };
   },
+  created() {
+    http.delete(`/counseling/liveList`);
+  },
   methods: {
     itemClick(i) {
       if (i === 0) {

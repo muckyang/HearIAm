@@ -90,13 +90,13 @@ public class CounselingController {
 	public void alllemotion() {
 		List<Emotion> list = emotionRepository.findByAngry("");
 		for (Emotion emotion : list) {
-			emotion.setAngry("1");
-			emotion.setDisgusted("1");
-			emotion.setFearful("1");
-			emotion.setHappy("1");
+			emotion.setAngry("0");
+			emotion.setDisgusted("0");
+			emotion.setFearful("0");
+			emotion.setHappy("0");
 			emotion.setNeutral("1");
-			emotion.setSad("1");
-			emotion.setSurprised("1");
+			emotion.setSad("0");
+			emotion.setSurprised("0");
 			emotionRepository.save(emotion);
 		}
 	}
@@ -107,19 +107,17 @@ public class CounselingController {
 		return emotion;
 	}
 
-	@GetMapping("/liveList")
-	public List<ConRoom> liveList() {
+	@DeleteMapping("/liveList")
+	public void liveList() {
 		List<ConRoom> list = conRoomRepository.findByStatus("liveRequest");
 		Date now = new Date();
 		
 		for (ConRoom conRoom : list) {
 			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate());
-			if ((now.getTime() - date2.getTime()) / 60000 > 30) {
+			if ((now.getTime() - date2.getTime()) / 1000 > 60) {
 				conRoomRepository.deleteByNum(conRoom.getNum());
 			}
 		}
-		list = conRoomRepository.findByStatus("liveRequest");
-		return list;
 	}
 
 	@GetMapping("/counseling/{num}")

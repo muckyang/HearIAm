@@ -76,6 +76,7 @@
                     cameraHeight="140"
                     @error="onError"
                     @childs-event="parentsMethod"
+                    @isLeave="menteeLeave()"
                   />
                   <span style="font-size:0.9rem;">
                   청소년에게 보여지는 화면</span>
@@ -96,6 +97,18 @@
       color="success"
       rounded="pill"
       :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+    <v-snackbar
+      v-model="primarySnack"
+      top
+      flat
+      color="primary"
+      rounded="pill"
+      :timeout="60000"
     >
       <span class="snackText">
         {{ altMsg }}
@@ -162,6 +175,7 @@ export default {
       menteeName: null,
       dialog: true,
       successSnack: false,
+      primarySnack: false,
       altMsg: "",
       isSangdam: false,
     };
@@ -325,6 +339,10 @@ export default {
       let num = this.getUserNum;
       http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
     },
+    menteeLeave(){
+      this.primarySnack = true;
+      this.altMsg = "청소년이 상담을 종료했습니다.";
+    }
   },
   computed: {
     ...mapGetters([
