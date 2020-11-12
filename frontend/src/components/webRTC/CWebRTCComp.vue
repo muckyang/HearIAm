@@ -132,7 +132,20 @@
       rounded="pill"
       :timeout="2000"
     >
+    
+   
       <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+     <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    > <span class="snackText">
         {{ altMsg }}
       </span>
     </v-snackbar>
@@ -228,8 +241,7 @@ export default {
         .then((res) => {
           if (res.data == "fail") {
             this.errorSnack = true;
-            this.altMsg = "이미 상담 중입니다. 다음엔 차례를 기다려 주세요.";
-            console.log("dasnl;fsnl;asnad;sfl ");
+            this.altMsg = "이미 상담 중입니다. 다른 학생과 상담하세요.";
             setTimeout(() => {
               this.$router.push("/");
             }, 1500);
