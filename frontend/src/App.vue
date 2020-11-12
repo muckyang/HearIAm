@@ -338,7 +338,7 @@ export default {
       this.$router.push(`/recordList`).catch(() => {});
     },
     subscribe() {
-      http.get(`/counseling/liveList`);
+      http.delete(`/counseling/liveList`);
       // console.log("click subscribe btn");
       this.$store.commit("changeIsReady", true);
       this.subscribeTokenToTopic(this.getDeviceID, this.topic);

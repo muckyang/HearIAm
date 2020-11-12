@@ -40,6 +40,7 @@ export default {
       localVideo: null,
       videoList: [],
       canvas: null,
+      isLeave: false,
     };
   },
   props: {
@@ -84,7 +85,16 @@ export default {
       default: null,
     },
   },
-  watch: {},
+  watch: {
+    videoList(){
+      if(this.isLeave){
+        this.$emit("isLeave");
+      }
+      if(this.videoList.length>1){
+        this.isLeave = true;
+      }
+    },
+  },
   mounted() {
     var that = this;
     this.rtcmConnection = new RTCMultiConnection();
