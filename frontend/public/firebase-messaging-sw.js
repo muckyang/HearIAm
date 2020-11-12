@@ -30,6 +30,8 @@ self.addEventListener('notificationclick', function (event) {
 //     icon: '../src/assets/logo.png',
 //     data: 'https://k3b202.p.ssafy.io/'
 //   };
+  
+
 //   return self.registration.showNotification(notificationTitle, notificationOptions);
 // })
 

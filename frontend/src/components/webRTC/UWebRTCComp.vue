@@ -200,6 +200,7 @@ export default {
       }
       this.stopVideo();
       this.deleteDB();
+      http.delete(`/counseling/liveList`); //conroom 삭제
       this.$router.push('/');
     },
     onError(error, stream) {

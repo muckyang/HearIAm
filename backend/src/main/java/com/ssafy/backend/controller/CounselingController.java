@@ -275,7 +275,7 @@ public class CounselingController {
 			System.out.println(result);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("fail", HttpStatus.OK);
 		}
 	}
 

@@ -225,6 +225,7 @@ export default {
       dialog: true,
       successSnack: false,
       primarySnack: false,
+      errorSnack:false,
       altMsg: "",
       isSangdam: false,
     };
