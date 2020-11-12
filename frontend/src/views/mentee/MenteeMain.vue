@@ -19,11 +19,11 @@
               >
                 <v-container fill-height>
                   <v-layout align-center justify-center>
-                    <v-card-title class="title white--text" style="opacity: 1">
+                    <v-card-title class="white--text" style="opacity: 1">
                       <div>
                         <p
-                          class="ma-0 font-weight-bold text-center"
-                          style="font-size: 2em"
+                          class="ma-0 text-center"
+                          style="font-size: 2em; font-weight:bold;"
                         >
                           {{ item.text }}
                         </p>
@@ -32,8 +32,8 @@
                           style="opacity: 1"
                         ></v-divider>
                         <p
-                          class="font-weight-medium text-center mx-10"
-                          style="opacity: 0.5; font-size: 0.8em"
+                          class="text-center mx-5"
+                          style="opacity: 1; font-size: 1em"
                         >
                           {{ item.subtext }}
                         </p>
@@ -59,7 +59,7 @@
                     class="ma-0 font-weight-bold text-center white--text"
                     style="font-size: 2em"
                   >
-                    음성 상담
+                    녹음 상담
                   </p>
                 </v-layout>
               </v-container>
@@ -159,15 +159,15 @@ export default {
         {
           text: "녹음 상담",
           subtext:
-            "상담사와 미팅이 부담스럽다면 당신의 목소리로 고민을 말해보세요.",
+            "실시간 상담이 부담스럽다면 녹음을 통해 상담해보세요.",
         },
         {
           text: "상담 예약",
-          subtext: "담당 상담사가 없다면 예약서비스를 이용해보세요",
+          subtext: "대기중인 상담사가 없다면 예약 서비스를 이용해보세요.",
         },
         {
           text: "마이페이지",
-          subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
+          subtext: "나의 상담 내역과 예약 현황을 확인할 수 있어요.",
         },
       ],
       transparent: "rgba(255, 255, 255, 0)",

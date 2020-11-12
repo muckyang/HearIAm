@@ -29,7 +29,7 @@
       <div v-if="this.waitList.length <= 0">
           <div style="margin-top:130px;font-size:1.5rem">
             
-            <img src="@/assets/noResult.png" style="height:200px; width:200px;">
+            <img src="@/assets/noResult3.png" style="height:200px; width:200px;">
             <br>
             등록된 녹음 상담이 없습니다.</div>
       </div>
