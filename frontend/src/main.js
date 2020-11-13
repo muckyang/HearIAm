@@ -48,7 +48,7 @@ messaging.onMessage((payload) => {
           .get(`/counseling/isRoom/${mentorNum}/${num}`)
           .then((res) => {
             if (res.data == "fail") {
-              alert("이미 상담 중입니다. 다음엔 차례를 기다려 주세요.");
+              alert("이미 상담 중입니다. 다른 학생과 상담하세요.");
               router.push("/");
             } else {             
               router.push(

@@ -72,13 +72,16 @@
               </div>
             </v-col>
             <v-col class="col-lg-4 col-md-4 col-sm-3 col-xs-10">
-              <v-btn
+              <v-btn v-if ="item.status == 'reapply'" 
                 small
                 @click="MenteeHistory(item)"
                 style="font-size: 0.9rem; height: 3.3rem; width:50%;border-radius:5px;"
                 class="main-btn"
                 >이전 상담내역<br>GO</v-btn
               >
+              <p v-else class="mt-3" style="font-size : 18px"  
+             
+                >이전 상담내역 없음 </p>
             </v-col>
           </v-row>
         </v-timeline-item>
