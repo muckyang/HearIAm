@@ -276,6 +276,8 @@ public class CounselingController {
 				alarmRepository.deleteByNum(cRoom.getNum());
 				alarmReadyRepository.deleteByMentor(mentor);
 				result = cRoom.getRoom();
+			} else if(cRoom.getMentor() == mentor) {
+				result = cRoom.getRoom();
 			} else {
 				result = "fail";
 			}
