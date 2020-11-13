@@ -8,7 +8,6 @@
           font-weight: 700;
           word-spacing: 4px;
           letter-spacing: 4px;
-          font-family: 'yg-jalnan';
         "
         class="mb-2"
       >
