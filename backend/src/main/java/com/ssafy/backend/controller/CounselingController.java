@@ -156,8 +156,15 @@ public class CounselingController {
 
 	@GetMapping("/menteeMyList/{num}")
 	public List<ConRoom> myList(@PathVariable(value = "num") Long num) {
-		List<ConRoom> list = conRoomRepository.findByMenteeAndStatusOrStatusOrStatusOrderByDateDesc(num, "finish", "progress", "waiting");
-		return list;
+		List<ConRoom> list = conRoomRepository.findByMenteeOrderByDateDesc(num); //, "finish", "progress", "waiting"
+		List<ConRoom> result = new ArrayList<ConRoom>();
+		for (ConRoom conRoom : list) {
+			if(conRoom.getStatus().equals("finish") || conRoom.getStatus().equals("progress") || conRoom.getStatus().equals("waiting")) {
+				result.add(conRoom);
+			}
+		}
+		
+		return result;
 	}
 
 	@GetMapping("/myMenteeList/{num}")
