@@ -108,6 +108,11 @@
         </v-btn>
       </v-card-actions>
     <!-- </v-card> -->
+    <v-snackbar v-model="successSnack" top flat color="success" rounded="pill" :timeout="2000">
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -137,6 +142,9 @@ export default {
       counseling: {},
       date: null,
       nickname: "",
+      successSnack:false,
+      altMsg:'',
+
     };
   },
   created() {
@@ -246,7 +254,9 @@ export default {
         .then((res) => {
           console.log(res.data);
           setTimeout(() => {
-            this.$router.push("/");
+            this.altMsg = "저장되었습니다.";
+            this.successSnack = true;
+            // this.$router.push("/myMenteeList");
           }, 1000);
         })
         .catch((err) => {
