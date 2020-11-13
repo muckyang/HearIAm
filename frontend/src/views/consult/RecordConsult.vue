@@ -33,13 +33,13 @@
               <v-card :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }" height="100vh">
                 <v-container fill-height>
                   <v-layout align-center justify-center>
-                    <v-card-title class="title white--text" style="opacity: 1;" @click="clickBtn(i)">
+                    <v-card-title class="white--text" style="opacity: 1;" @click="clickBtn(i)">
                       <div>
-                        <p class="ma-0 font-weight-bold text-center" style="font-size: 3.5vw;">
+                        <p class="ma-0 text-center" style="font-size: 3.5vw;font-weight:bold;">
                           {{ itm.text }}
                         </p>
                         <v-divider class="my-10 white" style="opacity: 1"></v-divider>
-                        <p class="font-weight-medium text-center mx-10" style="opacity:.5; font-size: .8em">
+                        <p class="text-center mx-10" style=" font-size: 1em">
                           {{ itm.subtext }}
                         </p>
                       </div>
@@ -158,9 +158,9 @@ export default {
       alertFlag: true,
       concern: '',
       items: [
-        '시험 성적 때문에 고민이에요..',
+        '시험 성적 때문에 고민이에요.',
         '진로에 대한 고민이 있어요.',
-        '괴롭힘을 당하고 있어요...',
+        '괴롭힘을 당하고 있어요.',
         '친구문제로 상담을 받고 싶어요.',
         '기타',
         '직접 입력',
@@ -195,7 +195,7 @@ export default {
       sitems: [
         {
           text: '전송하기',
-          subtext: '상담이 상담사에게 전송돼요.',
+          subtext: '녹음 내용이 상담사에게 전송돼요.',
         },
         {
           text: '재녹음하기',
