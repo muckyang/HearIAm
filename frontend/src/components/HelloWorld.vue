@@ -25,7 +25,7 @@
           <p
             style="
               font-family: 'Short Stack', cursive;
-              font-size: 4vw;
+              font-size: 2.5rem;
               font-weight: 700;
             "
           >

@@ -11,7 +11,7 @@
     </div>
 
     <!-- S1 -->
-    <div v-if="!flag1" class="record-first-ment" style="height:300px; padding-top:50px;">
+    <div v-if="!flag1" class="record-first-ment" style="height:40%; padding-top:50px;">
       <h1 style="color:white;font-size:6vw;">당신의 고민은 무엇인가요?</h1>
     </div>
 

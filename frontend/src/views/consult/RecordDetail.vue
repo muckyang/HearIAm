@@ -5,10 +5,12 @@
       padding-top: 70px;
       background-color: #0f0d2d;
       min-height: 100%;
+      height:100%;
+      max-height: 100%;
     "
     align="center"
   >
-    <div class="px-5 pt-5 content-box">
+    <div class="px-5 pt-5 content-box" style="">
       
       <h1 align="center">녹음 상담 답변하기</h1>
       <v-row style="height: 70%">

@@ -23,13 +23,13 @@
         <v-col cols="12" sm="6" md="2" v-for="item in menteeList" :key="item.num">
           <v-card :color="item.color" @click="menteeInfo(item.num, item.name)" height="200" style="overflow:hidden;" elevation="4">
             <div class="one-box" align="center" style="height:100%;width:100%;">
-              <div style="width: 80%; height: 75%">
+              <div style="width: 50%; height: 50%" class="pt-5">
                 <v-img :src="getIcon(item.icon)"></v-img>
               </div>
               <!-- <v-img :src="`../../assets/icons/${item.icon}`" ></v-img> -->
               <!-- <v-img src="../../assets/icons/bear.png" ></v-img> -->
-              <div style="height:25%;display:table;">
-                <p class="my-0" style="font-size:1.2rem;font-weight:bold;display:table-cell;vertical-align:middle;">
+              <div style="height:50%;">
+                <p class="my-0 pt-12" style="font-size:1.2rem;font-weight:bold;display:table-cell;vertical-align:middle;">
                   {{ item.name }}
                 </p>
               </div>
