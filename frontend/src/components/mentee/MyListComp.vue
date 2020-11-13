@@ -128,7 +128,7 @@
                         item.date.slice(8, 10) == todaytime.getDate() &&
                         item.date.slice(11, 13) == todaytime.getHours()
                       "
-                      @click="startCounseling(item.num)"
+                      @click="startCounseling(item.room)"
                       style="font-size: 1rem; color: white;background-color:crimson; font-weight: bold; border:2px solid; border-radius:20px;height:30px;"
                       
                       >ON-AIR</v-btn
@@ -595,10 +595,8 @@ export default {
     reRecord() {
       this.$router.push(`/recordConsult/${this.selitem.mentor}`);
     },
-    startCounseling(num) {
-      http.get(`/counseling/reserveConRoom/${num}`).then((res) => {
-        this.$router.push(`/userWRTC/${res.data.room}`);
-      });
+    startCounseling(room) {
+      this.$router.push(`/userWRTC/${room}`);
     },
     getDday(day) {
       var year = day.slice(0, 4);

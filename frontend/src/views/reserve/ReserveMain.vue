@@ -294,10 +294,12 @@ export default {
               date: `${res.data.sdate}T${res.data.stime}:00`,
             });
           });
-          this.reserDialog = false;
-          this.$emit("reserve", false);
           this.successSnack = true;
           this.altMsg = "예약이 완료되었습니다.";
+          setTimeout(() => {
+            this.reserDialog = false;
+            this.$emit("reserve", false);
+          },2000);
         })
         .catch((e) => {
           console.log(e);
