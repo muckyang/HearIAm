@@ -6,7 +6,7 @@
 
 * 팀장: 이재인(Full Stack)
   * 팀원: 김영남(Full Stack), 노휘종(Full Stack), 임도현(Full Stack), 임지민(Full Stack)
-  * 주소: http://k3b202.p.ssafy.io/
+  * 주소: https://k3b202.p.ssafy.io/
 
 ## :paperclip: 목차
 
