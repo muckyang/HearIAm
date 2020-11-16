@@ -1,26 +1,24 @@
 package com.ssafy.backend.help;
 
-import java.util.Date;
-
-/*
- UserProfile
-{id:"sdfs",username:"sdfsdfsdf", name:"ddssffsdfsffsdfs"}
- */
 public class UserProfile {
 
 	private Long num;
-	private String userId;
+	private String id;
 	private String name;
-	private String nickName;
-	private Date birth;
+	private String role;
+	private int qualification;
 
-	public UserProfile(Long num, String userId, String name, String nickName, Date birth) {
+	public UserProfile() {
+		super();
+	}
+
+	public UserProfile(Long num, String id, String name, String role, int qualification) {
 		super();
 		this.num = num;
-		this.userId = userId;
+		this.id = id;
 		this.name = name;
-		this.nickName = nickName;
-		this.birth = birth;
+		this.role = role;
+		this.qualification = qualification;
 	}
 
 	public Long getNum() {
@@ -31,12 +29,12 @@ public class UserProfile {
 		this.num = num;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getId() {
+		return id;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -47,20 +45,26 @@ public class UserProfile {
 		this.name = name;
 	}
 
-	public String getNickName() {
-		return nickName;
+	public String getRole() {
+		return role;
 	}
 
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
-	public Date getBirth() {
-		return birth;
+	public int getQualification() {
+		return qualification;
 	}
 
-	public void setBirth(Date birth) {
-		this.birth = birth;
+	public void setQualification(int qualification) {
+		this.qualification = qualification;
+	}
+
+	@Override
+	public String toString() {
+		return "UserProfile [num=" + num + ", id=" + id + ", name=" + name + ", role=" + role + ", qualification="
+				+ qualification + "]";
 	}
 
 }

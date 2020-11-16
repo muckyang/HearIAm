@@ -20,7 +20,6 @@ public class UserRoles {
 
 	public UserRoles() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public UserRoles(Long userNum, Long roleNum) {

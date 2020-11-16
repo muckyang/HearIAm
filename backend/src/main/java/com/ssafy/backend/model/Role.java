@@ -1,6 +1,8 @@
 package com.ssafy.backend.model;
 
 import org.hibernate.annotations.NaturalId;
+
+
 import javax.persistence.*;
 
 @Entity
