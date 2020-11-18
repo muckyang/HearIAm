@@ -156,6 +156,15 @@
               </v-col>
             </v-row>
 
+            <v-row v-if="type" justify="center">
+              <v-switch
+                v-model="imgCheck"
+                inset
+                hide-details
+                :label="'자격증 인증 없이 가입하겠습니다.'"
+              ></v-switch>
+            </v-row>
+
             <v-row>
               <v-col cols="10" style="margin: 0 auto">
                 <v-btn
