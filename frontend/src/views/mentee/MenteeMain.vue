@@ -19,11 +19,11 @@
               >
                 <v-container fill-height>
                   <v-layout align-center justify-center>
-                    <v-card-title class="title white--text" style="opacity: 1">
+                    <v-card-title class="white--text" style="opacity: 1">
                       <div>
                         <p
-                          class="ma-0 font-weight-bold text-center"
-                          style="font-size: 2em"
+                          class="ma-0 text-center"
+                          style="font-size: 2em; font-weight:bold;"
                         >
                           {{ item.text }}
                         </p>
@@ -32,8 +32,8 @@
                           style="opacity: 1"
                         ></v-divider>
                         <p
-                          class="font-weight-medium text-center mx-10"
-                          style="opacity: 0.5; font-size: 0.8em"
+                          class="text-center mx-5"
+                          style="opacity: 1; font-size: 1em"
                         >
                           {{ item.subtext }}
                         </p>
@@ -51,7 +51,7 @@
     <div class="d-flex d-sm-none fill-height">
       <v-container style="padding: 0">
         <v-row no-gutters style="height: 50vh">
-           <v-col cols="6">
+           <v-col cols="6" @click="itemClick(1)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, .5);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -59,13 +59,13 @@
                     class="ma-0 font-weight-bold text-center white--text"
                     style="font-size: 2em"
                   >
-                    음성 상담
+                    녹음 상담
                   </p>
                 </v-layout>
               </v-container>
             </v-card>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="6" @click="itemClick(0)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, .2);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -81,7 +81,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters style="height: 50vh">
-          <v-col cols="6">
+          <v-col cols="6" @click="itemClick(3)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, 0.2);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -95,7 +95,7 @@
               </v-container>
             </v-card>
           </v-col>
-           <v-col cols="6">
+           <v-col cols="6" @click="itemClick(2)">
             <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, 0.5);">
               <v-container fill-height>
                 <v-layout align-center justify-center>
@@ -114,12 +114,15 @@
     </div>
     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
       <div class="px-5 pt-5 reser-back">
-        <!-- <v-card rounded="xl" style="padding: 20px; background-color:white;">
-        <v-card-title class="text-center justify-center p-8"> -->
-        <h1>실시간 상담 예약</h1>
-        <!-- </v-card-title> -->
+        <span style="font-size: 2rem; font-weight:bold;">실시간 상담 예약</span>
+        <v-icon
+          class="mb-3"
+          style="float: right; color:crimson"
+          @click="reser_dialog=false"
+          >mdi-close</v-icon
+        >
         <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()" />
-        <!-- </v-card> -->
+       
       </div>
     </v-dialog>
 
@@ -149,7 +152,7 @@ export default {
   data() {
     return {
       devecieId: this.$store.getters["getDeviceID"],
-      topic: "streaming",
+      topic: "streaming1",
       reser_dialog: false,
       items: [
         {
@@ -159,21 +162,24 @@ export default {
         {
           text: "녹음 상담",
           subtext:
-            "상담사와 미팅이 부담스럽다면 당신의 목소리로 고민을 말해보세요.",
+            "실시간 상담이 부담스럽다면 녹음을 통해 상담해보세요.",
         },
         {
           text: "상담 예약",
-          subtext: "담당 상담사가 없다면 예약서비스를 이용해보세요",
+          subtext: "대기중인 상담사가 없다면 예약 서비스를 이용해보세요.",
         },
         {
           text: "마이페이지",
-          subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
+          subtext: "나의 상담 내역과 예약 현황을 확인할 수 있어요.",
         },
       ],
       transparent: "rgba(255, 255, 255, 0)",
       errorSnack: false,
       altMsg: "",
     };
+  },
+  created() {
+    http.delete(`/counseling/liveList`);
   },
   methods: {
     itemClick(i) {

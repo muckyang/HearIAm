@@ -8,7 +8,6 @@
           font-weight: 700;
           word-spacing: 4px;
           letter-spacing: 4px;
-          font-family: 'yg-jalnan';
         "
         class="mb-2"
       >
@@ -157,6 +156,15 @@
               </v-col>
             </v-row>
 
+            <v-row v-if="type" justify="center">
+              <v-switch
+                v-model="imgCheck"
+                inset
+                hide-details
+                :label="'자격증 인증 없이 가입하겠습니다.'"
+              ></v-switch>
+            </v-row>
+
             <v-row>
               <v-col cols="10" style="margin: 0 auto">
                 <v-btn
@@ -227,7 +235,7 @@
           flat
           color="error"
           rounded="pill"
-          :timeout="2000"
+          :timeout="1000"
         >
           <span class="snackText">
             비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.
@@ -241,7 +249,9 @@
           rounded="pill"
           :timeout="2000"
         >
-          <span class="snackText">비밀번호는 숫자와 영문자를 혼용하여야 합니다.</span>
+          <span class="snackText"
+            >비밀번호는 숫자와 영문자를 혼용하여야 합니다.</span
+          >
         </v-snackbar>
         <v-snackbar
           v-model="noid"
@@ -253,8 +263,54 @@
         >
           <span class="snackText">아이디를 입력해주세요.</span>
         </v-snackbar>
+        <v-snackbar
+          v-model="imgOk"
+          top
+          flat
+          color="success"
+          rounded="pill"
+          :timeout="2000"
+        >
+          <span class="snackText">인증 완료 했습니다.</span>
+        </v-snackbar>
+        <v-snackbar
+          v-model="noimgOk"
+          top
+          flat
+          color="error"
+          rounded="pill"
+          :timeout="2000"
+        >
+          <span class="snackText">인증 실패 했습니다. 다른 사진을 등록해주세요.</span>
+        </v-snackbar>
+        <v-snackbar
+          v-model="noimgChk"
+          top
+          flat
+          color="error"
+          rounded="pill"
+          :timeout="2000"
+        >
+          <span class="snackText">자격증 확인이 필요합니다.</span>
+        </v-snackbar>
+
       </v-container>
     </div>
+    <v-dialog v-model="img_dialog" max-width="600" min-height="600">
+      <div class="px-5 pt-5 reser-back">
+        <h2>자격증 확인 중 입니다. <br> 조금만 기다려 주세요.</h2><br>
+        <v-progress-circular 
+          :size="50"
+          :width="7"
+          color="#49358b"
+          indeterminate
+          class="mb-5"
+        >
+        </v-progress-circular>
+        <br>
+        
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -297,6 +353,11 @@ export default {
       noid: false,
       idchkFlag: false,
       files: null,
+      img_dialog: false,
+      imgCheck:false,
+      imgOk:false,
+      noimgOk:false,
+      noimgChk:false,
     };
   },
   mounted() {
@@ -340,25 +401,48 @@ export default {
         this.pwdEngNum = false;
         this.noid = false;
         this.idchkFlag = false;
+        this.imgCheck = false;
+        this.noimgChk = false;
+        this.imgOk=false;
       }
     },
+    files(val){
+      if(val != null){
+        this.img_dialog=true;
+      }
+    },
+
   },
   methods: {
     uploadFile() {
       if (this.files) {
         let formData = new FormData();
         formData.append("file", this.files);
-        // console.log(this.files);
         http3
           .post(`/cert/imgCheck`, formData)
           .then((res) => {
-            console.log(res.data);
+            console.log(res);
+            if (res.data == "眞(정상적으로 발급된 자격증입니다.)") {
+              this.imgCheck = true;
+              this.imgOk=true;
+            } else {
+              this.noimgOk=true;
+            }
+              this.img_dialog=false;
           })
           .catch((e) => console.log(e));
       }
     },
     validate() {
       this.$refs.form.validate();
+
+      if (this.type) {
+        if (!this.imgCheck) {
+          this.noimgChk = true;
+          return;
+        }
+      }
+
       if (this.password1 == this.password2) {
         var chk_num = this.password1.search(/[0-9]/g);
         var chk_eng = this.password1.search(/[a-z]/gi);
@@ -395,7 +479,7 @@ export default {
             this.signOk = true;
             setTimeout(() => {
               this.$router.go();
-            }, 1500);
+            }, 500);
           }
         })
         .catch((e) => {
@@ -439,7 +523,7 @@ export default {
   word-spacing: 2px;
   letter-spacing: 2px;
   display: inline-block;
-  width: 100%; 
+  width: 100%;
   text-align: center;
 }
 </style>

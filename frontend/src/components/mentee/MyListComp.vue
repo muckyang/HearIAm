@@ -11,16 +11,20 @@
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
       <v-tab-item>
-        <v-col v-if="!cpagingList" style="margin-top: 220px"
-          >상담 내역이 없습니다.</v-col
+
+        <v-col v-if="cpagingList == 0"
+          ><div style="margin-top:130px;font-size:1.5rem">
+            <img src="@/assets/noResult3.png" style="height:200px; width:200px;">
+            <br>
+            상담 내역이 없습니다.</div></v-col
         >
-        <v-simple-table v-if="cpagingList" class="py-5">
+        <v-simple-table v-if="cpagingList != 0" class="py-5">
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-center" style="width: 20%">상담 날짜</th>
+                <th class="text-center" style="width: 20%">상담 일자</th>
                 <th class="text-center" style="width: 20%">상담사</th>
-                <th class="text-center" style="width: 20%">종류</th>
+                <th class="text-center" style="width: 20%">상담 종류</th>
                 <th class="text-center" style="width: 20%">현황</th>
                 <th class="text-center" style="width: 20%">재상담 신청</th>
               </tr>
@@ -81,11 +85,12 @@
         </v-simple-table>
         <v-pagination
           v-model="cpage"
-          v-if="cpagingList"
+          v-if="cpagingList != 0"
           :length="cpageLength"
           circle
           class="pb-3"
           color="#262272"
+          :total-visible="9"
         ></v-pagination>
       </v-tab-item>
 
@@ -93,8 +98,12 @@
       <v-tab-item>
         <v-sheet class="mx-auto pa-5" max-width="100%">
           <v-row>
-            <v-col v-if="rpagingList.length == 0" style="margin-top: 205px"
-              >예약 내역이 없습니다.</v-col
+            <v-col v-if="rpagingList.length == 0"
+              ><div style="margin-top:130px;font-size:1.5rem">
+            
+            <img src="@/assets/noResult3.png" style="height:200px; width:200px;">
+            <br>
+            예약 내역이 없습니다.</div></v-col
             >
             <v-col
               v-for="(item, index) in rpagingList"
@@ -119,7 +128,7 @@
                         item.date.slice(8, 10) == todaytime.getDate() &&
                         item.date.slice(11, 13) == todaytime.getHours()
                       "
-                      @click="startCounseling(item.num)"
+                      @click="startCounseling(item.room)"
                       style="font-size: 1rem; color: white;background-color:crimson; font-weight: bold; border:2px solid; border-radius:20px;height:30px;"
                       
                       >ON-AIR</v-btn
@@ -382,7 +391,7 @@ export default {
     });
     http.get(`/schedule/myReservation/${this.getUserID}`).then((res) => {
       this.myReservation = res.data;
-      console.log(res.data)
+      // console.log(res.data)
       this.rpagingList = this.myReservation.slice(0, 8);
       // console.log(this.rpagingList)
       if (this.myReservation.length % 8 == 0) {
@@ -586,10 +595,8 @@ export default {
     reRecord() {
       this.$router.push(`/recordConsult/${this.selitem.mentor}`);
     },
-    startCounseling(num) {
-      http.get(`/counseling/reserveConRoom/${num}`).then((res) => {
-        this.$router.push(`/userWRTC/${res.data.room}`);
-      });
+    startCounseling(room) {
+      this.$router.push(`/userWRTC/${room}`);
     },
     getDday(day) {
       var year = day.slice(0, 4);

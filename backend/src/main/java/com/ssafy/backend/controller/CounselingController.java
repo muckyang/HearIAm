@@ -74,9 +74,31 @@ public class CounselingController {
 
 	@PostMapping("/saveEmotion")
 	public ResponseEntity<String> saveEmotion(@RequestBody Emotion emotion) {
+		emotion.setAngry(emotion.getAngry()+"1");
+		emotion.setDisgusted(emotion.getDisgusted()+"1");
+		emotion.setFearful(emotion.getFearful()+"1");
+		emotion.setHappy(emotion.getHappy()+"1");
+		emotion.setNeutral(emotion.getNeutral()+"1");
+		emotion.setSad(emotion.getSad()+"1");
+		emotion.setSurprised(emotion.getSurprised()+"1");
 		emotionRepository.save(emotion);
 
 		return ResponseEntity.ok(SUCCESS);
+	}
+	
+	@GetMapping("/alllemotions")
+	public void alllemotion() {
+		List<Emotion> list = emotionRepository.findByAngry("");
+		for (Emotion emotion : list) {
+			emotion.setAngry("0");
+			emotion.setDisgusted("0");
+			emotion.setFearful("0");
+			emotion.setHappy("0");
+			emotion.setNeutral("1");
+			emotion.setSad("0");
+			emotion.setSurprised("0");
+			emotionRepository.save(emotion);
+		}
 	}
 
 	@GetMapping("/loadEmotion/{num}")
@@ -85,19 +107,17 @@ public class CounselingController {
 		return emotion;
 	}
 
-	@GetMapping("/liveList")
-	public List<ConRoom> liveList() {
+	@DeleteMapping("/liveList")
+	public void liveList() {
 		List<ConRoom> list = conRoomRepository.findByStatus("liveRequest");
 		Date now = new Date();
 		
 		for (ConRoom conRoom : list) {
 			Date date2 = java.sql.Timestamp.valueOf(conRoom.getDate());
-			if ((now.getTime() - date2.getTime()) / 60000 > 30) {
+			if ((now.getTime() - date2.getTime()) / 1000 > 60) {
 				conRoomRepository.deleteByNum(conRoom.getNum());
 			}
 		}
-		list = conRoomRepository.findByStatus("liveRequest");
-		return list;
 	}
 
 	@GetMapping("/counseling/{num}")
@@ -136,8 +156,15 @@ public class CounselingController {
 
 	@GetMapping("/menteeMyList/{num}")
 	public List<ConRoom> myList(@PathVariable(value = "num") Long num) {
-		List<ConRoom> list = conRoomRepository.findByMenteeAndStatusOrStatusOrStatusOrderByDateDesc(num, "finish", "progress", "waiting");
-		return list;
+		List<ConRoom> list = conRoomRepository.findByMenteeOrderByDateDesc(num); //, "finish", "progress", "waiting"
+		List<ConRoom> result = new ArrayList<ConRoom>();
+		for (ConRoom conRoom : list) {
+			if(conRoom.getStatus().equals("finish") || conRoom.getStatus().equals("progress") || conRoom.getStatus().equals("waiting")) {
+				result.add(conRoom);
+			}
+		}
+		
+		return result;
 	}
 
 	@GetMapping("/myMenteeList/{num}")
@@ -249,13 +276,15 @@ public class CounselingController {
 				alarmRepository.deleteByNum(cRoom.getNum());
 				alarmReadyRepository.deleteByMentor(mentor);
 				result = cRoom.getRoom();
+			} else if(cRoom.getMentor() == mentor) {
+				result = cRoom.getRoom();
 			} else {
 				result = "fail";
 			}
 			System.out.println(result);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("fail", HttpStatus.OK);
 		}
 	}
 

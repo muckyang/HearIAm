@@ -133,6 +133,6 @@ export default {
   box-shadow:
     inset 0 0 12px white, /* Inset shadow */
     0 0 12px white, /* Outset shadow */
-    inset -1500px 0 0 white; /* The background color */
+    inset -2500px 0 0 white; /* The background color */
 }
 </style>

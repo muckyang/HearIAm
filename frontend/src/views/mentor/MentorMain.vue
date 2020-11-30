@@ -18,11 +18,11 @@
               >
                 <v-container fill-height>
                   <v-layout align-center justify-center>
-                    <v-card-title class="title white--text" style="opacity: 1">
+                    <v-card-title class="white--text" style="opacity: 1">
                       <div>
                         <p
-                          class="ma-0 font-weight-bold text-center"
-                          style="font-size: 2em"
+                          class="ma-0 text-center"
+                          style="font-size: 2em; font-weight:bold;"
                         >
                           {{ item.text }}
                         </p>
@@ -31,8 +31,8 @@
                           style="opacity: 1"
                         ></v-divider>
                         <p
-                          class="font-weight-medium text-center mx-10"
-                          style="opacity: 0.5; font-size: 0.8em"
+                          class="text-center mx-5"
+                          style="opacity: 1; font-size: 1em"
                         >
                           {{ item.subtext }}
                         </p>
@@ -69,91 +69,33 @@ export default {
   data() {
     return {
       devecieId: this.getDeviceID,
-      topic: "streaming",
+      topic: "streaming1",
       successSnack: false,
       altMsg: "",
       getKey: false,
       items: [
         {
-          text: "실시간 상담 대기",
-          subtext: "대기를 하면 빠른 상담을 원하는 학생과 매칭이 됩니다.",
+          text: "실시간 상담",
+          subtext: "대기를 통해 상담을 원하는 학생과 매칭될 수 있어요.",
         },
         {
           text: "녹음 상담",
-          subtext: "학생의 고민을 듣고 조언해주세요. 상담 후 매칭이 됩니다",
+          subtext: "녹음된 학생의 고민을 듣고 상담해주세요.",
         },
         {
           text: "일지 관리",
-          subtext: "담당 내담자의 상담 일지를 관리해보세요. ",
+          subtext: "상담한 학생들의 상담 일지를 날짜별로 관리해보세요. ",
         },
         {
           text: "마이페이지",
-          subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
+          subtext: "나의 일정을 관리하고 상담 현황을 확인할 수 있어요.",
         },
       ],
       transparent: "rgba(255, 255, 255, 0)",
     };
   },
-  mounted() {
-    // window.addEventListener("keypress", function (event) {
-    //   if (event.key == "F5") {
-    //     console.log("key press");
-    //     this.getKey = true;
-    //   }
-    // });
-
-    // window.addEventListener("beforeunload", function (event) {
-    //   console.log("unload");
-
-    //   if (!this.getKey) {
-    //     console.log("press f5!");
-    //     this.getKey = false;
-    //     // event.preventDefault;
-    //     // event.returnValue = "";
-    //   } else {
-    //     console.log("else");
-    //     console.log(this.getKey);
-
-    //     // this.unsubscribe();
-    //     // if (this.getIsReady) {
-    //       console.log("s;hdfisd;dsbsdkbsd");
-    //       axios({
-    //         method: "POST",
-    //         url: "https://iid.googleapis.com/iid/v1:batchRemove",
-    //         data: {
-    //           to: "/topics/streaming",
-    //           registration_tokens: [this.getDeviceID],
-    //         },
-    //         headers: {
-    //           "Content-type": "application/json",
-    //           Authorization:
-    //             "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
-    //         },
-    //       })
-    //         .then((response) => {
-    //           if (response.status < 200 || response.status >= 400) {
-    //             throw (
-    //               "Error subscribing to topic: " +
-    //               response.status +
-    //               " - " +
-    //               response.text()
-    //             );
-    //           }
-    //           console.log("unsubscribe success : " + response);
-    //         })
-    //         .catch((e) => {
-    //           console.log(e);
-    //         });
-
-    //       let num = this.getUserNum;
-    //       http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
-    //     }
-        
-        
-    //     event.preventDefault;
-    //     event.returnValue = "";
-    //   // }
-    // });
+  created() {
+    http.delete(`/counseling/liveList`);
   },
   methods: {
     itemClick(i) {
@@ -168,7 +110,6 @@ export default {
       }
     },
     subscribe() {
-      http.get(`/counseling/liveList`);
       if (this.getIsReady) {
         this.successSnack = true;
         this.altMsg = "이미 상담 대기 중입니다.";
@@ -191,10 +132,15 @@ export default {
           } else {
             // 학생 대기
             this.successSnack = true;
+            console.dir(res);
+            console.dir(res.conRoom);
+            console.dir(res.data);
+            console.dir(res.data.conRoom);
+            console.log("여기!!!! ::::"+res.data.conRoom.room+" "+res.data.conRoom.num);
             this.altMsg = "상담을 시작합니다.";
-            this.$router.push(
-              `/counselorWRTC/${res.data.room}&${res.data.num}`
-            );
+            // this.$router.push(
+            //   `/counselorWRTC/${res.conRoom.room}&${res.conRoom.num}`
+            // );
           }
         });
       }
@@ -249,7 +195,7 @@ export default {
         method: "POST",
         url: "https://iid.googleapis.com/iid/v1:batchRemove",
         data: {
-          to: "/topics/streaming",
+          to: "/topics/streaming1",
           registration_tokens: [token],
         },
         headers: {
@@ -279,6 +225,67 @@ export default {
   },
   computed: {
     ...mapGetters(["getDeviceID", "getUserNum", "getIsReady"]),
+  },
+  mounted() {
+    // window.addEventListener("keypress", function (event) {
+    //   if (event.key == "F5") {
+    //     console.log("key press");
+    //     this.getKey = true;
+    //   }
+    // });
+
+    // window.addEventListener("beforeunload", function (event) {
+    //   console.log("unload");
+
+    //   if (!this.getKey) {
+    //     console.log("press f5!");
+    //     this.getKey = false;
+    //     // event.preventDefault;
+    //     // event.returnValue = "";
+    //   } else {
+    //     console.log("else");
+    //     console.log(this.getKey);
+
+    //     // this.unsubscribe();
+    //     // if (this.getIsReady) {
+    //       console.log("s;hdfisd;dsbsdkbsd");
+    //       axios({
+    //         method: "POST",
+    //         url: "https://iid.googleapis.com/iid/v1:batchRemove",
+    //         data: {
+    //           to: "/topics/streaming1",
+    //           registration_tokens: [this.getDeviceID],
+    //         },
+    //         headers: {
+    //           "Content-type": "application/json",
+    //           Authorization:
+    //             "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+    //         },
+    //       })
+    //         .then((response) => {
+    //           if (response.status < 200 || response.status >= 400) {
+    //             throw (
+    //               "Error subscribing to topic: " +
+    //               response.status +
+    //               " - " +
+    //               response.text()
+    //             );
+    //           }
+    //           console.log("unsubscribe success : " + response);
+    //         })
+    //         .catch((e) => {
+    //           console.log(e);
+    //         });
+
+    //       let num = this.getUserNum;
+    //       http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
+    //     }
+        
+        
+    //     event.preventDefault;
+    //     event.returnValue = "";
+    //   // }
+    // });
   },
 };
 </script>

@@ -1,31 +1,43 @@
 <template>
-  <div align="center" class="main-back" id="main-first" style="height:100vh;">
+  <div align="center" class="main-back" id="main-first" style="height: 100vh">
     <!-- 소개글 -->
     <div class="mb-0 first-text" id="fade-out">
-      <h1 class="fade-in" style="font-size:5rem;color:white;margin-top:300px;">다 들어줄게, 난 항상 네 옆에 있어</h1>
+      <h1 class="fade-in main-story">다 들어줄게, 난 항상 네 옆에 있어</h1>
     </div>
 
-    <div v-show="mainFlag" style="padding-top:10%;">
+    <div v-show="mainFlag" style="padding-top: 10%">
       <span class="main-title">Hear I Am</span><br />
       <!-- <span class="main-title" style="font-size:2rem !important; font-family:S-CoreDream-5Medium !important"> 들어줄게, 너의 곁에 있어줄게</span> -->
       <br />
-      <div class="swap-on-hover">
+      <div class="swap-on-hover heartbeat">
         <img class="swap-on-hover__front-image" src="../assets/lock.png" />
-        <img class="swap-on-hover__back-image" src="../assets/unlock.png" @click="login_dialog = true" />
+        <img
+          class="swap-on-hover__back-image"
+          src="../assets/unlock.png"
+          @click="login_dialog = true"
+        />
       </div>
     </div>
 
     <v-dialog v-model="login_dialog" max-width="500" min-height="700">
-      <v-card rounded style="padding: 50px;">
+      <v-card rounded style="padding: 50px">
         <v-card-title class="text-center justify-center p-8">
-          <p style="font-family: 'Short Stack', cursive; font-size: 4vw; font-weight: 700">
+          <p
+            style="
+              font-family: 'Short Stack', cursive;
+              font-size: 2.5rem;
+              font-weight: 700;
+            "
+          >
             Hear I Am
           </p>
         </v-card-title>
         <Login :login_dialog="login_dialog" />
         <div align="right">
-          <v-btn text class="px-0 mt-2 mr-2">비회원이용</v-btn>
-          <v-btn text class="px-0 mt-2" @click="goSignUpModal()">회원가입</v-btn>
+          <!-- <v-btn text class="px-0 mt-2 mr-2">비회원이용</v-btn> -->
+          <v-btn text class="px-0 mt-2 mr-3" style="font-size:1rem;font-weight:bold;" @click="goSignUpModal()"
+            >회원가입</v-btn
+          >
         </div>
       </v-card>
     </v-dialog>
@@ -38,20 +50,20 @@
 </template>
 
 <script>
-import sal from 'sal.js';
+import sal from "sal.js";
 // import LoginModal from "@/components/account/LoginModal.vue";
-import Login from '@/components/account/Login.vue';
-import SignUpModal from '@/components/account/SignUpModal.vue';
-import { mapGetters } from 'vuex';
+import Login from "@/components/account/Login.vue";
+import SignUpModal from "@/components/account/SignUpModal.vue";
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   mounted() {
     sal();
     if (this.getRole == `mentee`) {
-      this.$router.push('/menteeMain');
+      this.$router.push("/menteeMain");
     } else if (this.getRole == `mentor`) {
-      this.$router.push('/mentorMain');
+      this.$router.push("/mentorMain");
     } else {
       this.fadeOut();
     }
@@ -65,7 +77,7 @@ export default {
     return {
       login_dialog: false,
       sign_dialog: false,
-      role: '',
+      role: "",
       mainFlag: false,
     };
   },
@@ -79,20 +91,29 @@ export default {
     },
     fadeOut() {
       setTimeout(() => {
-        document.getElementById('fade-out').setAttribute('style', 'display:none');
+        document
+          .getElementById("fade-out")
+          .setAttribute("style", "display:none");
         this.mainFlag = true;
       }, 4000);
     },
   },
   computed: {
-    ...mapGetters(['isProfileLoaded', 'getRole', 'getQualification', 'getUserName', 'getUserNum', 'getUserID']),
+    ...mapGetters([
+      "isProfileLoaded",
+      "getRole",
+      "getQualification",
+      "getUserName",
+      "getUserNum",
+      "getUserID",
+    ]),
   },
 };
 </script>
 <style>
-@import '../../node_modules/sal.js/dist/sal.css';
+@import "../../node_modules/sal.js/dist/sal.css";
 .main-back {
-  background-image: url('../assets/mainStarLazy.png');
+  background-image: url("../assets/mainStarLazy.png");
   /* background-size: 100% 100%; */
   background-size: cover;
   /* object-fit:fill; */
@@ -103,30 +124,30 @@ export default {
 }
 .main-title {
   /* font-family: "Capriola", sans-serif; */
-  font-family: 'Short Stack', cursive;
-  font-size: 8rem;
+  font-family: "Short Stack", cursive;
+  font-size: 10vw;
   color: white;
   text-shadow: 1px 1px 1px black, 0 0 0.2em white, 0 0 0.1em white;
   font-weight: 600;
 }
 .swap-on-hover {
   position: relative;
-  max-width: 250px;
-  max-height: 250px;
+  max-width: 300px;
+  max-height: 300px;
 }
 
 .swap-on-hover img {
   position: absolute;
   left: 0;
-  max-width: 250px;
-  max-height: 250px;
+  max-width: 300px;
+  max-height: 300px;
 }
 
 .swap-on-hover .swap-on-hover__front-image,
 .swap-on-hover__back-image {
   /* z-index: 9999; */
   transition: opacity 0.5s linear;
-  cursor: url('../assets/unkey.png'), default;
+  cursor: url("../assets/unkey.png"), default;
 }
 
 .swap-on-hover:hover > .swap-on-hover__front-image {
@@ -149,11 +170,11 @@ export default {
   background-size: cover;
   height: 97%;
   width: 100%;
-  background-image: url('../assets/mainStarLazy.png');
+  background-image: url("../assets/mainStarLazy.png");
   z-index: 1;
 }
 #main-first {
-  cursor: url('../assets/key.png'), default;
+  cursor: url("../assets/key.png"), default;
 }
 @-webkit-keyframes fadeIn {
   0% {
@@ -189,4 +210,91 @@ export default {
     opacity: 1;
   }
 }
+@font-face {
+  font-family: "Dovemayo-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.0/Dovemayo-Bold.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+.main-story {
+  font-family: "Dovemayo-Bold";
+  font-size: 7vw;
+  color: white;
+  margin-top: 300px;
+  text-shadow: 1px 1px 1px black, 0 0 0.1em white, 0 0 0.1em white;
+}
+.heartbeat {
+  -webkit-animation: heartbeat 2s ease-in-out infinite both;
+  animation: heartbeat 2s ease-in-out infinite both;
+}
+@-webkit-keyframes heartbeat {
+  from {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+    transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+    transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+}
+@keyframes heartbeat {
+  from {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+    transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+    transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+}
+
 </style>

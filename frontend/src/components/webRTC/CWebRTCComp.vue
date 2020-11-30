@@ -1,30 +1,38 @@
 <template>
   <div style="height: 100%; width: 100%" class="webRtc-back">
     <v-dialog v-model="dialog" persistent max-width="1300">
-      <v-card style="background-color: white; border: 1px solid white;" outlined>
-        <v-container v-if="!isSangdam" style="opacity: 1; height:400px;">
-          <h1 class="mt-15">
+      <div >
+        <div v-if="!isSangdam" style="border: 3px solid white; border-radius:10px;color:white;">
+        <v-container style="height:400px; padding-top:9%;">
+          <div>
+          <h1>
             상담 준비가 완료 되었다면 <br />
             시작버튼을 눌러주세요.
           </h1>
           <v-btn
             v-if="!isProgress"
-            style="font-size: 0.9rem; color:white"
-             color="#262272"
-            class="btn btn-primary mt-5"
+            x-large
+            style="font-size:1.2rem;border-radius:30px; color:white"
+             color="#ff7987"
+            class="btn btn-primary mt-5 heartbeat"
             @click="sangdamStart()"
           >
             상담 시작
           </v-btn>
+          </div>
         </v-container>
-        <div style="height:600px;" v-if="isSangdam">
-          <v-row align="center" justify="center" style="height:100%;">
-            <v-col cols="3" v-if="menteeName"> 
-              <h2><span style="color:#262272">{{ menteeName }}</span>님과 상담중 입니다.</h2>
+        </div>
+        <div style="height: 600px; background-color:white;" v-if="isSangdam">
+          <v-row align="center" justify="center" style="height: 100%">
+            <v-col cols="3" v-if="menteeName">
+              <h2>
+                <span style="color: #262272">{{ menteeName }}</span
+                >님과 상담중
+              </h2>
               <p>상담이 끝났다면 아래 버튼을 눌러주세요.</p>
               <v-btn
                 v-if="isProgress"
-                style="font-size: 0.9rem; color:white"
+                style="font-size: 0.9rem; color: white"
                 color="#262272"
                 class="btn btn-primary"
                 @click="onLeave"
@@ -32,61 +40,90 @@
                 상담 종료
               </v-btn>
             </v-col>
-            <v-divider vertical v-if="menteeName" ></v-divider>
-            <v-col cols="4" style="height:100%; padding-top:4%;">
-              <div style="width:100%;" v-if="menteeName">
-                <span style="font-size:1.5rem;font-weight:bold;">청소년 실시간 감정그래프<v-icon color="black" class="ml-1">mdi-chart-bar</v-icon></span>
-                <br><span style="font-size:0.9rem;">*학생의 익명성을 위해, 카메라 화면 대신 감정이 보여집니다.</span>
+            <v-divider vertical v-if="menteeName"></v-divider>
+            <v-col cols="4" style="height: 100%; padding-top: 4%">
+              <div style="width: 100%" v-if="menteeName">
+                <span style="font-size: 1.5rem; font-weight: bold"
+                  >청소년 실시간 감정그래프<v-icon color="black" class="ml-1"
+                    >mdi-chart-bar</v-icon
+                  ></span
+                >
+                <br /><span style="font-size: 0.9rem"
+                  >*학생의 익명성을 위해, 카메라 화면 대신 감정이
+                  보여집니다.</span
+                >
                 <div class="mt-5">
                   <Bar :chartData="chartData" :options="options" />
                 </div>
               </div>
             </v-col>
-            <v-col cols="4" style="height:100%; padding-top:4%;">
+            <v-col cols="4" style="height: 100%; padding-top: 4%">
               <div
                 v-if="menteeName"
                 align="center"
                 justify="center"
-                style="height:350px;"
-              ><div style="width:100%;font-weight:bold;" align="left" class="mb-1">
-                <v-icon color="black">mdi-note-text-outline</v-icon>메모장
+                style="height: 350px"
+              >
+                <div
+                  style="width: 100%; font-weight: bold"
+                  align="left"
+                  class="mb-1"
+                >
+                  <v-icon color="black">mdi-note-text-outline</v-icon>메모장
                 </div>
-                  <v-textarea
-                    hide-details
-                    v-model="memo"
-                    placeholder="상담 내용을 기록하세요"
-                    outlined
-                    rows="11"
-                    color="black"
-                  >
-                  </v-textarea>
+                <v-textarea
+                  hide-details
+                  v-model="memo"
+                  placeholder="상담 내용을 기록하세요"
+                  outlined
+                  rows="11"
+                  color="black"
+                >
+                </v-textarea>
               </div>
-              <div style="height:100px;">
+              <div style="height: 100px">
                 <v-row>
-                <div style="width:50%; height:100%;" align="center" class="my-auto">
-                  <div style="width:85%; border-radius:20px;font-size:0.9rem;background-color:#ff7987;color:white;" class=" py-2">
-                  <v-icon color="white" style="font-size:1rem;" class="mr-1">mdi-check-circle-outline</v-icon>실시간 감정 상태와<br>작성한 상담 내용은<br> 일지관리에 저장됩니다.
+                  <div
+                    style="width: 50%; height: 100%"
+                    align="center"
+                    class="my-auto"
+                  >
+                    <div
+                      style="
+                        width: 85%;
+                        border-radius: 20px;
+                        font-size: 0.9rem;
+                        background-color: #ff7987;
+                        color: white;
+                      "
+                      class="py-2"
+                    >
+                      <v-icon color="white" style="font-size: 1rem" class="mr-1"
+                        >mdi-check-circle-outline</v-icon
+                      >실시간 감정 상태와<br />작성한 상담 내용은<br />
+                      일지관리에 저장됩니다.
+                    </div>
                   </div>
-                </div>
-                <div style="width:50%;">
-                  <WebRTC
-                    class=""
-                    ref="webrtc"
-                    :roomId="roomId"
-                    cameraHeight="140"
-                    @error="onError"
-                    @childs-event="parentsMethod"
-                  />
-                  <span style="font-size:0.9rem;">
-                  청소년에게 보여지는 화면</span>
-                </div>
+                  <div style="width: 50%">
+                    <WebRTC
+                      class=""
+                      ref="webrtc"
+                      :roomId="roomId"
+                      cameraHeight="140"
+                      @error="onError"
+                      @childs-event="parentsMethod"
+                      @isLeave="menteeLeave()"
+                    />
+                    <span style="font-size: 0.9rem">
+                      청소년에게 보여지는 화면</span
+                    >
+                  </div>
                 </v-row>
               </div>
-              
             </v-col>
           </v-row>
         </div>
-      </v-card>
+      </div>
     </v-dialog>
 
     <v-snackbar
@@ -96,6 +133,31 @@
       color="success"
       rounded="pill"
       :timeout="2000"
+    >
+    
+   
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+     <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    > <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+    <v-snackbar
+      v-model="primarySnack"
+      top
+      flat
+      color="primary"
+      rounded="pill"
+      :timeout="60000"
     >
       <span class="snackText">
         {{ altMsg }}
@@ -162,6 +224,8 @@ export default {
       menteeName: null,
       dialog: true,
       successSnack: false,
+      primarySnack: false,
+      errorSnack:false,
       altMsg: "",
       isSangdam: false,
     };
@@ -174,11 +238,25 @@ export default {
     this.fillData();
   },
   methods: {
-    sangdamStart(){
-      this.isSangdam = true;
-      setTimeout(() => {
-        this.onJoin();
-      }, 1000);
+    sangdamStart() {
+      http
+        .get(`/counseling/isRoom/${this.getUserNum}/${this.$route.params.num}`)
+        .then((res) => {
+          if (res.data != "fail") {
+            this.successSnack = true;
+            this.altMsg = "상담을 시작합니다.";
+            this.isSangdam = true;
+            setTimeout(() => {
+              this.onJoin();
+            }, 1000);
+          } else {
+            this.errorSnack = true;
+            this.altMsg = "이미 상담 중입니다. 다른 학생과 상담하세요.";
+            setTimeout(() => {
+              this.$router.push("/");
+            }, 1500);
+          }
+        });
     },
     onJoin() {
       this.isProgress = true;
@@ -262,15 +340,7 @@ export default {
     },
     fillData() {
       this.chartData = {
-        labels: [
-          "화남",
-          "역겨움",
-          "두려움",
-          "행복",
-          "무표정",
-          "슬픔",
-          "놀람",
-        ],
+        labels: ["화남", "역겨움", "두려움", "행복", "무표정", "슬픔", "놀람"],
         datasets: [
           {
             label: "실시간 감정 정보",
@@ -298,7 +368,7 @@ export default {
         method: "POST",
         url: "https://iid.googleapis.com/iid/v1:batchRemove",
         data: {
-          to: "/topics/streaming",
+          to: "/topics/streaming1",
           registration_tokens: [token],
         },
         headers: {
@@ -324,6 +394,10 @@ export default {
 
       let num = this.getUserNum;
       http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
+    },
+    menteeLeave() {
+      this.primarySnack = true;
+      this.altMsg = "청소년이 상담을 종료했습니다.";
     },
   },
   computed: {
@@ -352,5 +426,77 @@ export default {
 .webRtc-back {
   background-image: url("../../assets/webBack.png");
   background-size: cover;
+}
+.heartbeat {
+  -webkit-animation: heartbeat 2s ease-in-out infinite both;
+  animation: heartbeat 2s ease-in-out infinite both;
+}
+@-webkit-keyframes heartbeat {
+  from {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+    transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+    transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+}
+@keyframes heartbeat {
+  from {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+    transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+    transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
 }
 </style>

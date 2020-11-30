@@ -35,10 +35,10 @@
               :max="getEndDate"
             >
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="dateModal = false">
-                Cancel
+              <v-btn text color="#262272" @click="dateModal = false">
+                닫기
               </v-btn>
-              <v-btn text color="primary" @click="setDate"> OK </v-btn>
+              <v-btn text color="#262272" @click="setDate"> 선택 </v-btn>
             </v-date-picker>
           </v-dialog>
         </v-col>
@@ -105,7 +105,7 @@
       <v-row class="mt-4" justify="center">
         <!-- <v-col class="pt-5 px-0 d-flex" align="center" justify="center"> -->
         
-        <v-btn class="main-btn" @click="reserveD">예약하기</v-btn>
+        <v-btn class="main-btn" large @click="reserveD" style="border-radius:20px;">예약하기</v-btn>
         <!-- </v-col> -->
       </v-row>
     </v-sheet>
@@ -164,7 +164,7 @@ export default {
   },
   data() {
     return {
-      date: '',
+      date: new Date().toISOString().substr(0, 10),
       dateModal: false,
       timeModal: false,
       time: "",
@@ -211,8 +211,23 @@ export default {
     },
     reser_dialog(v) {
       if (!v) {
-        this.date = "";
+        this.date = new Date().toISOString().substr(0, 10);
         this.time = "";
+        this.timeItems = [];
+        http
+      .get(`/schedule/getTimeByDate/${this.nowDate}`)
+      .then((res) => {
+        if (res.data.length == 0) {
+          this.timeItems.push("예약 가능한 시간이 없습니다.");
+          this.selLabel = "예약 가능한 시간이 없습니다.";
+        } else {
+          this.timeItems = res.data;
+          this.selLabel = "시간을 선택해주세요.";
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
         this.concern = "";
       }
     },
@@ -279,10 +294,12 @@ export default {
               date: `${res.data.sdate}T${res.data.stime}:00`,
             });
           });
-          this.reserDialog = false;
-          this.$emit("reserve", false);
           this.successSnack = true;
           this.altMsg = "예약이 완료되었습니다.";
+          setTimeout(() => {
+            this.reserDialog = false;
+            this.$emit("reserve", false);
+          },2000);
         })
         .catch((e) => {
           console.log(e);

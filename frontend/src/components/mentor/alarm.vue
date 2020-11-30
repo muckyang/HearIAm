@@ -94,11 +94,9 @@ export default {
             if (res.data == "fail") {
               this.errorSnack = true;
               this.altMsg =
-                "이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ!";
+                "이미 상담 중입니다. 다음엔 차례를 기다려 주세요.";
               this.$router.push("/");
             } else {
-              this.successSnack = true;
-              this.altMsg = "상담을 시작합니다.";
               this.unsubscribe();
               this.$router.push(
                 `/counselorWRTC/${data.conRoom.room}&${data.num}`
@@ -110,13 +108,13 @@ export default {
           });
       } else {
         this.errorSnack = true;
-        this.altMsg = "이미 상담 중입니다. 다음엔 더 빨리 수락하세욧! ㅇㅅㅇ!";
+        this.altMsg = "이미 상담 중입니다. 다른 학생과 상담하세요.";
       }
     },
     unsubscribe() {
       let token = this.getDeviceID;
       this.$store.commit("changeIsReady", false);
-      let topic = "streaming";
+      let topic = "streaming1";
       axios({
         method: "POST",
         url: "https://iid.googleapis.com/iid/v1:batchRemove",

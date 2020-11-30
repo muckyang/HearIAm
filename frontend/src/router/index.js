@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import UserWRTC from '../views/webRTC/UserWRTC.vue'
 import CounselorWRTC from '../views/webRTC/CounselorWRTC.vue'
-import LiveList from '../views/webRTC/LiveList.vue'
 import Emotion from '../views/emotion/EmotionTest.vue'
 import Record from '../views/videoRecord/Record.vue'
 import RecordConsult from '../views/consult/RecordConsult.vue'
@@ -39,11 +38,6 @@ const routes = [{
         path: '/counselorWRTC/:room&:num',
         name: 'CounselorWRTC',
         component: CounselorWRTC
-    },
-    {
-        path: '/liveList',
-        name: 'LiveList',
-        component: LiveList
     },
     {
         path: '/emotion',
@@ -116,13 +110,6 @@ const routes = [{
         path: '/consultingCenter',
         name: 'ConsultingCenter',
         component: ConsultingCenter
-    },
-    {
-        path: '/stMatch',
-        component: () =>
-            import ('@/views/mentor/streamingReady'),
-        name: 'stMatch',
-        props: true
     },
 ]
 
