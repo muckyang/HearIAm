@@ -1,71 +1,110 @@
 <template>
   <div>
-    <v-layout row align-center>
-      <v-avatar class="elevation-4 mr-2" color="orange">
-        <v-icon dark>mdi-earth</v-icon>
-      </v-avatar>
-      <v-select
-        :items="regions"
-        item-text="region"
-        item-value="region"
-        label="region"
-        solo
-        class="mt-7"
-        v-model="word"
-      ></v-select>
-      <v-btn
-        class="ml-2"
-        depressed
-        color="orange lighten-1 grey--text text--darken-4"
-        @click="onSubmit"
-        >검색</v-btn
-      >
-    </v-layout>
-    <v-sheet elevation="3" color="white" class="ml-3 mr-9 mt-7">
-      <v-avatar class="elevation-4 mb-1 mr-2" color="blue lighten-1">
-        <v-icon dark>mdi-map</v-icon>
-      </v-avatar>
-      상담센터 위치
-      <v-btn small @click="goNowLocation()">현위치로 이동</v-btn>
-      <v-sheet>
-        <div id="map" style="float:left; height:700px; width:60%" />
-        <div border="1" style="width:40%;float:left;" align="center">
-          <v-simple-table>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-center">기관명</th>
-                  <th class="text-center">전화번호</th>
-                  <th class="text-center">주소</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in centerList" :key="item.address">
-                  <td class="text-center">
-                    <v-btn
-                      small
-                      @click="goCenter(item)"
-                      style="font-size:0.9rem;"
-                    >
-                      {{ item.name }}
-                    </v-btn>
-                  </td>
+    <v-container>
+      <v-row>
+        <v-col class="pt-7 col-lg-5 col-md-5 col-sm-12 col-xs-12">
+          <v-card> <div id="map" style="height: 365px; width: 100%" /> </v-card><br />
+          <v-btn color="#262272" style="color:white; border-radius:30px;" small @click="goNowLocation()"> <v-icon small dark>mdi-map-marker</v-icon>내 위치로 이동</v-btn>
+        </v-col>
+        <v-col class="pt-0" align="center">
+          <v-row class="d-none d-sm-flex">
+            <v-select
+              :items="regions"
+              item-text="region"
+              item-value="region"
+              label="region"
+              solo
+              class="mt-7"
+              v-model="word"
+            ></v-select>
+            <v-card>
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-center">기관명</th>
+                      <th class="text-center">전화번호</th>
+                      <th class="text-center">주소</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in pagingList" :key="item.address">
+                      <td class="text-center">
+                        <v-btn
+                        text
+                          small
+                          @click="goCenter(item)"
+                          style="font-size: 0.9rem;color:#262272; font-weight:bold;"
+                        >
+                          {{ item.name }}
+                        </v-btn>
+                      </td>
+                      <td class="text-center">
+                        {{ item.phone }}
+                      </td>
+                      <td class="text-center">
+                        {{ item.address }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card>
+          </v-row>
 
-                  <td class="text-center">
-                    {{ item.phone }}
-                  </td>
-                  <td class="text-center">
-                    {{ item.address }}
-                  </td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-        </div>
-      </v-sheet>
-    </v-sheet>
-    <br />
-    <v-pagination v-model="page" :length="pageLength" circle></v-pagination>
+          <v-row class="d-flex d-sm-none">
+            <v-select
+              :items="regions"
+              item-text="region"
+              item-value="region"
+              label="region"
+              solo
+              class="mt-7"
+              v-model="word"
+            ></v-select>
+            <v-simple-table style="width:500px;">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-center">기관 정보</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in pagingList" :key="item.address">
+                      <td class="text-center" style="font-size: 0.7rem;">
+                        <v-btn
+                          small
+                          @click="goCenter(item)"
+                          style="color:white;"
+                          color="#262272"
+                          class="my-2"
+                        >
+                          {{ item.name }}
+                        </v-btn>
+                        <p class="my-2">{{ item.phone }}</p>
+                        <p class="my-2">{{ item.address }}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+          </v-row>
+          
+          <v-row>
+            <v-col>
+              <v-pagination
+                v-model="page"
+                :length="pageLength"
+                circle
+                class="pb-3"
+                color="#262272"
+                :total-visible="7"
+              ></v-pagination>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -83,8 +122,10 @@ export default {
       pagingList: [],
       pageLength: 0,
       page: 1,
+      // markerImg:
+      //   "https://blog.kakaocdn.net/dn/pe3Gt/btqKibc7VPl/JMG0zmTTAZuBAegMSA2c9k/img.png",
       markerImg:
-        "https://blog.kakaocdn.net/dn/pe3Gt/btqKibc7VPl/JMG0zmTTAZuBAegMSA2c9k/img.png",
+        "https://ifh.cc/g/JkmS8N.png",
       kakaomap: "",
       markers: [],
       word: "전체",
@@ -127,13 +168,12 @@ export default {
         document.head.appendChild(script);
       }
 
-      this.pagingList = this.centerList.slice(0, 9);
-      if (this.conList.length % 10 == 0) {
-        this.pageLength = this.centerList.length / 10;
+      this.pagingList = this.centerList.slice(0, 5);
+      if (this.centerList.length % 5 == 0) {
+        this.pageLength = this.centerList.length / 5;
       } else {
-        this.pageLength = parseInt(this.centerList.length / 10) + 1;
+        this.pageLength = parseInt(this.centerList.length / 5) + 1;
       }
-
     });
   },
   methods: {
@@ -150,7 +190,7 @@ export default {
         // 마커 이미지를 생성합니다
         var imageSrc = this.markerImg;
         // 마커 이미지의 이미지 크기 입니다
-        var imageSize = new kakao.maps.Size(55, 55);
+        var imageSize = new kakao.maps.Size(35, 35);
         var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
         // 마커를 생성합니다
         var latlng = new kakao.maps.LatLng(
@@ -186,14 +226,14 @@ export default {
       }
 
       function makeOverListener(map, marker, infowindow) {
-        return function() {
+        return function () {
           infowindow.open(map, marker);
         };
       }
 
       // 인포윈도우를 닫는 클로저를 만드는 함수입니다
       function makeOutListener(infowindow) {
-        return function() {
+        return function () {
           infowindow.close();
         };
       }
@@ -214,6 +254,12 @@ export default {
         );
         this.kakaomap.setLevel(this.selectedRegion.scale);
         this.centerList = res.data;
+        this.pagingList = this.centerList.slice(0, 5);
+        if (this.centerList.length % 5 == 0) {
+          this.pageLength = this.centerList.length / 5;
+        } else {
+          this.pageLength = parseInt(this.centerList.length / 5) + 1;
+        }
       });
     },
     goCenter(item) {
@@ -223,7 +269,7 @@ export default {
     goNowLocation() {
       var kakaomap = this.kakaomap;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           var lat = position.coords.latitude, // 위도
             lon = position.coords.longitude; // 경도
 
@@ -278,8 +324,11 @@ export default {
   },
   watch: {
     page(page) {
-      var first = (page - 1) * 10;
-      this.pagingList = this.centerList.slice(first, first + 9);
+      var first = (page - 1) * 5;
+      this.pagingList = this.centerList.slice(first, first + 5);
+    },
+    word() {
+      this.onSubmit();
     },
   },
 };

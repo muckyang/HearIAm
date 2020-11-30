@@ -348,7 +348,7 @@ export default {
       if (this.files) {
         let formData = new FormData();
         formData.append("file", this.files);
-        console.log(this.files);
+        // console.log(this.files);
         http3
           .post(`/cert/imgCheck`, formData)
           .then((res) => {
@@ -376,6 +376,9 @@ export default {
       }
     },
     signUpRequest() {
+      if(this.name == ""){
+        this.name = "청소년";
+      }
       http2
         .post("/signup", {
           id: this.id,

@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-sheet class="container">
-      <v-row class="d-flex justify-content-center">
+      <!-- <v-btn class="main-btn mr-2" @click="closeDialog">취소</v-btn> -->
+      
+      <v-row class="d-flex justify-content-center" justify="center">
         <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
           <v-dialog
             ref="dialogDate"
@@ -41,7 +43,7 @@
           </v-dialog>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row justify="center">
         <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
           <div class="d-flex">
             <v-icon class="mr-3" large color="black"
@@ -51,7 +53,7 @@
               class="mt-7"
               v-model="time"
               :items="timeItems"
-              label="시간을 선택해주세요."
+              :label="selLabel"
               hint="예약 가능한 시간만 보여집니다."
               solo
               persistent-hint
@@ -59,7 +61,7 @@
           </div>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row justify="center">
         <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
           <div class="d-flex">
             <v-icon class="mr-3" large color="black"
@@ -77,7 +79,7 @@
           </div>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row justify="center">
         <v-col cols="12" sm="10" md="10" class="reserve-data py-1 px-0">
           <div class="d-flex">
             <v-icon class="mr-3" large color="white"
@@ -100,10 +102,11 @@
             </div>
           </v-col>
         </v-row> -->
-      <v-row>
-        <v-col cols="2" class="reserve-data pt-5 px-0">
-          <v-btn class="main-btn" @click="reserveD" large>예약하기</v-btn>
-        </v-col>
+      <v-row class="mt-4" justify="center">
+        <!-- <v-col class="pt-5 px-0 d-flex" align="center" justify="center"> -->
+        
+        <v-btn class="main-btn" @click="reserveD">예약하기</v-btn>
+        <!-- </v-col> -->
       </v-row>
     </v-sheet>
     <v-dialog v-model="reserDialog" persistent max-width="400">
@@ -161,7 +164,7 @@ export default {
   },
   data() {
     return {
-      date: new Date().toISOString().substr(0, 10),
+      date: '',
       dateModal: false,
       timeModal: false,
       time: "",
@@ -184,6 +187,7 @@ export default {
       errorSnack: false,
       successSnack: false,
       altMsg: "",
+      selLabel: "시간을 선택해주세요.",
     };
   },
   computed: {
@@ -219,8 +223,10 @@ export default {
       .then((res) => {
         if (res.data.length == 0) {
           this.timeItems.push("예약 가능한 시간이 없습니다.");
+          this.selLabel = "예약 가능한 시간이 없습니다.";
         } else {
           this.timeItems = res.data;
+          this.selLabel = "시간을 선택해주세요.";
         }
       })
       .catch((e) => {
@@ -238,7 +244,16 @@ export default {
           if (res.data.length == 0) {
             this.timeItems.push("예약 가능한 시간이 없습니다.");
           } else {
-            this.timeItems = res.data;
+            // this.timeItems = res.data;
+            for (const stime of res.data) {
+              if (this.date.split("-")[2] == new Date().getDate().toString()) {
+                if (stime.substr(0, 2) > new Date().getHours()) {
+                  this.timeItems.push(stime);
+                }
+              } else {
+                this.timeItems.push(stime);
+              }
+            }
           }
         })
         .catch((e) => {
@@ -264,9 +279,10 @@ export default {
               date: `${res.data.sdate}T${res.data.stime}:00`,
             });
           });
+          this.reserDialog = false;
+          this.$emit("reserve", false);
           this.successSnack = true;
           this.altMsg = "예약이 완료되었습니다.";
-          this.$router.push("/menteeMain").catch(() => {});
         })
         .catch((e) => {
           console.log(e);
@@ -297,6 +313,9 @@ export default {
         this.reserDialog = true;
       }
     },
+    closeDialog() {
+      this.$emit("reserve", false);
+    },
   },
 };
 </script>
@@ -314,8 +333,5 @@ export default {
 }
 .v-picker__title {
   height: 100px;
-}
-.reserve-data {
-  margin: 0 auto;
 }
 </style>

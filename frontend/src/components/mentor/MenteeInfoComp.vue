@@ -1,17 +1,18 @@
 <template>
   <div>
-    <h1 class="text-center">{{ name }}의 상담 내역</h1>
+    <h2 class="text-center" style="font-size:1.8rem;"><span style="color:#262272; font-size:2.2rem;">{{ name }}</span> 님의 상담 내역</h2>
     <br />
     <v-card>
-      <v-tabs v-model="tab" background-color="deep-purple accent-4" center-active dark>
+      <v-tabs v-model="tab" background-color="#262272" center-active dark show-arrows>
         <v-tab v-for="(item, index) in myMenteeInfoList" :key="index">{{ setDate(item.date) }}</v-tab>
       </v-tabs>
+    </v-card>
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="(item, idx) in myMenteeInfoList" :key="idx">
           <CounselingInfoComp :numIndex="item.num" />
         </v-tab-item>
       </v-tabs-items>
-    </v-card>
+    <!-- </v-card> -->
   </div>
 </template>
 
@@ -35,7 +36,7 @@ export default {
   created() {
     http.get(`/counseling/myMenteeInfoList/${this.getUserNum}/${this.$route.params.num}`).then((res) => {
       this.myMenteeInfoList = res.data;
-      console.log(this.myMenteeInfoList);
+      // console.log(this.myMenteeInfoList);
     });
     this.name = this.$route.params.name;
   },

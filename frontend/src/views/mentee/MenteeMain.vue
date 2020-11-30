@@ -1,56 +1,126 @@
 <template>
   <div style="height: 100%; width: 100%" class="main-back">
     <v-row
-      class="fill-height"
+      class="fill-height d-none d-sm-flex"
       align="center"
       justify="center"
       style="padding: 0"
     >
-      <template v-for="(item, i) in items" >
-        <v-col :key="i" cols="12" md="3" style="padding: 0" >
-          <v-hover v-slot="{ hover }" > 
+      <template v-for="(item, i) in items">
+        <v-col :key="i" cols="12" md="3" style="padding: 0">
+          <v-hover v-slot="{ hover }">
             <v-expand-transition>
-            <v-card
-              :elevation="hover ? 12 : 2"
-              :class="{ 'on-hover': hover }"
-              height="100vh"
-              @click="itemClick(i)"
-            >
-              <v-container fill-height>
-                <v-layout align-center justify-center>
-                  <v-card-title class="title white--text" style="opacity: 1">
-                    <div>
-                      <p class="ma-0 font-weight-bold text-center"
-                      style="font-size: 2em;">
-                        {{ item.text }}
-                      </p>
-                      <v-divider
-                        class="my-10 white"
-                        style="opacity: 1"
-                      ></v-divider>
-                      <p
-                        class="font-weight-medium text-center mx-10" 
-                        style="opacity:.5; font-size: .8em"
-                      >
-                        {{ item.subtext }}
-                      </p>
-                    </div>
-                  </v-card-title>
-                </v-layout>
-              </v-container>
-            </v-card>
+              <v-card
+                :elevation="hover ? 12 : 2"
+                :class="{ 'on-hover': hover }"
+                height="100vh"
+                tile
+                @click="itemClick(i)"
+              >
+                <v-container fill-height>
+                  <v-layout align-center justify-center>
+                    <v-card-title class="title white--text" style="opacity: 1">
+                      <div>
+                        <p
+                          class="ma-0 font-weight-bold text-center"
+                          style="font-size: 2em"
+                        >
+                          {{ item.text }}
+                        </p>
+                        <v-divider
+                          class="my-10 white"
+                          style="opacity: 1"
+                        ></v-divider>
+                        <p
+                          class="font-weight-medium text-center mx-10"
+                          style="opacity: 0.5; font-size: 0.8em"
+                        >
+                          {{ item.subtext }}
+                        </p>
+                      </div>
+                    </v-card-title>
+                  </v-layout>
+                </v-container>
+              </v-card>
             </v-expand-transition>
           </v-hover>
         </v-col>
       </template>
     </v-row>
-     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
-      <v-card rounded="xl" style="padding: 20px; background-color:white" >
-        <v-card-title class="text-center justify-center p-8">
-          <h2>실시간 상담 예약</h2>
-        </v-card-title>
-        <ReserveMain :reser_dialog="reser_dialog"/>
-      </v-card>
+    <!-- 반응 -->
+    <div class="d-flex d-sm-none fill-height">
+      <v-container style="padding: 0">
+        <v-row no-gutters style="height: 50vh">
+           <v-col cols="6">
+            <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, .5);">
+              <v-container fill-height>
+                <v-layout align-center justify-center>
+                  <p
+                    class="ma-0 font-weight-bold text-center white--text"
+                    style="font-size: 2em"
+                  >
+                    음성 상담
+                  </p>
+                </v-layout>
+              </v-container>
+            </v-card>
+          </v-col>
+          <v-col cols="6">
+            <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, .2);">
+              <v-container fill-height>
+                <v-layout align-center justify-center>
+                  <p
+                    class="ma-0 font-weight-bold text-center white--text"
+                    style="font-size: 2em"
+                  >
+                    실시간 상담
+                  </p>
+                </v-layout>
+              </v-container>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row no-gutters style="height: 50vh">
+          <v-col cols="6">
+            <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, 0.2);">
+              <v-container fill-height>
+                <v-layout align-center justify-center>
+                  <p
+                    class="ma-0 font-weight-bold text-center white--text"
+                    style="font-size: 2em"
+                  >
+                    마이페이지
+                  </p>
+                </v-layout>
+              </v-container>
+            </v-card>
+          </v-col>
+           <v-col cols="6">
+            <v-card height="50vh" outlined style="background-color: rgb(14, 1, 27, 0.5);">
+              <v-container fill-height>
+                <v-layout align-center justify-center>
+                  <p
+                    class="ma-0 font-weight-bold text-center white--text"
+                    style="font-size: 2em"
+                  >
+                    상담예약
+                  </p>
+                </v-layout>
+              </v-container>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
+      <div class="px-5 pt-5 reser-back">
+        <!-- <v-card rounded="xl" style="padding: 20px; background-color:white;">
+        <v-card-title class="text-center justify-center p-8"> -->
+        <h1>실시간 상담 예약</h1>
+        <!-- </v-card-title> -->
+        <ReserveMain :reser_dialog="reser_dialog" @reserve="reserveDone()" />
+        <!-- </v-card> -->
+      </div>
     </v-dialog>
 
     <v-snackbar
@@ -83,19 +153,20 @@ export default {
       reser_dialog: false,
       items: [
         {
-          text:"1:1 상담",
+          text: "실시간 상담",
           subtext: "전문 상담사와 예약 없이 바로 상담해보세요. ",
         },
         {
-          text: "음성 상담",
-          subtext: "상담사와 미팅이 부담스럽다면 당신의 목소리로 고민을 말해보세요.",
+          text: "녹음 상담",
+          subtext:
+            "상담사와 미팅이 부담스럽다면 당신의 목소리로 고민을 말해보세요.",
         },
         {
           text: "상담 예약",
           subtext: "담당 상담사가 없다면 예약서비스를 이용해보세요",
         },
         {
-          text: "마이 페이지",
+          text: "마이페이지",
           subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
         },
       ],
@@ -105,23 +176,23 @@ export default {
     };
   },
   methods: {
-    itemClick(i){
-      if(i === 0){
-         this.goLive();
-      }else if(i===1){
-        this.goRecord()
-      }else if(i===2){
+    itemClick(i) {
+      if (i === 0) {
+        this.goLive();
+      } else if (i === 1) {
+        this.goRecord();
+      } else if (i === 2) {
         this.reser_dialog = true;
-      }else{
-        this.goMypage()
+      } else {
+        this.goMypage();
       }
     },
     goLive() {
       http
         .get(`/counseling/isMentee`)
         .then((res) => {
-          console.dir(res);
-          console.log(res.data);
+          // console.dir(res);
+          // console.log(res.data);
           if (res.data == 0) {
             this.errorSnack = true;
             this.altMsg = "대기중인 멘토가 없어요! 예약하기를 이용해주세요!";
@@ -184,12 +255,15 @@ export default {
       //   // alert("삭제 완료");
       // });
     },
+    reserveDone(msg) {
+      this.reser_dialog = msg;
+    },
   },
 };
 </script>
 <style scoped>
 .v-card {
-  transition: .4s ease-in;
+  transition: 0.4s ease-in;
   background-color: rgb(14, 1, 27, 0.2);
 }
 
@@ -199,5 +273,16 @@ export default {
 
 .show-btns {
   color: rgba(255, 255, 255, 1) !important;
+}
+.reser-back {
+  background-color: white;
+  background: -moz-linear-gradient(top left, #ff7987, #a23bbe);
+  background: -webkit-linear-gradient(top left, #ff7987, #a23bbe);
+  -moz-background-origin: border;
+  background-origin: border-box;
+  border: 10px solid transparent;
+  border-radius: 25px;
+  box-shadow: inset 0 0 2px white,
+    /* Inset shadow */ /*0 0 12px white, /* Outset shadow */ inset -999px 0 0 white; /* The background color */
 }
 </style>

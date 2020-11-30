@@ -1,91 +1,51 @@
 <template>
-  <div>
-    <div class="main-back">
-      <div style="height: 100vh" class="d-flex justify-content-center">
-        <v-col class="my-auto" align="center">
-          <v-btn v-if="this.getIsReady" @click="unsubscribe()">대기 취소</v-btn>
-          <div>
-            <v-btn
-              depressed
-              elevation="9"
-              fab
-              icon
-              style="
-                width: 260px;
-                height: 250px;
-                background: linear-gradient(to top, black, #0a7a78);
-              "
-            >
-              <div
-                style="width: 260px; height: 250px; padding: 17px"
-                class="justify-content-center mb-5;"
-                text-align="center"
+  <div style="height: 100%; width: 100%" class="main-back">
+    <v-row
+      class="fill-height"
+      align="center"
+      justify="center"
+      style="padding: 0"
+    >
+      <template v-for="(item, i) in items">
+        <v-col :key="i" cols="12" md="3" style="padding: 0">
+          <v-hover v-slot="{ hover }">
+            <v-expand-transition>
+              <v-card
+                :elevation="hover ? 12 : 2"
+                :class="{ 'on-hover': hover }"
+                height="100vh"
+                @click="itemClick(i)"
               >
-                <img
-                  src="@/assets/icons/t_stream_btn.png"
-                  style="width: 100%; height: 100%"
-                  @click="subscribe()"
-                />
-              </div>
-            </v-btn>
-          </div>
+                <v-container fill-height>
+                  <v-layout align-center justify-center>
+                    <v-card-title class="title white--text" style="opacity: 1">
+                      <div>
+                        <p
+                          class="ma-0 font-weight-bold text-center"
+                          style="font-size: 2em"
+                        >
+                          {{ item.text }}
+                        </p>
+                        <v-divider
+                          class="my-10 white"
+                          style="opacity: 1"
+                        ></v-divider>
+                        <p
+                          class="font-weight-medium text-center mx-10"
+                          style="opacity: 0.5; font-size: 0.8em"
+                        >
+                          {{ item.subtext }}
+                        </p>
+                      </div>
+                    </v-card-title>
+                  </v-layout>
+                </v-container>
+              </v-card>
+            </v-expand-transition>
+          </v-hover>
         </v-col>
-        <v-col class="my-auto" align="center">
-          <div>
-            <v-btn
-              depressed
-              elevation="9"
-              fab
-              icon
-              style="
-                width: 260px;
-                height: 250px;
-                background: linear-gradient(to top, black, #0a7a78);
-              "
-            >
-              <div
-                style="width: 260px; height: 250px; padding: 17px"
-                class="justify-content-center mb-5;"
-                text-align="center"
-              >
-                <img
-                  src="@/assets/icons/t_voice_btn.png"
-                  style="width: 100%; height: 100%"
-                  @click="goRecordList()"
-                />
-              </div>
-            </v-btn>
-          </div>
-        </v-col>
-        <v-col class="my-auto" align="center">
-          <div>
-            <v-btn
-              depressed
-              elevation="9"
-              fab
-              icon
-              style="
-                width: 260px;
-                height: 250px;
-                background: linear-gradient(to top, black, #0a7a78);
-              "
-              @click="goMyMenteeList()"
-            >
-              <div
-                style="width: 260px; height: 250px; padding: 17px"
-                class="justify-content-center mb-5;"
-                text-align="center"
-              >
-                <img
-                  src="@/assets/icons/t_report_btn.png"
-                  style="width: 100%; height: 100%"
-                />
-              </div>
-            </v-btn>
-          </div>
-        </v-col>
-      </div>
-    </div>
+      </template>
+    </v-row>
     <v-snackbar
       v-model="successSnack"
       top
@@ -102,39 +62,142 @@
 </template>
 
 <script>
-import { AUTH_LOGOUT } from "@/store/actions/auth";
 import http from "@/util/http-common.js";
 import axios from "axios";
 import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      devecieId: this.$store.getters["getDeviceID"],
+      devecieId: this.getDeviceID,
       topic: "streaming",
       successSnack: false,
       altMsg: "",
+      getKey: false,
+      items: [
+        {
+          text: "실시간 상담 대기",
+          subtext: "대기를 하면 빠른 상담을 원하는 학생과 매칭이 됩니다.",
+        },
+        {
+          text: "녹음 상담",
+          subtext: "학생의 고민을 듣고 조언해주세요. 상담 후 매칭이 됩니다",
+        },
+        {
+          text: "일지 관리",
+          subtext: "담당 내담자의 상담 일지를 관리해보세요. ",
+        },
+        {
+          text: "마이페이지",
+          subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
+        },
+      ],
+      transparent: "rgba(255, 255, 255, 0)",
     };
   },
+  mounted() {
+    // window.addEventListener("keypress", function (event) {
+    //   if (event.key == "F5") {
+    //     console.log("key press");
+    //     this.getKey = true;
+    //   }
+    // });
+
+    // window.addEventListener("beforeunload", function (event) {
+    //   console.log("unload");
+
+    //   if (!this.getKey) {
+    //     console.log("press f5!");
+    //     this.getKey = false;
+    //     // event.preventDefault;
+    //     // event.returnValue = "";
+    //   } else {
+    //     console.log("else");
+    //     console.log(this.getKey);
+
+    //     // this.unsubscribe();
+    //     // if (this.getIsReady) {
+    //       console.log("s;hdfisd;dsbsdkbsd");
+    //       axios({
+    //         method: "POST",
+    //         url: "https://iid.googleapis.com/iid/v1:batchRemove",
+    //         data: {
+    //           to: "/topics/streaming",
+    //           registration_tokens: [this.getDeviceID],
+    //         },
+    //         headers: {
+    //           "Content-type": "application/json",
+    //           Authorization:
+    //             "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+    //         },
+    //       })
+    //         .then((response) => {
+    //           if (response.status < 200 || response.status >= 400) {
+    //             throw (
+    //               "Error subscribing to topic: " +
+    //               response.status +
+    //               " - " +
+    //               response.text()
+    //             );
+    //           }
+    //           console.log("unsubscribe success : " + response);
+    //         })
+    //         .catch((e) => {
+    //           console.log(e);
+    //         });
+
+    //       let num = this.getUserNum;
+    //       http.delete(`/counseling/deleteReadyMentor/${num}`).then(() => {});
+    //     }
+        
+        
+    //     event.preventDefault;
+    //     event.returnValue = "";
+    //   // }
+    // });
+  },
   methods: {
+    itemClick(i) {
+      if (i === 0) {
+        this.subscribe();
+      } else if (i === 1) {
+        this.goRecordList();
+      } else if (i === 2) {
+        this.goMyMenteeList();
+      } else {
+        this.goMypage();
+      }
+    },
     subscribe() {
       http.get(`/counseling/liveList`);
-      console.log("click subscribe btn");
-      this.readyClick = true;
-      this.$store.commit("changeIsReady", true);
-      http.get(`/counseling/getMenteeCnt`).then((res) => {
-        if (res.data == "empty") {
-          this.subscribeTokenToTopic(this.devecieId, this.topic);
-          let mentorname = this.$store.getters["getUserNum"];
-          http.get(`/counseling/addReady/${mentorname}`).catch((e) => {
-            console.log(e);
-          });
-        } else {
-          // 학생 대기
-          this.successSnack = true;
-          this.altMsg = "상담을 시작합니다.";
-          this.$router.push(`/counselorWRTC/${res.data.room}&${res.data.num}`);
-        }
-      });
+      if (this.getIsReady) {
+        this.successSnack = true;
+        this.altMsg = "이미 상담 대기 중입니다.";
+        setTimeout(function () {
+          // Code here
+          this.successSnack = false;
+        }, 1000);
+      } else {
+        this.$store.commit("changeIsReady", true);
+        http.get(`/counseling/getMenteeCnt`).then((res) => {
+          if (res.data == "empty") {
+            this.successSnack = true;
+            this.altMsg = "상담을 대기합니다.";
+            this.subscribeTokenToTopic(this.getDeviceID, this.topic);
+            let mentorname = this.$store.getters["getUserNum"];
+            http.get(`/counseling/addReady/${mentorname}`).catch((e) => {
+              console.log(e);
+              this.successSnack = false;
+            });
+          } else {
+            // 학생 대기
+            this.successSnack = true;
+            this.altMsg = "상담을 시작합니다.";
+            this.$router.push(
+              `/counselorWRTC/${res.data.room}&${res.data.num}`
+            );
+          }
+        });
+      }
     },
     subscribeTokenToTopic(token, topic) {
       axios({
@@ -163,13 +226,6 @@ export default {
     goLiveList() {
       this.$router.push(`/liveList`);
     },
-    logout: function () {
-      this.unsubscribe();
-
-      this.$store.dispatch(AUTH_LOGOUT).then(() => {});
-      // this.$router.push("/").catch(() => {});
-      window.location.href = "/";
-    },
     goMypage() {
       this.$router.push(`/mentorMypage`);
     },
@@ -180,10 +236,15 @@ export default {
       this.$router.push(`/recordList`);
     },
     unsubscribe() {
-      this.$store.commit("changeIsReady", false);
-      this.unsubscribeTokenToTopic(this.devecieId);
+      // console.log("hhhhhhh");
+      this.errorSnack = true;
+      this.altMsg = "상담이 취소되었습니다. ";
+        this.$store.commit("changeIsReady", false);
+      this.unsubscribeTokenToTopic(this.getDeviceID);
+      this.errorSnack = false;
     },
     unsubscribeTokenToTopic(token) {
+      console.log("unsubscribeTokenToTopic");
       axios({
         method: "POST",
         url: "https://iid.googleapis.com/iid/v1:batchRemove",
@@ -206,6 +267,7 @@ export default {
               response.text()
             );
           }
+          console.log("unsubscribe success : " + response);
         })
         .catch((e) => {
           console.log(e);
@@ -216,7 +278,17 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getUserNum", "getIsReady"]),
+    ...mapGetters(["getDeviceID", "getUserNum", "getIsReady"]),
   },
 };
 </script>
+<style scoped>
+.v-card {
+  transition: 0.4s ease-in;
+  background-color: rgb(14, 1, 27, 0.2);
+}
+
+.v-card:not(.on-hover) {
+  background-color: rgb(14, 1, 27, 0.8);
+}
+</style>

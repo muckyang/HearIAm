@@ -9,8 +9,10 @@
     align="center"
   >
     <!-- <v-container> -->
-      <div class="px-5 pt-5 content-box">
+      <div class="px-5 pt-5 content-box" style="overflow-y:scroll;">
         <MyListComp />
+        <div class="d-none d-sm-flex" style="position:absolute; bottom:2.3rem;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon>메인으로</span></div>
+        <div class="d-flex d-sm-none" style="position:absolute; left:35px;top:85px;color:black;"><span class="icon-line" @click="goBack()"><v-icon style="color:crimson;">mdi-arrow-left-thick</v-icon></span></div>
       </div>
     <!-- </v-container> -->
   </div>
@@ -24,6 +26,11 @@ export default {
   components: {
     MyListComp,
   },
+  methods:{
+    goBack(){
+      this.$router.push("/")
+    }
+  }
 };
 </script>
 
@@ -46,19 +53,11 @@ export default {
     0 0 12px white, /* Outset shadow */
     inset -1500px 0 0 white; /* The background color */
 }
-.content-box2{
-  width:90%; 
-  background-color:white;
-  /* border:7px solid#f22fdc; */
-  /* border-image: radial-gradient(ellipse at 0% 0%, #f00, #00f); */
-  /* border-image: linear-gradient(to right, red 20%, green 20%, green 40%, blue 40%, blue 60%, maroon 60%, maroon 80%, chocolate 80%); */
-  /* #f22fdc #a23bbe #49358b */
-  border: 10px solid transparent;
-  border-radius:20px; 
-  /* -moz-border-image: -moz-linear-gradient(top left, #3acfd5 0%, #3a4ed5 100%);
-  -webkit-border-image: -webkit-linear-gradient(top left, #3acfd5 0%, #3a4ed5 100%); */
-  border-image: linear-gradient(to bottom right, #f22fdc 0%, #49358b 100%);
-  border-image-slice: 1;
-}
 
+.icon-line{
+  display:inline-flex;
+  vertical-align:middle;
+  color:crimson;
+  cursor:pointer;
+}
 </style>

@@ -1,13 +1,20 @@
 <template>
   <div>
-    <v-tabs v-model="tab" background-color="" color="black" grow >
-      <v-tab style="font-size:1.2rem;">상담 내역</v-tab>
-      <v-tab style="font-size:1.2rem;">예약 내역</v-tab>
+    <v-tabs v-model="tab" background-color="" color="black" grow>
+      <v-tab style="font-size: 1.3rem"><v-icon class="mr-1" style="font-size: 1.5rem"
+            >mdi-book-open-outline</v-icon
+          >상담 내역</v-tab>
+      <v-tab style="font-size: 1.3rem"><v-icon class="mr-1" style="font-size: 1.5rem"
+            >mdi-clock-time-four-outline</v-icon
+          >예약 내역</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <!-- 상담 내역 -->
       <v-tab-item>
-        <v-simple-table class="pa-5">
+        <v-col v-if="!cpagingList" style="margin-top: 220px"
+          >상담 내역이 없습니다.</v-col
+        >
+        <v-simple-table v-if="cpagingList" class="py-5">
           <template v-slot:default>
             <thead>
               <tr>
@@ -30,21 +37,30 @@
                 </td>
                 <td v-else class="text-center">실시간 상담</td>
 
-                <td v-if="item.recordDir != null && item.status == 'finish'" align="center">
-                  <v-btn text @click="getAnswer(item)" small style="font-size: 0.9rem"
-                    ><span style="vertical-align: middle; display: inline-flex; color:crimson"
-                      ><v-icon small class="mr-1">mdi-message-text-outline</v-icon> 답변보기</span
+                <td
+                  v-if="item.recordDir != null && item.answer != null"
+                  align="center"
+                >
+                  <v-btn
+                    text
+                    @click="getAnswer(item)"
+                    small
+                    style="font-size: 0.9rem"
+                    ><span
+                      style="
+                        vertical-align: middle;
+                        display: inline-flex;
+                        color: crimson;
+                      "
+                      ><v-icon small class="mr-1"
+                        >mdi-message-text-outline</v-icon
+                      >
+                      답변보기</span
                     ></v-btn
                   >
                 </td>
-                <td v-else-if="item.status == 'finish'" class="text-center">
+                <td v-else-if="item.recordDir == null" class="text-center">
                   상담 완료
-                </td>
-                <td v-else-if="item.status == 'progress'" class="text-center">
-                  진행중
-                </td>
-                <td v-else-if="item.status == 'reserveRequest'" class="text-center">
-                  예약중
                 </td>
                 <td v-else class="text-center">대기중</td>
 
@@ -54,7 +70,7 @@
                     v-if="item.status == 'finish' && item.isreapply == 0"
                     :disabled="item.isreapply != 0"
                     @click="reapplyType(item)"
-                    style="font-size: 0.9rem; color:white"
+                    style="font-size: 0.9rem; color: white"
                     color="#262272"
                     >신청</v-btn
                   >
@@ -63,52 +79,83 @@
             </tbody>
           </template>
         </v-simple-table>
-        <v-pagination v-model="cpage" :length="cpageLength" circle class="pb-3" color="#262272"></v-pagination>
+        <v-pagination
+          v-model="cpage"
+          v-if="cpagingList"
+          :length="cpageLength"
+          circle
+          class="pb-3"
+          color="#262272"
+        ></v-pagination>
       </v-tab-item>
 
       <!-- 예약 내역 -->
       <v-tab-item>
         <v-sheet class="mx-auto pa-5" max-width="100%">
           <v-row>
-            <v-col v-for="(item, index) in rpagingList" :key="index" cols="12" sm="6" md="3">
-              <v-card class="mx-auto pa-3" height="200">
+            <v-col v-if="rpagingList.length == 0" style="margin-top: 205px"
+              >예약 내역이 없습니다.</v-col
+            >
+            <v-col
+              v-for="(item, index) in rpagingList"
+              :key="index"
+              cols="12"
+              sm="6"
+              md="3"
+            >
+              <v-card class="mx-auto pa-3" height="195">
                 <div align="left" class="d-flex">
                   <v-col class="pb-0">
                     <v-chip small color="#262272" label text-color="white">
-                      {{ getDday(item.sdate) }}
+                      {{ getDday(item.date) }}
                     </v-chip>
                   </v-col>
                   <v-col class="pt-2 pb-0">
                     <v-btn
+                    text
+                    class="px-2 mt-1"
                       v-if="
-                        item.sdate.slice(5, 7) == todaytime.getMonth() + 1 &&
-                          item.sdate.slice(8, 10) == todaytime.getDate() &&
-                          item.stime.slice(0, 2) == todaytime.getHours()
+                        item.date.slice(5, 7) == todaytime.getMonth() + 1 &&
+                        item.date.slice(8, 10) == todaytime.getDate() &&
+                        item.date.slice(11, 13) == todaytime.getHours()
                       "
-                      small
-                      color="orange lighten-4"
-                      text-color="red"
                       @click="startCounseling(item.num)"
-                      style="font-size: 0.9rem; color: red"
+                      style="font-size: 1rem; color: white;background-color:crimson; font-weight: bold; border:2px solid; border-radius:20px;height:30px;"
+                      
+                      >ON-AIR</v-btn
+                    >
+                    <v-btn
+                      v-else
+                      disabled
+                      style="font-size: 1rem; color: black"
+                      text
                       >on-Air</v-btn
                     >
-                    <v-btn v-else disabled style="font-size: 0.9rem; color: black" text>on-air</v-btn>
                   </v-col>
                 </div>
                 <div align="left" class="mt-1 pl-3">
-                  <h4> {{ item.sdate }} </h4>
+                  <h4>{{ item.date.slice(0,10) }}</h4>
                 </div>
                 <div>
-                  <h1> {{ item.stime }} </h1>
+                  <h1>{{ item.date.slice(11,16) }}</h1>
                 </div>
                 <div align="right">
-                  {{ item.mentor }}
+                  {{ findName(item.mentor) }} 상담사
                 </div>
-                <v-btn large icon color="red" @click="cancelD(item.num)"><v-icon>mdi-delete-forever-outline</v-icon></v-btn>
+                <v-btn large icon color="red" @click="cancelD(item.num)"
+                  ><v-icon>mdi-delete-forever-outline</v-icon></v-btn
+                >
               </v-card>
             </v-col>
           </v-row>
-          <v-pagination v-model="rpage" :length="rpageLength" circle class="pb-3 mt-5" color="#262272"></v-pagination>
+          <v-pagination
+            v-model="rpage"
+            v-if="rpagingList.length != 0"
+            :length="rpageLength"
+            circle
+            class="pb-3 mt-5"
+            color="#262272"
+          ></v-pagination>
         </v-sheet>
       </v-tab-item>
     </v-tabs-items>
@@ -122,7 +169,17 @@
           <span><h1>답변</h1></span>
         </v-card-subtitle>
         <v-card-text>
-          <v-textarea rows="10" readonly auto-grow solo flat class="pa-3" :value="answer" style="white-space: pre-line"> </v-textarea>
+          <v-textarea
+            rows="10"
+            readonly
+            auto-grow
+            solo
+            flat
+            class="pa-3"
+            :value="answer"
+            style="white-space: pre-line"
+          >
+          </v-textarea>
         </v-card-text>
 
         <v-card-actions>
@@ -134,10 +191,15 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="typeDialog" max-width="500" min-height="500" style="height: 500px">
+    <v-dialog
+      v-model="typeDialog"
+      max-width="500"
+      min-height="500"
+      style="height: 500px"
+    >
       <v-card>
         <v-card-title class="justify-center pt-3">
-          <span style="font-size:2rem;">상담 유형을 선택하세요</span>
+          <span style="font-size: 2rem">상담 유형을 선택하세요</span>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text class="pt-5 pb-1">
@@ -164,26 +226,35 @@
       <v-card
         ><br />
         <v-card-subtitle>
-          <span
-            ><h1 style="color:black;">실시간 상담 재신청</h1></span
-          >
+          <span><h1 style="color: black">실시간 상담 재신청</h1></span>
           <!-- {{ reMentor }}-->
         </v-card-subtitle>
         <v-card-text>
           원하시는 날짜와 시간을 선택해주세요.
-          <span style="color: crimson">재신청은 1회만 가능하므로 신중히 선택해주세요.</span>
+          <span style="color: crimson"
+            >재신청은 1회만 가능하므로 신중히 선택해주세요.</span
+          >
           <br />
           (상담 가능한 날짜와 시간만 표시됩니다.)
         </v-card-text>
         <v-container>
           <v-row>
             <v-col class="pb-0">
-              <v-date-picker v-model="date" :allowed-dates="allowedDates" color="#a23bbe"></v-date-picker>
+              <v-date-picker
+                v-model="date"
+                :allowed-dates="allowedDates"
+                color="#a23bbe"
+              ></v-date-picker>
             </v-col>
             <v-col class="pb-0">
               <div class="px-7" style="height: 100%">
                 <div style="height: 20%">
-                  <v-select v-model="time" :items="timeItems" :label="selLabel" solo></v-select>
+                  <v-select
+                    v-model="time"
+                    :items="timeItems"
+                    :label="selLabel"
+                    solo
+                  ></v-select>
                 </div>
                 <div style="height: 60%"></div>
                 <div align="right" style="height: 20%">
@@ -215,10 +286,10 @@
         <v-card-text></v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="cancelDialog = false">
+          <v-btn color="#262272" text @click="cancelDialog = false">
             아니오
           </v-btn>
-          <v-btn color="green darken-1" text @click="cancel"> 예 </v-btn>
+          <v-btn color="#262272" text @click="cancel"> 예 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -252,12 +323,12 @@
 </template>
 
 <script>
-import http from '@/util/http-common.js';
-import { mapGetters } from 'vuex';
+import http from "@/util/http-common.js";
+import { mapGetters } from "vuex";
 import moment from "moment";
 
 export default {
-  name: 'MyListComp',
+  name: "MyListComp",
   data() {
     return {
       myList: [],
@@ -269,7 +340,7 @@ export default {
       dialog: false,
       typeDialog: false,
       cancelDialog: false,
-      reMentor: '',
+      reMentor: "",
       time: null,
       date: null,
       schedule: [],
@@ -280,13 +351,13 @@ export default {
       rpage: 1,
       selitem: [],
       mentorNum: null,
-      cancelNum: '',
+      cancelNum: "",
       answerDialog: false,
-      answer: '',
+      answer: "",
       todaytime: new Date(),
       tab: null,
       timeItems: [],
-      selLabel: '시간을 선택해주세요.',
+      selLabel: "시간을 선택해주세요.",
       model: null,
       errorSnack: false,
       successSnack: false,
@@ -299,11 +370,11 @@ export default {
     });
     http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
       this.myList = res.data;
-      this.cpagingList = this.myList.slice(0, 9);
-      if (this.myList.length % 9 == 0) {
-        this.cpageLength = this.myList.length / 9;
+      this.cpagingList = this.myList.slice(0, 8);
+      if (this.myList.length % 8 == 0) {
+        this.cpageLength = this.myList.length / 8;
       } else {
-        this.cpageLength = parseInt(this.myList.length / 9) + 1;
+        this.cpageLength = parseInt(this.myList.length / 8) + 1;
       }
     });
     http.get(`/schedule/isReservation/${this.getUserID}`).then((res) => {
@@ -311,7 +382,9 @@ export default {
     });
     http.get(`/schedule/myReservation/${this.getUserID}`).then((res) => {
       this.myReservation = res.data;
+      console.log(res.data)
       this.rpagingList = this.myReservation.slice(0, 8);
+      // console.log(this.rpagingList)
       if (this.myReservation.length % 8 == 0) {
         this.rpageLength = this.myReservation.length / 8;
       } else {
@@ -320,9 +393,23 @@ export default {
     });
   },
   computed: {
-    ...mapGetters(['isProfileLoaded', 'getRole', 'getQualification', 'getUserName', 'getUserNum', 'getUserID']),
+    ...mapGetters([
+      "isProfileLoaded",
+      "getRole",
+      "getQualification",
+      "getUserName",
+      "getUserNum",
+      "getUserID",
+    ]),
   },
   methods: {
+    findNameById(userid) {
+      for (let index = 0; index < this.userList.length; index++) {
+        if (this.userList[index].id == userid) {
+          return this.userList[index].name;
+        }
+      }
+    },
     findName(userNum) {
       for (let index = 0; index < this.userList.length; index++) {
         if (this.userList[index].num == userNum) {
@@ -339,7 +426,7 @@ export default {
     },
     setTime(date) {
       var momentz = moment(new Date(date));
-      require('moment-timezone'); 
+      require("moment-timezone");
       return momentz.tz("Asia/Seoul").format("YYYY-MM-DD HH:mm");
     },
     reapplyType(item) {
@@ -357,7 +444,7 @@ export default {
       var mentorId = this.findID(this.selitem.mentor);
       http.get(`/schedule/allowSchedule/${mentorId}`).then((res) => {
         this.schedule = res.data;
-        console.log(this.schedule);
+        // console.log(this.schedule);
       });
     },
     allowedDates(val) {
@@ -377,7 +464,12 @@ export default {
       for (const schedule of this.schedule) {
         if (this.date == schedule.sdate) {
           if (val == schedule.stime.substr(0, 2)) {
-            var today = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+            var today =
+              date.getFullYear() +
+              "-" +
+              (date.getMonth() + 1) +
+              "-" +
+              date.getDate();
             if (today == this.date) {
               return val > hour;
             } else {
@@ -394,34 +486,53 @@ export default {
     reqReapply() {
       var mentorId = this.findID(this.selitem.mentor);
       if (this.date != null && this.time != null) {
-        http.get(`/schedule/findScheduleNum/${this.date}/${this.time.substr(0, 5)}/${mentorId}`).then((res) => {
-          http
-            .post(`/schedule/reApply/${this.conRoomNum}`, {
-              mentee: this.getUserID,
-              scheNum: res.data,
-            })
-            .then((success) => {
-              if (success.data == 'success') {
-                http.post(`/counseling/reserveRequest`, {
-                  mentee: this.getUserNum,
-                  mentor: this.mentorNum,
-                  room: this.createRoomId(),
-                  status: 'reapply',
-                  date: `${this.date}T${this.time.substr(0, 5)}:00`,
-                });
-                this.successSnack = true;
-                this.altMsg = "재상담 신청 완료되었습니다.";
-                http.get(`/counseling/menteeMyList/${this.getUserNum}`).then((res) => {
-                  this.myList = res.data;
-                  this.cpagingList = this.myList.slice(0, 9);
-                });
-                http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
-                  this.myReservation = data.data;
-                });
-                this.dialog = false;
-              }
-            });
-        });
+        http
+          .get(
+            `/schedule/findScheduleNum/${this.date}/${this.time.substr(
+              0,
+              5
+            )}/${mentorId}`
+          )
+          .then((res) => {
+            http
+              .post(`/schedule/reApply/${this.conRoomNum}`, {
+                mentee: this.getUserID,
+                scheNum: res.data,
+              })
+              .then((success) => {
+                if (success.data == "success") {
+                  http.post(`/counseling/reserveRequest`, {
+                    mentee: this.getUserNum,
+                    mentor: this.mentorNum,
+                    room: this.createRoomId(),
+                    status: "reapply",
+                    date: `${this.date}T${this.time.substr(0, 5)}:00`,
+                  });
+                  this.successSnack = true;
+                  this.altMsg = "재상담 신청 완료되었습니다.";
+                  http
+                    .get(`/counseling/menteeMyList/${this.getUserNum}`)
+                    .then((res) => {
+                      this.myList = res.data;
+                      this.cpagingList = this.myList.slice(0, 9);
+                    });
+                  http
+                    .get(`/schedule/myReservation/${this.getUserID}`)
+                    .then((data) => {
+                      this.myReservation = data.data;
+                      console.log(this.myReservation)
+                      this.rpagingList = this.myReservation.slice(0, 8);
+                      if (this.myReservation.length % 8 == 0) {
+                        this.rpageLength = this.myReservation.length / 8;
+                      } else {
+                        this.rpageLength =
+                          parseInt(this.myReservation.length / 8) + 1;
+                      }
+                    });
+                  this.dialog = false;
+                }
+              });
+          });
       } else {
         this.errorSnack = true;
         this.altMsg = "날짜와 시간을 선택해주세요.";
@@ -429,19 +540,33 @@ export default {
     },
     cancel() {
       this.cancelDialog = false;
-      http.delete(`/schedule/cancelReservation/${this.cancelNum}`).then((res) => {
-        if (res.data == 'success') {
-          this.successSnack = true;
-          this.altMsg = "예약이 취소되었습니다.";
-          http.get(`/schedule/myReservation/${this.getUserID}`).then((data) => {
-            this.myReservation = data.data;
-          });
-        }
-      });
+      http
+        .delete(`/schedule/cancelReservation/${this.cancelNum}`)
+        .then((res) => {
+          if (res.data == "success") {
+            this.successSnack = true;
+            this.altMsg = "예약이 취소되었습니다.";
+            http
+              .get(`/schedule/myReservation/${this.getUserID}`)
+              .then((data) => {
+                this.myReservation = data.data;
+                      console.log(this.myReservation)
+
+                this.rpagingList = this.myReservation.slice(0, 8);
+                if (this.myReservation.length % 8 == 0) {
+                  this.rpageLength = this.myReservation.length / 8;
+                } else {
+                  this.rpageLength =
+                    parseInt(this.myReservation.length / 8) + 1;
+                }
+              });
+          }
+        });
     },
     createRoomId(length = 20) {
-      let text = '';
-      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let text = "";
+      const possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       Array.from(Array(length)).forEach(() => {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
       });
@@ -452,8 +577,10 @@ export default {
       this.cancelDialog = true;
     },
     getAnswer(item) {
-      console.log(item.answer);
-      this.answer = item.answer.substring(1, item.answer.length - 1).replaceAll('\r\n', '<br/>');
+      // console.log(item.answer);
+      this.answer = item.answer
+        .substring(0, item.answer.length)
+        .replaceAll("\r\n", "<br/>");
       this.answerDialog = true;
     },
     reRecord() {
@@ -467,17 +594,17 @@ export default {
     getDday(day) {
       var year = day.slice(0, 4);
       var month = day.slice(5, 7);
-      var d = day.slice(8, 11);
+      var d = day.slice(8, 10);
       var Dday = new Date(year, month - 1, d);
       var now = new Date();
       var result = now.getDate() - Dday.getDate();
 
       if (result > 0) {
-        result = 'D+' + result;
+        result = "D+" + result;
       } else if (result == 0) {
-        result = 'D-Day';
+        result = "D-Day";
       } else {
-        result = 'D' + result;
+        result = "D" + result;
       }
 
       return result;
@@ -485,8 +612,8 @@ export default {
   },
   watch: {
     cpage(page) {
-      var first = (page - 1) * 9;
-      this.cpagingList = this.myList.slice(first, first + 9);
+      var first = (page - 1) * 8;
+      this.cpagingList = this.myList.slice(first, first + 8);
     },
     rpage(page) {
       var first = (page - 1) * 8;
@@ -498,15 +625,19 @@ export default {
       this.timeItems = [];
       http.get(`/schedule/allowScheduleTime/${mentorId}/${v}`).then((res) => {
         for (const stime of res.data) {
-          if (stime.substr(0, 2) > hour) {
+          if (v.split("-")[2] == new Date().getDate().toString()) {
+            if (stime.substr(0, 2) > hour) {
+              this.timeItems.push(stime);
+            }
+          } else {
             this.timeItems.push(stime);
           }
         }
         if (this.timeItems.length == 0) {
-          this.selLabel = '예약 가능한 시간이 없습니다.';
-          this.timeItems.push('예약 가능한 시간이 없습니다.');
+          this.selLabel = "예약 가능한 시간이 없습니다.";
+          this.timeItems.push("예약 가능한 시간이 없습니다.");
         } else {
-          this.selLabel = '시간을 선택해주세요.';
+          this.selLabel = "시간을 선택해주세요.";
         }
       });
     },
@@ -520,17 +651,20 @@ export default {
   font-size: 1.3rem;
   cursor: pointer;
   height: 70px;
-  border-radius:30px;
-  background:#262272;
+  border-radius: 30px;
+  background: #262272;
 }
 .type-title {
-  color:white;
-  width:100%;height:100%;padding-top:5%;
+  color: white;
+  width: 100%;
+  height: 100%;
+  padding-top: 5%;
   transform: scale(1);
   transition: all 0.3s;
 }
 .type-title:hover {
   transform: scale(1.2);
   transition: all 0.3s;
+  color: #d9d6ff;
 }
 </style>

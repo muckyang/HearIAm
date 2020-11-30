@@ -9,8 +9,6 @@
       <span class="main-title">Hear I Am</span><br />
       <!-- <span class="main-title" style="font-size:2rem !important; font-family:S-CoreDream-5Medium !important"> 들어줄게, 너의 곁에 있어줄게</span> -->
       <br />
-      <br />
-      <br />
       <div class="swap-on-hover">
         <img class="swap-on-hover__front-image" src="../assets/lock.png" />
         <img class="swap-on-hover__back-image" src="../assets/unlock.png" @click="login_dialog = true" />
@@ -20,7 +18,7 @@
     <v-dialog v-model="login_dialog" max-width="500" min-height="700">
       <v-card rounded style="padding: 50px;">
         <v-card-title class="text-center justify-center p-8">
-          <p style="font-family: 'Capriola'; font-size: 3rem; font-weight: 700">
+          <p style="font-family: 'Short Stack', cursive; font-size: 4vw; font-weight: 700">
             Hear I Am
           </p>
         </v-card-title>
@@ -54,8 +52,9 @@ export default {
       this.$router.push('/menteeMain');
     } else if (this.getRole == `mentor`) {
       this.$router.push('/mentorMain');
+    } else {
+      this.fadeOut();
     }
-    this.fadeOut();
   },
   components: {
     // LoginModal,
@@ -82,7 +81,7 @@ export default {
       setTimeout(() => {
         document.getElementById('fade-out').setAttribute('style', 'display:none');
         this.mainFlag = true;
-      }, 6000);
+      }, 4000);
     },
   },
   computed: {
@@ -142,8 +141,8 @@ export default {
   opacity: 100;
 }
 .fade-in {
-  -webkit-animation: fadeIn 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  animation: fadeIn 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  -webkit-animation: fadeIn 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: fadeIn 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .first-text {
   position: absolute;

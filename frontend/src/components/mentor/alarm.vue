@@ -8,10 +8,6 @@
     transition="slide-x-reverse-transition"
   >
     <template v-slot:activator>
-      <!-- <v-btn v-model="fab" color="yellow" dark fab @click="alarmClick()">
-        <v-icon v-if="fab">mdi-close </v-icon>
-        <v-icon v-else> mdi-bell </v-icon>
-      </v-btn> -->
        <v-btn v-model="fab" :color="getAlarmBtn" dark fab @click="alarmClick()">
         <v-icon v-if="fab">mdi-close </v-icon>
         <v-icon v-else> mdi-bell </v-icon>
@@ -68,30 +64,7 @@
       </span>
     </v-snackbar>
   </v-speed-dial>
-  <!-- <div>
-    <div class="my-2">
-      <v-btn color="error" fab small dark @click="move()"
-        >{{ alert_num }}
-      </v-btn>
-    </div>
-  </div> -->
 
-  <!-- <div class="text-center">
-    <v-menu offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn color="error" fab small dark v-bind="attrs" v-on="on">
-          {{ alert_num }}
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item v-for="(item, index) in list" :key="index">
-          <v-list-item-title @click="onjoin(item)">
-            실시간 상담 요청이 왔습니다!</v-list-item-title
-          >
-        </v-list-item>
-      </v-list>
-    </v-menu>
-  </div> -->
 </template>
 <script>
 import http from "@/util/http-common.js";
@@ -102,7 +75,7 @@ export default {
     return {
       alert_num: 0,
       list: this.getAlarmList,
-      btn_color: this.getAlarmBtn, //빨 : #F44336   그린 :  #0a7a78
+      btn_color: this.getAlarmBtn, //빨 : #F44336   그린 :  #49358b  F44336
       fab: false,
       alarm: null,
       errorSnack: false,
@@ -112,7 +85,7 @@ export default {
   },
   methods: {
     onjoin(data) {
-      console.dir(data);
+      // console.dir(data);
       let mentorName = this.getUserNum;
       if (data.mentor == 1) {
         http
@@ -179,20 +152,20 @@ export default {
       //알람 끈다 초록
       // this.$store.commit('setAlarmCnt',0);
       // this.$store.commit('setAlarmFlag',false);
-      this.$store.commit("changeAlarmBtn", "#0a7a78");
+      this.$store.commit("changeAlarmBtn", "#49358b");
     },
   },
-  // updated() {
-  //   http
-  //     .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
-  //     .then((res) => {
-  //       this.$store.commit("setAlarmList", res.data);
-  //       let len = this.$store.getters["getAlarmList"].length;
-  //       if (len > 0) {
-  //         this.$store.commit("changeAlarmBtn", "#F44336");
-  //       }
-  //     });
-  // },
+  updated() {
+    http
+      .get(`/counseling/alarmList/${this.$store.getters["getUserNum"]}`)
+      .then((res) => {
+        this.$store.commit("setAlarmList", res.data);
+        let len = this.$store.getters["getAlarmList"].length;
+        if (len > 0) {
+          this.$store.commit("changeAlarmBtn", "#F44336");
+        }
+      });
+  },
   computed: {
     ...mapGetters([
       "getUserName",
@@ -202,13 +175,5 @@ export default {
       "getAlarmBtn",
     ]),
   },
-  // watch:{
-  //   getAlarmCnt(val){
-  //     if(val>0){ //알람불 들어옴 빨강
-  //       // this.$store.commit('setAlarmFlag',true);
-  //       this.btn_color = "#F44336";
-  //     }
-  //   }
-  // },
 };
 </script>

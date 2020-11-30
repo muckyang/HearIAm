@@ -1,17 +1,18 @@
 <template>
   <div
     style="
-      height: 100%;
       width: 100%;
-      background: linear-gradient(to left, #93dfff, #f5a2bb);
-      padding-top: 64px;
+      background-color: #0f0d2d;
+      padding-top: 70px;
+      padding-bottom:30px;
     "
+    align="center"
   >
-  <v-container>
+  <div class="px-5 pt-3 content-box">
     <v-col>
     <MenteeInfoComp />
     </v-col>
-  </v-container>
+  </div>
   </div>
 </template>
 
@@ -26,5 +27,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.content-box2{
+  width:90%;
+  height:98%;
+  background: -moz-linear-gradient(top left, #ff7987, #a23bbe);
+  background: -webkit-linear-gradient(top left, #ff7987, #a23bbe);
+  -moz-background-origin: border;
+  background-origin: border-box;
+  border: 10px solid transparent;
+  border-radius: 25px;
+  box-shadow:
+    0 0 12px white, /* Outset shadow */
+    inset 0 0 0 white; /* The background color */
+  }
 </style>
