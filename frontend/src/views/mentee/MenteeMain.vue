@@ -1,0 +1,203 @@
+<template>
+  <div style="height: 100%; width: 100%" class="main-back">
+    <v-row
+      class="fill-height"
+      align="center"
+      justify="center"
+      style="padding: 0"
+    >
+      <template v-for="(item, i) in items" >
+        <v-col :key="i" cols="12" md="3" style="padding: 0" >
+          <v-hover v-slot="{ hover }" > 
+            <v-expand-transition>
+            <v-card
+              :elevation="hover ? 12 : 2"
+              :class="{ 'on-hover': hover }"
+              height="100vh"
+              @click="itemClick(i)"
+            >
+              <v-container fill-height>
+                <v-layout align-center justify-center>
+                  <v-card-title class="title white--text" style="opacity: 1">
+                    <div>
+                      <p class="ma-0 font-weight-bold text-center"
+                      style="font-size: 2em;">
+                        {{ item.text }}
+                      </p>
+                      <v-divider
+                        class="my-10 white"
+                        style="opacity: 1"
+                      ></v-divider>
+                      <p
+                        class="font-weight-medium text-center mx-10" 
+                        style="opacity:.5; font-size: .8em"
+                      >
+                        {{ item.subtext }}
+                      </p>
+                    </div>
+                  </v-card-title>
+                </v-layout>
+              </v-container>
+            </v-card>
+            </v-expand-transition>
+          </v-hover>
+        </v-col>
+      </template>
+    </v-row>
+     <v-dialog v-model="reser_dialog" max-width="600" min-height="500">
+      <v-card rounded="xl" style="padding: 20px; background-color:white" >
+        <v-card-title class="text-center justify-center p-8">
+          <h2>실시간 상담 예약</h2>
+        </v-card-title>
+        <ReserveMain :reser_dialog="reser_dialog"/>
+      </v-card>
+    </v-dialog>
+
+    <v-snackbar
+      v-model="errorSnack"
+      top
+      flat
+      color="error"
+      rounded="pill"
+      :timeout="2000"
+    >
+      <span class="snackText">
+        {{ altMsg }}
+      </span>
+    </v-snackbar>
+  </div>
+</template>
+<script>
+import { AUTH_LOGOUT } from "@/store/actions/auth";
+import http from "@/util/http-common.js";
+import axios from "axios";
+import ReserveMain from "@/views/reserve/ReserveMain.vue";
+export default {
+  components: {
+    ReserveMain,
+  },
+  data() {
+    return {
+      devecieId: this.$store.getters["getDeviceID"],
+      topic: "streaming",
+      reser_dialog: false,
+      items: [
+        {
+          text:"1:1 상담",
+          subtext: "전문 상담사와 예약 없이 바로 상담해보세요. ",
+        },
+        {
+          text: "음성 상담",
+          subtext: "상담사와 미팅이 부담스럽다면 당신의 목소리로 고민을 말해보세요.",
+        },
+        {
+          text: "상담 예약",
+          subtext: "담당 상담사가 없다면 예약서비스를 이용해보세요",
+        },
+        {
+          text: "마이 페이지",
+          subtext: "상담 내역을 확인하고 싶다면 클릭해주세요",
+        },
+      ],
+      transparent: "rgba(255, 255, 255, 0)",
+      errorSnack: false,
+      altMsg: "",
+    };
+  },
+  methods: {
+    itemClick(i){
+      if(i === 0){
+         this.goLive();
+      }else if(i===1){
+        this.goRecord()
+      }else if(i===2){
+        this.reser_dialog = true;
+      }else{
+        this.goMypage()
+      }
+    },
+    goLive() {
+      http
+        .get(`/counseling/isMentee`)
+        .then((res) => {
+          console.dir(res);
+          console.log(res.data);
+          if (res.data == 0) {
+            this.errorSnack = true;
+            this.altMsg = "대기중인 멘토가 없어요! 예약하기를 이용해주세요!";
+          } else {
+            this.$router.push(`/userWRTC`);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    logout: function () {
+      this.unsubscribe();
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {});
+      // this.$router.push("/").catch(() => {});
+      window.location.href = "/";
+    },
+    goMypage() {
+      this.$router.push(`/menteeMypage`).catch(() => {});
+    },
+    goReserve() {
+      this.$router.push(`/reserveMain`).catch(() => {});
+    },
+    goRecord() {
+      this.$router.push("/recordConsult/1").catch(() => {});
+    },
+    unsubscribe() {
+      this.unsubscribeTokenToTopic(this.devecieId, this.topic);
+    },
+    unsubscribeTokenToTopic(token, topic) {
+      axios({
+        method: "POST",
+        url: "https://iid.googleapis.com/iid/v1:batchRemove",
+        data: {
+          to: "/topics/" + topic,
+          registration_tokens: [token],
+        },
+        headers: {
+          "Content-type": "application/json",
+          Authorization:
+            "key=AAAAEDiSbms:APA91bH-uXikdH1nixzEB2RRH5dMl14_rotnU1ujpcU7Ii6dW-oaV4N_Q6Uh_TvHzumQzllUui2-E4ZdcShX2upbC52FaNAaxxVxjnwnqxcel4RgNYPp_uzWmKNe5OblH2aRX5NWZbcd",
+        },
+      })
+        .then((response) => {
+          if (response.status < 200 || response.status >= 400) {
+            throw (
+              "Error subscribing to topic: " +
+              response.status +
+              " - " +
+              response.text()
+            );
+          }
+          console.log("unsubscribe success : " + response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      // http.delete(`/counseling/deleteReadyMentee/${this.$store.getters['getUserNum']}`).then(()=>{
+      //   // alert("삭제 완료");
+      // });
+    },
+  },
+};
+</script>
+<style scoped>
+.v-card {
+  transition: .4s ease-in;
+  background-color: rgb(14, 1, 27, 0.2);
+}
+
+.v-card:not(.on-hover) {
+  background-color: rgb(14, 1, 27, 0.8);
+}
+
+.show-btns {
+  color: rgba(255, 255, 255, 1) !important;
+}
+</style>

@@ -14,6 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }),
 		@UniqueConstraint(columnNames = { "name" }) })
@@ -26,6 +29,11 @@ public class User {
 	private String password;
 	private String role;
 	private int qualification;
+	private String gender;
+	private String deviceId;
+	private int isSet;
+	private String color;
+	private String icon;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_num"), inverseJoinColumns = @JoinColumn(name = "role_num"))
@@ -35,7 +43,7 @@ public class User {
 		super();
 	}
 
-	public User(Long num, String id, String name, String password, String role, int qualification, Set<Role> roles) {
+	public User(Long num, String id, String name, String password, String role, int qualification, String gender, Set<Role> roles) {
 		super();
 		this.num = num;
 		this.id = id;
@@ -43,6 +51,7 @@ public class User {
 		this.password = password;
 		this.role = role;
 		this.qualification = qualification;
+		this.gender = gender;
 		this.roles = roles;
 	}
 
@@ -94,6 +103,14 @@ public class User {
 		this.qualification = qualification;
 	}
 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -105,7 +122,23 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [num=" + num + ", id=" + id + ", name=" + name + ", password=" + password + ", role=" + role
-				+ ", qualification=" + qualification + ", roles=" + roles + "]";
+				+ ", qualification=" + qualification + ", gender=" + gender + ", roles=" + roles + "]";
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
+
+	public int getIsSet(){
+		return isSet;
+	}
+
+	public void setIsSet(int isSet){
+		this.isSet = isSet;
 	}
 
 }
